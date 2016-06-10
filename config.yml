@@ -1,0 +1,269 @@
+Settings:
+  Prefix: '&7[&4Crazy &bAuctions&7]: ' #Prefix of when you get Crazy Auctions Messages.
+  GUIName: '&4Crazy &bAuctions&8' #Name of the Main GUI.
+  Players-Current-Items: '&8Your Current Listings' #The Name of the Player Current Items GUI.
+  Cancelled/Expired-Items: '&8Cancelled/Expired Listings' #Name of the Cancelled/Expired GUI.
+  Buying-Item: '&8Purchase Item: Are You Sure?' #Name of the Buying GUI.
+  Bidding-On-Item: '&8You Are Bidding On This Item.' #Name of the Budding GUI.
+  Categories: '&8Categories' #Name of the Category GUI.
+  Sell-Time: 2d #The time that each item will sell for.
+  Bid-Time: 2m 30s #Time for each item that is biddable.
+  Full-Expire-Time: 10d #The full time the item is in the crazy auctions.
+  Bid-Winner-Time: 20d #The time the winner of a bid has to claim there prize.
+  Minimum-Sell-Price: 10 #Minimum amount you can sell a item for.
+  Max-Beginning-Sell-Price: 1000000 #Max amount you can sell a item for.
+  Minimum-Bid-Price: 100 #Minimum starting bid.
+  Max-Beginning-Bid-Price: 1000000 #Maximum starting bid.
+  Allow-Damaged-Items: False
+  GUISettings: #Settings for things in the gui.
+    SellingItemLore: #The lore on items that are being sold.
+      - '&7-------------------------'
+      - '&aClick here to purchase.'
+      - ''
+      - '&9Price: &e$%Price%'
+      - '&9Seller: &e%Seller%'
+      - '&7-------------------------'
+    CurrentLore: #Lore on items that are in your current items GUI.
+      - '&7-------------------------'
+      - '&aClick here to cancel.'
+      - ''
+      - '&9Price: &e$%Price%'
+      - '&9Expire: &e%Time%'
+      - '&7-------------------------'
+    Cancelled/ExpiredLore: #Lore on items that are in your cancelled/expired GUI.
+      - '&7-------------------------'
+      - '&aClick here to return to you.'
+      - ''
+      - '&9Full Expire: &e%Time%'
+      - '&7-------------------------'
+    Bidding: #Lore on Bidding Items.
+      - '&7-------------------------'
+      - '&aClick here to bid.'
+      - ''
+      - '&9Seller: &e%Seller%'
+      - '&9Current Bid: &e$%TopBid%'
+      - '&9Top Bidder: &e%TopBidder%'
+      - '&9Time Left: &e%Time%'
+      - '&7-------------------------'
+    Category-Settings:
+      Armor:
+        Item: '315'
+        Slot: 11
+        Name: '&6&lArmor'
+        Lore:
+          - '&7This category contains all'
+          - '&7armor that is currently being sold.'
+      Weapons:
+        Item: '283'
+        Slot: 12
+        Name: '&6&lWeapons'
+        Lore:
+          - '&7This category contains all'
+          - '&7weapons that is currently being sold.'
+      Tools:
+        Item: '285'
+        Slot: 13
+        Name: '&6&lTools'
+        Lore:
+          - '&7This category contains all'
+          - '&7tools that is currently being sold.'
+      Food:
+        Item: '322'
+        Slot: 14
+        Name: '&6&lFood'
+        Lore:
+          - '&7This category contains all'
+          - '&7food that is currently being sold.'
+      Potions:
+        Item: '373:8227'
+        Slot: 15
+        Name: '&6&lPotions'
+        Lore:
+          - '&7This category contains all'
+          - '&7potions that is currently being sold.'
+      Blocks:
+        Item: '2'
+        Slot: 16
+        Name: '&6&lBlocks'
+        Lore:
+          - '&7This category contains all'
+          - '&7blocks that is currently being sold.'
+      Other:
+        Item: '371'
+        Slot: 17
+        Name: '&6&lOthers'
+        Lore:
+          - '&7This category contains all the'
+          - '&7other items currently being sold.'
+      None:
+        Item: '166'
+        Slot: 23
+        Name: '&6&lNone'
+        Lore:
+          - '&7This category contains all'
+          - '&7items currently being sold.'
+    OtherSettings: #Other Settings for the GUIs.
+      SellingItems: #The button for your current items.
+        Item: '264' #The item that this button is.
+        Slot: 46 #The slot it is in. I recommend not changing these. If you do make sure they are still in the bottom row.
+        Name: '&6Items You are Selling' #Name of the item.
+        Lore: #Lore of the item.
+          - '&aClick here to view all the items you'
+          - '&aare currently selling on the auction.'
+      Cancelled/ExpiredItems: #The button for Cancelled/Expired Items.
+        Item: '394'
+        Slot: 47
+        Name: '&6Collect Expired / Cancelled Items'
+        Lore:
+          - '&aClick here to view and collect all of the'
+          - '&aitems you have cancelled or has expired.'
+      PreviousPage: #The button for Previous Page.
+        Item: '339'
+        Slot: 49
+        Name: '&6Previous Page'
+      Refesh: #The button for Refresh Page.
+        Item: '175'
+        Slot: 50
+        Name: '&6Refresh Page'
+      NextPage: #The button for Next Page.
+        Item: '339'
+        Slot: 51
+        Name: '&6Next Page'
+      Category1: #The button for Next Page.
+        Item: '54'
+        Slot: 52
+        Name: '&6Categories'
+        Lore:
+          - '&bCurrent Category: &6%Category%'
+          - '&aWant see items in specific categories?'
+          - '&aClick here to see all categories of items.'
+      Category2: #The button for Next Page.
+        Item: '54'
+        Slot: 48
+        Name: '&6Categories'
+        Lore:
+          - '&bCurrent Category: &6%Category%'
+          - '&aWant see items in specific categories?'
+          - '&aClick here to see all categories of items.'
+      Bidding/Selling: #Switch between Bidding and Selling.
+        Selling:
+          Item: '341'
+          Slot: 53
+          Name: '&6Currently looking at items being sold.'
+          Lore:
+            - '&7&l(&6&l!&7&l) &7Click here to see items'
+            - '&7that you can be bidded on.'
+        Bidding:
+          Item: '378'
+          Slot: 53
+          Name: '&6Currently looking at items that can be bid on.'
+          Lore:
+            - '&7&l(&6&l!&7&l) &7Click here to see items'
+            - '&7that you can buy at a price.'
+      WhatIsThis: #The info on all the Books buttons.
+        SellingShop: #The Book in the main shop.
+          Item: '340'
+          Slot: 54
+          Name: '&6What Is This Page?'
+          Lore:
+            - '&aThis is the crazy auctions, here you can'
+            - '&aput items for sale, and buy items'
+            - '&athat others have put for sale.'
+            - ''
+            - '&aThe auction is also a great place to make'
+            - '&amoney by selling items that others'
+            - '&amay be interested in buying.'
+        BiddingShop: #The Book in the main shop.
+          Item: '340'
+          Slot: 54
+          Name: '&6What Is This Page?'
+          Lore:
+            - '&aThis is the crazy auctions, here you can'
+            - '&aput items for sale, and bid on items'
+            - '&athat others have put for sale.'
+            - ''
+            - '&aThe bidding auction is also a great place to'
+            - '&amake money by bidding off items that others'
+            - '&amay be interested in bidding on.'
+        CurrentItems: #The Book in the Current items GUI.
+          Item: '340'
+          Slot: 54
+          Name: '&6What Is This Page?'
+          Lore:
+            - '&aThese are your current listings, all of'
+            - '&athe items you currenty have listed on'
+            - '&acrazy auctions are displayed here.'
+            - ''
+            - '&aYou can cancel and view your listings'
+            - '&aexpire time here.'
+        Cancelled/ExpiredItems: #The Book in the Cancelled/Expired Items GUI.
+          Item: '340'
+          Slot: 54
+          Name: '&6What Is This Page?'
+          Lore:
+            - '&aThis page houses all of your cancelled and'
+            - '&aexpired items, when a listings is cancelled'
+            - '&aor expires you will be able to return that'
+            - '&aitem back to you from this menu.'
+            - ''
+            - '&aJust click on the item and if you have enough'
+            - '&ainventory space you will receive that item.'
+        Viewing: #The Book in the Viewing Items GUI.
+          Item: '340'
+          Slot: 50
+          Name: '&6What Is This Page?'
+          Lore:
+            - '&aThis page shows all the items that'
+            - '&aa player has currently on the bidding'
+            - '&aand selling market. You can quickly see'
+            - '&awhat a specific player is selling.'
+        Categories: #The Book in the Viewing Items GUI.
+          Item: '340'
+          Slot: 54
+          Name: '&6What Is This Page?'
+          Lore:
+            - '&aThis page shows all the categories'
+            - '&athat you can choose from. When you click'
+            - '&aa category it will open the gui with only'
+            - '&aitems that belong to that category.'
+      Back: #The Back Buttons.
+        Item: '339'
+        Slot: 46
+        Name: '&6Back'
+      Return: #The Return Buttons.
+        Item: '390'
+        Slot: 50
+        Name: '&6Return All'
+        Lore:
+          - '&aClick here to return all cancelled'
+          - '&aand expired items to your inventory.'
+      Confirm: #The Confirm Buttons.
+        Item: '160:5'
+        Name: '&aConfirm'
+      Cancel: #The Cancel Buttons.
+        Item: '160:14'
+        Name: '&cCancel'
+      Your-Item: #The item that shows when you try to buy/bid on your item.
+        Item: '166'
+        Name: '&cYou Cant Purchase Your Own Item.'
+      Cant-Afford: #The item that shows when you cant afford this item.
+        Item: '166'
+        Name: '&cYou Cant Afford This Item.'
+      Top-Bidder: #The item for when a player is already the top bidder.
+        Item: '166'
+        Name: '&cYou are already the top bidder.'
+      Bidding: #The item in the middle when bidding on an item.
+        Item: '160:15'
+        Name: '&7Bidding'
+        Lore:
+          - '&7<--&aAdd &cRemove&7-->'
+          - '&9Your Current Bid: &e$%Bid%'
+          - '&9Current Top Bid: &e$%TopBid%'
+      Bid: #The button for when you want to confirm your bid.
+        Item: '160:3'
+        Name: '&bBid Now'
+        Lore:
+          - '&7Click here to Bid Now.'
+  BlackList:
+    - '7'
+    - '120'
