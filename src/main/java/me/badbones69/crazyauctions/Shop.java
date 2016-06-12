@@ -1,4 +1,4 @@
-package me.BadBones69.CrazyAuctions;
+package me.badbones69.crazyauctions;
 
 public enum Shop{
 	SELL("Sell"), BID("Bid");

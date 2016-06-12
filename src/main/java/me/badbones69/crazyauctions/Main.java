@@ -1,4 +1,4 @@
-package me.BadBones69.CrazyAuctions;
+package me.badbones69.crazyauctions;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -16,7 +16,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import me.BadBones69.CrazyAuctions.Currency.Vault;
+import me.badbones69.crazyauctions.currency.Vault;
 
 public class Main extends JavaPlugin implements Listener{
 	public static SettingsManager settings = SettingsManager.getInstance();
