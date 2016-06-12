@@ -1,4 +1,4 @@
-package me.BadBones69.CrazyAuctions;
+package me.badbones69.crazyauctions;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -17,7 +17,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import me.BadBones69.CrazyAuctions.Currency.CM;
+import me.badbones69.crazyauctions.currency.CM;
 
 public class Api {
 	public static String color(String msg){

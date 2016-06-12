@@ -1,10 +1,10 @@
-package me.BadBones69.CrazyAuctions.Currency;
+package me.badbones69.crazyauctions.currency;
 
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
-import me.BadBones69.CrazyAuctions.Main;
+import me.badbones69.crazyauctions.Main;
 
 public enum CM { // Currency Manager
 	VAULT("Vault", "Money");

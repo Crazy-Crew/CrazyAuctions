@@ -1,9 +1,10 @@
-package me.BadBones69.CrazyAuctions;
+package me.badbones69.crazyauctions;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import me.badbones69.crazyauctions.currency.CM;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -16,8 +17,6 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
-
-import me.BadBones69.CrazyAuctions.Currency.CM;
 
 public class GUI implements Listener{
 	private static HashMap<Player, Integer> Bidding = new HashMap<Player, Integer>();

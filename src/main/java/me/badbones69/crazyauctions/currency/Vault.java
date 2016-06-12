@@ -1,4 +1,4 @@
-package me.BadBones69.CrazyAuctions.Currency;
+package me.badbones69.crazyauctions.currency;
 
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
