@@ -71,7 +71,7 @@ public enum CM { // Currency Manager
 	 *            Type of currency you want to get.
 	 * @return Returns the amount they have of the currency
 	 */
-	public static int getMoney(Player player) {
+	public static Long getMoney(Player player) {
 		return Vault.getMoney(player);
 	}
 
@@ -84,7 +84,7 @@ public enum CM { // Currency Manager
 	 * @param amount
 	 *            The amount you want to take.
 	 */
-	public static void removeMoney(Player player, Integer amount) {
+	public static void removeMoney(Player player, Long amount) {
 		Vault.removeMoney(player, amount);
 	}
 
@@ -97,7 +97,7 @@ public enum CM { // Currency Manager
 	 * @param amount
 	 *            The amount you want to take.
 	 */
-	public static void removeMoney(OfflinePlayer player, Integer amount) {
+	public static void removeMoney(OfflinePlayer player, Long amount) {
 		Vault.removeMoney(player, amount);
 	}
 
@@ -110,7 +110,7 @@ public enum CM { // Currency Manager
 	 * @param amount
 	 *            The amount you want to add.
 	 */
-	public static void addMoney(Player player, Integer amount) {
+	public static void addMoney(Player player, Long amount) {
 		Vault.addMoney(player, amount);
 	}
 
@@ -123,7 +123,7 @@ public enum CM { // Currency Manager
 	 * @param amount
 	 *            The amount you want to add.
 	 */
-	public static void addMoney(OfflinePlayer player, Integer amount) {
+	public static void addMoney(OfflinePlayer player, Long amount) {
 		Vault.addMoney(player, amount);
 	}
 }

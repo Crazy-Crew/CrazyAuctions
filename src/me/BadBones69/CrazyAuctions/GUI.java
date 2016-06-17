@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -52,7 +53,7 @@ public class GUI implements Listener{
 							String seller = data.getString("Items."+i+".Seller");
 							String topbidder = data.getString("Items."+i+".TopBidder");
 							for(String l : config.getStringList("Settings.GUISettings.Bidding")){
-								lore.add(l.replaceAll("%TopBid%", data.getInt("Items."+i+".Price")+"").replaceAll("%topbid%", data.getInt("Items."+i+".Price")+"")
+								lore.add(l.replaceAll("%TopBid%", Api.getPrice(i, false)).replaceAll("%topbid%", Api.getPrice(i, false))
 										.replaceAll("%Seller%", seller).replaceAll("%seller%", seller)
 										.replaceAll("%TopBidder%", topbidder).replaceAll("%topbidder%", topbidder)
 										.replaceAll("%Time%", Api.convertToTime(data.getLong("Items."+i+".Time-Till-Expire"))).replaceAll("%time%", Api.convertToTime(data.getLong("Items."+i+".Time-Till-Expire"))));
@@ -63,7 +64,7 @@ public class GUI implements Listener{
 					}else{
 						if(sell==Shop.SELL){
 							for(String l : config.getStringList("Settings.GUISettings.SellingItemLore")){
-								lore.add(l.replaceAll("%Price%", data.getString("Items."+i+".Price")).replaceAll("%price%", data.getString("Items."+i+".Price"))
+								lore.add(l.replaceAll("%Price%", Api.getPrice(i, false)).replaceAll("%price%", Api.getPrice(i, false))
 										.replaceAll("%Seller%", data.getString("Items."+i+".Seller")).replaceAll("%seller%", data.getString("Items."+i+".Seller")));
 							}
 							items.add(Api.addLore(data.getItemStack("Items."+i+".Item").clone(), lore));
@@ -161,7 +162,7 @@ public class GUI implements Listener{
 				if(data.getString("Items."+i+".Seller").equalsIgnoreCase(player.getName())){
 					List<String> lore = new ArrayList<String>();
 					for(String l : config.getStringList("Settings.GUISettings.CurrentLore")){
-						lore.add(l.replaceAll("%Price%", data.getString("Items."+i+".Price")).replaceAll("%price%", data.getString("Items."+i+".Price"))
+						lore.add(l.replaceAll("%Price%", Api.getPrice(i, false)).replaceAll("%price%", Api.getPrice(i, false))
 								.replaceAll("%Time%", Api.convertToTime(data.getLong("Items."+i+".Time-Till-Expire"))).replaceAll("%time%", Api.convertToTime(data.getLong("Items."+i+".Time-Till-Expire"))));
 					}
 					items.add(Api.addLore(data.getItemStack("Items."+i+".Item").clone(), lore));
@@ -191,7 +192,7 @@ public class GUI implements Listener{
 				if(data.getString("OutOfTime/Cancelled."+i+".Seller").equalsIgnoreCase(player.getName())){
 					List<String> lore = new ArrayList<String>();
 					for(String l : config.getStringList("Settings.GUISettings.Cancelled/ExpiredLore")){
-						lore.add(l.replaceAll("%Price%", data.getString("OutOfTime/Cancelled."+i+".Price")).replaceAll("%price%", data.getString("OutOfTime/Cancelled."+i+".Price"))
+						lore.add(l.replaceAll("%Price%", Api.getPrice(i, true)).replaceAll("%price%", Api.getPrice(i, true))
 								.replaceAll("%Time%", Api.convertToTime(data.getLong("OutOfTime/Cancelled."+i+".Full-Time"))).replaceAll("%time%", Api.convertToTime(data.getLong("OutOfTime/Cancelled."+i+".Full-Time"))));
 					}
 					items.add(Api.addLore(data.getItemStack("OutOfTime/Cancelled."+i+".Item").clone(), lore));
@@ -264,7 +265,7 @@ public class GUI implements Listener{
 		ItemStack item = data.getItemStack("Items."+ID+".Item");
 		List<String> lore = new ArrayList<String>();
 		for(String l : config.getStringList("Settings.GUISettings.SellingLore")){
-			lore.add(l.replaceAll("%Price%", data.getString("Items."+ID+".Price")).replaceAll("%price%", data.getString("Items."+ID+".Price"))
+			lore.add(l.replaceAll("%Price%", Api.getPrice(ID, false)).replaceAll("%price%", Api.getPrice(ID, false))
 					.replaceAll("%Seller%", data.getString("Items."+ID+".Seller")).replaceAll("%seller%", data.getString("Items."+ID+".Seller")));
 		}
 		inv.setItem(4, Api.addLore(item.clone(), lore));
@@ -317,7 +318,7 @@ public class GUI implements Listener{
 						String seller = data.getString("Items."+i+".Seller");
 						String topbidder = data.getString("Items."+i+".TopBidder");
 						for(String l : config.getStringList("Settings.GUISettings.Bidding")){
-							lore.add(l.replaceAll("%TopBid%", data.getInt("Items."+i+".Price")+"").replaceAll("%topbid%", data.getInt("Items."+i+".Price")+"")
+							lore.add(l.replaceAll("%TopBid%", Api.getPrice(i, false)).replaceAll("%topbid%", Api.getPrice(i, false))
 									.replaceAll("%Seller%", seller).replaceAll("%seller%", seller)
 									.replaceAll("%TopBidder%", topbidder).replaceAll("%topbidder%", topbidder)
 									.replaceAll("%Time%", Api.convertToTime(data.getLong("Items."+i+".Time-Till-Expire"))).replaceAll("%time%", Api.convertToTime(data.getLong("Items."+i+".Time-Till-Expire"))));
@@ -326,7 +327,7 @@ public class GUI implements Listener{
 						ID.add(data.getInt("Items."+i+".StoreID"));
 					}else{
 						for(String l : config.getStringList("Settings.GUISettings.SellingItemLore")){
-							lore.add(l.replaceAll("%Price%", data.getString("Items."+i+".Price")).replaceAll("%price%", data.getString("Items."+i+".Price"))
+							lore.add(l.replaceAll("%Price%", Api.getPrice(i, false)).replaceAll("%price%", Api.getPrice(i, false))
 									.replaceAll("%Seller%", data.getString("Items."+i+".Seller")).replaceAll("%seller%", data.getString("Items."+i+".Seller")));
 						}
 						items.add(Api.addLore(data.getItemStack("Items."+i+".Item").clone(), lore));
@@ -362,17 +363,15 @@ public class GUI implements Listener{
 	}
 	public static ItemStack getBiddingGlass(Player player, String ID){
 		FileConfiguration config = Main.settings.getConfig();
-		FileConfiguration data = Main.settings.getData();
 		String id = config.getString("Settings.GUISettings.OtherSettings.Bidding.Item");
 		String name = config.getString("Settings.GUISettings.OtherSettings.Bidding.Name");
 		ItemStack item = new ItemStack(Material.AIR);
 		int bid = Bidding.get(player);
-		int topbid = data.getInt("Items."+ID+".Price");
 		if(config.contains("Settings.GUISettings.OtherSettings.Bidding.Lore")){
 			List<String> lore = new ArrayList<String>();
 			for(String l : config.getStringList("Settings.GUISettings.OtherSettings.Bidding.Lore")){
 				lore.add(l.replaceAll("%Bid%", bid+"").replaceAll("%bid%", bid+"")
-						.replaceAll("%TopBid%", topbid+"").replaceAll("%topbid%", topbid+""));
+						.replaceAll("%TopBid%", Api.getPrice(ID, false)).replaceAll("%topbid%", Api.getPrice(ID, false)));
 			}
 			item = Api.makeItem(id, 1, name, lore);
 		}else{
@@ -388,7 +387,7 @@ public class GUI implements Listener{
 		ItemStack item = data.getItemStack("Items."+ID+".Item");
 		List<String> lore = new ArrayList<String>();
 		for(String l : config.getStringList("Settings.GUISettings.Bidding")){
-			lore.add(l.replaceAll("%TopBid%", data.getInt("Items."+ID+".Price")+"").replaceAll("%topbid%", data.getInt("Items."+ID+".Price")+"")
+			lore.add(l.replaceAll("%TopBid%", Api.getPrice(ID, false)).replaceAll("%topbid%", Api.getPrice(ID, false))
 					.replaceAll("%Seller%", seller).replaceAll("%seller%", seller)
 					.replaceAll("%TopBidder%", topbidder).replaceAll("%topbidder%", topbidder)
 					.replaceAll("%Time%", Api.convertToTime(data.getLong("Items."+ID+".Time-Till-Expire"))).replaceAll("%time%", Api.convertToTime(data.getLong("Items."+ID+".Time-Till-Expire"))));
@@ -427,10 +426,12 @@ public class GUI implements Listener{
 								for(Category cat : Category.values()){
 									if(item.getItemMeta().getDisplayName().equals(Api.color(config.getString("Settings.GUISettings.Category-Settings."+cat.getName()+".Name")))){
 										openShop(player, Type.get(player), cat, 1);
+										playClick(player);
 										return;
 									}
 									if(item.getItemMeta().getDisplayName().equals(Api.color(config.getString("Settings.GUISettings.OtherSettings.Back.Name")))){
 										openShop(player, Type.get(player), Cat.get(player), 1);
+										playClick(player);
 										return;
 									}
 								}
@@ -456,11 +457,11 @@ public class GUI implements Listener{
 												.replaceAll("%Money_Needed%", (bid-CM.getMoney(player))+"").replaceAll("%money_needed%", (bid-CM.getMoney(player))+"")));
 										return;
 									}
-									if(data.getInt("Items."+ID+".Price")>bid){
+									if(data.getLong("Items."+ID+".Price")>bid){
 										player.sendMessage(Api.getPrefix()+Api.color(msg.getString("Messages.Bid-More-Money")));
 										return;
 									}
-									if(data.getInt("Items."+ID+".Price")>=bid&&!topBidder.equalsIgnoreCase("None")){
+									if(data.getLong("Items."+ID+".Price")>=bid&&!topBidder.equalsIgnoreCase("None")){
 										player.sendMessage(Api.getPrefix()+Api.color(msg.getString("Messages.Bid-More-Money")));
 										return;
 									}
@@ -471,30 +472,35 @@ public class GUI implements Listener{
 									Main.settings.saveData();
 									Bidding.put(player, 0);
 									player.closeInventory();
+									playClick(player);
 									return;
 								}
 								if(item.getItemMeta().getDisplayName().equals(Api.color("&a+1"))){
 									Bidding.put(player, (Bidding.get(player)+1));
 									inv.setItem(4, getBiddingItem(player, BiddingID.get(player)));
 									inv.setItem(13, getBiddingGlass(player, BiddingID.get(player)));
+									playClick(player);
 									return;
 								}
 								if(item.getItemMeta().getDisplayName().equals(Api.color("&a+10"))){
 									Bidding.put(player, (Bidding.get(player)+10));
 									inv.setItem(4, getBiddingItem(player, BiddingID.get(player)));
 									inv.setItem(13, getBiddingGlass(player, BiddingID.get(player)));
+									playClick(player);
 									return;
 								}
 								if(item.getItemMeta().getDisplayName().equals(Api.color("&a+100"))){
 									Bidding.put(player, (Bidding.get(player)+100));
 									inv.setItem(4, getBiddingItem(player, BiddingID.get(player)));
 									inv.setItem(13, getBiddingGlass(player, BiddingID.get(player)));
+									playClick(player);
 									return;
 								}
 								if(item.getItemMeta().getDisplayName().equals(Api.color("&a+1000"))){
 									Bidding.put(player, (Bidding.get(player)+1000));
 									inv.setItem(4, getBiddingItem(player, BiddingID.get(player)));
 									inv.setItem(13, getBiddingGlass(player, BiddingID.get(player)));
+									playClick(player);
 									return;
 								}
 								if(item.getItemMeta().getDisplayName().equals(Api.color("&c-1"))){
@@ -503,6 +509,7 @@ public class GUI implements Listener{
 									Bidding.put(player, bid);
 									inv.setItem(4, getBiddingItem(player, BiddingID.get(player)));
 									inv.setItem(13, getBiddingGlass(player, BiddingID.get(player)));
+									playClick(player);
 									return;
 								}
 								if(item.getItemMeta().getDisplayName().equals(Api.color("&c-10"))){
@@ -511,6 +518,7 @@ public class GUI implements Listener{
 									Bidding.put(player, bid);
 									inv.setItem(4, getBiddingItem(player, BiddingID.get(player)));
 									inv.setItem(13, getBiddingGlass(player, BiddingID.get(player)));
+									playClick(player);
 									return;
 								}
 								if(item.getItemMeta().getDisplayName().equals(Api.color("&c-100"))){
@@ -519,6 +527,7 @@ public class GUI implements Listener{
 									Bidding.put(player, bid);
 									inv.setItem(4, getBiddingItem(player, BiddingID.get(player)));
 									inv.setItem(13, getBiddingGlass(player, BiddingID.get(player)));
+									playClick(player);
 									return;
 								}
 								if(item.getItemMeta().getDisplayName().equals(Api.color("&c-1000"))){
@@ -527,6 +536,7 @@ public class GUI implements Listener{
 									Bidding.put(player, bid);
 									inv.setItem(4, getBiddingItem(player, BiddingID.get(player)));
 									inv.setItem(13, getBiddingGlass(player, BiddingID.get(player)));
+									playClick(player);
 									return;
 								}
 							}
@@ -546,6 +556,7 @@ public class GUI implements Listener{
 									Api.updateAuction();
 									int page = Integer.parseInt(inv.getName().split("#")[1]);
 									openShop(player, Type.get(player), Cat.get(player), page+1);
+									playClick(player);
 									return;
 								}
 								if(item.getItemMeta().getDisplayName().equals(Api.color(config.getString("Settings.GUISettings.OtherSettings.PreviousPage.Name")))){
@@ -553,36 +564,44 @@ public class GUI implements Listener{
 									int page = Integer.parseInt(inv.getName().split("#")[1]);
 									if(page==1)page++;
 									openShop(player, Type.get(player), Cat.get(player), page-1);
+									playClick(player);
 									return;
 								}
 								if(item.getItemMeta().getDisplayName().equals(Api.color(config.getString("Settings.GUISettings.OtherSettings.Refesh.Name")))){
 									Api.updateAuction();
 									int page = Integer.parseInt(inv.getName().split("#")[1]);
 									openShop(player, Type.get(player), Cat.get(player), page);
+									playClick(player);
 									return;
 								}
 								if(item.getItemMeta().getDisplayName().equals(Api.color(config.getString("Settings.GUISettings.OtherSettings.Bidding/Selling.Selling.Name")))){
 									openShop(player, Shop.BID, Cat.get(player), 1);
+									playClick(player);
 									return;
 								}
 								if(item.getItemMeta().getDisplayName().equals(Api.color(config.getString("Settings.GUISettings.OtherSettings.Bidding/Selling.Bidding.Name")))){
 									openShop(player, Shop.SELL, Cat.get(player), 1);
+									playClick(player);
 									return;
 								}
 								if(item.getItemMeta().getDisplayName().equals(Api.color(config.getString("Settings.GUISettings.OtherSettings.Cancelled/ExpiredItems.Name")))){
 									openPlayersExpiredList(player, 1);
+									playClick(player);
 									return;
 								}
 								if(item.getItemMeta().getDisplayName().equals(Api.color(config.getString("Settings.GUISettings.OtherSettings.SellingItems.Name")))){
 									openPlayersCurrentList(player, 1);
+									playClick(player);
 									return;
 								}
 								if(item.getItemMeta().getDisplayName().equals(Api.color(config.getString("Settings.GUISettings.OtherSettings.Category1.Name")))){
 									openCateories(player);
+									playClick(player);
 									return;
 								}
 								if(item.getItemMeta().getDisplayName().equals(Api.color(config.getString("Settings.GUISettings.OtherSettings.Category2.Name")))){
 									openCateories(player);
+									playClick(player);
 									return;
 								}
 								if(item.getItemMeta().getDisplayName().equals(Api.color(config.getString("Settings.GUISettings.OtherSettings.Your-Item.Name")))){
@@ -619,6 +638,7 @@ public class GUI implements Listener{
 													data.set("Items."+i, null);
 													Main.settings.saveData();
 													player.sendMessage(Api.getPrefix()+Api.color(msg.getString("Messages.Admin-Force-Cancelled")));
+													playClick(player);
 													int page = Integer.parseInt(inv.getName().split("#")[1]);
 													openShop(player, Type.get(player), Cat.get(player), page);
 													return;
@@ -634,6 +654,7 @@ public class GUI implements Listener{
 													I = Api.makeItem(it, 1, name);
 												}
 												inv.setItem(slot, I);
+												playClick(player);
 												Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable(){
 													@Override
 													public void run() {
@@ -642,7 +663,7 @@ public class GUI implements Listener{
 												}, 3*20);
 												return;
 											}
-											int cost = data.getInt("Items."+i+".Price");
+											Long cost = data.getLong("Items."+i+".Price");
 											if(CM.getMoney(player)<cost){
 												String it = config.getString("Settings.GUISettings.OtherSettings.Cant-Afford.Item");
 												String name = config.getString("Settings.GUISettings.OtherSettings.Cant-Afford.Name");
@@ -653,6 +674,7 @@ public class GUI implements Listener{
 													I = Api.makeItem(it, 1, name);
 												}
 												inv.setItem(slot, I);
+												playClick(player);
 												Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable(){
 													@Override
 													public void run() {
@@ -672,6 +694,7 @@ public class GUI implements Listener{
 														I = Api.makeItem(it, 1, name);
 													}
 													inv.setItem(slot, I);
+													playClick(player);
 													Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable(){
 														@Override
 														public void run() {
@@ -680,9 +703,11 @@ public class GUI implements Listener{
 													}, 3*20);
 													return;
 												}
+												playClick(player);
 												openBidding(player, i);
 												BiddingID.put(player, i);
 											}else{
+												playClick(player);
 												openBuying(player, i);
 											}
 											return;
@@ -690,6 +715,7 @@ public class GUI implements Listener{
 									}
 								}
 								if(!T){
+									playClick(player);
 									openShop(player, Type.get(player), Cat.get(player), 1);
 									player.sendMessage(Api.getPrefix()+Api.color(msg.getString("Messages.Item-Doesnt-Exist")));
 									return;
@@ -709,19 +735,22 @@ public class GUI implements Listener{
 							if(item.getItemMeta().hasDisplayName()){
 								if(item.getItemMeta().getDisplayName().equals(Api.color(config.getString("Settings.GUISettings.OtherSettings.Confirm.Name")))){
 									String ID = IDs.get(player);
-									int cost = data.getInt("Items."+ID+".Price");
+									long cost = data.getLong("Items."+ID+".Price");
 									String seller = data.getString("Items."+ID+".Seller");
 									if(!data.contains("Items."+ID)){
+										playClick(player);
 										openShop(player, Type.get(player), Cat.get(player), 1);
 										player.sendMessage(Api.getPrefix()+Api.color(msg.getString("Messages.Item-Doesnt-Exist")));
 										return;
 									}
 									if(Api.isInvFull(player)){
+										playClick(player);
 										player.closeInventory();
 										player.sendMessage(Api.getPrefix()+Api.color(msg.getString("Messages.Inventory-Full")));
 										return;
 									}
 									if(CM.getMoney(player)<cost){
+										playClick(player);
 										player.closeInventory();
 										player.sendMessage(Api.getPrefix()+Api.color(msg.getString("Messages.Need-More-Money")
 												.replaceAll("%Money_Needed%", (cost-CM.getMoney(player))+"").replaceAll("%money_needed%", (cost-CM.getMoney(player))+"")));
@@ -730,22 +759,24 @@ public class GUI implements Listener{
 									CM.removeMoney(player, cost);
 									CM.addMoney(Api.getOfflinePlayer(seller), cost);
 									player.sendMessage(Api.getPrefix()+Api.color(msg.getString("Messages.Bought-Item")
-											.replaceAll("%Price%", cost+"").replaceAll("%price%", cost+"")));
+											.replaceAll("%Price%", Api.getPrice(ID, false)).replaceAll("%price%", Api.getPrice(ID, false))));
 									if(Api.isOnline(seller)){
 										Player sell = Api.getPlayer(seller);
 										sell.sendMessage(Api.getPrefix()+Api.color(msg.getString("Messages.Player-Bought-Item")
-												.replaceAll("%Price%", cost+"").replaceAll("%price%", cost+"")
+												.replaceAll("%Price%", Api.getPrice(ID, false)).replaceAll("%price%", Api.getPrice(ID, false))
 												.replaceAll("%Player%", player.getName()).replaceAll("%player%", player.getName())));
 									}
 									ItemStack i = data.getItemStack("Items."+ID+".Item");
 									player.getInventory().addItem(i);
 									data.set("Items."+ID, null);
 									Main.settings.saveData();
+									playClick(player);
 									openShop(player, Type.get(player), Cat.get(player), 1);
 									return;
 								}
 								if(item.getItemMeta().getDisplayName().equals(Api.color(config.getString("Settings.GUISettings.OtherSettings.Cancel.Name")))){
 									openShop(player, Type.get(player), Cat.get(player), 1);
+									playClick(player);
 									return;
 								}
 							}
@@ -763,6 +794,7 @@ public class GUI implements Listener{
 							if(item.getItemMeta().hasDisplayName()){
 								if(item.getItemMeta().getDisplayName().equals(Api.color(config.getString("Settings.GUISettings.OtherSettings.Back.Name")))){
 									openShop(player, Type.get(player), Cat.get(player), 1);
+									playClick(player);
 									return;
 								}
 							}
@@ -783,12 +815,14 @@ public class GUI implements Listener{
 											data.set("OutOfTime/Cancelled."+num+".Item", data.getItemStack("Items."+i+".Item"));
 											data.set("Items."+i, null);
 											Main.settings.saveData();
+											playClick(player);
 											openPlayersCurrentList(player, 1);
 											return;
 										}
 									}
 								}
 								if(!T){
+									playClick(player);
 									openShop(player, Type.get(player), Cat.get(player), 1);
 									player.sendMessage(Api.getPrefix()+Api.color(msg.getString("Messages.Item-Doesnt-Exist")));
 									return;
@@ -808,6 +842,7 @@ public class GUI implements Listener{
 							if(item.getItemMeta().hasDisplayName()){
 								if(item.getItemMeta().getDisplayName().equals(Api.color(config.getString("Settings.GUISettings.OtherSettings.Back.Name")))){
 									Api.updateAuction();
+									playClick(player);
 									openShop(player, Type.get(player), Cat.get(player), 1);
 									return;
 								}
@@ -815,6 +850,7 @@ public class GUI implements Listener{
 									Api.updateAuction();
 									int page = Integer.parseInt(inv.getName().split("#")[1]);
 									if(page==1)page++;
+									playClick(player);
 									openPlayersExpiredList(player, (page-1));
 									return;
 								}
@@ -835,12 +871,14 @@ public class GUI implements Listener{
 									}
 									player.sendMessage(Api.getPrefix()+Api.color(msg.getString("Messages.Got-Item-Back")));
 									Main.settings.saveData();
+									playClick(player);
 									openPlayersExpiredList(player, page);
 									return;
 								}
 								if(item.getItemMeta().getDisplayName().equals(Api.color(config.getString("Settings.GUISettings.OtherSettings.NextPage.Name")))){
 									Api.updateAuction();
 									int page = Integer.parseInt(inv.getName().split("#")[1]);
+									playClick(player);
 									openPlayersExpiredList(player, (page+1));
 									return;
 								}
@@ -858,12 +896,14 @@ public class GUI implements Listener{
 											player.getInventory().addItem(IT);
 											data.set("OutOfTime/Cancelled."+i, null);
 											Main.settings.saveData();
+											playClick(player);
 											openPlayersExpiredList(player, 1);
 											return;
 										}
 									}
 								}
 								if(!T){
+									playClick(player);
 									openShop(player, Type.get(player), Cat.get(player), 1);
 									player.sendMessage(Api.getPrefix()+Api.color(msg.getString("Messages.Item-Doesnt-Exist")));
 									return;
@@ -873,6 +913,13 @@ public class GUI implements Listener{
 					}
 				}
 			}
+		}
+	}
+	private static void playClick(Player player){
+		if(Api.getVersion()>=191){
+			player.playSound(player.getLocation(), Sound.valueOf("UI_BUTTON_CLICK"), 1, 1);
+		}else{
+			player.playSound(player.getLocation(), Sound.valueOf("CLICK"), 1, 1);
 		}
 	}
 }

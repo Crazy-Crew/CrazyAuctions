@@ -28,19 +28,19 @@ public class Vault {
         econ = rsp.getProvider();
         return econ != null;
     }
-	public static Integer getMoney(Player player){
-		return (int) econ.getBalance(player);
+	public static Long getMoney(Player player){
+		return (long) econ.getBalance(player);
 	}
-	public static void removeMoney(Player player, int amount){
+	public static void removeMoney(Player player, Long amount){
 		econ.withdrawPlayer(player, amount);
 	}
-	public static void removeMoney(OfflinePlayer player, int amount){
+	public static void removeMoney(OfflinePlayer player, Long amount){
 		econ.withdrawPlayer(player, amount);
 	}
-	public static void addMoney(Player player, int amount){
+	public static void addMoney(Player player, Long amount){
 		econ.depositPlayer(player, amount);
 	}
-	public static void addMoney(OfflinePlayer player, int amount){
+	public static void addMoney(OfflinePlayer player, Long amount){
 		econ.depositPlayer(player, amount);
 	}
 }

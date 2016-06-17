@@ -1,5 +1,6 @@
 package me.BadBones69.CrazyAuctions;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -321,18 +322,18 @@ public class Api {
 					if(data.getBoolean("Items."+i+".Biddable")&&!data.getString("Items."+i+".TopBidder").equalsIgnoreCase("None")&&CM.getMoney(Api.getPlayer(data.getString("Items."+i+".TopBidder")))>=data.getInt("Items."+i+".Price")){
 						String winner = data.getString("Items."+i+".TopBidder");
 						String seller = data.getString("Items."+i+".Seller");
-						int price = data.getInt("Items."+i+".Price");
+						Long price = data.getLong("Items."+i+".Price");
 						CM.addMoney(Api.getOfflinePlayer(seller), price);
 						CM.removeMoney(Api.getOfflinePlayer(winner), price);
 						if(Api.isOnline(winner)){
 							Player player = Api.getPlayer(winner);
 							player.sendMessage(Api.getPrefix()+Api.color(msg.getString("Messages.Win-Bidding")
-									.replaceAll("%Price%", price+"").replaceAll("%price%", price+"")));
+									.replaceAll("%Price%", getPrice(i, false)).replaceAll("%price%", getPrice(i, false))));
 						}
 						if(Api.isOnline(seller)){
 							Player player = Api.getPlayer(seller);
 							player.sendMessage(Api.getPrefix()+Api.color(msg.getString("Messages.Someone-Won-Players-Bid")
-									.replaceAll("%Price%", price+"").replaceAll("%price%", price+"")
+									.replaceAll("%Price%", getPrice(i, false)).replaceAll("%price%", getPrice(i, false))
 									.replaceAll("%Player%", winner).replaceAll("%player%", winner)));
 						}
 						data.set("OutOfTime/Cancelled."+num+".Seller", winner);
@@ -355,5 +356,18 @@ public class Api {
 			}
 		}
 		Main.settings.saveData();
+	}
+	public static String getPrice(String ID, Boolean Expired){
+		Long price = 0L;
+		if(Expired){
+			if(Main.settings.getData().contains("OutOfTime/Cancelled."+ID+".Price")){
+				price = Main.settings.getData().getLong("OutOfTime/Cancelled."+ID+".Price");
+			}
+		}else{
+			if(Main.settings.getData().contains("Items."+ID+".Price")){
+				price = Main.settings.getData().getLong("Items."+ID+".Price");
+			}
+		}
+		return NumberFormat.getNumberInstance().format(price);
 	}
 }
