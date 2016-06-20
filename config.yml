@@ -14,7 +14,7 @@ Settings:
   Max-Beginning-Sell-Price: 1000000 #Max amount you can sell a item for.
   Minimum-Bid-Price: 100 #Minimum starting bid.
   Max-Beginning-Bid-Price: 1000000 #Maximum starting bid.
-  Allow-Damaged-Items: False
+  Allow-Damaged-Items: False #Allow items that have been damaged.
   GUISettings: #Settings for things in the gui.
     SellingItemLore: #The lore on items that are being sold.
       - '&7-------------------------'

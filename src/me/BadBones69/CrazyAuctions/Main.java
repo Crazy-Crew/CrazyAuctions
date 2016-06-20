@@ -53,6 +53,7 @@ public class Main extends JavaPlugin implements Listener{
 		if(commandLable.equalsIgnoreCase("CrazyAuctions")||commandLable.equalsIgnoreCase("CrazyAuction")
 				||commandLable.equalsIgnoreCase("CA")||commandLable.equalsIgnoreCase("AH")){
 			if(args.length==0){
+				if(!Api.hasPermission(sender, "Access"))return true;
 				if(!(sender instanceof Player)){
 					sender.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Players-Only")));
 					return true;
@@ -63,6 +64,7 @@ public class Main extends JavaPlugin implements Listener{
 			}
 			if(args.length>=1){
 				if(args[0].equalsIgnoreCase("Help")){// CA Help
+					if(!Api.hasPermission(sender, "Access"))return true;
 					sender.sendMessage(Api.color("&e-- &6Crazy Auctions Help &e--"));
 					sender.sendMessage(Api.color("&9/CA - &eOpens the crazy auction."));
 					sender.sendMessage(Api.color("&9/CA View <Player> - &eSee what a player is selling."));
@@ -82,6 +84,7 @@ public class Main extends JavaPlugin implements Listener{
 					return true;
 				}
 				if(args[0].equalsIgnoreCase("View")){// CA Reload
+					if(!Api.hasPermission(sender, "View"))return true;
 					if(!(sender instanceof Player)){
 						sender.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Players-Only")));
 						return true;
@@ -95,6 +98,7 @@ public class Main extends JavaPlugin implements Listener{
 					return true;
 				}
 				if(args[0].equalsIgnoreCase("Expired")||args[0].equalsIgnoreCase("Collect")){// CA Expired
+					if(!Api.hasPermission(sender, "Access"))return true;
 					if(!(sender instanceof Player)){
 						sender.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Players-Only")));
 						return true;
@@ -104,6 +108,7 @@ public class Main extends JavaPlugin implements Listener{
 					return true;
 				}
 				if(args[0].equalsIgnoreCase("Listed")){// CA Listed
+					if(!Api.hasPermission(sender, "Access"))return true;
 					if(!(sender instanceof Player)){
 						sender.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Players-Only")));
 						return true;

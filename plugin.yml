@@ -3,6 +3,7 @@ author: BadBones69
 main: me.BadBones69.CrazyAuctions.Main
 website: https://www.spigotmc.org/resources/authors/kicjow.9719/
 version: 1.0
+depend: [Vault]
 description: >
              A plugin to auction off items globally.
 commands:
