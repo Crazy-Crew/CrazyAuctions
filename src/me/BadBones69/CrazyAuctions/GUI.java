@@ -1,4 +1,4 @@
-package me.BadBones69.CrazyAuctions;
+package me.badbones69.crazyauctions;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,7 +18,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
-import me.BadBones69.CrazyAuctions.Currency.CM;
+import me.badbones69.crazyauctions.currency.CM;
 
 public class GUI implements Listener{
 	private static HashMap<Player, Integer> Bidding = new HashMap<Player, Integer>();
@@ -43,7 +43,11 @@ public class GUI implements Listener{
 			data.set("Items.Clear", null);
 			Main.settings.saveData();
 		}
-		Cat.put(player, cat);
+		if(cat!=null){
+			Cat.put(player, cat);
+		}else{
+			Cat.put(player, Category.NONE);
+		}
 		if(data.contains("Items")){
 			for(String i : data.getConfigurationSection("Items").getKeys(false)){
 				List<String> lore = new ArrayList<String>();
@@ -115,7 +119,7 @@ public class GUI implements Listener{
 		List.put(player, Id);
 		player.openInventory(inv);
 	}
-	public static void openCateories(Player player){
+	public static void openCateories(Player player, Shop shop){
 		Api.updateAuction();
 		FileConfiguration config = Main.settings.getConfig();
 		Inventory inv = Bukkit.createInventory(null, 54, Api.color(config.getString("Settings.Categories")));
@@ -135,6 +139,7 @@ public class GUI implements Listener{
 				inv.setItem(slot-1, Api.makeItem(id, 1, name));
 			}
 		}
+		Type.put(player, shop);
 		player.openInventory(inv);
 	}
 	public static void openPlayersCurrentList(Player player, int page){
@@ -595,12 +600,12 @@ public class GUI implements Listener{
 									return;
 								}
 								if(item.getItemMeta().getDisplayName().equals(Api.color(config.getString("Settings.GUISettings.OtherSettings.Category1.Name")))){
-									openCateories(player);
+									openCateories(player, Type.get(player));
 									playClick(player);
 									return;
 								}
 								if(item.getItemMeta().getDisplayName().equals(Api.color(config.getString("Settings.GUISettings.OtherSettings.Category2.Name")))){
-									openCateories(player);
+									openCateories(player, Type.get(player));
 									playClick(player);
 									return;
 								}

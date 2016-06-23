@@ -1,4 +1,4 @@
-package me.BadBones69.CrazyAuctions;
+package me.badbones69.crazyauctions;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -16,7 +16,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import me.BadBones69.CrazyAuctions.Currency.Vault;
+import me.badbones69.crazyauctions.currency.Vault;
 
 public class Main extends JavaPlugin implements Listener{
 	public static SettingsManager settings = SettingsManager.getInstance();
@@ -31,6 +31,7 @@ public class Main extends JavaPlugin implements Listener{
 	public void onEnable(){
 		saveDefaultConfig();
 		settings.setup(this);
+		Api.hasUpdate();
 		Bukkit.getServer().getPluginManager().registerEvents(this, this);
 		Bukkit.getServer().getPluginManager().registerEvents(new GUI(this), this);
 		Api.updateAuction();
@@ -39,7 +40,8 @@ public class Main extends JavaPlugin implements Listener{
 	   		saveDefaultConfig();
 	    }
 		if(Bukkit.getPluginManager().getPlugin("Vault")==null){
-			Bukkit.getConsoleSender().sendMessage(Api.getPrefix()+Api.color("&cThis plugin is shutting down. This plugin requires a compatable currency plugin."
+			Bukkit.getConsoleSender().sendMessage(Api.getPrefix()+
+					Api.color("&cThis plugin is shutting down. This plugin requires a compatable currency plugin."
 					+ " &cPlease add Vault to continue using this."));
 			Bukkit.getServer().getPluginManager().disablePlugin(this);
 		}
@@ -59,6 +61,12 @@ public class Main extends JavaPlugin implements Listener{
 					return true;
 				}
 				Player player = (Player) sender;
+				if(settings.getConfig().contains("Settings.Category-Page-Opens-First")){
+					if(settings.getConfig().getBoolean("Settings.Category-Page-Opens-First")){
+						GUI.openCateories(player, Shop.SELL);
+						return true;
+					}
+				}
 				GUI.openShop(player, Shop.SELL, Category.NONE, 1);
 				return true;
 			}
@@ -192,13 +200,17 @@ public class Main extends JavaPlugin implements Listener{
 								}
 							}
 						}
-						if(auc.getItems(player, Shop.SELL).size()>=SellLimit){
-							player.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Max-Items")));
-							return true;
+						if(args[0].equalsIgnoreCase("Sell")){
+							if(auc.getItems(player, Shop.SELL).size()>=SellLimit){
+								player.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Max-Items")));
+								return true;
+							}
 						}
-						if(auc.getItems(player, Shop.BID).size()>=BidLimit){
-							player.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Max-Items")));
-							return true;
+						if(args[0].equalsIgnoreCase("Bid")){
+							if(auc.getItems(player, Shop.BID).size()>=BidLimit){
+								player.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Max-Items")));
+								return true;
+							}
 						}
 						for(String id : settings.getConfig().getStringList("Settings.BlackList")){
 							if(item.getType()==Api.makeItem(id, 1).getType()){
@@ -270,6 +282,9 @@ public class Main extends JavaPlugin implements Listener{
 				if(player.getName().equals("BadBones69")){
 					player.sendMessage(Api.getPrefix()+Api.color("&7This server is running your Crazy Auctions Plugin. "
 						+ "&7It is running version &av"+Bukkit.getServer().getPluginManager().getPlugin("CrazyAuctions").getDescription().getVersion()+"&7."));
+				}
+				if(player.isOp()){
+					Api.hasUpdate(player);
 				}
 			}
 		}, 40);

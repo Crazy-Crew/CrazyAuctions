@@ -1,4 +1,4 @@
-package me.BadBones69.CrazyAuctions;
+package me.badbones69.crazyauctions;
 
 import java.io.BufferedReader;
 import java.io.File;
