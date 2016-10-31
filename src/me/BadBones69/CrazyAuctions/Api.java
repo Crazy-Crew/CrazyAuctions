@@ -216,7 +216,7 @@ public class Api {
 		if(sender instanceof Player){
 			Player player = (Player) sender;
 			if(!player.hasPermission("CrazyAuctions." + perm)){
-				player.sendMessage(color(Main.settings.getConfig().getString("Messages.No-Permission")));
+				player.sendMessage(color(Main.settings.getMsg().getString("Messages.No-Permission")));
 				return false;
 			}else{
 				return true;

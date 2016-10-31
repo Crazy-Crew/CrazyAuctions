@@ -179,8 +179,8 @@ public class Main extends JavaPlugin implements Listener{
 								return true;
 							}
 						}
-						int SellLimit = 1;
-						int BidLimit = 1;
+						int SellLimit = 0;
+						int BidLimit = 0;
 						for(PermissionAttachmentInfo permission : player.getEffectivePermissions()){
 							String perm = permission.getPermission();
 							if(perm.startsWith("crazyauctions.sell.")){
@@ -194,7 +194,7 @@ public class Main extends JavaPlugin implements Listener{
 							if(perm.startsWith("crazyauctions.bid.")){
 								perm=perm.replace("crazyauctions.bid.", "");
 								if(Api.isInt(perm)){
-									if(Integer.parseInt(perm)>SellLimit){
+									if(Integer.parseInt(perm)>BidLimit){
 										BidLimit = Integer.parseInt(perm);
 									}
 								}
