@@ -3,6 +3,7 @@ package me.badbones69.crazyauctions;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -21,17 +22,16 @@ import org.bukkit.plugin.Plugin;
 import me.badbones69.crazyauctions.currency.CM;
 
 public class GUI implements Listener{
+	
 	private static HashMap<Player, Integer> Bidding = new HashMap<Player, Integer>();
 	private static HashMap<Player, String> BiddingID = new HashMap<Player, String>();
 	private static HashMap<Player, Shop> Type = new HashMap<Player, Shop>(); // Shop Type
 	private static HashMap<Player, Category> Cat = new HashMap<Player, Category>(); // Category Type 
 	private static HashMap<Player, List<Integer>> List = new HashMap<Player, List<Integer>>();
 	private static HashMap<Player, String> IDs = new HashMap<Player, String>();
+	
 	public static Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin("CrazyAuctions");
-	@SuppressWarnings("static-access")
-	public GUI(Plugin plugin){
-		this.plugin = plugin;
-	}
+	
 	public static void openShop(Player player, Shop sell, Category cat, int page){
 		Api.updateAuction();
 		FileConfiguration config = Main.settings.getConfig();
@@ -119,6 +119,7 @@ public class GUI implements Listener{
 		List.put(player, Id);
 		player.openInventory(inv);
 	}
+	
 	public static void openCateories(Player player, Shop shop){
 		Api.updateAuction();
 		FileConfiguration config = Main.settings.getConfig();
@@ -142,6 +143,7 @@ public class GUI implements Listener{
 		Type.put(player, shop);
 		player.openInventory(inv);
 	}
+	
 	public static void openPlayersCurrentList(Player player, int page){
 		Api.updateAuction();
 		FileConfiguration config = Main.settings.getConfig();
@@ -185,6 +187,7 @@ public class GUI implements Listener{
 		List.put(player, Id);
 		player.openInventory(inv);
 	}
+	
 	public static void openPlayersExpiredList(Player player, int page){
 		Api.updateAuction();
 		FileConfiguration config = Main.settings.getConfig();
@@ -232,6 +235,7 @@ public class GUI implements Listener{
 		List.put(player, Id);
 		player.openInventory(inv);
 	}
+	
 	public static void openBuying(Player player, String ID){
 		Api.updateAuction();
 		FileConfiguration config = Main.settings.getConfig();
@@ -277,6 +281,7 @@ public class GUI implements Listener{
 		IDs.put(player, ID);
 		player.openInventory(inv);
 	}
+	
 	public static void openBidding(Player player, String ID){
 		Api.updateAuction();
 		FileConfiguration config = Main.settings.getConfig();
@@ -304,6 +309,7 @@ public class GUI implements Listener{
 		inv.setItem(4, getBiddingItem(player, ID));
 		player.openInventory(inv);
 	}
+	
 	public static void openViewer(Player player, String other, int page){
 		Api.updateAuction();
 		FileConfiguration config = Main.settings.getConfig();
@@ -366,6 +372,7 @@ public class GUI implements Listener{
 		List.put(player, Id);
 		player.openInventory(inv);
 	}
+	
 	public static ItemStack getBiddingGlass(Player player, String ID){
 		FileConfiguration config = Main.settings.getConfig();
 		String id = config.getString("Settings.GUISettings.OtherSettings.Bidding.Item");
@@ -384,6 +391,7 @@ public class GUI implements Listener{
 		}
 		return item;
 	}
+	
 	public static ItemStack getBiddingItem(Player player, String ID){
 		FileConfiguration config = Main.settings.getConfig();
 		FileConfiguration data = Main.settings.getData();
@@ -399,6 +407,7 @@ public class GUI implements Listener{
 		}
 		return Api.addLore(item.clone(), lore);
 	}
+	
 	@EventHandler
 	public void onInvClose(InventoryCloseEvent e){
 		FileConfiguration config = Main.settings.getConfig();
@@ -412,6 +421,7 @@ public class GUI implements Listener{
 			}
 		}
 	}
+	
 	@EventHandler
 	public void onInvClick(InventoryClickEvent e){
 		FileConfiguration config = Main.settings.getConfig();
@@ -920,11 +930,30 @@ public class GUI implements Listener{
 			}
 		}
 	}
+	
 	private static void playClick(Player player){
-		if(Api.getVersion()>=191){
-			player.playSound(player.getLocation(), Sound.valueOf("UI_BUTTON_CLICK"), 1, 1);
+		if(Main.settings.getConfig().contains("Settings.Sounds.Toggle")){
+			if(Main.settings.getConfig().getBoolean("Settings.Sounds.Toggle")){
+				String sound = Main.settings.getConfig().getString("Settings.Sounds.Sound");
+				try{
+					player.playSound(player.getLocation(), Sound.valueOf(sound), 1, 1);
+				}catch(Exception e){
+					if(Api.getVersion()>=191){
+						player.playSound(player.getLocation(), Sound.valueOf("UI_BUTTON_CLICK"), 1, 1);
+					}else{
+						player.playSound(player.getLocation(), Sound.valueOf("CLICK"), 1, 1);
+					}
+					Bukkit.getLogger().log(Level.WARNING, "[Crazy Auctions]>> You set the sound to "+sound+" and this is not a sound for your minecraft version. "
+							+ "Please go to the config and set a correct sound or turn the sound off in the toggle setting.");
+				}
+			}
 		}else{
-			player.playSound(player.getLocation(), Sound.valueOf("CLICK"), 1, 1);
+			if(Api.getVersion()>=191){
+				player.playSound(player.getLocation(), Sound.valueOf("UI_BUTTON_CLICK"), 1, 1);
+			}else{
+				player.playSound(player.getLocation(), Sound.valueOf("CLICK"), 1, 1);
+			}
 		}
 	}
+	
 }

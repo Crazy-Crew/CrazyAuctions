@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 public class CrazyAuctions {
+	
 	static CrazyAuctions instance = new CrazyAuctions();
 	
 	public static CrazyAuctions getInstance() {

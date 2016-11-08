@@ -33,7 +33,7 @@ public class Main extends JavaPlugin implements Listener{
 		settings.setup(this);
 		Api.hasUpdate();
 		Bukkit.getServer().getPluginManager().registerEvents(this, this);
-		Bukkit.getServer().getPluginManager().registerEvents(new GUI(this), this);
+		Bukkit.getServer().getPluginManager().registerEvents(new GUI(), this);
 		Api.updateAuction();
 		startCheck();
 		if (!Vault.setupEconomy()){
@@ -161,55 +161,57 @@ public class Main extends JavaPlugin implements Listener{
 						}
 						int price = Integer.parseInt(args[1]);
 						if(args[0].equalsIgnoreCase("Bid")){
-							if(price<settings.getConfig().getInt("Settings.Minimum-Bid-Price")){
+							if(price<settings.getConfig().getLong("Settings.Minimum-Bid-Price")){
 								player.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Bid-Price-To-Low")));
 								return true;
 							}
-							if(price>settings.getConfig().getInt("Settings.Max-Beginning-Bid-Price")){
+							if(price>settings.getConfig().getLong("Settings.Max-Beginning-Bid-Price")){
 								player.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Bid-Price-To-High")));
 								return true;
 							}
 						}else{
-							if(price<settings.getConfig().getInt("Settings.Minimum-Sell-Price")){
+							if(price<settings.getConfig().getLong("Settings.Minimum-Sell-Price")){
 								player.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Sell-Price-To-Low")));
 								return true;
 							}
-							if(price>settings.getConfig().getInt("Settings.Max-Beginning-Sell-Price")){
+							if(price>settings.getConfig().getLong("Settings.Max-Beginning-Sell-Price")){
 								player.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Sell-Price-To-High")));
 								return true;
 							}
 						}
-						int SellLimit = 0;
-						int BidLimit = 0;
-						for(PermissionAttachmentInfo permission : player.getEffectivePermissions()){
-							String perm = permission.getPermission();
-							if(perm.startsWith("crazyauctions.sell.")){
-								perm=perm.replace("crazyauctions.sell.", "");
-								if(Api.isInt(perm)){
-									if(Integer.parseInt(perm)>SellLimit){
-										SellLimit = Integer.parseInt(perm);
+						if(!player.hasPermission("crazyauctions.bypass")){
+							int SellLimit = 0;
+							int BidLimit = 0;
+							for(PermissionAttachmentInfo permission : player.getEffectivePermissions()){
+								String perm = permission.getPermission();
+								if(perm.startsWith("crazyauctions.sell.")){
+									perm=perm.replace("crazyauctions.sell.", "");
+									if(Api.isInt(perm)){
+										if(Integer.parseInt(perm)>SellLimit){
+											SellLimit = Integer.parseInt(perm);
+										}
+									}
+								}
+								if(perm.startsWith("crazyauctions.bid.")){
+									perm=perm.replace("crazyauctions.bid.", "");
+									if(Api.isInt(perm)){
+										if(Integer.parseInt(perm)>BidLimit){
+											BidLimit = Integer.parseInt(perm);
+										}
 									}
 								}
 							}
-							if(perm.startsWith("crazyauctions.bid.")){
-								perm=perm.replace("crazyauctions.bid.", "");
-								if(Api.isInt(perm)){
-									if(Integer.parseInt(perm)>BidLimit){
-										BidLimit = Integer.parseInt(perm);
-									}
+							if(args[0].equalsIgnoreCase("Sell")){
+								if(auc.getItems(player, Shop.SELL).size()>=SellLimit){
+									player.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Max-Items")));
+									return true;
 								}
 							}
-						}
-						if(args[0].equalsIgnoreCase("Sell")){
-							if(auc.getItems(player, Shop.SELL).size()>=SellLimit){
-								player.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Max-Items")));
-								return true;
-							}
-						}
-						if(args[0].equalsIgnoreCase("Bid")){
-							if(auc.getItems(player, Shop.BID).size()>=BidLimit){
-								player.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Max-Items")));
-								return true;
+							if(args[0].equalsIgnoreCase("Bid")){
+								if(auc.getItems(player, Shop.BID).size()>=BidLimit){
+									player.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Max-Items")));
+									return true;
+								}
 							}
 						}
 						for(String id : settings.getConfig().getStringList("Settings.BlackList")){

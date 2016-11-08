@@ -27,21 +27,21 @@ import me.badbones69.crazyauctions.currency.CM;
 
 public class Api {
 	public static Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin("CrazyAuctions");
-	@SuppressWarnings("static-access")
-	public Api(Plugin plugin){
-		this.plugin = plugin;
-	}
+
 	public static String color(String msg){
 		msg = ChatColor.translateAlternateColorCodes('&', msg);
 		return msg;
 	}
+	
 	public static String removeColor(String msg){
 		msg = ChatColor.stripColor(msg);
 		return msg;
 	}
+	
 	public static String getPrefix(){
 		return color(Main.settings.getConfig().getString("Settings.Prefix"));
 	}
+	
 	public static ItemStack makeItem(String type, int amount){
 		int ty = 0;
 		if(type.contains(":")){
@@ -58,6 +58,7 @@ public class Api {
 		}
 		return item;
 	}
+	
 	public static ItemStack makeItem(String type, int amount, String name){
 		int ty = 0;
 		if(type.contains(":")){
@@ -77,6 +78,7 @@ public class Api {
 		item.setItemMeta(me);
 		return item;
 	}
+	
 	public static ItemStack makeItem(String type, int amount, String name, List<String> lore){
 		ArrayList<String> l = new ArrayList<String>();
 		int ty = 0;
@@ -99,6 +101,7 @@ public class Api {
 		item.setItemMeta(me);
 		return item;
 	}
+	
 	public static ItemStack makeItem(Material material, int amount, int type, String name){
 		ItemStack item = new ItemStack(material, amount, (short) type);
 		ItemMeta m = item.getItemMeta();
@@ -106,6 +109,7 @@ public class Api {
 		item.setItemMeta(m);
 		return item;
 	}
+	
 	public static ItemStack makeItem(Material material, int amount, int type, String name, List<String> lore){
 		ArrayList<String> l = new ArrayList<String>();
 		ItemStack item = new ItemStack(material, amount, (short) type);
@@ -116,6 +120,7 @@ public class Api {
 		item.setItemMeta(m);
 		return item;
 	}
+	
 	public static ItemStack makeItem(Material material, int amount, int type, String name, List<String> lore, Map<Enchantment, Integer> enchants){
 		ItemStack item = new ItemStack(material, amount, (short) type);
 		ItemMeta m = item.getItemMeta();
@@ -125,6 +130,7 @@ public class Api {
 		item.addUnsafeEnchantments(enchants);
 		return item;
 	}
+	
 	public static ItemStack addLore(ItemStack item, String i){
 		ArrayList<String> lore = new ArrayList<String>();
 		ItemMeta m = item.getItemMeta();
@@ -136,6 +142,7 @@ public class Api {
 		item.setItemMeta(m);
 		return item;
 	}
+	
 	public static ItemStack addLore(ItemStack item, List<String> list){
 		ArrayList<String> lore = new ArrayList<String>();
 		ItemMeta m = item.getItemMeta();
@@ -145,12 +152,14 @@ public class Api {
 		item.setItemMeta(m);
 		return item;
 	}
+	
 	public static Integer getVersion(){
 		String ver = Bukkit.getServer().getClass().getPackage().getName();
 		ver = ver.substring(ver.lastIndexOf('.')+1);
 		ver=ver.replaceAll("_", "").replaceAll("R", "").replaceAll("v", "");
 		return Integer.parseInt(ver);
 	}
+	
 	@SuppressWarnings("deprecation")
 	public static ItemStack getItemInHand(Player player){
 		if(getVersion()>=191){
@@ -159,6 +168,7 @@ public class Api {
 			return player.getItemInHand();
 		}
 	}
+	
 	@SuppressWarnings("deprecation")
 	public static void setItemInHand(Player player, ItemStack item){
 		if(Api.getVersion()>=191){
@@ -167,6 +177,7 @@ public class Api {
 			player.setItemInHand(item);
 		}
 	}
+	
 	public static boolean isInt(String s) {
 	    try {
 	        Integer.parseInt(s);
@@ -175,19 +186,24 @@ public class Api {
 	    }
 	    return true;
 	}
+	
 	public static Player getPlayer(String name){
 		return Bukkit.getServer().getPlayer(name);
 	}
+	
 	@SuppressWarnings("deprecation")
 	public static OfflinePlayer getOfflinePlayer(String name){
 		return Bukkit.getServer().getOfflinePlayer(name);
 	}
+	
 	public static Location getLoc(Player player){
 		return player.getLocation();
 	}
+	
 	public static void runCMD(Player player, String CMD){
 		player.performCommand(CMD);
 	}
+	
 	public static boolean isOnline(String name){
 		for(Player player : Bukkit.getServer().getOnlinePlayers()){
 			if(player.getName().equalsIgnoreCase(name)){
@@ -196,6 +212,7 @@ public class Api {
 		}
 		return false;
 	}
+	
 	public static boolean isOnline(String name, CommandSender p){
 		for(Player player : Bukkit.getServer().getOnlinePlayers()){
 			if(player.getName().equalsIgnoreCase(name)){
@@ -205,6 +222,7 @@ public class Api {
 		p.sendMessage(color(Main.settings.getMsg().getString("Messages.Not-Online")));
 		return false;
 	}
+	
 	public static boolean hasPermission(Player player, String perm){
 		if(!player.hasPermission("CrazyAuctions." + perm)){
 			player.sendMessage(color(Main.settings.getMsg().getString("Messages.No-Permission")));
@@ -212,6 +230,7 @@ public class Api {
 		}
 		return true;
 	}
+	
 	public static boolean hasPermission(CommandSender sender, String perm){
 		if(sender instanceof Player){
 			Player player = (Player) sender;
@@ -225,6 +244,7 @@ public class Api {
 			return true;
 		}
 	}
+	
 	public static void hasUpdate(){
 		try {
 			HttpURLConnection c = (HttpURLConnection)new URL("http://www.spigotmc.org/api/general.php").openConnection();
@@ -241,6 +261,7 @@ public class Api {
 			return;
 		}
 	}
+	
 	public static void hasUpdate(Player player){
 		try {
 			HttpURLConnection c = (HttpURLConnection)new URL("http://www.spigotmc.org/api/general.php").openConnection();
@@ -257,6 +278,7 @@ public class Api {
 			return;
 		}
 	}
+	
 	public static List<ItemStack> getPage(List<ItemStack> list, Integer page){
 		List<ItemStack> items = new ArrayList<ItemStack>();
 		if(page<=0)page=1;
@@ -276,6 +298,7 @@ public class Api {
 		}
 		return items;
 	}
+	
 	public static List<Integer> getPageInts(List<Integer> list, Integer page){
 		List<Integer> items = new ArrayList<Integer>();
 		if(page<=0)page=1;
@@ -295,12 +318,14 @@ public class Api {
 		}
 		return items;
 	}
+	
 	public static int getMaxPage(List<ItemStack> list){
 		int maxPage = 1;
 		int amount = list.size();
 		for(;amount>45;amount-=45,maxPage++);
 		return maxPage;
 	}
+	
 	public static String convertToTime(long time){
 		Calendar C = Calendar.getInstance();
 		Calendar cal = Calendar.getInstance();
@@ -316,6 +341,7 @@ public class Api {
 		S+=total;
 		return D+"d "+H+"h "+M+"m "+S+"s ";
 	}
+	
 	public static long convertToMill(String time){
 		Calendar cal = Calendar.getInstance();
 		for(String i : time.split(" ")){
@@ -334,12 +360,14 @@ public class Api {
 		}
 		return cal.getTimeInMillis();
 	}
+	
 	public static boolean isInvFull(Player player){
 		if(player.getInventory().firstEmpty()==-1){
 			return true;
 		}
 		return false;
 	}
+	
 	public static void updateAuction(){
 		FileConfiguration data = Main.settings.getData();
 		FileConfiguration msg = Main.settings.getMsg();
@@ -399,6 +427,7 @@ public class Api {
 		}
 		Main.settings.saveData();
 	}
+	
 	public static String getPrice(String ID, Boolean Expired){
 		Long price = 0L;
 		if(Expired){
@@ -412,4 +441,5 @@ public class Api {
 		}
 		return NumberFormat.getNumberInstance().format(price);
 	}
+	
 }

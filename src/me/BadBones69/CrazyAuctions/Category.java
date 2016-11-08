@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.bukkit.Material;
 
 public enum Category{
+	
 	NONE("None", new ArrayList<Material>()), OTHER("Other", getOthers()),
 	ARMOR("Armor", getArmor()), WEAPONS("Weapons", getWeapons()), TOOLS("Tools", getTools()),
 	FOOD("Food", getFood()), POTIONS("Potions", getPotions()), BLOCKS("Blocks", getBlocks());
