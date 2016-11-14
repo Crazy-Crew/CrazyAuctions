@@ -32,4 +32,5 @@ public enum Shop{
 		}
 		return null;
 	}
+
 }
