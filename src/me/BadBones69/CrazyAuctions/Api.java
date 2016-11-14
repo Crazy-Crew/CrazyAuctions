@@ -26,6 +26,7 @@ import org.bukkit.plugin.Plugin;
 import me.badbones69.crazyauctions.currency.CM;
 
 public class Api {
+	
 	public static Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin("CrazyAuctions");
 
 	public static String color(String msg){
