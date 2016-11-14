@@ -279,6 +279,7 @@ public class Main extends JavaPlugin implements Listener{
 		sender.sendMessage(Api.getPrefix()+Api.color("/CA Help"));
 		return false;
 	}
+	
 	@EventHandler
 	public void onJoin(PlayerJoinEvent e){
 		final Player player = e.getPlayer();
@@ -295,7 +296,8 @@ public class Main extends JavaPlugin implements Listener{
 			}
 		}, 40);
 	}
-	void startCheck(){
+	
+	private void startCheck(){
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new Runnable(){
 			@Override
 			public void run() {
@@ -303,7 +305,8 @@ public class Main extends JavaPlugin implements Listener{
 			}
 		}, 20, 5*20);
 	}
-	ArrayList<Material> getDamageableItems(){
+	
+	private ArrayList<Material> getDamageableItems(){
 		ArrayList<Material> ma = new ArrayList<Material>();
 		ma.add(Material.DIAMOND_HELMET);
 		ma.add(Material.DIAMOND_CHESTPLATE);
@@ -355,4 +358,5 @@ public class Main extends JavaPlugin implements Listener{
 		ma.add(Material.FISHING_ROD);
 		return ma;
 	}
+
 }
