@@ -19,14 +19,17 @@ import org.bukkit.plugin.java.JavaPlugin;
 import me.badbones69.crazyauctions.currency.Vault;
 
 public class Main extends JavaPlugin implements Listener{
+	
 	public static SettingsManager settings = SettingsManager.getInstance();
 	public static CrazyAuctions auc = CrazyAuctions.getInstance();
 	int file = 0;
+	
 	@Override
 	public void onDisable(){
 		Bukkit.getScheduler().cancelTask(file);
 		settings.saveData();
 	}
+	
 	@Override
 	public void onEnable(){
 		saveDefaultConfig();
@@ -39,7 +42,7 @@ public class Main extends JavaPlugin implements Listener{
 		if (!Vault.setupEconomy()){
 	   		saveDefaultConfig();
 	    }
-		if(Bukkit.getPluginManager().getPlugin("Vault")==null){
+		if(Bukkit.getPluginManager().getPlugin("Vault") == null){
 			Bukkit.getConsoleSender().sendMessage(Api.getPrefix()+
 					Api.color("&cThis plugin is shutting down. This plugin requires a compatable currency plugin."
 					+ " &cPlease add Vault to continue using this."));
@@ -51,10 +54,11 @@ public class Main extends JavaPlugin implements Listener{
 			System.out.println("Error Submitting stats!");
 		}
 	}
+	
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLable, String[] args){
 		if(commandLable.equalsIgnoreCase("CrazyAuctions")||commandLable.equalsIgnoreCase("CrazyAuction")
 				||commandLable.equalsIgnoreCase("CA")||commandLable.equalsIgnoreCase("AH")){
-			if(args.length==0){
+			if(args.length == 0){
 				if(!Api.hasPermission(sender, "Access"))return true;
 				if(!(sender instanceof Player)){
 					sender.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Players-Only")));
@@ -70,7 +74,7 @@ public class Main extends JavaPlugin implements Listener{
 				GUI.openShop(player, Shop.SELL, Category.NONE, 1);
 				return true;
 			}
-			if(args.length>=1){
+			if(args.length >= 1){
 				if(args[0].equalsIgnoreCase("Help")){// CA Help
 					if(!Api.hasPermission(sender, "Access"))return true;
 					sender.sendMessage(Api.color("&e-- &6Crazy Auctions Help &e--"));
@@ -130,7 +134,7 @@ public class Main extends JavaPlugin implements Listener{
 						sender.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Players-Only")));
 						return true;
 					}
-					if(args.length>=2){
+					if(args.length >= 2){
 						Player player = (Player) sender;
 						if(args[0].equalsIgnoreCase("Sell")){
 							if(!Api.hasPermission(player, "Sell"))return true;
@@ -140,7 +144,7 @@ public class Main extends JavaPlugin implements Listener{
 						}
 						ItemStack item = Api.getItemInHand(player);
 						int amount = item.getAmount();
-						if(args.length>=3){
+						if(args.length >= 3){
 							if(!Api.isInt(args[2])){
 								player.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Not-A-Number")
 										.replaceAll("%Arg%", args[2]).replaceAll("%arg%", args[2])));
@@ -187,7 +191,7 @@ public class Main extends JavaPlugin implements Listener{
 								if(perm.startsWith("crazyauctions.sell.")){
 									perm=perm.replace("crazyauctions.sell.", "");
 									if(Api.isInt(perm)){
-										if(Integer.parseInt(perm)>SellLimit){
+										if(Integer.parseInt(perm) > SellLimit){
 											SellLimit = Integer.parseInt(perm);
 										}
 									}
@@ -195,20 +199,20 @@ public class Main extends JavaPlugin implements Listener{
 								if(perm.startsWith("crazyauctions.bid.")){
 									perm=perm.replace("crazyauctions.bid.", "");
 									if(Api.isInt(perm)){
-										if(Integer.parseInt(perm)>BidLimit){
+										if(Integer.parseInt(perm) > BidLimit){
 											BidLimit = Integer.parseInt(perm);
 										}
 									}
 								}
 							}
 							if(args[0].equalsIgnoreCase("Sell")){
-								if(auc.getItems(player, Shop.SELL).size()>=SellLimit){
+								if(auc.getItems(player, Shop.SELL).size() >= SellLimit){
 									player.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Max-Items")));
 									return true;
 								}
 							}
 							if(args[0].equalsIgnoreCase("Bid")){
-								if(auc.getItems(player, Shop.BID).size()>=BidLimit){
+								if(auc.getItems(player, Shop.BID).size() >= BidLimit){
 									player.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Max-Items")));
 									return true;
 								}

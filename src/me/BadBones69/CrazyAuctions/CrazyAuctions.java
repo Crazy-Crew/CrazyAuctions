@@ -19,7 +19,9 @@ public class CrazyAuctions {
 		ArrayList<ItemStack> items = new ArrayList<ItemStack>();
 		if(data.contains("Items")){
 			for(String i : data.getConfigurationSection("Items").getKeys(false)){
-				items.add(data.getItemStack("Items."+i+".Item").clone());
+				if(data.getString("Items." + i + ".Seller").equalsIgnoreCase(player.getName())){
+					items.add(data.getItemStack("Items."+i+".Item").clone());
+				}
 			}
 		}
 		return items;
@@ -30,13 +32,15 @@ public class CrazyAuctions {
 		ArrayList<ItemStack> items = new ArrayList<ItemStack>();
 		if(data.contains("Items")){
 			for(String i : data.getConfigurationSection("Items").getKeys(false)){
-				if(data.getBoolean("Items."+i+".Biddable")){
-					if(type==Shop.BID){
-						items.add(data.getItemStack("Items."+i+".Item").clone());
-					}
-				}else{
-					if(type==Shop.SELL){
-						items.add(data.getItemStack("Items."+i+".Item").clone());
+				if(data.getString("Items." + i + ".Seller").equalsIgnoreCase(player.getName())){
+					if(data.getBoolean("Items."+i+".Biddable")){
+						if(type == Shop.BID){
+							items.add(data.getItemStack("Items."+i+".Item").clone());
+						}
+					}else{
+						if(type == Shop.SELL){
+							items.add(data.getItemStack("Items."+i+".Item").clone());
+						}
 					}
 				}
 			}
