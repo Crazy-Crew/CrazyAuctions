@@ -100,9 +100,10 @@ public class GUI implements Listener{
 			String name = config.getString("Settings.GUISettings.OtherSettings."+o+".Name");
 			List<String> lore = new ArrayList<String>();
 			int slot = config.getInt("Settings.GUISettings.OtherSettings."+o+".Slot");
+			String cName = Api.color(config.getString("Settings.GUISettings.Category-Settings." + Cat.get(player).getName() + ".Name"));
 			if(config.contains("Settings.GUISettings.OtherSettings."+o+".Lore")){
 				for(String l : config.getStringList("Settings.GUISettings.OtherSettings."+o+".Lore")){
-					lore.add(l.replaceAll("%Category%", Cat.get(player).getName()).replaceAll("%category%", Cat.get(player).getName()));
+					lore.add(l.replaceAll("%Category%", cName).replaceAll("%category%", cName));
 				}
 				inv.setItem(slot-1, Api.makeItem(id, 1, name, lore));
 			}else{
