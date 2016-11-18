@@ -188,6 +188,15 @@ public class Api {
 	    return true;
 	}
 	
+	public static boolean isLong(String s) {
+	    try {
+	        Long.parseLong(s);
+	    } catch (NumberFormatException nfe) {
+	        return false;
+	    }
+	    return true;
+	}
+	
 	public static Player getPlayer(String name){
 		return Bukkit.getServer().getPlayer(name);
 	}

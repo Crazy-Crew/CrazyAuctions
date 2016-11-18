@@ -154,7 +154,7 @@ public class Main extends JavaPlugin implements Listener{
 							if(amount<=0)amount=1;
 							if(amount>item.getAmount())amount=item.getAmount();
 						}
-						if(!Api.isInt(args[1])){
+						if(!Api.isLong(args[1])){
 							player.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Not-A-Number")
 									.replaceAll("%Arg%", args[1]).replaceAll("%arg%", args[1])));
 							return true;
@@ -163,7 +163,7 @@ public class Main extends JavaPlugin implements Listener{
 							player.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Doesnt-Have-Item-In-Hand")));
 							return false;
 						}
-						int price = Integer.parseInt(args[1]);
+						Long price = Long.parseLong(args[1]);
 						if(args[0].equalsIgnoreCase("Bid")){
 							if(price<settings.getConfig().getLong("Settings.Minimum-Bid-Price")){
 								player.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Bid-Price-To-Low")));
