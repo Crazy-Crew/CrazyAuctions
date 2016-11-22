@@ -56,8 +56,9 @@ public class Main extends JavaPlugin implements Listener{
 	}
 	
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLable, String[] args){
-		if(commandLable.equalsIgnoreCase("CrazyAuctions")||commandLable.equalsIgnoreCase("CrazyAuction")
-				||commandLable.equalsIgnoreCase("CA")||commandLable.equalsIgnoreCase("AH")){
+		if(commandLable.equalsIgnoreCase("CrazyAuctions") || commandLable.equalsIgnoreCase("CrazyAuction")
+				|| commandLable.equalsIgnoreCase("CA") || commandLable.equalsIgnoreCase("AH")
+				|| commandLable.equalsIgnoreCase("HDV")){
 			if(args.length == 0){
 				if(!Api.hasPermission(sender, "Access"))return true;
 				if(!(sender instanceof Player)){

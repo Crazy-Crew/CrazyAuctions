@@ -906,15 +906,20 @@ public class GUI implements Listener{
 									for(String i : data.getConfigurationSection("OutOfTime/Cancelled").getKeys(false)){
 										int ID = data.getInt("OutOfTime/Cancelled."+i+".StoreID");
 										if(id==ID){
-											T=true;
-											player.sendMessage(Api.getPrefix()+Api.color(msg.getString("Messages.Got-Item-Back")));
-											ItemStack IT = data.getItemStack("OutOfTime/Cancelled."+i+".Item");
-											player.getInventory().addItem(IT);
-											data.set("OutOfTime/Cancelled."+i, null);
-											Main.settings.saveData();
-											playClick(player);
-											openPlayersExpiredList(player, 1);
-											return;
+											if(!Api.isInvFull(player)){
+												T=true;
+												player.sendMessage(Api.getPrefix()+Api.color(msg.getString("Messages.Got-Item-Back")));
+												ItemStack IT = data.getItemStack("OutOfTime/Cancelled."+i+".Item");
+												player.getInventory().addItem(IT);
+												data.set("OutOfTime/Cancelled."+i, null);
+												Main.settings.saveData();
+												playClick(player);
+												openPlayersExpiredList(player, 1);
+												return;
+											}else{
+												player.sendMessage(Api.getPrefix() + Api.color(msg.getString("Messages.Inventory-Full")));
+												return;
+											}
 										}
 									}
 								}

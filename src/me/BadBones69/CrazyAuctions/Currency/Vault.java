@@ -29,7 +29,10 @@ public class Vault {
         return econ != null;
     }
 	public static Long getMoney(Player player){
-		return (long) econ.getBalance(player);
+		if(player != null){
+			return (long) econ.getBalance(player);
+		}
+		return 0L;
 	}
 	public static void removeMoney(Player player, Long amount){
 		econ.withdrawPlayer(player, amount);
