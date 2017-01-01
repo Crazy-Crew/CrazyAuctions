@@ -10,8 +10,9 @@ public enum Category{
 	ARMOR("Armor", getArmor()), WEAPONS("Weapons", getWeapons()), TOOLS("Tools", getTools()),
 	FOOD("Food", getFood()), POTIONS("Potions", getPotions()), BLOCKS("Blocks", getBlocks());
 	
-	String Name;
-	ArrayList<Material> Items;
+	private String Name;
+	private ArrayList<Material> Items;
+	
 	
 	/**
 	 * @param name Name of the Shop Type.

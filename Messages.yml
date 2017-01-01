@@ -29,3 +29,11 @@ Messages:
   Someone-Won-Players-Bid: '&7%Player% has won your item you from a bid for &a$%Price%.'
   Added-Item-To-Auction: '&7You have just added a item to the crazy auctions for &a$%Price%&7.'
   Bid-Msg: '&7You have just bid &a$%Bid% &7on that item.'
+  Help-Menu:
+    - '&e-- &6Crazy Auctions Help &e--'
+    - '&9/Ah - &eOpens the crazy auction.'
+    - '&9/Ah View <Player> - &eSee what a player is selling.'
+    - '&9/Ah Sell/Bid <Price> [Amount of items] - &eList the item you are holding on the crazy auction.'
+    - '&9/Ah Expired/Collect - &eView and manage your cancelled and expired items.'
+    - '&9/Ah Listed - &eView and manage the items you are selling.'
+    - '&9/Ah Help - &eView this help menu.'

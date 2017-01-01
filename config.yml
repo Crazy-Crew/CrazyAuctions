@@ -54,6 +54,7 @@ Settings:
     Category-Settings:
       Armor:
         Item: '315'
+        Toggle: true
         Slot: 11
         Name: '&6&lArmor'
         Lore:
@@ -61,6 +62,7 @@ Settings:
           - '&7armor that is currently being sold.'
       Weapons:
         Item: '283'
+        Toggle: true
         Slot: 12
         Name: '&6&lWeapons'
         Lore:
@@ -68,6 +70,7 @@ Settings:
           - '&7weapons that is currently being sold.'
       Tools:
         Item: '285'
+        Toggle: true
         Slot: 13
         Name: '&6&lTools'
         Lore:
@@ -75,6 +78,7 @@ Settings:
           - '&7tools that is currently being sold.'
       Food:
         Item: '322'
+        Toggle: true
         Slot: 14
         Name: '&6&lFood'
         Lore:
@@ -82,6 +86,7 @@ Settings:
           - '&7food that is currently being sold.'
       Potions:
         Item: '373:8227'
+        Toggle: true
         Slot: 15
         Name: '&6&lPotions'
         Lore:
@@ -89,6 +94,7 @@ Settings:
           - '&7potions that is currently being sold.'
       Blocks:
         Item: '2'
+        Toggle: true
         Slot: 16
         Name: '&6&lBlocks'
         Lore:
@@ -96,6 +102,7 @@ Settings:
           - '&7blocks that is currently being sold.'
       Other:
         Item: '371'
+        Toggle: true
         Slot: 17
         Name: '&6&lOthers'
         Lore:
@@ -103,6 +110,7 @@ Settings:
           - '&7other items currently being sold.'
       None:
         Item: '166'
+        Toggle: true
         Slot: 23
         Name: '&6&lNone'
         Lore:
@@ -111,6 +119,7 @@ Settings:
     OtherSettings: #Other Settings for the GUIs.
       SellingItems: #The button for your current items.
         Item: '264' #The item that this button is.
+        Toggle: true #If the item is in the gui or not.
         Slot: 46 #The slot it is in. I recommend not changing these. If you do make sure they are still in the bottom row.
         Name: '&6Items You are Selling' #Name of the item.
         Lore: #Lore of the item.
@@ -118,6 +127,7 @@ Settings:
           - '&aare currently selling on the auction.'
       Cancelled/ExpiredItems: #The button for Cancelled/Expired Items.
         Item: '394'
+        Toggle: true
         Slot: 47
         Name: '&6Collect Expired / Cancelled Items'
         Lore:
@@ -125,21 +135,25 @@ Settings:
           - '&aitems you have cancelled or has expired.'
       PreviousPage: #The button for Previous Page.
         Item: '339'
+        Toggle: true
         Slot: 49
         Name: '&6Previous Page'
         Lore: {}
       Refesh: #The button for Refresh Page.
         Item: '175'
+        Toggle: true
         Slot: 50
         Name: '&6Refresh Page'
         Lore: {}
       NextPage: #The button for Next Page.
         Item: '339'
+        Toggle: true
         Slot: 51
         Name: '&6Next Page'
         Lore: {}
       Category1: #The button for Next Page.
         Item: '54'
+        Toggle: true
         Slot: 52
         Name: '&6Categories'
         Lore:
@@ -148,6 +162,7 @@ Settings:
           - '&aClick here to see all categories of items.'
       Category2: #The button for Next Page.
         Item: '54'
+        Toggle: true
         Slot: 48
         Name: '&6Categories'
         Lore:
@@ -157,6 +172,7 @@ Settings:
       Bidding/Selling: #Switch between Bidding and Selling.
         Selling:
           Item: '341'
+          Toggle: true
           Slot: 53
           Name: '&6Currently looking at items being sold.'
           Lore:
@@ -164,6 +180,7 @@ Settings:
             - '&7that you can be bidded on.'
         Bidding:
           Item: '378'
+          Toggle: true
           Slot: 53
           Name: '&6Currently looking at items that can be bid on.'
           Lore:
@@ -172,6 +189,7 @@ Settings:
       WhatIsThis: #The info on all the Books buttons.
         SellingShop: #The Book in the main shop.
           Item: '340'
+          Toggle: true
           Slot: 54
           Name: '&6What Is This Page?'
           Lore:
@@ -184,6 +202,7 @@ Settings:
             - '&amay be interested in buying.'
         BiddingShop: #The Book in the main shop.
           Item: '340'
+          Toggle: true
           Slot: 54
           Name: '&6What Is This Page?'
           Lore:
@@ -196,6 +215,7 @@ Settings:
             - '&amay be interested in bidding on.'
         CurrentItems: #The Book in the Current items GUI.
           Item: '340'
+          Toggle: true
           Slot: 54
           Name: '&6What Is This Page?'
           Lore:
@@ -207,6 +227,7 @@ Settings:
             - '&aexpire time here.'
         Cancelled/ExpiredItems: #The Book in the Cancelled/Expired Items GUI.
           Item: '340'
+          Toggle: true
           Slot: 54
           Name: '&6What Is This Page?'
           Lore:
@@ -219,6 +240,7 @@ Settings:
             - '&ainventory space you will receive that item.'
         Viewing: #The Book in the Viewing Items GUI.
           Item: '340'
+          Toggle: true
           Slot: 50
           Name: '&6What Is This Page?'
           Lore:
@@ -228,6 +250,7 @@ Settings:
             - '&awhat a specific player is selling.'
         Categories: #The Book in the Viewing Items GUI.
           Item: '340'
+          Toggle: true
           Slot: 54
           Name: '&6What Is This Page?'
           Lore:

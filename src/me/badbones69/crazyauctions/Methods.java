@@ -25,7 +25,7 @@ import org.bukkit.plugin.Plugin;
 
 import me.badbones69.crazyauctions.currency.CM;
 
-public class Api {
+public class Methods {
 	
 	public static Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin("CrazyAuctions");
 
@@ -172,7 +172,7 @@ public class Api {
 	
 	@SuppressWarnings("deprecation")
 	public static void setItemInHand(Player player, ItemStack item){
-		if(Api.getVersion()>=191){
+		if(Methods.getVersion()>=191){
 			player.getInventory().setItemInMainHand(item);
 		}else{
 			player.setItemInHand(item);
@@ -399,20 +399,20 @@ public class Api {
 				if(cal.after(expireTime)){
 					int num = 1;
 					for(;data.contains("OutOfTime/Cancelled."+num);num++);
-					if(data.getBoolean("Items."+i+".Biddable")&&!data.getString("Items."+i+".TopBidder").equalsIgnoreCase("None")&&CM.getMoney(Api.getPlayer(data.getString("Items."+i+".TopBidder")))>=data.getInt("Items."+i+".Price")){
+					if(data.getBoolean("Items."+i+".Biddable")&&!data.getString("Items."+i+".TopBidder").equalsIgnoreCase("None")&&CM.getMoney(Methods.getPlayer(data.getString("Items."+i+".TopBidder")))>=data.getInt("Items."+i+".Price")){
 						String winner = data.getString("Items."+i+".TopBidder");
 						String seller = data.getString("Items."+i+".Seller");
 						Long price = data.getLong("Items."+i+".Price");
-						CM.addMoney(Api.getOfflinePlayer(seller), price);
-						CM.removeMoney(Api.getOfflinePlayer(winner), price);
-						if(Api.isOnline(winner)){
-							Player player = Api.getPlayer(winner);
-							player.sendMessage(Api.getPrefix()+Api.color(msg.getString("Messages.Win-Bidding")
+						CM.addMoney(Methods.getOfflinePlayer(seller), price);
+						CM.removeMoney(Methods.getOfflinePlayer(winner), price);
+						if(Methods.isOnline(winner)){
+							Player player = Methods.getPlayer(winner);
+							player.sendMessage(Methods.getPrefix()+Methods.color(msg.getString("Messages.Win-Bidding")
 									.replaceAll("%Price%", getPrice(i, false)).replaceAll("%price%", getPrice(i, false))));
 						}
-						if(Api.isOnline(seller)){
-							Player player = Api.getPlayer(seller);
-							player.sendMessage(Api.getPrefix()+Api.color(msg.getString("Messages.Someone-Won-Players-Bid")
+						if(Methods.isOnline(seller)){
+							Player player = Methods.getPlayer(seller);
+							player.sendMessage(Methods.getPrefix()+Methods.color(msg.getString("Messages.Someone-Won-Players-Bid")
 									.replaceAll("%Price%", getPrice(i, false)).replaceAll("%price%", getPrice(i, false))
 									.replaceAll("%Player%", winner).replaceAll("%player%", winner)));
 						}
@@ -422,9 +422,9 @@ public class Api {
 						data.set("OutOfTime/Cancelled."+num+".Item", data.getItemStack("Items."+i+".Item"));
 					}else{
 						String seller = data.getString("Items."+i+".Seller");
-						if(Api.isOnline(seller)){
-							Player player = Api.getPlayer(seller);
-							player.sendMessage(Api.getPrefix()+Api.color(msg.getString("Messages.Item-Has-Expired")));
+						if(Methods.isOnline(seller)){
+							Player player = Methods.getPlayer(seller);
+							player.sendMessage(Methods.getPrefix()+Methods.color(msg.getString("Messages.Item-Has-Expired")));
 						}
 						data.set("OutOfTime/Cancelled."+num+".Seller", data.getString("Items."+i+".Seller"));
 						data.set("OutOfTime/Cancelled."+num+".Full-Time", fullExpireTime.getTimeInMillis());
