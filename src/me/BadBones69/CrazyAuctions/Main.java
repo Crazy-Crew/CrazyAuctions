@@ -15,6 +15,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import me.badbones69.crazyauctions.currency.Vault;
 
@@ -53,6 +54,9 @@ public class Main extends JavaPlugin implements Listener{
 		} catch (IOException e) {
 			System.out.println("Error Submitting stats!");
 		}
+		try {
+			new MCUpdate(this, true);
+		} catch (IOException e) {}
 	}
 	
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLable, String[] args){
@@ -280,27 +284,27 @@ public class Main extends JavaPlugin implements Listener{
 	@EventHandler
 	public void onJoin(PlayerJoinEvent e){
 		final Player player = e.getPlayer();
-		Bukkit.getScheduler().scheduleSyncDelayedTask(this, new Runnable(){
+		new BukkitRunnable(){
 			@Override
 			public void run() {
 				if(player.getName().equals("BadBones69")){
-					player.sendMessage(Methods.getPrefix()+Methods.color("&7This server is running your Crazy Auctions Plugin. "
-						+ "&7It is running version &av"+Bukkit.getServer().getPluginManager().getPlugin("CrazyAuctions").getDescription().getVersion()+"&7."));
+					player.sendMessage(Methods.getPrefix() + Methods.color("&7This server is running your Crazy Auctions Plugin. "
+						+ "&7It is running version &av" + Bukkit.getServer().getPluginManager().getPlugin("CrazyAuctions").getDescription().getVersion() + "&7."));
 				}
 				if(player.isOp()){
 					Methods.hasUpdate(player);
 				}
 			}
-		}, 40);
+		}.runTaskLaterAsynchronously(this, 40);
 	}
 	
 	private void startCheck(){
-		Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new Runnable(){
+		new BukkitRunnable(){
 			@Override
 			public void run() {
 				Methods.updateAuction();
 			}
-		}, 20, 5*20);
+		}.runTaskTimerAsynchronously(this, 20, 5*20);
 	}
 	
 	private ArrayList<Material> getDamageableItems(){
