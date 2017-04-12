@@ -50,11 +50,6 @@ public class Main extends JavaPlugin implements Listener{
 			Bukkit.getServer().getPluginManager().disablePlugin(this);
 		}
 		try {
-			Metrics metrics = new Metrics(this); metrics.start();
-		} catch (IOException e) {
-			System.out.println("Error Submitting stats!");
-		}
-		try {
 			new MCUpdate(this, true);
 		} catch (IOException e) {}
 	}
