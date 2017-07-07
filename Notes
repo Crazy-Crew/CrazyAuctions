@@ -1,7 +1,18 @@
-Features:
-  (Request) Add it so you can sell more then just 64 of a stack.
-  (Request) Add a history purchase history.
-  (Bug) When you collect an item from the expired list with a fully inventory, the item gets lost.
+Feature Requests:
+  - Add it so you can sell more then just 64 of a stack.
+  - Add a history purchase history.
+  - Add a taxation option.
+  - Add an option to broadcast a message when a player adds a new item.
+  - Add a black list to block names and lores.
+  - Add an option to set Bidding as the 1st GUI.
+  - Add the command translation for Spanish and Portugees.
+  - Add MySQL support.
+  - Make the command messages all configurable.
+  - Add a tax system for when a player buys an item.
+  - Add an option to search for items by ID.
+  
+Reports:
+  - When you collect an item from the expired list with a fully inventory, the item gets lost.
 
 Bug Fixes:
   - 
@@ -13,4 +24,4 @@ Changes:
   - 
   
 Removed:
-  - MCStats metrics has been removed due to it being dead.
+  - 

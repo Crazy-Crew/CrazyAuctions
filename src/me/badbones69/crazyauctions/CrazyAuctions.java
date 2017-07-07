@@ -8,9 +8,12 @@ import org.bukkit.inventory.ItemStack;
 
 public class CrazyAuctions {
 	
-	static CrazyAuctions instance = new CrazyAuctions();
+	public static CrazyAuctions instance;
 	
 	public static CrazyAuctions getInstance() {
+		if(instance == null){
+			instance  = new CrazyAuctions();
+		}
 		return instance;
 	}
 	
@@ -33,7 +36,7 @@ public class CrazyAuctions {
 		if(data.contains("Items")){
 			for(String i : data.getConfigurationSection("Items").getKeys(false)){
 				if(data.getString("Items." + i + ".Seller").equalsIgnoreCase(player.getName())){
-					if(data.getBoolean("Items."+i+".Biddable")){
+					if(data.getBoolean("Items." + i + ".Biddable")){
 						if(type == Shop.BID){
 							items.add(data.getItemStack("Items."+i+".Item").clone());
 						}

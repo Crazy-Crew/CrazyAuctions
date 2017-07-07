@@ -6,9 +6,14 @@ import org.bukkit.Material;
 
 public enum Category{
 	
-	NONE("None", new ArrayList<Material>()), OTHER("Other", getOthers()),
-	ARMOR("Armor", getArmor()), WEAPONS("Weapons", getWeapons()), TOOLS("Tools", getTools()),
-	FOOD("Food", getFood()), POTIONS("Potions", getPotions()), BLOCKS("Blocks", getBlocks());
+	NONE("None", new ArrayList<Material>()),
+	OTHER("Other", getOthers()),
+	ARMOR("Armor", getArmor()),
+	WEAPONS("Weapons", getWeapons()),
+	TOOLS("Tools", getTools()),
+	FOOD("Food", getFood()),
+	POTIONS("Potions", getPotions()),
+	BLOCKS("Blocks", getBlocks());
 	
 	private String Name;
 	private ArrayList<Material> Items;
@@ -18,8 +23,8 @@ public enum Category{
 	 * @param name Name of the Shop Type.
 	 */
 	private Category(String name, ArrayList<Material> items){
-		this.Name=name;
-		this.Items=items;
+		this.Name = name;
+		this.Items = items;
 	}
 	
 	/**
@@ -70,6 +75,7 @@ public enum Category{
 		ma.add(Material.DIAMOND_BOOTS);
 		return ma;
 	}
+	
 	private static ArrayList<Material> getTools(){
 		ArrayList<Material> ma = new ArrayList<Material>();
 		ma.add(Material.WOOD_PICKAXE);
@@ -90,6 +96,7 @@ public enum Category{
 		ma.add(Material.DIAMOND_HOE);
 		return ma;
 	}
+	
 	private static ArrayList<Material> getWeapons(){
 		ArrayList<Material> ma = new ArrayList<Material>();
 		ma.add(Material.WOOD_SWORD);
@@ -103,6 +110,7 @@ public enum Category{
 		ma.add(Material.BOW);
 		return ma;
 	}
+
 	private static ArrayList<Material> getFood(){
 		ArrayList<Material> ma = new ArrayList<Material>();
 		for(Material m : Material.values()){
@@ -112,11 +120,13 @@ public enum Category{
 		}
 		return ma;
 	}
+
 	private static ArrayList<Material> getPotions(){
 		ArrayList<Material> ma = new ArrayList<Material>();
 		ma.add(Material.POTION);
 		return ma;
 	}
+
 	private static ArrayList<Material> getBlocks(){
 		ArrayList<Material> ma = new ArrayList<Material>();
 		for(Material m : Material.values()){
@@ -126,6 +136,7 @@ public enum Category{
 		}
 		return ma;
 	}
+
 	private static ArrayList<Material> getOthers(){
 		ArrayList<Material> ma = new ArrayList<Material>();
 		for(Material m : Material.values()){
@@ -136,4 +147,5 @@ public enum Category{
 		}
 		return ma;
 	}
+
 }

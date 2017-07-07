@@ -6,7 +6,8 @@ import org.bukkit.entity.Player;
 
 import me.badbones69.crazyauctions.Main;
 
-public enum CM { // Currency Manager
+public enum CurrencyManager { // Currency Manager
+	
 	VAULT("Vault", "Money");
 
 	String PluginName, Name;
@@ -17,7 +18,7 @@ public enum CM { // Currency Manager
 	 * @param name
 	 *            Name of the Currency.
 	 */
-	private CM(String pluginname, String name) {
+	private CurrencyManager(String pluginname, String name) {
 		this.PluginName = pluginname;
 		this.Name = name;
 	}
@@ -41,8 +42,8 @@ public enum CM { // Currency Manager
 	 *            Name of the Type you want.
 	 * @return Returns the Currency as a Enum.
 	 */
-	public static CM getFromName(String name) {
-		for (CM type : CM.values()) {
+	public static CurrencyManager getFromName(String name) {
+		for (CurrencyManager type : CurrencyManager.values()) {
 			if (type.getPluginName().equalsIgnoreCase(name)) {
 				return type;
 			}

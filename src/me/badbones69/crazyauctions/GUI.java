@@ -19,7 +19,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
-import me.badbones69.crazyauctions.currency.CM;
+import me.badbones69.crazyauctions.currency.CurrencyManager;
 
 public class GUI implements Listener{
 	
@@ -43,7 +43,7 @@ public class GUI implements Listener{
 			data.set("Items.Clear", null);
 			Main.settings.saveData();
 		}
-		if(cat!=null){
+		if(cat != null){
 			Cat.put(player, cat);
 		}else{
 			Cat.put(player, Category.NONE);
@@ -51,7 +51,7 @@ public class GUI implements Listener{
 		if(data.contains("Items")){
 			for(String i : data.getConfigurationSection("Items").getKeys(false)){
 				List<String> lore = new ArrayList<String>();
-				if(cat.getItems().contains(data.getItemStack("Items."+i+".Item").getType())||cat==Category.NONE){
+				if(cat.getItems().contains(data.getItemStack("Items."+i+".Item").getType()) || cat == Category.NONE){
 					if(data.getBoolean("Items."+i+".Biddable")){
 						if(sell==Shop.BID){
 							String seller = data.getString("Items."+i+".Seller");
@@ -493,9 +493,9 @@ public class GUI implements Listener{
 									String ID = BiddingID.get(player);
 									int bid = Bidding.get(player);
 									String topBidder = data.getString("Items."+ID+".TopBidder");
-									if(CM.getMoney(player)<bid){
+									if(CurrencyManager.getMoney(player)<bid){
 										player.sendMessage(Methods.getPrefix()+Methods.color(msg.getString("Messages.Need-More-Money")
-												.replaceAll("%Money_Needed%", (bid-CM.getMoney(player))+"").replaceAll("%money_needed%", (bid-CM.getMoney(player))+"")));
+												.replaceAll("%Money_Needed%", (bid-CurrencyManager.getMoney(player))+"").replaceAll("%money_needed%", (bid-CurrencyManager.getMoney(player))+"")));
 										return;
 									}
 									if(data.getLong("Items."+ID+".Price")>bid){
@@ -705,7 +705,7 @@ public class GUI implements Listener{
 												return;
 											}
 											Long cost = data.getLong("Items."+i+".Price");
-											if(CM.getMoney(player)<cost){
+											if(CurrencyManager.getMoney(player)<cost){
 												String it = config.getString("Settings.GUISettings.OtherSettings.Cant-Afford.Item");
 												String name = config.getString("Settings.GUISettings.OtherSettings.Cant-Afford.Name");
 												ItemStack I = new ItemStack(Material.AIR);
@@ -790,15 +790,15 @@ public class GUI implements Listener{
 										player.sendMessage(Methods.getPrefix()+Methods.color(msg.getString("Messages.Inventory-Full")));
 										return;
 									}
-									if(CM.getMoney(player)<cost){
+									if(CurrencyManager.getMoney(player)<cost){
 										playClick(player);
 										player.closeInventory();
 										player.sendMessage(Methods.getPrefix()+Methods.color(msg.getString("Messages.Need-More-Money")
-												.replaceAll("%Money_Needed%", (cost-CM.getMoney(player))+"").replaceAll("%money_needed%", (cost-CM.getMoney(player))+"")));
+												.replaceAll("%Money_Needed%", (cost-CurrencyManager.getMoney(player))+"").replaceAll("%money_needed%", (cost-CurrencyManager.getMoney(player))+"")));
 										return;
 									}
-									CM.removeMoney(player, cost);
-									CM.addMoney(Methods.getOfflinePlayer(seller), cost);
+									CurrencyManager.removeMoney(player, cost);
+									CurrencyManager.addMoney(Methods.getOfflinePlayer(seller), cost);
 									player.sendMessage(Methods.getPrefix()+Methods.color(msg.getString("Messages.Bought-Item")
 											.replaceAll("%Price%", Methods.getPrice(ID, false)).replaceAll("%price%", Methods.getPrice(ID, false))));
 									if(Methods.isOnline(seller)){

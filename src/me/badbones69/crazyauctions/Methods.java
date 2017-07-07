@@ -23,20 +23,18 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 
-import me.badbones69.crazyauctions.currency.CM;
+import me.badbones69.crazyauctions.currency.CurrencyManager;
 
 public class Methods {
 	
 	public static Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin("CrazyAuctions");
 
 	public static String color(String msg){
-		msg = ChatColor.translateAlternateColorCodes('&', msg);
-		return msg;
+		return ChatColor.translateAlternateColorCodes('&', msg);
 	}
 	
 	public static String removeColor(String msg){
-		msg = ChatColor.stripColor(msg);
-		return msg;
+		return ChatColor.stripColor(msg);
 	}
 	
 	public static String getPrefix(){
@@ -399,12 +397,12 @@ public class Methods {
 				if(cal.after(expireTime)){
 					int num = 1;
 					for(;data.contains("OutOfTime/Cancelled."+num);num++);
-					if(data.getBoolean("Items."+i+".Biddable")&&!data.getString("Items."+i+".TopBidder").equalsIgnoreCase("None")&&CM.getMoney(Methods.getPlayer(data.getString("Items."+i+".TopBidder")))>=data.getInt("Items."+i+".Price")){
+					if(data.getBoolean("Items."+i+".Biddable")&&!data.getString("Items."+i+".TopBidder").equalsIgnoreCase("None")&&CurrencyManager.getMoney(Methods.getPlayer(data.getString("Items."+i+".TopBidder")))>=data.getInt("Items."+i+".Price")){
 						String winner = data.getString("Items."+i+".TopBidder");
 						String seller = data.getString("Items."+i+".Seller");
 						Long price = data.getLong("Items."+i+".Price");
-						CM.addMoney(Methods.getOfflinePlayer(seller), price);
-						CM.removeMoney(Methods.getOfflinePlayer(winner), price);
+						CurrencyManager.addMoney(Methods.getOfflinePlayer(seller), price);
+						CurrencyManager.removeMoney(Methods.getOfflinePlayer(winner), price);
 						if(Methods.isOnline(winner)){
 							Player player = Methods.getPlayer(winner);
 							player.sendMessage(Methods.getPrefix()+Methods.color(msg.getString("Messages.Win-Bidding")

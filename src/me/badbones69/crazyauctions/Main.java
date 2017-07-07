@@ -23,13 +23,7 @@ public class Main extends JavaPlugin implements Listener{
 	
 	public static SettingsManager settings = SettingsManager.getInstance();
 	public static CrazyAuctions auc = CrazyAuctions.getInstance();
-	int file = 0;
-	
-	@Override
-	public void onDisable(){
-		Bukkit.getScheduler().cancelTask(file);
-		settings.saveData();
-	}
+	private int file = 0;
 	
 	@Override
 	public void onEnable(){
@@ -52,6 +46,12 @@ public class Main extends JavaPlugin implements Listener{
 		try {
 			new MCUpdate(this, true);
 		} catch (IOException e) {}
+	}
+	
+	@Override
+	public void onDisable(){
+		Bukkit.getScheduler().cancelTask(file);
+		settings.saveData();
 	}
 	
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLable, String[] args){
@@ -299,7 +299,7 @@ public class Main extends JavaPlugin implements Listener{
 			public void run() {
 				Methods.updateAuction();
 			}
-		}.runTaskTimerAsynchronously(this, 20, 5*20);
+		}.runTaskTimer(this, 20, 5*20);
 	}
 	
 	private ArrayList<Material> getDamageableItems(){
