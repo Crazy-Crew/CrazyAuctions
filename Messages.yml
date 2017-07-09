@@ -2,7 +2,7 @@ Messages:
   Players-Only: '&cOnly players can use this command.'
   Reload: '&7You have just reloaded the Crazy Auctions Files.'
   Need-More-Money: '&cYou are in need of &a$%Money_Needed%&c.'
-  Inventory-Full: '&cYour inventory is to full. Please open up some space to buy that.'
+  Inventory-Full: '&cYour inventory is too full. Please open up some space to buy that.'
   No-Permission: '&cYou do not have permission to use that command!'
   Not-Online: '&cThat player is not online at this time.'
   Doesnt-Have-Item-In-Hand: '&cYou must have an item in your hand.'
