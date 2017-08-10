@@ -17,7 +17,14 @@ import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import me.badbones69.crazyauctions.api.Category;
+import me.badbones69.crazyauctions.api.CrazyAuctions;
+import me.badbones69.crazyauctions.api.MCUpdate;
+import me.badbones69.crazyauctions.api.SettingsManager;
+import me.badbones69.crazyauctions.api.ShopType;
+import me.badbones69.crazyauctions.controlers.GUI;
 import me.badbones69.crazyauctions.currency.Vault;
+import me.badbones69.crazyauctions.events.AuctionListEvent;
 
 public class Main extends JavaPlugin implements Listener{
 	
@@ -67,11 +74,11 @@ public class Main extends JavaPlugin implements Listener{
 				Player player = (Player) sender;
 				if(settings.getConfig().contains("Settings.Category-Page-Opens-First")){
 					if(settings.getConfig().getBoolean("Settings.Category-Page-Opens-First")){
-						GUI.openCateories(player, Shop.SELL);
+						GUI.openCateories(player, ShopType.SELL);
 						return true;
 					}
 				}
-				GUI.openShop(player, Shop.SELL, Category.NONE, 1);
+				GUI.openShop(player, ShopType.SELL, Category.NONE, 1);
 				return true;
 			}
 			if(args.length >= 1){
@@ -201,14 +208,26 @@ public class Main extends JavaPlugin implements Listener{
 									}
 								}
 							}
+							for(int i = 1; i < 100; i++) {
+								if(SellLimit < i) {
+									if(player.hasPermission("crazyauctions.sell." + i)) {
+										SellLimit = i;
+									}
+								}
+								if(BidLimit < i) {
+									if(player.hasPermission("crazyauctions.bid." + i)) {
+										BidLimit = i;
+									}
+								}
+							}
 							if(args[0].equalsIgnoreCase("Sell")){
-								if(auc.getItems(player, Shop.SELL).size() >= SellLimit){
+								if(auc.getItems(player, ShopType.SELL).size() >= SellLimit){
 									player.sendMessage(Methods.getPrefix()+Methods.color(settings.getMsg().getString("Messages.Max-Items")));
 									return true;
 								}
 							}
 							if(args[0].equalsIgnoreCase("Bid")){
-								if(auc.getItems(player, Shop.BID).size() >= BidLimit){
+								if(auc.getItems(player, ShopType.BID).size() >= BidLimit){
 									player.sendMessage(Methods.getPrefix()+Methods.color(settings.getMsg().getString("Messages.Max-Items")));
 									return true;
 								}
@@ -244,12 +263,14 @@ public class Main extends JavaPlugin implements Listener{
 						settings.getData().set("Items."+num+".Full-Time", Methods.convertToMill(settings.getConfig().getString("Settings.Full-Expire-Time")));
 						int id = r.nextInt(999999);
 						// Runs 3x to check for same ID.
-						for(String i : settings.getData().getConfigurationSection("Items").getKeys(false))if(settings.getData().getInt("Items."+i+".StoreID")==id)id=r.nextInt(999999);
-						for(String i : settings.getData().getConfigurationSection("Items").getKeys(false))if(settings.getData().getInt("Items."+i+".StoreID")==id)id=r.nextInt(999999);
-						for(String i : settings.getData().getConfigurationSection("Items").getKeys(false))if(settings.getData().getInt("Items."+i+".StoreID")==id)id=r.nextInt(999999);
+						for(String i : settings.getData().getConfigurationSection("Items").getKeys(false))if(settings.getData().getInt("Items."+i+".StoreID")==id)id=r.nextInt(Integer.MAX_VALUE);
+						for(String i : settings.getData().getConfigurationSection("Items").getKeys(false))if(settings.getData().getInt("Items."+i+".StoreID")==id)id=r.nextInt(Integer.MAX_VALUE);
+						for(String i : settings.getData().getConfigurationSection("Items").getKeys(false))if(settings.getData().getInt("Items."+i+".StoreID")==id)id=r.nextInt(Integer.MAX_VALUE);
 						settings.getData().set("Items."+num+".StoreID", id);
+						ShopType type = ShopType.SELL;
 						if(args[0].equalsIgnoreCase("Bid")){
 							settings.getData().set("Items."+num+".Biddable", true);
+							type = ShopType.BID;
 						}else{
 							settings.getData().set("Items."+num+".Biddable", false);
 						}
@@ -258,6 +279,7 @@ public class Main extends JavaPlugin implements Listener{
 						I.setAmount(amount);
 						settings.getData().set("Items."+num+".Item", I);
 						settings.saveData();
+						Bukkit.getPluginManager().callEvent(new AuctionListEvent(player, type, I, price));
 						player.sendMessage(Methods.getPrefix()+Methods.color(settings.getMsg().getString("Messages.Added-Item-To-Auction")
 								.replaceAll("%Price%", price+"").replaceAll("%price%", price+"")));
 						if(item.getAmount()<=1||(item.getAmount()-amount)<=0){

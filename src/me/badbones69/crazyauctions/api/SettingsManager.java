@@ -1,4 +1,4 @@
-package me.badbones69.crazyauctions;
+package me.badbones69.crazyauctions.api;
 
 import java.io.File;
 import java.io.FileOutputStream;

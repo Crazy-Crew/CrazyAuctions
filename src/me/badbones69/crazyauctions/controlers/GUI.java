@@ -1,4 +1,4 @@
-package me.badbones69.crazyauctions;
+package me.badbones69.crazyauctions.controlers;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,20 +19,26 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
+import me.badbones69.crazyauctions.Main;
+import me.badbones69.crazyauctions.Methods;
+import me.badbones69.crazyauctions.api.Category;
+import me.badbones69.crazyauctions.api.ShopType;
 import me.badbones69.crazyauctions.currency.CurrencyManager;
+import me.badbones69.crazyauctions.events.AuctionBuyEvent;
+import me.badbones69.crazyauctions.events.AuctionNewBidEvent;
 
 public class GUI implements Listener{
 	
 	private static HashMap<Player, Integer> Bidding = new HashMap<Player, Integer>();
 	private static HashMap<Player, String> BiddingID = new HashMap<Player, String>();
-	private static HashMap<Player, Shop> Type = new HashMap<Player, Shop>(); // Shop Type
+	private static HashMap<Player, ShopType> Type = new HashMap<Player, ShopType>(); // Shop Type
 	private static HashMap<Player, Category> Cat = new HashMap<Player, Category>(); // Category Type 
 	private static HashMap<Player, List<Integer>> List = new HashMap<Player, List<Integer>>();
 	private static HashMap<Player, String> IDs = new HashMap<Player, String>();
 	
 	public static Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin("CrazyAuctions");
 	
-	public static void openShop(Player player, Shop sell, Category cat, int page){
+	public static void openShop(Player player, ShopType sell, Category cat, int page){
 		Methods.updateAuction();
 		FileConfiguration config = Main.settings.getConfig();
 		FileConfiguration data = Main.settings.getData();
@@ -53,7 +59,7 @@ public class GUI implements Listener{
 				List<String> lore = new ArrayList<String>();
 				if(cat.getItems().contains(data.getItemStack("Items."+i+".Item").getType()) || cat == Category.NONE){
 					if(data.getBoolean("Items."+i+".Biddable")){
-						if(sell==Shop.BID){
+						if(sell==ShopType.BID){
 							String seller = data.getString("Items."+i+".Seller");
 							String topbidder = data.getString("Items."+i+".TopBidder");
 							for(String l : config.getStringList("Settings.GUISettings.Bidding")){
@@ -66,7 +72,7 @@ public class GUI implements Listener{
 							ID.add(data.getInt("Items."+i+".StoreID"));
 						}
 					}else{
-						if(sell==Shop.SELL){
+						if(sell==ShopType.SELL){
 							for(String l : config.getStringList("Settings.GUISettings.SellingItemLore")){
 								lore.add(l.replaceAll("%Price%", Methods.getPrice(i, false)).replaceAll("%price%", Methods.getPrice(i, false))
 										.replaceAll("%Seller%", data.getString("Items."+i+".Seller")).replaceAll("%seller%", data.getString("Items."+i+".Seller")));
@@ -85,13 +91,13 @@ public class GUI implements Listener{
 		options.add("SellingItems");options.add("Cancelled/ExpiredItems");
 		options.add("PreviousPage");options.add("Refesh");options.add("NextPage");
 		options.add("Category1");options.add("Category2");
-		if(sell==Shop.SELL){
-			Type.put(player, Shop.SELL);
+		if(sell==ShopType.SELL){
+			Type.put(player, ShopType.SELL);
 			options.add("Bidding/Selling.Selling");
 			options.add("WhatIsThis.SellingShop");
 		}
-		if(sell==Shop.BID){
-			Type.put(player, Shop.BID);
+		if(sell==ShopType.BID){
+			Type.put(player, ShopType.BID);
 			options.add("Bidding/Selling.Bidding");
 			options.add("WhatIsThis.BiddingShop");
 		}
@@ -126,7 +132,7 @@ public class GUI implements Listener{
 		player.openInventory(inv);
 	}
 	
-	public static void openCateories(Player player, Shop shop){
+	public static void openCateories(Player player, ShopType shop){
 		Methods.updateAuction();
 		FileConfiguration config = Main.settings.getConfig();
 		Inventory inv = Bukkit.createInventory(null, 54, Methods.color(config.getString("Settings.Categories")));
@@ -263,7 +269,7 @@ public class GUI implements Listener{
 		FileConfiguration data = Main.settings.getData();
 		FileConfiguration msg = Main.settings.getMsg();
 		if(!data.contains("Items."+ID)){
-			openShop(player, Shop.SELL, Cat.get(player), 1);
+			openShop(player, ShopType.SELL, Cat.get(player), 1);
 			player.sendMessage(Methods.getPrefix()+Methods.color(msg.getString("Messages.Item-Doesnt-Exist")));
 			return;
 		}
@@ -309,7 +315,7 @@ public class GUI implements Listener{
 		FileConfiguration data = Main.settings.getData();
 		FileConfiguration msg = Main.settings.getMsg();
 		if(!data.contains("Items."+ID)){
-			openShop(player, Shop.BID, Cat.get(player), 1);
+			openShop(player, ShopType.BID, Cat.get(player), 1);
 			player.sendMessage(Methods.getPrefix()+Methods.color(msg.getString("Messages.Item-Doesnt-Exist")));
 			return;
 		}
@@ -506,6 +512,7 @@ public class GUI implements Listener{
 										player.sendMessage(Methods.getPrefix()+Methods.color(msg.getString("Messages.Bid-More-Money")));
 										return;
 									}
+									Bukkit.getPluginManager().callEvent(new AuctionNewBidEvent(player, data.getItemStack("Items."+ID+".Item"), bid));
 									data.set("Items."+ID+".Price", bid);
 									data.set("Items."+ID+".TopBidder", player.getName());
 									player.sendMessage(Methods.getPrefix()+Methods.color(msg.getString("Messages.Bid-Msg")
@@ -616,12 +623,12 @@ public class GUI implements Listener{
 									return;
 								}
 								if(item.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.Bidding/Selling.Selling.Name")))){
-									openShop(player, Shop.BID, Cat.get(player), 1);
+									openShop(player, ShopType.BID, Cat.get(player), 1);
 									playClick(player);
 									return;
 								}
 								if(item.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.Bidding/Selling.Bidding.Name")))){
-									openShop(player, Shop.SELL, Cat.get(player), 1);
+									openShop(player, ShopType.SELL, Cat.get(player), 1);
 									playClick(player);
 									return;
 								}
@@ -797,6 +804,8 @@ public class GUI implements Listener{
 												.replaceAll("%Money_Needed%", (cost-CurrencyManager.getMoney(player))+"").replaceAll("%money_needed%", (cost-CurrencyManager.getMoney(player))+"")));
 										return;
 									}
+									ItemStack i = data.getItemStack("Items."+ID+".Item");
+									Bukkit.getPluginManager().callEvent(new AuctionBuyEvent(player, i, cost));
 									CurrencyManager.removeMoney(player, cost);
 									CurrencyManager.addMoney(Methods.getOfflinePlayer(seller), cost);
 									player.sendMessage(Methods.getPrefix()+Methods.color(msg.getString("Messages.Bought-Item")
@@ -807,7 +816,6 @@ public class GUI implements Listener{
 												.replaceAll("%Price%", Methods.getPrice(ID, false)).replaceAll("%price%", Methods.getPrice(ID, false))
 												.replaceAll("%Player%", player.getName()).replaceAll("%player%", player.getName())));
 									}
-									ItemStack i = data.getItemStack("Items."+ID+".Item");
 									player.getInventory().addItem(i);
 									data.set("Items."+ID, null);
 									Main.settings.saveData();
