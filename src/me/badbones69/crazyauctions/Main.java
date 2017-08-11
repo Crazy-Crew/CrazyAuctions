@@ -54,6 +54,7 @@ public class Main extends JavaPlugin implements Listener{
 		settings.saveData();
 	}
 	
+        @Override
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLable, String[] args){
 		if(commandLable.equalsIgnoreCase("CrazyAuctions") || commandLable.equalsIgnoreCase("CrazyAuction")
 				|| commandLable.equalsIgnoreCase("CA") || commandLable.equalsIgnoreCase("AH")
@@ -220,6 +221,19 @@ public class Main extends JavaPlugin implements Listener{
 								return true;
 							}
 						}
+
+                                                // Blacklist by item lore
+                                                if (item.hasItemMeta() && item.getItemMeta().hasLore()) {
+                                                    for (String lore : settings.getConfig().getStringList("Settings.BlackListLore")) {
+                                                        for (String ilore : item.getItemMeta().getLore()) {
+                                                            if (ilore.matches(lore) || ilore.contains(lore)) {
+                                                                player.sendMessage(Methods.getPrefix() + Methods.color(settings.getMsg().getString("Messages.Item-BlackListed")));
+                                                                return true;
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                                
 						if(!settings.getConfig().getBoolean("Settings.Allow-Damaged-Items")){
 							for(Material i : getDamageableItems()){
 								if(item.getType()==i){

@@ -299,3 +299,7 @@ Settings:
   BlackList:
     - '7'
     - '120'
+  BlackListLore: # If a item has this lore it can't be sold. You can use regex.
+    - 'Event item'
+    - '[eE]vent [iItem]'
+    - '.*[eE]vent.*'
