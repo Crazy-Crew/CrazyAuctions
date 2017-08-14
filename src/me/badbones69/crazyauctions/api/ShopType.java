@@ -1,6 +1,6 @@
-package me.badbones69.crazyauctions;
+package me.badbones69.crazyauctions.api;
 
-public enum Shop{
+public enum ShopType{
 	
 	SELL("Sell"), BID("Bid");
 	
@@ -9,7 +9,7 @@ public enum Shop{
 	/**
 	 * @param name Name of the Shop Type.
 	 */
-	private Shop(String name){
+	private ShopType(String name){
 		this.Name=name;
 	}
 	
@@ -24,8 +24,8 @@ public enum Shop{
 	 * @param name Name of the Type you want.
 	 * @return Returns the Type as a Enum.
 	 */
-	public static Shop getFromName(String name){
-		for(Shop type : Shop.values()){
+	public static ShopType getFromName(String name){
+		for(ShopType type : ShopType.values()){
 			if(type.getName().equalsIgnoreCase(name)){
 				return type;
 			}

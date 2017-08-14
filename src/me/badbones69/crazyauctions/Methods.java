@@ -24,6 +24,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 
 import me.badbones69.crazyauctions.currency.CurrencyManager;
+import me.badbones69.crazyauctions.events.AuctionWinBidEvent;
 
 public class Methods {
 	
@@ -397,7 +398,9 @@ public class Methods {
 				if(cal.after(expireTime)){
 					int num = 1;
 					for(;data.contains("OutOfTime/Cancelled."+num);num++);
-					if(data.getBoolean("Items."+i+".Biddable")&&!data.getString("Items."+i+".TopBidder").equalsIgnoreCase("None")&&CurrencyManager.getMoney(Methods.getPlayer(data.getString("Items."+i+".TopBidder")))>=data.getInt("Items."+i+".Price")){
+					if(data.getBoolean("Items."+i+".Biddable")&&
+							!data.getString("Items."+i+".TopBidder").equalsIgnoreCase("None")&&
+							CurrencyManager.getMoney(Methods.getPlayer(data.getString("Items."+i+".TopBidder")))>=data.getInt("Items."+i+".Price")){
 						String winner = data.getString("Items."+i+".TopBidder");
 						String seller = data.getString("Items."+i+".Seller");
 						Long price = data.getLong("Items."+i+".Price");
@@ -405,6 +408,7 @@ public class Methods {
 						CurrencyManager.removeMoney(Methods.getOfflinePlayer(winner), price);
 						if(Methods.isOnline(winner)){
 							Player player = Methods.getPlayer(winner);
+							Bukkit.getPluginManager().callEvent(new AuctionWinBidEvent(player, data.getItemStack("Items."+i+".Item"), price));
 							player.sendMessage(Methods.getPrefix()+Methods.color(msg.getString("Messages.Win-Bidding")
 									.replaceAll("%Price%", getPrice(i, false)).replaceAll("%price%", getPrice(i, false))));
 						}
