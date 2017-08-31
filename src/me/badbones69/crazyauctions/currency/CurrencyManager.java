@@ -9,9 +9,9 @@ import me.badbones69.crazyauctions.Main;
 public enum CurrencyManager { // Currency Manager
 	
 	VAULT("Vault", "Money");
-
+	
 	String PluginName, Name;
-
+	
 	/**
 	 * @param pluginname
 	 *            Name of the Plugin.
@@ -22,48 +22,48 @@ public enum CurrencyManager { // Currency Manager
 		this.PluginName = pluginname;
 		this.Name = name;
 	}
-
+	
 	/**
 	 * @return Returns the Currency name as a string.
 	 */
 	public String getName() {
 		return Name;
 	}
-
+	
 	/**
 	 * @return Returns the Currency name as a string.
 	 */
 	public String getPluginName() {
 		return PluginName;
 	}
-
+	
 	/**
 	 * @param name
 	 *            Name of the Type you want.
 	 * @return Returns the Currency as a Enum.
 	 */
 	public static CurrencyManager getFromName(String name) {
-		for (CurrencyManager type : CurrencyManager.values()) {
-			if (type.getPluginName().equalsIgnoreCase(name)) {
+		for(CurrencyManager type : CurrencyManager.values()) {
+			if(type.getPluginName().equalsIgnoreCase(name)) {
 				return type;
 			}
 		}
 		return null;
 	}
-
+	
 	/**
 	 * 
 	 * @return Returns true if the server has the plugin.
 	 */
 	public Boolean hasPlugin() {
-		if (Bukkit.getServer().getPluginManager().getPlugin(PluginName) != null) {
-			if (Main.settings.getConfig().getBoolean("Settings.Currencies." + PluginName + ".Enabled")) {
+		if(Bukkit.getServer().getPluginManager().getPlugin(PluginName) != null) {
+			if(Main.settings.getConfig().getBoolean("Settings.Currencies." + PluginName + ".Enabled")) {
 				return true;
 			}
 		}
 		return false;
 	}
-
+	
 	/**
 	 * 
 	 * @param player
@@ -75,7 +75,7 @@ public enum CurrencyManager { // Currency Manager
 	public static Long getMoney(Player player) {
 		return Vault.getMoney(player);
 	}
-
+	
 	/**
 	 * 
 	 * @param player
@@ -88,7 +88,7 @@ public enum CurrencyManager { // Currency Manager
 	public static void removeMoney(Player player, Long amount) {
 		Vault.removeMoney(player, amount);
 	}
-
+	
 	/**
 	 * 
 	 * @param player
@@ -101,7 +101,7 @@ public enum CurrencyManager { // Currency Manager
 	public static void removeMoney(OfflinePlayer player, Long amount) {
 		Vault.removeMoney(player, amount);
 	}
-
+	
 	/**
 	 * 
 	 * @param player
@@ -114,7 +114,7 @@ public enum CurrencyManager { // Currency Manager
 	public static void addMoney(Player player, Long amount) {
 		Vault.addMoney(player, amount);
 	}
-
+	
 	/**
 	 * 
 	 * @param player

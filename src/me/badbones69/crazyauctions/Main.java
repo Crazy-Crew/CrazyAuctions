@@ -26,14 +26,14 @@ import me.badbones69.crazyauctions.controlers.GUI;
 import me.badbones69.crazyauctions.currency.Vault;
 import me.badbones69.crazyauctions.events.AuctionListEvent;
 
-public class Main extends JavaPlugin implements Listener{
+public class Main extends JavaPlugin implements Listener {
 	
 	public static SettingsManager settings = SettingsManager.getInstance();
 	public static CrazyAuctions auc = CrazyAuctions.getInstance();
 	private int file = 0;
 	
 	@Override
-	public void onEnable(){
+	public void onEnable() {
 		saveDefaultConfig();
 		settings.setup(this);
 		Methods.hasUpdate();
@@ -41,39 +41,35 @@ public class Main extends JavaPlugin implements Listener{
 		Bukkit.getServer().getPluginManager().registerEvents(new GUI(), this);
 		Methods.updateAuction();
 		startCheck();
-		if (!Vault.setupEconomy()){
-	   		saveDefaultConfig();
-	    }
-		if(Bukkit.getPluginManager().getPlugin("Vault") == null){
-			Bukkit.getConsoleSender().sendMessage(Methods.getPrefix()+
-					Methods.color("&cThis plugin is shutting down. This plugin requires a compatable currency plugin."
-					+ " &cPlease add Vault to continue using this."));
+		if(!Vault.setupEconomy()) {
+			saveDefaultConfig();
+		}
+		if(Bukkit.getPluginManager().getPlugin("Vault") == null) {
+			Bukkit.getConsoleSender().sendMessage(Methods.getPrefix() + Methods.color("&cThis plugin is shutting down. This plugin requires a compatable currency plugin." + " &cPlease add Vault to continue using this."));
 			Bukkit.getServer().getPluginManager().disablePlugin(this);
 		}
 		try {
 			new MCUpdate(this, true);
-		} catch (IOException e) {}
+		}catch(IOException e) {}
 	}
 	
 	@Override
-	public void onDisable(){
+	public void onDisable() {
 		Bukkit.getScheduler().cancelTask(file);
 		settings.saveData();
 	}
 	
-	public boolean onCommand(CommandSender sender, Command cmd, String commandLable, String[] args){
-		if(commandLable.equalsIgnoreCase("CrazyAuctions") || commandLable.equalsIgnoreCase("CrazyAuction")
-				|| commandLable.equalsIgnoreCase("CA") || commandLable.equalsIgnoreCase("AH")
-				|| commandLable.equalsIgnoreCase("HDV")){
-			if(args.length == 0){
-				if(!Methods.hasPermission(sender, "Access"))return true;
-				if(!(sender instanceof Player)){
-					sender.sendMessage(Methods.getPrefix()+Methods.color(settings.getMsg().getString("Messages.Players-Only")));
+	public boolean onCommand(CommandSender sender, Command cmd, String commandLable, String[] args) {
+		if(commandLable.equalsIgnoreCase("CrazyAuctions") || commandLable.equalsIgnoreCase("CrazyAuction") || commandLable.equalsIgnoreCase("CA") || commandLable.equalsIgnoreCase("AH") || commandLable.equalsIgnoreCase("HDV")) {
+			if(args.length == 0) {
+				if(!Methods.hasPermission(sender, "Access")) return true;
+				if(!(sender instanceof Player)) {
+					sender.sendMessage(Methods.getPrefix() + Methods.color(settings.getMsg().getString("Messages.Players-Only")));
 					return true;
 				}
 				Player player = (Player) sender;
-				if(settings.getConfig().contains("Settings.Category-Page-Opens-First")){
-					if(settings.getConfig().getBoolean("Settings.Category-Page-Opens-First")){
+				if(settings.getConfig().contains("Settings.Category-Page-Opens-First")) {
+					if(settings.getConfig().getBoolean("Settings.Category-Page-Opens-First")) {
 						GUI.openCateories(player, ShopType.SELL);
 						return true;
 					}
@@ -81,128 +77,126 @@ public class Main extends JavaPlugin implements Listener{
 				GUI.openShop(player, ShopType.SELL, Category.NONE, 1);
 				return true;
 			}
-			if(args.length >= 1){
-				if(args[0].equalsIgnoreCase("Help")){// CA Help
-					if(!Methods.hasPermission(sender, "Access"))return true;
-					for(String msg : settings.getMsg().getStringList("Messages.Help-Menu")){
+			if(args.length >= 1) {
+				if(args[0].equalsIgnoreCase("Help")) {// CA Help
+					if(!Methods.hasPermission(sender, "Access")) return true;
+					for(String msg : settings.getMsg().getStringList("Messages.Help-Menu")) {
 						sender.sendMessage(Methods.color(msg));
 					}
 					return true;
 				}
-				if(args[0].equalsIgnoreCase("Reload")){// CA Reload
-					if(!Methods.hasPermission(sender, "Admin"))return true;
+				if(args[0].equalsIgnoreCase("Reload")) {// CA Reload
+					if(!Methods.hasPermission(sender, "Admin")) return true;
 					settings.reloadConfig();
 					settings.reloadData();
 					settings.reloadMsg();
 					settings.setup(this);
-					sender.sendMessage(Methods.getPrefix()+Methods.color(settings.getMsg().getString("Messages.Reload")));
+					sender.sendMessage(Methods.getPrefix() + Methods.color(settings.getMsg().getString("Messages.Reload")));
 					return true;
 				}
-				if(args[0].equalsIgnoreCase("View")){// CA Reload
-					if(!Methods.hasPermission(sender, "View"))return true;
-					if(!(sender instanceof Player)){
-						sender.sendMessage(Methods.getPrefix()+Methods.color(settings.getMsg().getString("Messages.Players-Only")));
+				if(args[0].equalsIgnoreCase("View")) {// CA Reload
+					if(!Methods.hasPermission(sender, "View")) return true;
+					if(!(sender instanceof Player)) {
+						sender.sendMessage(Methods.getPrefix() + Methods.color(settings.getMsg().getString("Messages.Players-Only")));
 						return true;
 					}
-					if(args.length>=2){
+					if(args.length >= 2) {
 						Player player = (Player) sender;
 						GUI.openViewer(player, args[1], 1);
 						return true;
 					}
-					sender.sendMessage(Methods.getPrefix()+Methods.color("&c/CA View <Player>"));
+					sender.sendMessage(Methods.getPrefix() + Methods.color("&c/CA View <Player>"));
 					return true;
 				}
-				if(args[0].equalsIgnoreCase("Expired")||args[0].equalsIgnoreCase("Collect")){// CA Expired
-					if(!Methods.hasPermission(sender, "Access"))return true;
-					if(!(sender instanceof Player)){
-						sender.sendMessage(Methods.getPrefix()+Methods.color(settings.getMsg().getString("Messages.Players-Only")));
+				if(args[0].equalsIgnoreCase("Expired") || args[0].equalsIgnoreCase("Collect")) {// CA Expired
+					if(!Methods.hasPermission(sender, "Access")) return true;
+					if(!(sender instanceof Player)) {
+						sender.sendMessage(Methods.getPrefix() + Methods.color(settings.getMsg().getString("Messages.Players-Only")));
 						return true;
 					}
 					Player player = (Player) sender;
 					GUI.openPlayersExpiredList(player, 1);
 					return true;
 				}
-				if(args[0].equalsIgnoreCase("Listed")){// CA Listed
-					if(!Methods.hasPermission(sender, "Access"))return true;
-					if(!(sender instanceof Player)){
-						sender.sendMessage(Methods.getPrefix()+Methods.color(settings.getMsg().getString("Messages.Players-Only")));
+				if(args[0].equalsIgnoreCase("Listed")) {// CA Listed
+					if(!Methods.hasPermission(sender, "Access")) return true;
+					if(!(sender instanceof Player)) {
+						sender.sendMessage(Methods.getPrefix() + Methods.color(settings.getMsg().getString("Messages.Players-Only")));
 						return true;
 					}
 					Player player = (Player) sender;
 					GUI.openPlayersCurrentList(player, 1);
 					return true;
 				}
-				if(args[0].equalsIgnoreCase("Sell")||args[0].equalsIgnoreCase("Bid")){// /CA Sell/Bid <Price> [Amount of Items]
-					if(!(sender instanceof Player)){
-						sender.sendMessage(Methods.getPrefix()+Methods.color(settings.getMsg().getString("Messages.Players-Only")));
+				if(args[0].equalsIgnoreCase("Sell") || args[0].equalsIgnoreCase("Bid")) {// /CA Sell/Bid <Price> [Amount of Items]
+					if(!(sender instanceof Player)) {
+						sender.sendMessage(Methods.getPrefix() + Methods.color(settings.getMsg().getString("Messages.Players-Only")));
 						return true;
 					}
-					if(args.length >= 2){
+					if(args.length >= 2) {
 						Player player = (Player) sender;
-						if(args[0].equalsIgnoreCase("Sell")){
-							if(!Methods.hasPermission(player, "Sell"))return true;
+						if(args[0].equalsIgnoreCase("Sell")) {
+							if(!Methods.hasPermission(player, "Sell")) return true;
 						}
-						if(args[0].equalsIgnoreCase("Bid")){
-							if(!Methods.hasPermission(player, "Bid"))return true;
+						if(args[0].equalsIgnoreCase("Bid")) {
+							if(!Methods.hasPermission(player, "Bid")) return true;
 						}
 						ItemStack item = Methods.getItemInHand(player);
 						int amount = item.getAmount();
-						if(args.length >= 3){
-							if(!Methods.isInt(args[2])){
-								player.sendMessage(Methods.getPrefix()+Methods.color(settings.getMsg().getString("Messages.Not-A-Number")
-										.replaceAll("%Arg%", args[2]).replaceAll("%arg%", args[2])));
+						if(args.length >= 3) {
+							if(!Methods.isInt(args[2])) {
+								player.sendMessage(Methods.getPrefix() + Methods.color(settings.getMsg().getString("Messages.Not-A-Number").replaceAll("%Arg%", args[2]).replaceAll("%arg%", args[2])));
 								return true;
 							}
-							amount=Integer.parseInt(args[2]);
-							if(amount<=0)amount=1;
-							if(amount>item.getAmount())amount=item.getAmount();
+							amount = Integer.parseInt(args[2]);
+							if(amount <= 0) amount = 1;
+							if(amount > item.getAmount()) amount = item.getAmount();
 						}
-						if(!Methods.isLong(args[1])){
-							player.sendMessage(Methods.getPrefix()+Methods.color(settings.getMsg().getString("Messages.Not-A-Number")
-									.replaceAll("%Arg%", args[1]).replaceAll("%arg%", args[1])));
+						if(!Methods.isLong(args[1])) {
+							player.sendMessage(Methods.getPrefix() + Methods.color(settings.getMsg().getString("Messages.Not-A-Number").replaceAll("%Arg%", args[1]).replaceAll("%arg%", args[1])));
 							return true;
 						}
-						if(Methods.getItemInHand(player).getType() == Material.AIR){
-							player.sendMessage(Methods.getPrefix()+Methods.color(settings.getMsg().getString("Messages.Doesnt-Have-Item-In-Hand")));
+						if(Methods.getItemInHand(player).getType() == Material.AIR) {
+							player.sendMessage(Methods.getPrefix() + Methods.color(settings.getMsg().getString("Messages.Doesnt-Have-Item-In-Hand")));
 							return false;
 						}
 						Long price = Long.parseLong(args[1]);
-						if(args[0].equalsIgnoreCase("Bid")){
-							if(price<settings.getConfig().getLong("Settings.Minimum-Bid-Price")){
-								player.sendMessage(Methods.getPrefix()+Methods.color(settings.getMsg().getString("Messages.Bid-Price-To-Low")));
+						if(args[0].equalsIgnoreCase("Bid")) {
+							if(price < settings.getConfig().getLong("Settings.Minimum-Bid-Price")) {
+								player.sendMessage(Methods.getPrefix() + Methods.color(settings.getMsg().getString("Messages.Bid-Price-To-Low")));
 								return true;
 							}
-							if(price>settings.getConfig().getLong("Settings.Max-Beginning-Bid-Price")){
-								player.sendMessage(Methods.getPrefix()+Methods.color(settings.getMsg().getString("Messages.Bid-Price-To-High")));
+							if(price > settings.getConfig().getLong("Settings.Max-Beginning-Bid-Price")) {
+								player.sendMessage(Methods.getPrefix() + Methods.color(settings.getMsg().getString("Messages.Bid-Price-To-High")));
 								return true;
 							}
-						}else{
-							if(price<settings.getConfig().getLong("Settings.Minimum-Sell-Price")){
-								player.sendMessage(Methods.getPrefix()+Methods.color(settings.getMsg().getString("Messages.Sell-Price-To-Low")));
+						}else {
+							if(price < settings.getConfig().getLong("Settings.Minimum-Sell-Price")) {
+								player.sendMessage(Methods.getPrefix() + Methods.color(settings.getMsg().getString("Messages.Sell-Price-To-Low")));
 								return true;
 							}
-							if(price>settings.getConfig().getLong("Settings.Max-Beginning-Sell-Price")){
-								player.sendMessage(Methods.getPrefix()+Methods.color(settings.getMsg().getString("Messages.Sell-Price-To-High")));
+							if(price > settings.getConfig().getLong("Settings.Max-Beginning-Sell-Price")) {
+								player.sendMessage(Methods.getPrefix() + Methods.color(settings.getMsg().getString("Messages.Sell-Price-To-High")));
 								return true;
 							}
 						}
-						if(!player.hasPermission("crazyauctions.bypass")){
+						if(!player.hasPermission("crazyauctions.bypass")) {
 							int SellLimit = 0;
 							int BidLimit = 0;
-							for(PermissionAttachmentInfo permission : player.getEffectivePermissions()){
+							for(PermissionAttachmentInfo permission : player.getEffectivePermissions()) {
 								String perm = permission.getPermission();
-								if(perm.startsWith("crazyauctions.sell.")){
-									perm=perm.replace("crazyauctions.sell.", "");
-									if(Methods.isInt(perm)){
-										if(Integer.parseInt(perm) > SellLimit){
+								if(perm.startsWith("crazyauctions.sell.")) {
+									perm = perm.replace("crazyauctions.sell.", "");
+									if(Methods.isInt(perm)) {
+										if(Integer.parseInt(perm) > SellLimit) {
 											SellLimit = Integer.parseInt(perm);
 										}
 									}
 								}
-								if(perm.startsWith("crazyauctions.bid.")){
-									perm=perm.replace("crazyauctions.bid.", "");
-									if(Methods.isInt(perm)){
-										if(Integer.parseInt(perm) > BidLimit){
+								if(perm.startsWith("crazyauctions.bid.")) {
+									perm = perm.replace("crazyauctions.bid.", "");
+									if(Methods.isInt(perm)) {
+										if(Integer.parseInt(perm) > BidLimit) {
 											BidLimit = Integer.parseInt(perm);
 										}
 									}
@@ -220,111 +214,112 @@ public class Main extends JavaPlugin implements Listener{
 									}
 								}
 							}
-							if(args[0].equalsIgnoreCase("Sell")){
-								if(auc.getItems(player, ShopType.SELL).size() >= SellLimit){
-									player.sendMessage(Methods.getPrefix()+Methods.color(settings.getMsg().getString("Messages.Max-Items")));
+							if(args[0].equalsIgnoreCase("Sell")) {
+								if(auc.getItems(player, ShopType.SELL).size() >= SellLimit) {
+									player.sendMessage(Methods.getPrefix() + Methods.color(settings.getMsg().getString("Messages.Max-Items")));
 									return true;
 								}
 							}
-							if(args[0].equalsIgnoreCase("Bid")){
-								if(auc.getItems(player, ShopType.BID).size() >= BidLimit){
-									player.sendMessage(Methods.getPrefix()+Methods.color(settings.getMsg().getString("Messages.Max-Items")));
+							if(args[0].equalsIgnoreCase("Bid")) {
+								if(auc.getItems(player, ShopType.BID).size() >= BidLimit) {
+									player.sendMessage(Methods.getPrefix() + Methods.color(settings.getMsg().getString("Messages.Max-Items")));
 									return true;
 								}
 							}
 						}
-						for(String id : settings.getConfig().getStringList("Settings.BlackList")){
-							if(item.getType()==Methods.makeItem(id, 1).getType()){
-								player.sendMessage(Methods.getPrefix()+Methods.color(settings.getMsg().getString("Messages.Item-BlackListed")));
+						for(String id : settings.getConfig().getStringList("Settings.BlackList")) {
+							if(item.getType() == Methods.makeItem(id, 1).getType()) {
+								player.sendMessage(Methods.getPrefix() + Methods.color(settings.getMsg().getString("Messages.Item-BlackListed")));
 								return true;
 							}
 						}
-						if(!settings.getConfig().getBoolean("Settings.Allow-Damaged-Items")){
-							for(Material i : getDamageableItems()){
-								if(item.getType()==i){
-									if(item.getDurability()>0){
-										player.sendMessage(Methods.getPrefix()+Methods.color(settings.getMsg().getString("Messages.Item-Damaged")));
+						if(!settings.getConfig().getBoolean("Settings.Allow-Damaged-Items")) {
+							for(Material i : getDamageableItems()) {
+								if(item.getType() == i) {
+									if(item.getDurability() > 0) {
+										player.sendMessage(Methods.getPrefix() + Methods.color(settings.getMsg().getString("Messages.Item-Damaged")));
 										return true;
-									}	
+									}
 								}
 							}
 						}
 						String seller = player.getName();
 						int num = 1;
 						Random r = new Random();
-						for(;settings.getData().contains("Items."+num);num++);
-						settings.getData().set("Items."+num+".Price", price);
-						settings.getData().set("Items."+num+".Seller", seller);
-						if(args[0].equalsIgnoreCase("Bid")){
-							settings.getData().set("Items."+num+".Time-Till-Expire", Methods.convertToMill(settings.getConfig().getString("Settings.Bid-Time")));
-						}else{
-							settings.getData().set("Items."+num+".Time-Till-Expire", Methods.convertToMill(settings.getConfig().getString("Settings.Sell-Time")));
+						for(; settings.getData().contains("Items." + num); num++);
+						settings.getData().set("Items." + num + ".Price", price);
+						settings.getData().set("Items." + num + ".Seller", seller);
+						if(args[0].equalsIgnoreCase("Bid")) {
+							settings.getData().set("Items." + num + ".Time-Till-Expire", Methods.convertToMill(settings.getConfig().getString("Settings.Bid-Time")));
+						}else {
+							settings.getData().set("Items." + num + ".Time-Till-Expire", Methods.convertToMill(settings.getConfig().getString("Settings.Sell-Time")));
 						}
-						settings.getData().set("Items."+num+".Full-Time", Methods.convertToMill(settings.getConfig().getString("Settings.Full-Expire-Time")));
+						settings.getData().set("Items." + num + ".Full-Time", Methods.convertToMill(settings.getConfig().getString("Settings.Full-Expire-Time")));
 						int id = r.nextInt(999999);
 						// Runs 3x to check for same ID.
-						for(String i : settings.getData().getConfigurationSection("Items").getKeys(false))if(settings.getData().getInt("Items."+i+".StoreID")==id)id=r.nextInt(Integer.MAX_VALUE);
-						for(String i : settings.getData().getConfigurationSection("Items").getKeys(false))if(settings.getData().getInt("Items."+i+".StoreID")==id)id=r.nextInt(Integer.MAX_VALUE);
-						for(String i : settings.getData().getConfigurationSection("Items").getKeys(false))if(settings.getData().getInt("Items."+i+".StoreID")==id)id=r.nextInt(Integer.MAX_VALUE);
-						settings.getData().set("Items."+num+".StoreID", id);
+						for(String i : settings.getData().getConfigurationSection("Items").getKeys(false))
+							if(settings.getData().getInt("Items." + i + ".StoreID") == id) id = r.nextInt(Integer.MAX_VALUE);
+						for(String i : settings.getData().getConfigurationSection("Items").getKeys(false))
+							if(settings.getData().getInt("Items." + i + ".StoreID") == id) id = r.nextInt(Integer.MAX_VALUE);
+						for(String i : settings.getData().getConfigurationSection("Items").getKeys(false))
+							if(settings.getData().getInt("Items." + i + ".StoreID") == id) id = r.nextInt(Integer.MAX_VALUE);
+						settings.getData().set("Items." + num + ".StoreID", id);
 						ShopType type = ShopType.SELL;
-						if(args[0].equalsIgnoreCase("Bid")){
-							settings.getData().set("Items."+num+".Biddable", true);
+						if(args[0].equalsIgnoreCase("Bid")) {
+							settings.getData().set("Items." + num + ".Biddable", true);
 							type = ShopType.BID;
-						}else{
-							settings.getData().set("Items."+num+".Biddable", false);
+						}else {
+							settings.getData().set("Items." + num + ".Biddable", false);
 						}
-						settings.getData().set("Items."+num+".TopBidder", "None");
+						settings.getData().set("Items." + num + ".TopBidder", "None");
 						ItemStack I = item.clone();
 						I.setAmount(amount);
-						settings.getData().set("Items."+num+".Item", I);
+						settings.getData().set("Items." + num + ".Item", I);
 						settings.saveData();
 						Bukkit.getPluginManager().callEvent(new AuctionListEvent(player, type, I, price));
-						player.sendMessage(Methods.getPrefix()+Methods.color(settings.getMsg().getString("Messages.Added-Item-To-Auction")
-								.replaceAll("%Price%", price+"").replaceAll("%price%", price+"")));
-						if(item.getAmount()<=1||(item.getAmount()-amount)<=0){
+						player.sendMessage(Methods.getPrefix() + Methods.color(settings.getMsg().getString("Messages.Added-Item-To-Auction").replaceAll("%Price%", price + "").replaceAll("%price%", price + "")));
+						if(item.getAmount() <= 1 || (item.getAmount() - amount) <= 0) {
 							Methods.setItemInHand(player, new ItemStack(Material.AIR));
-						}else{
-							item.setAmount(item.getAmount()-amount);
+						}else {
+							item.setAmount(item.getAmount() - amount);
 						}
 						return false;
 					}
-					sender.sendMessage(Methods.getPrefix()+Methods.color("/CA Sell/Bid <Price> [Amount of items]"));
+					sender.sendMessage(Methods.getPrefix() + Methods.color("/CA Sell/Bid <Price> [Amount of items]"));
 					return true;
 				}
 			}
 		}
-		sender.sendMessage(Methods.getPrefix()+Methods.color("/CA Help"));
+		sender.sendMessage(Methods.getPrefix() + Methods.color("/CA Help"));
 		return false;
 	}
 	
 	@EventHandler
-	public void onJoin(PlayerJoinEvent e){
+	public void onJoin(PlayerJoinEvent e) {
 		final Player player = e.getPlayer();
-		new BukkitRunnable(){
+		new BukkitRunnable() {
 			@Override
 			public void run() {
-				if(player.getName().equals("BadBones69")){
-					player.sendMessage(Methods.getPrefix() + Methods.color("&7This server is running your Crazy Auctions Plugin. "
-						+ "&7It is running version &av" + Bukkit.getServer().getPluginManager().getPlugin("CrazyAuctions").getDescription().getVersion() + "&7."));
+				if(player.getName().equals("BadBones69")) {
+					player.sendMessage(Methods.getPrefix() + Methods.color("&7This server is running your Crazy Auctions Plugin. " + "&7It is running version &av" + Bukkit.getServer().getPluginManager().getPlugin("CrazyAuctions").getDescription().getVersion() + "&7."));
 				}
-				if(player.isOp()){
+				if(player.isOp()) {
 					Methods.hasUpdate(player);
 				}
 			}
 		}.runTaskLaterAsynchronously(this, 40);
 	}
 	
-	private void startCheck(){
-		new BukkitRunnable(){
+	private void startCheck() {
+		new BukkitRunnable() {
 			@Override
 			public void run() {
 				Methods.updateAuction();
 			}
-		}.runTaskTimer(this, 20, 5*20);
+		}.runTaskTimer(this, 20, 5 * 20);
 	}
 	
-	private ArrayList<Material> getDamageableItems(){
+	private ArrayList<Material> getDamageableItems() {
 		ArrayList<Material> ma = new ArrayList<Material>();
 		ma.add(Material.DIAMOND_HELMET);
 		ma.add(Material.DIAMOND_CHESTPLATE);
@@ -376,5 +371,5 @@ public class Main extends JavaPlugin implements Listener{
 		ma.add(Material.FISHING_ROD);
 		return ma;
 	}
-
+	
 }

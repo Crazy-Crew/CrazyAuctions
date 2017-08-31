@@ -12,7 +12,7 @@ import org.bukkit.inventory.ItemStack;
  * This event is fired when a bidding item's time has run out and so a player wins the item.
  *
  */
-public class AuctionWinBidEvent extends Event{
+public class AuctionWinBidEvent extends Event {
 	
 	private Player player;
 	private long bid;
@@ -32,11 +32,11 @@ public class AuctionWinBidEvent extends Event{
 	}
 	
 	public HandlerList getHandlers() {
-	    return handlers;
+		return handlers;
 	}
 	
 	public static HandlerList getHandlerList() {
-	    return handlers;
+		return handlers;
 	}
 	
 	public Player getPlayer() {

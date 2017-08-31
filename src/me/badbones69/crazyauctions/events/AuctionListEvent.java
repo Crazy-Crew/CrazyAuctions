@@ -14,8 +14,8 @@ import me.badbones69.crazyauctions.api.ShopType;
  * This event is fired when a new item is listed onto the auction house.
  *
  */
-public class AuctionListEvent extends Event{
-
+public class AuctionListEvent extends Event {
+	
 	private Player player;
 	private long price;
 	private ShopType shop;
@@ -37,11 +37,11 @@ public class AuctionListEvent extends Event{
 	}
 	
 	public HandlerList getHandlers() {
-	    return handlers;
+		return handlers;
 	}
 	
 	public static HandlerList getHandlerList() {
-	    return handlers;
+		return handlers;
 	}
 	
 	public Player getPlayer() {

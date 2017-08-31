@@ -12,7 +12,7 @@ import org.bukkit.inventory.ItemStack;
  * This event is fired when a player places a new bid onto an item in the auction house.
  *
  */
-public class AuctionNewBidEvent extends Event{
+public class AuctionNewBidEvent extends Event {
 	
 	private Player player;
 	private long bid;
@@ -32,11 +32,11 @@ public class AuctionNewBidEvent extends Event{
 	}
 	
 	public HandlerList getHandlers() {
-	    return handlers;
+		return handlers;
 	}
 	
 	public static HandlerList getHandlerList() {
-	    return handlers;
+		return handlers;
 	}
 	
 	public Player getPlayer() {
