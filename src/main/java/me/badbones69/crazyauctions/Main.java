@@ -1,9 +1,13 @@
 package me.badbones69.crazyauctions;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Random;
-
+import com.massivestats.MassiveStats;
+import me.badbones69.crazyauctions.api.Category;
+import me.badbones69.crazyauctions.api.CrazyAuctions;
+import me.badbones69.crazyauctions.api.SettingsManager;
+import me.badbones69.crazyauctions.api.ShopType;
+import me.badbones69.crazyauctions.api.events.AuctionListEvent;
+import me.badbones69.crazyauctions.controlers.GUI;
+import me.badbones69.crazyauctions.currency.Vault;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -17,26 +21,19 @@ import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import me.badbones69.crazyauctions.api.Category;
-import me.badbones69.crazyauctions.api.CrazyAuctions;
-import me.badbones69.crazyauctions.api.MCUpdate;
-import me.badbones69.crazyauctions.api.SettingsManager;
-import me.badbones69.crazyauctions.api.ShopType;
-import me.badbones69.crazyauctions.controlers.GUI;
-import me.badbones69.crazyauctions.currency.Vault;
-import me.badbones69.crazyauctions.events.AuctionListEvent;
+import java.util.ArrayList;
+import java.util.Random;
 
 public class Main extends JavaPlugin implements Listener {
 	
 	public static SettingsManager settings = SettingsManager.getInstance();
 	public static CrazyAuctions auc = CrazyAuctions.getInstance();
-	private int file = 0;
 	
 	@Override
 	public void onEnable() {
 		saveDefaultConfig();
 		settings.setup(this);
-		Methods.hasUpdate();
+		//		Methods.hasUpdate();
 		Bukkit.getServer().getPluginManager().registerEvents(this, this);
 		Bukkit.getServer().getPluginManager().registerEvents(new GUI(), this);
 		Methods.updateAuction();
@@ -44,17 +41,15 @@ public class Main extends JavaPlugin implements Listener {
 		if(!Vault.setupEconomy()) {
 			saveDefaultConfig();
 		}
-		if(Bukkit.getPluginManager().getPlugin("Vault") == null) {
-			Bukkit.getConsoleSender().sendMessage(Methods.getPrefix() + Methods.color("&cThis plugin is shutting down. This plugin requires a compatable currency plugin." + " &cPlease add Vault to continue using this."));
-			Bukkit.getServer().getPluginManager().disablePlugin(this);
-		}
 		try {
-			new MCUpdate(this, true);
-		}catch(IOException e) {}
+			MassiveStats massiveStats = new MassiveStats(this);
+		}catch(Exception e) {
+		}
 	}
 	
 	@Override
 	public void onDisable() {
+		int file = 0;
 		Bukkit.getScheduler().cancelTask(file);
 		settings.saveData();
 	}
@@ -246,7 +241,7 @@ public class Main extends JavaPlugin implements Listener {
 						String seller = player.getName();
 						int num = 1;
 						Random r = new Random();
-						for(; settings.getData().contains("Items." + num); num++);
+						for(; settings.getData().contains("Items." + num); num++) ;
 						settings.getData().set("Items." + num + ".Price", price);
 						settings.getData().set("Items." + num + ".Seller", seller);
 						if(args[0].equalsIgnoreCase("Bid")) {
@@ -303,11 +298,8 @@ public class Main extends JavaPlugin implements Listener {
 				if(player.getName().equals("BadBones69")) {
 					player.sendMessage(Methods.getPrefix() + Methods.color("&7This server is running your Crazy Auctions Plugin. " + "&7It is running version &av" + Bukkit.getServer().getPluginManager().getPlugin("CrazyAuctions").getDescription().getVersion() + "&7."));
 				}
-				if(player.isOp()) {
-					Methods.hasUpdate(player);
-				}
 			}
-		}.runTaskLaterAsynchronously(this, 40);
+		}.runTaskLater(this, 40);
 	}
 	
 	private void startCheck() {
@@ -320,7 +312,7 @@ public class Main extends JavaPlugin implements Listener {
 	}
 	
 	private ArrayList<Material> getDamageableItems() {
-		ArrayList<Material> ma = new ArrayList<Material>();
+		ArrayList<Material> ma = new ArrayList<>();
 		ma.add(Material.DIAMOND_HELMET);
 		ma.add(Material.DIAMOND_CHESTPLATE);
 		ma.add(Material.DIAMOND_LEGGINGS);
@@ -337,10 +329,10 @@ public class Main extends JavaPlugin implements Listener {
 		ma.add(Material.IRON_CHESTPLATE);
 		ma.add(Material.IRON_LEGGINGS);
 		ma.add(Material.IRON_BOOTS);
-		ma.add(Material.DIAMOND_HELMET);
-		ma.add(Material.DIAMOND_CHESTPLATE);
-		ma.add(Material.DIAMOND_LEGGINGS);
-		ma.add(Material.DIAMOND_BOOTS);
+		ma.add(Material.LEATHER_HELMET);
+		ma.add(Material.LEATHER_CHESTPLATE);
+		ma.add(Material.LEATHER_LEGGINGS);
+		ma.add(Material.LEATHER_BOOTS);
 		ma.add(Material.BOW);
 		ma.add(Material.WOOD_SWORD);
 		ma.add(Material.STONE_SWORD);

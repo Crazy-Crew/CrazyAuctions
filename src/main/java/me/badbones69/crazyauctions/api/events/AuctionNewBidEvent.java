@@ -1,39 +1,34 @@
-package me.badbones69.crazyauctions.events;
+package me.badbones69.crazyauctions.api.events;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.ItemStack;
 
-import me.badbones69.crazyauctions.api.ShopType;
-
 /**
- * 
+ *
  * @author BadBones69
- * 
- * This event is fired when a new item is listed onto the auction house.
+ *
+ * This event is fired when a player places a new bid onto an item in the auction house.
  *
  */
-public class AuctionListEvent extends Event {
+public class AuctionNewBidEvent extends Event {
 	
 	private Player player;
-	private long price;
-	private ShopType shop;
+	private long bid;
 	private ItemStack item;
 	private static final HandlerList handlers = new HandlerList();
 	
 	/**
-	 * 
+	 *
 	 * @param player
-	 * @param shop
 	 * @param item
-	 * @param price
+	 * @param bid
 	 */
-	public AuctionListEvent(Player player, ShopType shop, ItemStack item, long price) {
+	public AuctionNewBidEvent(Player player, ItemStack item, long bid) {
 		this.player = player;
-		this.shop = shop;
 		this.item = item;
-		this.price = price;
+		this.bid = bid;
 	}
 	
 	public HandlerList getHandlers() {
@@ -48,16 +43,12 @@ public class AuctionListEvent extends Event {
 		return player;
 	}
 	
-	public ShopType getShopType() {
-		return shop;
-	}
-	
 	public ItemStack getItem() {
 		return item;
 	}
 	
-	public long getPrice() {
-		return price;
+	public long getBid() {
+		return bid;
 	}
 	
 }

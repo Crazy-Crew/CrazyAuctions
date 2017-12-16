@@ -1,12 +1,13 @@
 package me.badbones69.crazyauctions.controlers;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.logging.Level;
-
+import me.badbones69.crazyauctions.Main;
+import me.badbones69.crazyauctions.Methods;
+import me.badbones69.crazyauctions.api.Category;
+import me.badbones69.crazyauctions.api.ShopType;
+import me.badbones69.crazyauctions.api.events.AuctionBuyEvent;
+import me.badbones69.crazyauctions.api.events.AuctionNewBidEvent;
+import me.badbones69.crazyauctions.currency.CurrencyManager;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -19,22 +20,19 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
-import me.badbones69.crazyauctions.Main;
-import me.badbones69.crazyauctions.Methods;
-import me.badbones69.crazyauctions.api.Category;
-import me.badbones69.crazyauctions.api.ShopType;
-import me.badbones69.crazyauctions.currency.CurrencyManager;
-import me.badbones69.crazyauctions.events.AuctionBuyEvent;
-import me.badbones69.crazyauctions.events.AuctionNewBidEvent;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.logging.Level;
 
 public class GUI implements Listener {
 	
-	private static HashMap<Player, Integer> Bidding = new HashMap<Player, Integer>();
-	private static HashMap<Player, String> BiddingID = new HashMap<Player, String>();
-	private static HashMap<Player, ShopType> Type = new HashMap<Player, ShopType>(); // Shop Type
-	private static HashMap<Player, Category> Cat = new HashMap<Player, Category>(); // Category Type 
-	private static HashMap<Player, List<Integer>> List = new HashMap<Player, List<Integer>>();
-	private static HashMap<Player, String> IDs = new HashMap<Player, String>();
+	private static HashMap<Player, Integer> bidding = new HashMap<>();
+	private static HashMap<Player, String> biddingID = new HashMap<>();
+	private static HashMap<Player, ShopType> Type = new HashMap<>(); // Shop Type
+	private static HashMap<Player, Category> Cat = new HashMap<>(); // Category Type
+	private static HashMap<Player, List<Integer>> List = new HashMap<>();
+	private static HashMap<Player, String> IDs = new HashMap<>();
 	
 	public static Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin("CrazyAuctions");
 	
@@ -42,9 +40,8 @@ public class GUI implements Listener {
 		Methods.updateAuction();
 		FileConfiguration config = Main.settings.getConfig();
 		FileConfiguration data = Main.settings.getData();
-		List<ItemStack> items = new ArrayList<ItemStack>();
-		List<Integer> ID = new ArrayList<Integer>();
-		List<Integer> Id = new ArrayList<Integer>();
+		List<ItemStack> items = new ArrayList<>();
+		List<Integer> ID = new ArrayList<>();
 		if(!data.contains("Items")) {
 			data.set("Items.Clear", null);
 			Main.settings.saveData();
@@ -56,7 +53,7 @@ public class GUI implements Listener {
 		}
 		if(data.contains("Items")) {
 			for(String i : data.getConfigurationSection("Items").getKeys(false)) {
-				List<String> lore = new ArrayList<String>();
+				List<String> lore = new ArrayList<>();
 				if(cat.getItems().contains(data.getItemStack("Items." + i + ".Item").getType()) || cat == Category.NONE) {
 					if(data.getBoolean("Items." + i + ".Biddable")) {
 						if(sell == ShopType.BID) {
@@ -81,9 +78,9 @@ public class GUI implements Listener {
 			}
 		}
 		int maxPage = Methods.getMaxPage(items);
-		for(; page > maxPage; page--);
+		for(; page > maxPage; page--) ;
 		Inventory inv = Bukkit.createInventory(null, 54, Methods.color(config.getString("Settings.GUIName") + " #" + page));
-		List<String> options = new ArrayList<String>();
+		List<String> options = new ArrayList<>();
 		options.add("SellingItems");
 		options.add("Cancelled/ExpiredItems");
 		options.add("PreviousPage");
@@ -109,7 +106,7 @@ public class GUI implements Listener {
 			}
 			String id = config.getString("Settings.GUISettings.OtherSettings." + o + ".Item");
 			String name = config.getString("Settings.GUISettings.OtherSettings." + o + ".Name");
-			List<String> lore = new ArrayList<String>();
+			List<String> lore = new ArrayList<>();
 			int slot = config.getInt("Settings.GUISettings.OtherSettings." + o + ".Slot");
 			String cName = Methods.color(config.getString("Settings.GUISettings.Category-Settings." + Cat.get(player).getName() + ".Name"));
 			if(config.contains("Settings.GUISettings.OtherSettings." + o + ".Lore")) {
@@ -125,9 +122,7 @@ public class GUI implements Listener {
 			int slot = inv.firstEmpty();
 			inv.setItem(slot, item);
 		}
-		for(int id : Methods.getPageInts(ID, page)) {
-			Id.add(id);
-		}
+		List<Integer> Id = new ArrayList<>(Methods.getPageInts(ID, page));
 		List.put(player, Id);
 		player.openInventory(inv);
 	}
@@ -136,7 +131,7 @@ public class GUI implements Listener {
 		Methods.updateAuction();
 		FileConfiguration config = Main.settings.getConfig();
 		Inventory inv = Bukkit.createInventory(null, 54, Methods.color(config.getString("Settings.Categories")));
-		List<String> options = new ArrayList<String>();
+		List<String> options = new ArrayList<>();
 		options.add("OtherSettings.Back");
 		options.add("OtherSettings.WhatIsThis.Categories");
 		options.add("Category-Settings.Armor");
@@ -170,11 +165,10 @@ public class GUI implements Listener {
 		Methods.updateAuction();
 		FileConfiguration config = Main.settings.getConfig();
 		FileConfiguration data = Main.settings.getData();
-		List<ItemStack> items = new ArrayList<ItemStack>();
-		List<Integer> ID = new ArrayList<Integer>();
-		List<Integer> Id = new ArrayList<Integer>();
+		List<ItemStack> items = new ArrayList<>();
+		List<Integer> ID = new ArrayList<>();
 		Inventory inv = Bukkit.createInventory(null, 54, Methods.color(config.getString("Settings.Players-Current-Items")));
-		List<String> options = new ArrayList<String>();
+		List<String> options = new ArrayList<>();
 		options.add("Back");
 		options.add("WhatIsThis.CurrentItems");
 		for(String o : options) {
@@ -195,7 +189,7 @@ public class GUI implements Listener {
 		if(data.contains("Items")) {
 			for(String i : data.getConfigurationSection("Items").getKeys(false)) {
 				if(data.getString("Items." + i + ".Seller").equalsIgnoreCase(player.getName())) {
-					List<String> lore = new ArrayList<String>();
+					List<String> lore = new ArrayList<>();
 					for(String l : config.getStringList("Settings.GUISettings.CurrentLore")) {
 						lore.add(l.replaceAll("%Price%", Methods.getPrice(i, false)).replaceAll("%price%", Methods.getPrice(i, false)).replaceAll("%Time%", Methods.convertToTime(data.getLong("Items." + i + ".Time-Till-Expire"))).replaceAll("%time%", Methods.convertToTime(data.getLong("Items." + i + ".Time-Till-Expire"))));
 					}
@@ -208,9 +202,7 @@ public class GUI implements Listener {
 			int slot = inv.firstEmpty();
 			inv.setItem(slot, item);
 		}
-		for(int id : Methods.getPageInts(ID, page)) {
-			Id.add(id);
-		}
+		List<Integer> Id = new ArrayList<>(Methods.getPageInts(ID, page));
 		List.put(player, Id);
 		player.openInventory(inv);
 	}
@@ -219,13 +211,12 @@ public class GUI implements Listener {
 		Methods.updateAuction();
 		FileConfiguration config = Main.settings.getConfig();
 		FileConfiguration data = Main.settings.getData();
-		List<ItemStack> items = new ArrayList<ItemStack>();
-		List<Integer> ID = new ArrayList<Integer>();
-		List<Integer> Id = new ArrayList<Integer>();
+		List<ItemStack> items = new ArrayList<>();
+		List<Integer> ID = new ArrayList<>();
 		if(data.contains("OutOfTime/Cancelled")) {
 			for(String i : data.getConfigurationSection("OutOfTime/Cancelled").getKeys(false)) {
 				if(data.getString("OutOfTime/Cancelled." + i + ".Seller").equalsIgnoreCase(player.getName())) {
-					List<String> lore = new ArrayList<String>();
+					List<String> lore = new ArrayList<>();
 					for(String l : config.getStringList("Settings.GUISettings.Cancelled/ExpiredLore")) {
 						lore.add(l.replaceAll("%Price%", Methods.getPrice(i, true)).replaceAll("%price%", Methods.getPrice(i, true)).replaceAll("%Time%", Methods.convertToTime(data.getLong("OutOfTime/Cancelled." + i + ".Full-Time"))).replaceAll("%time%", Methods.convertToTime(data.getLong("OutOfTime/Cancelled." + i + ".Full-Time"))));
 					}
@@ -235,9 +226,9 @@ public class GUI implements Listener {
 			}
 		}
 		int maxPage = Methods.getMaxPage(items);
-		for(; page > maxPage; page--);
+		for(; page > maxPage; page--) ;
 		Inventory inv = Bukkit.createInventory(null, 54, Methods.color(config.getString("Settings.Cancelled/Expired-Items") + " #" + page));
-		List<String> options = new ArrayList<String>();
+		List<String> options = new ArrayList<>();
 		options.add("Back");
 		options.add("PreviousPage");
 		options.add("Return");
@@ -262,9 +253,7 @@ public class GUI implements Listener {
 			int slot = inv.firstEmpty();
 			inv.setItem(slot, item);
 		}
-		for(int id : Methods.getPageInts(ID, page)) {
-			Id.add(id);
-		}
+		List<Integer> Id = new ArrayList<>(Methods.getPageInts(ID, page));
 		List.put(player, Id);
 		player.openInventory(inv);
 	}
@@ -280,13 +269,13 @@ public class GUI implements Listener {
 			return;
 		}
 		Inventory inv = Bukkit.createInventory(null, 9, Methods.color(config.getString("Settings.Buying-Item")));
-		List<String> options = new ArrayList<String>();
+		List<String> options = new ArrayList<>();
 		options.add("Confirm");
 		options.add("Cancel");
 		for(String o : options) {
 			String id = config.getString("Settings.GUISettings.OtherSettings." + o + ".Item");
 			String name = config.getString("Settings.GUISettings.OtherSettings." + o + ".Name");
-			ItemStack item = new ItemStack(Material.AIR);
+			ItemStack item;
 			if(config.contains("Settings.GUISettings.OtherSettings." + o + ".Lore")) {
 				item = Methods.makeItem(id, 1, name, config.getStringList("Settings.GUISettings.OtherSettings." + o + ".Lore"));
 			}else {
@@ -306,7 +295,7 @@ public class GUI implements Listener {
 			}
 		}
 		ItemStack item = data.getItemStack("Items." + ID + ".Item");
-		List<String> lore = new ArrayList<String>();
+		List<String> lore = new ArrayList<>();
 		for(String l : config.getStringList("Settings.GUISettings.SellingLore")) {
 			lore.add(l.replaceAll("%Price%", Methods.getPrice(ID, false)).replaceAll("%price%", Methods.getPrice(ID, false)).replaceAll("%Seller%", data.getString("Items." + ID + ".Seller")).replaceAll("%seller%", data.getString("Items." + ID + ".Seller")));
 		}
@@ -326,7 +315,7 @@ public class GUI implements Listener {
 			return;
 		}
 		Inventory inv = Bukkit.createInventory(null, 27, Methods.color(config.getString("Settings.Bidding-On-Item")));
-		if(!Bidding.containsKey(player)) Bidding.put(player, 0);
+		if(!bidding.containsKey(player)) bidding.put(player, 0);
 		inv.setItem(9, Methods.makeItem("160:5", 1, "&a+1"));
 		inv.setItem(10, Methods.makeItem("160:5", 1, "&a+10"));
 		inv.setItem(11, Methods.makeItem("160:5", 1, "&a+100"));
@@ -346,9 +335,8 @@ public class GUI implements Listener {
 		Methods.updateAuction();
 		FileConfiguration config = Main.settings.getConfig();
 		FileConfiguration data = Main.settings.getData();
-		List<ItemStack> items = new ArrayList<ItemStack>();
-		List<Integer> ID = new ArrayList<Integer>();
-		List<Integer> Id = new ArrayList<Integer>();
+		List<ItemStack> items = new ArrayList<>();
+		List<Integer> ID = new ArrayList<>();
 		if(!data.contains("Items")) {
 			data.set("Items.Clear", null);
 			Main.settings.saveData();
@@ -356,7 +344,7 @@ public class GUI implements Listener {
 		if(data.contains("Items")) {
 			for(String i : data.getConfigurationSection("Items").getKeys(false)) {
 				if(data.getString("Items." + i + ".Seller").equalsIgnoreCase(other)) {
-					List<String> lore = new ArrayList<String>();
+					List<String> lore = new ArrayList<>();
 					if(data.getBoolean("Items." + i + ".Biddable")) {
 						String seller = data.getString("Items." + i + ".Seller");
 						String topbidder = data.getString("Items." + i + ".TopBidder");
@@ -376,9 +364,9 @@ public class GUI implements Listener {
 			}
 		}
 		int maxPage = Methods.getMaxPage(items);
-		for(; page > maxPage; page--);
+		for(; page > maxPage; page--) ;
 		Inventory inv = Bukkit.createInventory(null, 54, Methods.color(config.getString("Settings.GUIName") + " #" + page));
-		List<String> options = new ArrayList<String>();
+		List<String> options = new ArrayList<>();
 		options.add("WhatIsThis.Viewing");
 		for(String o : options) {
 			if(config.contains("Settings.GUISettings.OtherSettings." + o + ".Toggle")) {
@@ -399,10 +387,7 @@ public class GUI implements Listener {
 			int slot = inv.firstEmpty();
 			inv.setItem(slot, item);
 		}
-		for(int id : Methods.getPageInts(ID, page)) {
-			Id.add(id);
-		}
-		List.put(player, Id);
+		List.put(player, new ArrayList<>(Methods.getPageInts(ID, page)));
 		player.openInventory(inv);
 	}
 	
@@ -410,10 +395,10 @@ public class GUI implements Listener {
 		FileConfiguration config = Main.settings.getConfig();
 		String id = config.getString("Settings.GUISettings.OtherSettings.Bidding.Item");
 		String name = config.getString("Settings.GUISettings.OtherSettings.Bidding.Name");
-		ItemStack item = new ItemStack(Material.AIR);
-		int bid = Bidding.get(player);
+		ItemStack item;
+		int bid = bidding.get(player);
 		if(config.contains("Settings.GUISettings.OtherSettings.Bidding.Lore")) {
-			List<String> lore = new ArrayList<String>();
+			List<String> lore = new ArrayList<>();
 			for(String l : config.getStringList("Settings.GUISettings.OtherSettings.Bidding.Lore")) {
 				lore.add(l.replaceAll("%Bid%", bid + "").replaceAll("%bid%", bid + "").replaceAll("%TopBid%", Methods.getPrice(ID, false)).replaceAll("%topbid%", Methods.getPrice(ID, false)));
 			}
@@ -430,7 +415,7 @@ public class GUI implements Listener {
 		String seller = data.getString("Items." + ID + ".Seller");
 		String topbidder = data.getString("Items." + ID + ".TopBidder");
 		ItemStack item = data.getItemStack("Items." + ID + ".Item");
-		List<String> lore = new ArrayList<String>();
+		List<String> lore = new ArrayList<>();
 		for(String l : config.getStringList("Settings.GUISettings.Bidding")) {
 			lore.add(l.replaceAll("%TopBid%", Methods.getPrice(ID, false)).replaceAll("%topbid%", Methods.getPrice(ID, false)).replaceAll("%Seller%", seller).replaceAll("%seller%", seller).replaceAll("%TopBidder%", topbidder).replaceAll("%topbidder%", topbidder).replaceAll("%Time%", Methods.convertToTime(data.getLong("Items." + ID + ".Time-Till-Expire"))).replaceAll("%time%", Methods.convertToTime(data.getLong("Items." + ID + ".Time-Till-Expire"))));
 		}
@@ -444,9 +429,7 @@ public class GUI implements Listener {
 		Player player = (Player) e.getPlayer();
 		if(inv != null) {
 			if(inv.getName().contains(Methods.color(config.getString("Settings.Bidding-On-Item")))) {
-				if(Bidding.containsKey(player)) {
-					Bidding.remove(player);
-				}
+				bidding.remove(player);
 			}
 		}
 	}
@@ -493,8 +476,8 @@ public class GUI implements Listener {
 						if(item.hasItemMeta()) {
 							if(item.getItemMeta().hasDisplayName()) {
 								if(item.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.Bid.Name")))) {
-									String ID = BiddingID.get(player);
-									int bid = Bidding.get(player);
+									String ID = biddingID.get(player);
+									int bid = bidding.get(player);
 									String topBidder = data.getString("Items." + ID + ".TopBidder");
 									if(CurrencyManager.getMoney(player) < bid) {
 										player.sendMessage(Methods.getPrefix() + Methods.color(msg.getString("Messages.Need-More-Money").replaceAll("%Money_Needed%", (bid - CurrencyManager.getMoney(player)) + "").replaceAll("%money_needed%", (bid - CurrencyManager.getMoney(player)) + "")));
@@ -513,74 +496,34 @@ public class GUI implements Listener {
 									data.set("Items." + ID + ".TopBidder", player.getName());
 									player.sendMessage(Methods.getPrefix() + Methods.color(msg.getString("Messages.Bid-Msg").replaceAll("%Bid%", bid + "").replaceAll("%bid%", bid + "")));
 									Main.settings.saveData();
-									Bidding.put(player, 0);
+									bidding.put(player, 0);
 									player.closeInventory();
 									playClick(player);
 									return;
 								}
-								if(item.getItemMeta().getDisplayName().equals(Methods.color("&a+1"))) {
-									Bidding.put(player, (Bidding.get(player) + 1));
-									inv.setItem(4, getBiddingItem(player, BiddingID.get(player)));
-									inv.setItem(13, getBiddingGlass(player, BiddingID.get(player)));
-									playClick(player);
-									return;
-								}
-								if(item.getItemMeta().getDisplayName().equals(Methods.color("&a+10"))) {
-									Bidding.put(player, (Bidding.get(player) + 10));
-									inv.setItem(4, getBiddingItem(player, BiddingID.get(player)));
-									inv.setItem(13, getBiddingGlass(player, BiddingID.get(player)));
-									playClick(player);
-									return;
-								}
-								if(item.getItemMeta().getDisplayName().equals(Methods.color("&a+100"))) {
-									Bidding.put(player, (Bidding.get(player) + 100));
-									inv.setItem(4, getBiddingItem(player, BiddingID.get(player)));
-									inv.setItem(13, getBiddingGlass(player, BiddingID.get(player)));
-									playClick(player);
-									return;
-								}
-								if(item.getItemMeta().getDisplayName().equals(Methods.color("&a+1000"))) {
-									Bidding.put(player, (Bidding.get(player) + 1000));
-									inv.setItem(4, getBiddingItem(player, BiddingID.get(player)));
-									inv.setItem(13, getBiddingGlass(player, BiddingID.get(player)));
-									playClick(player);
-									return;
-								}
-								if(item.getItemMeta().getDisplayName().equals(Methods.color("&c-1"))) {
-									int bid = Bidding.get(player) - 1;
-									if(bid < 0) bid = 0;
-									Bidding.put(player, bid);
-									inv.setItem(4, getBiddingItem(player, BiddingID.get(player)));
-									inv.setItem(13, getBiddingGlass(player, BiddingID.get(player)));
-									playClick(player);
-									return;
-								}
-								if(item.getItemMeta().getDisplayName().equals(Methods.color("&c-10"))) {
-									int bid = Bidding.get(player) - 10;
-									if(bid < 0) bid = 0;
-									Bidding.put(player, bid);
-									inv.setItem(4, getBiddingItem(player, BiddingID.get(player)));
-									inv.setItem(13, getBiddingGlass(player, BiddingID.get(player)));
-									playClick(player);
-									return;
-								}
-								if(item.getItemMeta().getDisplayName().equals(Methods.color("&c-100"))) {
-									int bid = Bidding.get(player) - 100;
-									if(bid < 0) bid = 0;
-									Bidding.put(player, bid);
-									inv.setItem(4, getBiddingItem(player, BiddingID.get(player)));
-									inv.setItem(13, getBiddingGlass(player, BiddingID.get(player)));
-									playClick(player);
-									return;
-								}
-								if(item.getItemMeta().getDisplayName().equals(Methods.color("&c-1000"))) {
-									int bid = Bidding.get(player) - 1000;
-									if(bid < 0) bid = 0;
-									Bidding.put(player, bid);
-									inv.setItem(4, getBiddingItem(player, BiddingID.get(player)));
-									inv.setItem(13, getBiddingGlass(player, BiddingID.get(player)));
-									playClick(player);
-									return;
+								HashMap<String, Integer> priceEdits = new HashMap<>();
+								priceEdits.put("&a+1", 1);
+								priceEdits.put("&a+10", 10);
+								priceEdits.put("&a+100", 100);
+								priceEdits.put("&a+1000", 1000);
+								priceEdits.put("&c-1", -1);
+								priceEdits.put("&c-10", -10);
+								priceEdits.put("&c-100", -100);
+								priceEdits.put("&c-1000", -1000);
+								for(String price : priceEdits.keySet()) {
+									if(item.getItemMeta().getDisplayName().equals(Methods.color(price))) {
+										try {
+											bidding.put(player, (bidding.get(player) + priceEdits.get(price)));
+											inv.setItem(4, getBiddingItem(player, biddingID.get(player)));
+											inv.setItem(13, getBiddingGlass(player, biddingID.get(player)));
+											playClick(player);
+											return;
+										}catch(Exception ex) {
+											player.closeInventory();
+											player.sendMessage(Methods.getPrefix() + Methods.color(msg.getString("Messages.Item-Doesnt-Exist")));
+											return;
+										}
+									}
 								}
 							}
 						}
@@ -664,11 +607,10 @@ public class GUI implements Listener {
 									for(String i : data.getConfigurationSection("Items").getKeys(false)) {
 										int ID = data.getInt("Items." + i + ".StoreID");
 										if(id == ID) {
-											T = true;
-											if(player.hasPermission("CrazyAuctions.Admin")) {
+											if(player.hasPermission("crazyAuctions.admin") || player.hasPermission("crazyauctions.force-end")) {
 												if(e.getAction() == InventoryAction.MOVE_TO_OTHER_INVENTORY) {
 													int num = 1;
-													for(; data.contains("OutOfTime/Cancelled." + num); num++);
+													for(; data.contains("OutOfTime/Cancelled." + num); num++) ;
 													String seller = data.getString("Items." + i + ".Seller");
 													if(Methods.isOnline(seller)) {
 														Player S = Methods.getPlayer(seller);
@@ -690,7 +632,7 @@ public class GUI implements Listener {
 											if(data.getString("Items." + i + ".Seller").equalsIgnoreCase(player.getName())) {
 												String it = config.getString("Settings.GUISettings.OtherSettings.Your-Item.Item");
 												String name = config.getString("Settings.GUISettings.OtherSettings.Your-Item.Name");
-												ItemStack I = new ItemStack(Material.AIR);
+												ItemStack I;
 												if(config.contains("Settings.GUISettings.OtherSettings.Your-Item.Lore")) {
 													I = Methods.makeItem(it, 1, name, config.getStringList("Settings.GUISettings.OtherSettings.Your-Item.Lore"));
 												}else {
@@ -698,19 +640,14 @@ public class GUI implements Listener {
 												}
 												inv.setItem(slot, I);
 												playClick(player);
-												Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
-													@Override
-													public void run() {
-														inv.setItem(slot, item);
-													}
-												}, 3 * 20);
+												Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> inv.setItem(slot, item), 3 * 20);
 												return;
 											}
 											Long cost = data.getLong("Items." + i + ".Price");
 											if(CurrencyManager.getMoney(player) < cost) {
 												String it = config.getString("Settings.GUISettings.OtherSettings.Cant-Afford.Item");
 												String name = config.getString("Settings.GUISettings.OtherSettings.Cant-Afford.Name");
-												ItemStack I = new ItemStack(Material.AIR);
+												ItemStack I;
 												if(config.contains("Settings.GUISettings.OtherSettings.Cant-Afford.Lore")) {
 													I = Methods.makeItem(it, 1, name, config.getStringList("Settings.GUISettings.OtherSettings.Cant-Afford.Lore"));
 												}else {
@@ -718,19 +655,14 @@ public class GUI implements Listener {
 												}
 												inv.setItem(slot, I);
 												playClick(player);
-												Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
-													@Override
-													public void run() {
-														inv.setItem(slot, item);
-													}
-												}, 3 * 20);
+												Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> inv.setItem(slot, item), 3 * 20);
 												return;
 											}
 											if(data.getBoolean("Items." + i + ".Biddable")) {
 												if(player.getName().equalsIgnoreCase(data.getString("Items." + i + ".TopBidder"))) {
 													String it = config.getString("Settings.GUISettings.OtherSettings.Top-Bidder.Item");
 													String name = config.getString("Settings.GUISettings.OtherSettings.Top-Bidder.Name");
-													ItemStack I = new ItemStack(Material.AIR);
+													ItemStack I;
 													if(config.contains("Settings.GUISettings.OtherSettings.Top-Bidder.Lore")) {
 														I = Methods.makeItem(it, 1, name, config.getStringList("Settings.GUISettings.OtherSettings.Top-Bidder.Lore"));
 													}else {
@@ -738,17 +670,12 @@ public class GUI implements Listener {
 													}
 													inv.setItem(slot, I);
 													playClick(player);
-													Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
-														@Override
-														public void run() {
-															inv.setItem(slot, item);
-														}
-													}, 3 * 20);
+													Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> inv.setItem(slot, item), 3 * 20);
 													return;
 												}
 												playClick(player);
 												openBidding(player, i);
-												BiddingID.put(player, i);
+												biddingID.put(player, i);
 											}else {
 												playClick(player);
 												openBuying(player, i);
@@ -845,10 +772,9 @@ public class GUI implements Listener {
 									for(String i : data.getConfigurationSection("Items").getKeys(false)) {
 										int ID = data.getInt("Items." + i + ".StoreID");
 										if(id == ID) {
-											T = true;
 											player.sendMessage(Methods.getPrefix() + Methods.color(msg.getString("Messages.Cancelled-Item")));
 											int num = 1;
-											for(; data.contains("OutOfTime/Cancelled." + num); num++);
+											for(; data.contains("OutOfTime/Cancelled." + num); num++) ;
 											data.set("OutOfTime/Cancelled." + num + ".Seller", data.getString("Items." + i + ".Seller"));
 											data.set("OutOfTime/Cancelled." + num + ".Full-Time", data.getLong("Items." + i + ".Full-Time"));
 											data.set("OutOfTime/Cancelled." + num + ".StoreID", data.getInt("Items." + i + ".StoreID"));
@@ -932,7 +858,6 @@ public class GUI implements Listener {
 										int ID = data.getInt("OutOfTime/Cancelled." + i + ".StoreID");
 										if(id == ID) {
 											if(!Methods.isInvFull(player)) {
-												T = true;
 												player.sendMessage(Methods.getPrefix() + Methods.color(msg.getString("Messages.Got-Item-Back")));
 												ItemStack IT = data.getItemStack("OutOfTime/Cancelled." + i + ".Item");
 												player.getInventory().addItem(IT);
@@ -952,7 +877,6 @@ public class GUI implements Listener {
 									playClick(player);
 									openShop(player, Type.get(player), Cat.get(player), 1);
 									player.sendMessage(Methods.getPrefix() + Methods.color(msg.getString("Messages.Item-Doesnt-Exist")));
-									return;
 								}
 							}
 						}

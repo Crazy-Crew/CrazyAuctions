@@ -1,7 +1,10 @@
 
+\.idea/
 
-*.prefs
+*.iml
 
 *.class
 
-bin/
+target/classes/
+
+target/

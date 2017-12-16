@@ -1,4 +1,4 @@
-package me.badbones69.crazyauctions.events;
+package me.badbones69.crazyauctions.api.events;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -6,29 +6,29 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.ItemStack;
 
 /**
- * 
+ *
  * @author BadBones69
- * 
- * This event is fired when a bidding item's time has run out and so a player wins the item.
+ *
+ * This event is fired when a player buys something from the selling auction house.
  *
  */
-public class AuctionWinBidEvent extends Event {
+public class AuctionBuyEvent extends Event {
 	
 	private Player player;
-	private long bid;
+	private long price;
 	private ItemStack item;
 	private static final HandlerList handlers = new HandlerList();
 	
 	/**
-	 * 
+	 *
 	 * @param player
 	 * @param item
-	 * @param bid
+	 * @param price
 	 */
-	public AuctionWinBidEvent(Player player, ItemStack item, long bid) {
+	public AuctionBuyEvent(Player player, ItemStack item, long price) {
 		this.player = player;
 		this.item = item;
-		this.bid = bid;
+		this.price = price;
 	}
 	
 	public HandlerList getHandlers() {
@@ -47,8 +47,8 @@ public class AuctionWinBidEvent extends Event {
 		return item;
 	}
 	
-	public long getBid() {
-		return bid;
+	public long getPrice() {
+		return price;
 	}
 	
 }
