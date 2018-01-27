@@ -447,7 +447,7 @@ public class Methods {
 				price = Main.settings.getData().getLong("Items." + ID + ".Price");
 			}
 		}
-		return NumberFormat.getNumberInstance().format(price);
+		return String.valueOf(price);
 	}
 	
 }
