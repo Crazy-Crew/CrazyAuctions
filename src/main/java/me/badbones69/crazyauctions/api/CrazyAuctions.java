@@ -1,12 +1,11 @@
 package me.badbones69.crazyauctions.api;
 
-import java.util.ArrayList;
-
+import me.badbones69.crazyauctions.Main;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import me.badbones69.crazyauctions.Main;
+import java.util.ArrayList;
 
 public class CrazyAuctions {
 	

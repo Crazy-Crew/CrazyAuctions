@@ -1,12 +1,12 @@
 package me.badbones69.crazyauctions.api;
 
-import java.util.ArrayList;
-
 import org.bukkit.Material;
 
-public enum Category{
+import java.util.ArrayList;
+
+public enum Category {
 	
-	NONE("None", new ArrayList<Material>()),
+	NONE("None", new ArrayList<>()),
 	OTHER("Other", getOthers()),
 	ARMOR("Armor", getArmor()),
 	WEAPONS("Weapons", getWeapons()),
@@ -51,7 +51,7 @@ public enum Category{
 	}
 	
 	private static ArrayList<Material> getArmor() {
-		ArrayList<Material> ma = new ArrayList<Material>();
+		ArrayList<Material> ma = new ArrayList<>();
 		ma.add(Material.DIAMOND_HELMET);
 		ma.add(Material.DIAMOND_CHESTPLATE);
 		ma.add(Material.DIAMOND_LEGGINGS);
@@ -76,7 +76,7 @@ public enum Category{
 	}
 	
 	private static ArrayList<Material> getTools() {
-		ArrayList<Material> ma = new ArrayList<Material>();
+		ArrayList<Material> ma = new ArrayList<>();
 		ma.add(Material.WOOD_PICKAXE);
 		ma.add(Material.STONE_PICKAXE);
 		ma.add(Material.IRON_PICKAXE);
@@ -97,7 +97,7 @@ public enum Category{
 	}
 	
 	private static ArrayList<Material> getWeapons() {
-		ArrayList<Material> ma = new ArrayList<Material>();
+		ArrayList<Material> ma = new ArrayList<>();
 		ma.add(Material.WOOD_SWORD);
 		ma.add(Material.STONE_SWORD);
 		ma.add(Material.IRON_SWORD);
@@ -111,7 +111,7 @@ public enum Category{
 	}
 	
 	private static ArrayList<Material> getFood() {
-		ArrayList<Material> ma = new ArrayList<Material>();
+		ArrayList<Material> ma = new ArrayList<>();
 		for(Material m : Material.values()) {
 			if(m.isEdible()) {
 				if(m != Material.POTION) ma.add(m);
@@ -121,13 +121,17 @@ public enum Category{
 	}
 	
 	private static ArrayList<Material> getPotions() {
-		ArrayList<Material> ma = new ArrayList<Material>();
+		ArrayList<Material> ma = new ArrayList<>();
 		ma.add(Material.POTION);
+		ma.add(Material.SPLASH_POTION);
+		if(Material.matchMaterial("LINGERING_POTION") != null) {
+			ma.add(Material.matchMaterial("LINGERING_POTION"));
+		}
 		return ma;
 	}
 	
 	private static ArrayList<Material> getBlocks() {
-		ArrayList<Material> ma = new ArrayList<Material>();
+		ArrayList<Material> ma = new ArrayList<>();
 		for(Material m : Material.values()) {
 			if(m.isBlock()) {
 				ma.add(m);
@@ -137,7 +141,7 @@ public enum Category{
 	}
 	
 	private static ArrayList<Material> getOthers() {
-		ArrayList<Material> ma = new ArrayList<Material>();
+		ArrayList<Material> ma = new ArrayList<>();
 		for(Material m : Material.values()) {
 			if(!(getArmor().contains(m) || getTools().contains(m) || getWeapons().contains(m) || getFood().contains(m) || getPotions().contains(m) || getBlocks().contains(m))) {
 				ma.add(m);

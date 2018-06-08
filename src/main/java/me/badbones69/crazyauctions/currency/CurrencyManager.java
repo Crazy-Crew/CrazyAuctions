@@ -1,10 +1,9 @@
 package me.badbones69.crazyauctions.currency;
 
+import me.badbones69.crazyauctions.Main;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
-
-import me.badbones69.crazyauctions.Main;
 
 public enum CurrencyManager { // Currency Manager
 	
@@ -52,7 +51,7 @@ public enum CurrencyManager { // Currency Manager
 	}
 	
 	/**
-	 * 
+	 *
 	 * @return Returns true if the server has the plugin.
 	 */
 	public Boolean hasPlugin() {
@@ -65,7 +64,7 @@ public enum CurrencyManager { // Currency Manager
 	}
 	
 	/**
-	 * 
+	 *
 	 * @param player
 	 *            Player you want the currency from.
 	 * @param type
@@ -77,7 +76,7 @@ public enum CurrencyManager { // Currency Manager
 	}
 	
 	/**
-	 * 
+	 *
 	 * @param player
 	 *            Player you want the currency from.
 	 * @param type
@@ -90,7 +89,7 @@ public enum CurrencyManager { // Currency Manager
 	}
 	
 	/**
-	 * 
+	 *
 	 * @param player
 	 *            Player you want the currency from.
 	 * @param type
@@ -103,7 +102,7 @@ public enum CurrencyManager { // Currency Manager
 	}
 	
 	/**
-	 * 
+	 *
 	 * @param player
 	 *            Player you want the currency from.
 	 * @param type
@@ -116,7 +115,7 @@ public enum CurrencyManager { // Currency Manager
 	}
 	
 	/**
-	 * 
+	 *
 	 * @param player
 	 *            Player you want the currency from.
 	 * @param type

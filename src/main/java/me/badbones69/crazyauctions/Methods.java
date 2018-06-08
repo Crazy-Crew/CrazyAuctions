@@ -1,20 +1,8 @@
 package me.badbones69.crazyauctions;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-import java.util.Map;
-
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.OfflinePlayer;
+import me.badbones69.crazyauctions.api.events.AuctionWinBidEvent;
+import me.badbones69.crazyauctions.currency.CurrencyManager;
+import org.bukkit.*;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
@@ -23,8 +11,11 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 
-import me.badbones69.crazyauctions.currency.CurrencyManager;
-import me.badbones69.crazyauctions.events.AuctionWinBidEvent;
+import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+import java.util.Map;
 
 public class Methods {
 	
@@ -80,7 +71,7 @@ public class Methods {
 	}
 	
 	public static ItemStack makeItem(String type, int amount, String name, List<String> lore) {
-		ArrayList<String> l = new ArrayList<String>();
+		ArrayList<String> l = new ArrayList<>();
 		int ty = 0;
 		if(type.contains(":")) {
 			String[] b = type.split(":");
@@ -112,7 +103,7 @@ public class Methods {
 	}
 	
 	public static ItemStack makeItem(Material material, int amount, int type, String name, List<String> lore) {
-		ArrayList<String> l = new ArrayList<String>();
+		ArrayList<String> l = new ArrayList<>();
 		ItemStack item = new ItemStack(material, amount, (short) type);
 		ItemMeta m = item.getItemMeta();
 		m.setDisplayName(color(name));
@@ -134,7 +125,7 @@ public class Methods {
 	}
 	
 	public static ItemStack addLore(ItemStack item, String i) {
-		ArrayList<String> lore = new ArrayList<String>();
+		ArrayList<String> lore = new ArrayList<>();
 		ItemMeta m = item.getItemMeta();
 		if(item.getItemMeta().hasLore()) {
 			lore.addAll(item.getItemMeta().getLore());
@@ -146,7 +137,7 @@ public class Methods {
 	}
 	
 	public static ItemStack addLore(ItemStack item, List<String> list) {
-		ArrayList<String> lore = new ArrayList<String>();
+		ArrayList<String> lore = new ArrayList<>();
 		ItemMeta m = item.getItemMeta();
 		if(item.getItemMeta().hasLore()) lore.addAll(item.getItemMeta().getLore());
 		for(String i : list)
@@ -236,7 +227,7 @@ public class Methods {
 	}
 	
 	public static boolean hasPermission(Player player, String perm) {
-		if(!player.hasPermission("CrazyAuctions." + perm)) {
+		if(!player.hasPermission("crazyauctions." + perm)) {
 			player.sendMessage(color(Main.settings.getMsg().getString("Messages.No-Permission")));
 			return false;
 		}
@@ -246,7 +237,7 @@ public class Methods {
 	public static boolean hasPermission(CommandSender sender, String perm) {
 		if(sender instanceof Player) {
 			Player player = (Player) sender;
-			if(!player.hasPermission("CrazyAuctions." + perm)) {
+			if(!player.hasPermission("crazyauctions." + perm)) {
 				player.sendMessage(color(Main.settings.getMsg().getString("Messages.No-Permission")));
 				return false;
 			}else {
@@ -257,40 +248,8 @@ public class Methods {
 		}
 	}
 	
-	public static void hasUpdate() {
-		try {
-			HttpURLConnection c = (HttpURLConnection) new URL("http://www.spigotmc.org/api/general.php").openConnection();
-			c.setDoOutput(true);
-			c.setRequestMethod("POST");
-			c.getOutputStream().write(("key=98BE0FE67F88AB82B4C197FAF1DC3B69206EFDCC4D3B80FC83A00037510B99B4&resource=25219").getBytes("UTF-8"));
-			String oldVersion = plugin.getDescription().getVersion();
-			String newVersion = new BufferedReader(new InputStreamReader(c.getInputStream())).readLine().replaceAll("[a-zA-Z ]", "");
-			if(!newVersion.equals(oldVersion)) {
-				Bukkit.getConsoleSender().sendMessage(getPrefix() + color("&cYour server is running &7v" + oldVersion + "&c and the newest is &7v" + newVersion + "&c."));
-			}
-		}catch(Exception e) {
-			return;
-		}
-	}
-	
-	public static void hasUpdate(Player player) {
-		try {
-			HttpURLConnection c = (HttpURLConnection) new URL("http://www.spigotmc.org/api/general.php").openConnection();
-			c.setDoOutput(true);
-			c.setRequestMethod("POST");
-			c.getOutputStream().write(("key=98BE0FE67F88AB82B4C197FAF1DC3B69206EFDCC4D3B80FC83A00037510B99B4&resource=25219").getBytes("UTF-8"));
-			String oldVersion = plugin.getDescription().getVersion();
-			String newVersion = new BufferedReader(new InputStreamReader(c.getInputStream())).readLine().replaceAll("[a-zA-Z ]", "");
-			if(!newVersion.equals(oldVersion)) {
-				player.sendMessage(getPrefix() + color("&cYour server is running &7v" + oldVersion + "&c and the newest is &7v" + newVersion + "&c."));
-			}
-		}catch(Exception e) {
-			return;
-		}
-	}
-	
 	public static List<ItemStack> getPage(List<ItemStack> list, Integer page) {
-		List<ItemStack> items = new ArrayList<ItemStack>();
+		List<ItemStack> items = new ArrayList<>();
 		if(page <= 0) page = 1;
 		int max = 45;
 		int index = page * max - max;
@@ -310,7 +269,7 @@ public class Methods {
 	}
 	
 	public static List<Integer> getPageInts(List<Integer> list, Integer page) {
-		List<Integer> items = new ArrayList<Integer>();
+		List<Integer> items = new ArrayList<>();
 		if(page <= 0) page = 1;
 		int max = 45;
 		int index = page * max - max;
@@ -332,7 +291,7 @@ public class Methods {
 	public static int getMaxPage(List<ItemStack> list) {
 		int maxPage = 1;
 		int amount = list.size();
-		for(; amount > 45; amount -= 45, maxPage++);
+		for(; amount > 45; amount -= 45, maxPage++) ;
 		return maxPage;
 	}
 	
@@ -345,9 +304,9 @@ public class Methods {
 		int H = 0;
 		int M = 0;
 		int S = 0;
-		for(; total > 86400; total -= 86400, D++);
-		for(; total > 3600; total -= 3600, H++);
-		for(; total > 60; total -= 60, M++);
+		for(; total > 86400; total -= 86400, D++) ;
+		for(; total > 3600; total -= 3600, H++) ;
+		for(; total > 60; total -= 60, M++) ;
 		S += total;
 		return D + "d " + H + "h " + M + "m " + S + "s ";
 	}
@@ -398,7 +357,7 @@ public class Methods {
 				fullExpireTime.setTimeInMillis(data.getLong("Items." + i + ".Full-Time"));
 				if(cal.after(expireTime)) {
 					int num = 1;
-					for(; data.contains("OutOfTime/Cancelled." + num); num++);
+					for(; data.contains("OutOfTime/Cancelled." + num); num++) ;
 					if(data.getBoolean("Items." + i + ".Biddable") && !data.getString("Items." + i + ".TopBidder").equalsIgnoreCase("None") && CurrencyManager.getMoney(Methods.getPlayer(data.getString("Items." + i + ".TopBidder"))) >= data.getInt("Items." + i + ".Price")) {
 						String winner = data.getString("Items." + i + ".TopBidder");
 						String seller = data.getString("Items." + i + ".Seller");

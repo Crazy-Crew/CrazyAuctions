@@ -1,7 +1,12 @@
 
+\.idea/
 
-*.prefs
+*.iml
 
 *.class
 
-bin/
+target/classes/
+
+target/
+
+\.DS_Store
