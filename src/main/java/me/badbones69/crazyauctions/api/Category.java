@@ -123,7 +123,9 @@ public enum Category {
 	private static ArrayList<Material> getPotions() {
 		ArrayList<Material> ma = new ArrayList<>();
 		ma.add(Material.POTION);
-		ma.add(Material.SPLASH_POTION);
+		if(Material.matchMaterial("SPLASH_POTION") != null) {
+			ma.add(Material.matchMaterial("SPLASH_POTION"));
+		}
 		if(Material.matchMaterial("LINGERING_POTION") != null) {
 			ma.add(Material.matchMaterial("LINGERING_POTION"));
 		}
