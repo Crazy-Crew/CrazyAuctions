@@ -13,10 +13,7 @@ public class Vault {
 	public static EconomyResponse r;
 	
 	public static boolean hasVault() {
-		if(Bukkit.getServer().getPluginManager().getPlugin("Vault") != null) {
-			return true;
-		}
-		return false;
+		return Bukkit.getServer().getPluginManager().getPlugin("Vault") != null;
 	}
 	
 	public static boolean setupEconomy() {

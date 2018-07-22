@@ -4,24 +4,24 @@ public enum ShopType {
 	
 	SELL("Sell"), BID("Bid");
 	
-	String Name;
+	private String name;
 	
 	/**
-	 * @param name Name of the Shop Type.
+	 * @param name name of the Shop Type.
 	 */
 	private ShopType(String name) {
-		this.Name = name;
+		this.name = name;
 	}
 	
 	/**
 	 * @return Returns the type name as a string.
 	 */
 	public String getName() {
-		return Name;
+		return name;
 	}
 	
 	/**
-	 * @param name Name of the Type you want.
+	 * @param name name of the Type you want.
 	 * @return Returns the Type as a Enum.
 	 */
 	public static ShopType getFromName(String name) {
