@@ -1,6 +1,6 @@
 package me.badbones69.crazyauctions.currency;
 
-import me.badbones69.crazyauctions.Main;
+import me.badbones69.crazyauctions.api.FileManager.Files;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -9,36 +9,36 @@ public enum CurrencyManager { // Currency Manager
 	
 	VAULT("Vault", "Money");
 	
-	String PluginName, Name;
+	private String pluginName, name;
 	
 	/**
 	 * @param pluginname
-	 *            Name of the Plugin.
+	 *            name of the Plugin.
 	 * @param name
-	 *            Name of the Currency.
+	 *            name of the Currency.
 	 */
 	private CurrencyManager(String pluginname, String name) {
-		this.PluginName = pluginname;
-		this.Name = name;
+		this.pluginName = pluginname;
+		this.name = name;
 	}
 	
 	/**
 	 * @return Returns the Currency name as a string.
 	 */
 	public String getName() {
-		return Name;
+		return name;
 	}
 	
 	/**
 	 * @return Returns the Currency name as a string.
 	 */
 	public String getPluginName() {
-		return PluginName;
+		return pluginName;
 	}
 	
 	/**
 	 * @param name
-	 *            Name of the Type you want.
+	 *            name of the Type you want.
 	 * @return Returns the Currency as a Enum.
 	 */
 	public static CurrencyManager getFromName(String name) {
@@ -55,10 +55,8 @@ public enum CurrencyManager { // Currency Manager
 	 * @return Returns true if the server has the plugin.
 	 */
 	public Boolean hasPlugin() {
-		if(Bukkit.getServer().getPluginManager().getPlugin(PluginName) != null) {
-			if(Main.settings.getConfig().getBoolean("Settings.Currencies." + PluginName + ".Enabled")) {
-				return true;
-			}
+		if(Bukkit.getServer().getPluginManager().getPlugin(pluginName) != null) {
+			return Files.CONFIG.getFile().getBoolean("Settings.Currencies." + pluginName + ".Enabled");
 		}
 		return false;
 	}
@@ -67,8 +65,6 @@ public enum CurrencyManager { // Currency Manager
 	 *
 	 * @param player
 	 *            Player you want the currency from.
-	 * @param type
-	 *            Type of currency you want to get.
 	 * @return Returns the amount they have of the currency
 	 */
 	public static Long getMoney(Player player) {
@@ -79,8 +75,6 @@ public enum CurrencyManager { // Currency Manager
 	 *
 	 * @param player
 	 *            Player you want the currency from.
-	 * @param type
-	 *            Type of currency you want to take from.
 	 * @param amount
 	 *            The amount you want to take.
 	 */
@@ -92,8 +86,6 @@ public enum CurrencyManager { // Currency Manager
 	 *
 	 * @param player
 	 *            Player you want the currency from.
-	 * @param type
-	 *            Type of currency you want to take from.
 	 * @param amount
 	 *            The amount you want to take.
 	 */
@@ -105,8 +97,6 @@ public enum CurrencyManager { // Currency Manager
 	 *
 	 * @param player
 	 *            Player you want the currency from.
-	 * @param type
-	 *            Type of currency you want to add to.
 	 * @param amount
 	 *            The amount you want to add.
 	 */
@@ -118,12 +108,11 @@ public enum CurrencyManager { // Currency Manager
 	 *
 	 * @param player
 	 *            Player you want the currency from.
-	 * @param type
-	 *            Type of currency you want to add to.
 	 * @param amount
 	 *            The amount you want to add.
 	 */
 	public static void addMoney(OfflinePlayer player, Long amount) {
 		Vault.addMoney(player, amount);
 	}
+	
 }
