@@ -1,11 +1,8 @@
 package me.badbones69.crazyauctions.controllers;
 
 import me.badbones69.crazyauctions.Methods;
-import me.badbones69.crazyauctions.api.Category;
-import me.badbones69.crazyauctions.api.CrazyAuctions;
+import me.badbones69.crazyauctions.api.*;
 import me.badbones69.crazyauctions.api.FileManager.Files;
-import me.badbones69.crazyauctions.api.Messages;
-import me.badbones69.crazyauctions.api.ShopType;
 import me.badbones69.crazyauctions.api.events.AuctionBuyEvent;
 import me.badbones69.crazyauctions.api.events.AuctionNewBidEvent;
 import me.badbones69.crazyauctions.currency.CurrencyManager;
@@ -70,7 +67,7 @@ public class GUI implements Listener {
 					}else {
 						if(sell == ShopType.SELL) {
 							for(String l : config.getStringList("Settings.GUISettings.SellingItemLore")) {
-								lore.add(l.replaceAll("%Price%", Methods.getPrice(i, false)).replaceAll("%price%", Methods.getPrice(i, false)).replaceAll("%Seller%", data.getString("Items." + i + ".Seller")).replaceAll("%seller%", data.getString("Items." + i + ".Seller")));
+								lore.add(l.replaceAll("%Price%", Methods.getPrice(i, false)).replaceAll("%price%", Methods.getPrice(i, false)).replaceAll("%Seller%", data.getString("Items." + i + ".Seller")).replaceAll("%seller%", data.getString("Items." + i + ".Seller")).replaceAll("%Time%", Methods.convertToTime(data.getLong("Items." + i + ".Time-Till-Expire"))).replaceAll("%time%", Methods.convertToTime(data.getLong("Items." + i + ".Time-Till-Expire"))));
 							}
 							items.add(Methods.addLore(data.getItemStack("Items." + i + ".Item").clone(), lore));
 							ID.add(data.getInt("Items." + i + ".StoreID"));
@@ -302,7 +299,7 @@ public class GUI implements Listener {
 		ItemStack item = data.getItemStack("Items." + ID + ".Item");
 		List<String> lore = new ArrayList<>();
 		for(String l : config.getStringList("Settings.GUISettings.SellingLore")) {
-			lore.add(l.replaceAll("%Price%", Methods.getPrice(ID, false)).replaceAll("%price%", Methods.getPrice(ID, false)).replaceAll("%Seller%", data.getString("Items." + ID + ".Seller")).replaceAll("%seller%", data.getString("Items." + ID + ".Seller")));
+			lore.add(l.replaceAll("%Price%", Methods.getPrice(ID, false)).replaceAll("%price%", Methods.getPrice(ID, false)).replaceAll("%Seller%", data.getString("Items." + ID + ".Seller")).replaceAll("%seller%", data.getString("Items." + ID + ".Seller")).replaceAll("%Time%", Methods.convertToTime(data.getLong("Items." + l + ".Time-Till-Expire"))).replaceAll("%time%", Methods.convertToTime(data.getLong("Items." + l + ".Time-Till-Expire"))));
 		}
 		inv.setItem(4, Methods.addLore(item.clone(), lore));
 		IDs.put(player, ID);
@@ -320,15 +317,26 @@ public class GUI implements Listener {
 		}
 		Inventory inv = Bukkit.createInventory(null, 27, Methods.color(config.getString("Settings.Bidding-On-Item")));
 		if(!bidding.containsKey(player)) bidding.put(player, 0);
-		inv.setItem(9, Methods.makeItem("160:5", 1, "&a+1"));
-		inv.setItem(10, Methods.makeItem("160:5", 1, "&a+10"));
-		inv.setItem(11, Methods.makeItem("160:5", 1, "&a+100"));
-		inv.setItem(12, Methods.makeItem("160:5", 1, "&a+1000"));
+		if(Version.getCurrentVersion().isNewer(Version.v1_12_R1)) {
+			inv.setItem(9, Methods.makeItem("LIME_STAINED_GLASS_PANE", 1, "&a+1"));
+			inv.setItem(10, Methods.makeItem("LIME_STAINED_GLASS_PANE", 1, "&a+10"));
+			inv.setItem(11, Methods.makeItem("LIME_STAINED_GLASS_PANE", 1, "&a+100"));
+			inv.setItem(12, Methods.makeItem("LIME_STAINED_GLASS_PANE", 1, "&a+1000"));
+			inv.setItem(14, Methods.makeItem("RED_STAINED_GLASS_PANE", 1, "&c-1000"));
+			inv.setItem(15, Methods.makeItem("RED_STAINED_GLASS_PANE", 1, "&c-100"));
+			inv.setItem(16, Methods.makeItem("RED_STAINED_GLASS_PANE", 1, "&c-10"));
+			inv.setItem(17, Methods.makeItem("RED_STAINED_GLASS_PANE", 1, "&c-1"));
+		}else {
+			inv.setItem(9, Methods.makeItem("160:5", 1, "&a+1"));
+			inv.setItem(10, Methods.makeItem("160:5", 1, "&a+10"));
+			inv.setItem(11, Methods.makeItem("160:5", 1, "&a+100"));
+			inv.setItem(12, Methods.makeItem("160:5", 1, "&a+1000"));
+			inv.setItem(14, Methods.makeItem("160:14", 1, "&c-1000"));
+			inv.setItem(15, Methods.makeItem("160:14", 1, "&c-100"));
+			inv.setItem(16, Methods.makeItem("160:14", 1, "&c-10"));
+			inv.setItem(17, Methods.makeItem("160:14", 1, "&c-1"));
+		}
 		inv.setItem(13, getBiddingGlass(player, ID));
-		inv.setItem(14, Methods.makeItem("160:14", 1, "&c-1000"));
-		inv.setItem(15, Methods.makeItem("160:14", 1, "&c-100"));
-		inv.setItem(16, Methods.makeItem("160:14", 1, "&c-10"));
-		inv.setItem(17, Methods.makeItem("160:14", 1, "&c-1"));
 		inv.setItem(22, Methods.makeItem(config.getString("Settings.GUISettings.OtherSettings.Bid.Item"), 1, config.getString("Settings.GUISettings.OtherSettings.Bid.Name"), config.getStringList("Settings.GUISettings.OtherSettings.Bid.Lore")));
 		
 		inv.setItem(4, getBiddingItem(player, ID));
@@ -650,7 +658,7 @@ public class GUI implements Listener {
 												Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> inv.setItem(slot, item), 3 * 20);
 												return;
 											}
-											Long cost = data.getLong("Items." + i + ".Price");
+											long cost = data.getLong("Items." + i + ".Price");
 											if(CurrencyManager.getMoney(player) < cost) {
 												String it = config.getString("Settings.GUISettings.OtherSettings.Cant-Afford.Item");
 												String name = config.getString("Settings.GUISettings.OtherSettings.Cant-Afford.Name");
