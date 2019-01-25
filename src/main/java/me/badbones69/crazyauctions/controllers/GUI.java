@@ -68,7 +68,7 @@ public class GUI implements Listener {
 					}else {
 						if(sell == ShopType.SELL) {
 							for(String l : config.getStringList("Settings.GUISettings.SellingItemLore")) {
-								lore.add(l.replaceAll("%Price%", String.format(Locale.ENGLISH, "%,d", Long.parseLong(Methods.getPrice(i, false)))).replaceAll("%price%", String.format(Locale.ENGLISH, "%,d", Long.parseLong(Methods.getPrice(i, false)))).replaceAll("%Seller%", data.getString("Items." + i + ".Seller")).replaceAll("%seller%", data.getString("Items." + i + ".Seller")));
+								lore.add(l.replaceAll("%Price%", String.format(Locale.ENGLISH, "%,d", Long.parseLong(Methods.getPrice(i, false)))).replaceAll("%price%", String.format(Locale.ENGLISH, "%,d", Long.parseLong(Methods.getPrice(i, false)))).replaceAll("%Seller%", data.getString("Items." + i + ".Seller")).replaceAll("%seller%", data.getString("Items." + i + ".Seller")).replaceAll("%Time%", Methods.convertToTime(data.getLong("Items." + i + ".Time-Till-Expire"))).replaceAll("%time%", Methods.convertToTime(data.getLong("Items." + i + ".Time-Till-Expire"))));
 							}
 							items.add(Methods.addLore(data.getItemStack("Items." + i + ".Item").clone(), lore));
 							ID.add(data.getInt("Items." + i + ".StoreID"));
