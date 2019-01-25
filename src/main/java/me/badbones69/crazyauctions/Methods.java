@@ -426,7 +426,7 @@ public class Methods {
 				price = Files.DATA.getFile().getLong("Items." + ID + ".Price");
 			}
 		}
-		return NumberFormat.getNumberInstance().format(price);
+		return String.valueOf(price);
 	}
 	
 }

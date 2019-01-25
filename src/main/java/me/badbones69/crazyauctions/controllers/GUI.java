@@ -644,6 +644,7 @@ public class GUI implements Listener {
 													return;
 												}
 											}
+											Runnable runnable = () -> inv.setItem(slot, item);
 											if(data.getString("Items." + i + ".Seller").equalsIgnoreCase(player.getName())) {
 												String it = config.getString("Settings.GUISettings.OtherSettings.Your-Item.Item");
 												String name = config.getString("Settings.GUISettings.OtherSettings.Your-Item.Name");
@@ -655,7 +656,7 @@ public class GUI implements Listener {
 												}
 												inv.setItem(slot, I);
 												playClick(player);
-												Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> inv.setItem(slot, item), 3 * 20);
+												Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, runnable, 3 * 20);
 												return;
 											}
 											long cost = data.getLong("Items." + i + ".Price");
@@ -670,7 +671,7 @@ public class GUI implements Listener {
 												}
 												inv.setItem(slot, I);
 												playClick(player);
-												Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> inv.setItem(slot, item), 3 * 20);
+												Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, runnable, 3 * 20);
 												return;
 											}
 											if(data.getBoolean("Items." + i + ".Biddable")) {
@@ -685,7 +686,7 @@ public class GUI implements Listener {
 													}
 													inv.setItem(slot, I);
 													playClick(player);
-													Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> inv.setItem(slot, item), 3 * 20);
+													Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, runnable, 3 * 20);
 													return;
 												}
 												playClick(player);
