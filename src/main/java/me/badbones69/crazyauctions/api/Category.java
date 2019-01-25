@@ -52,6 +52,17 @@ public enum Category {
 	
 	private static ArrayList<Material> getArmor() {
 		ArrayList<Material> ma = new ArrayList<>();
+		if(Version.getCurrentVersion().isNewer(Version.v1_12_R1)) {
+			ma.add(Material.matchMaterial("GOLDEN_HELMET"));
+			ma.add(Material.matchMaterial("GOLDEN_CHESTPLATE"));
+			ma.add(Material.matchMaterial("GOLDEN_LEGGINGS"));
+			ma.add(Material.matchMaterial("GOLDEN_BOOTS"));
+		}else {
+			ma.add(Material.matchMaterial("GOLD_HELMET"));
+			ma.add(Material.matchMaterial("GOLD_CHESTPLATE"));
+			ma.add(Material.matchMaterial("GOLD_LEGGINGS"));
+			ma.add(Material.matchMaterial("GOLD_BOOTS"));
+		}
 		ma.add(Material.DIAMOND_HELMET);
 		ma.add(Material.DIAMOND_CHESTPLATE);
 		ma.add(Material.DIAMOND_LEGGINGS);
@@ -60,10 +71,6 @@ public enum Category {
 		ma.add(Material.CHAINMAIL_CHESTPLATE);
 		ma.add(Material.CHAINMAIL_LEGGINGS);
 		ma.add(Material.CHAINMAIL_BOOTS);
-		ma.add(Material.GOLD_HELMET);
-		ma.add(Material.GOLD_CHESTPLATE);
-		ma.add(Material.GOLD_LEGGINGS);
-		ma.add(Material.GOLD_BOOTS);
 		ma.add(Material.IRON_HELMET);
 		ma.add(Material.IRON_CHESTPLATE);
 		ma.add(Material.IRON_LEGGINGS);
@@ -77,19 +84,37 @@ public enum Category {
 	
 	private static ArrayList<Material> getTools() {
 		ArrayList<Material> ma = new ArrayList<>();
-		ma.add(Material.WOOD_PICKAXE);
+		if(Version.getCurrentVersion().isNewer(Version.v1_12_R1)) {
+			ma.add(Material.matchMaterial("WOODEN_PICKAXE"));
+			ma.add(Material.matchMaterial("WOODEN_AXE"));
+			ma.add(Material.matchMaterial("WOODEN_SHOVEL"));
+			ma.add(Material.matchMaterial("WOODEN_HOE"));
+			ma.add(Material.matchMaterial("GOLDEN_PICKAXE"));
+			ma.add(Material.matchMaterial("GOLDEN_AXE"));
+			ma.add(Material.matchMaterial("GOLDEN_SHOVEL"));
+			ma.add(Material.matchMaterial("GOLDEN_HOE"));
+			ma.add(Material.matchMaterial("STONE_SHOVEL"));
+			ma.add(Material.matchMaterial("IRON_SHOVEL"));
+			ma.add(Material.matchMaterial("DIAMOND_SHOVEL"));
+		}else {
+			ma.add(Material.matchMaterial("WOOD_PICKAXE"));
+			ma.add(Material.matchMaterial("WOOD_AXE"));
+			ma.add(Material.matchMaterial("WOOD_SPADE"));
+			ma.add(Material.matchMaterial("WOOD_HOE"));
+			ma.add(Material.matchMaterial("GOLD_PICKAXE"));
+			ma.add(Material.matchMaterial("GOLD_AXE"));
+			ma.add(Material.matchMaterial("GOLD_SPADE"));
+			ma.add(Material.matchMaterial("GOLD_HOE"));
+			ma.add(Material.matchMaterial("STONE_SPADE"));
+			ma.add(Material.matchMaterial("IRON_SPADE"));
+			ma.add(Material.matchMaterial("DIAMOND_SPADE"));
+		}
 		ma.add(Material.STONE_PICKAXE);
 		ma.add(Material.IRON_PICKAXE);
 		ma.add(Material.DIAMOND_PICKAXE);
-		ma.add(Material.WOOD_AXE);
 		ma.add(Material.STONE_AXE);
 		ma.add(Material.IRON_AXE);
 		ma.add(Material.DIAMOND_AXE);
-		ma.add(Material.WOOD_SPADE);
-		ma.add(Material.STONE_SPADE);
-		ma.add(Material.IRON_SPADE);
-		ma.add(Material.DIAMOND_SPADE);
-		ma.add(Material.WOOD_HOE);
 		ma.add(Material.STONE_HOE);
 		ma.add(Material.IRON_HOE);
 		ma.add(Material.DIAMOND_HOE);
@@ -98,11 +123,20 @@ public enum Category {
 	
 	private static ArrayList<Material> getWeapons() {
 		ArrayList<Material> ma = new ArrayList<>();
-		ma.add(Material.WOOD_SWORD);
+		if(Version.getCurrentVersion().isNewer(Version.v1_12_R1)) {
+			ma.add(Material.matchMaterial("WOODEN_SWORD"));
+			ma.add(Material.matchMaterial("WOODEN_AXE"));
+			ma.add(Material.matchMaterial("GOLDEN_SWORD"));
+			ma.add(Material.matchMaterial("GOLDEN_AXE"));
+		}else {
+			ma.add(Material.matchMaterial("WOOD_SWORD"));
+			ma.add(Material.matchMaterial("WOOD_AXE"));
+			ma.add(Material.matchMaterial("GOLD_SWORD"));
+			ma.add(Material.matchMaterial("GOLD_AXE"));
+		}
 		ma.add(Material.STONE_SWORD);
 		ma.add(Material.IRON_SWORD);
 		ma.add(Material.DIAMOND_SWORD);
-		ma.add(Material.WOOD_AXE);
 		ma.add(Material.STONE_AXE);
 		ma.add(Material.IRON_AXE);
 		ma.add(Material.DIAMOND_AXE);

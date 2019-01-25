@@ -1,11 +1,8 @@
 package me.badbones69.crazyauctions.controllers;
 
 import me.badbones69.crazyauctions.Methods;
-import me.badbones69.crazyauctions.api.Category;
-import me.badbones69.crazyauctions.api.CrazyAuctions;
+import me.badbones69.crazyauctions.api.*;
 import me.badbones69.crazyauctions.api.FileManager.Files;
-import me.badbones69.crazyauctions.api.Messages;
-import me.badbones69.crazyauctions.api.ShopType;
 import me.badbones69.crazyauctions.api.events.AuctionBuyEvent;
 import me.badbones69.crazyauctions.api.events.AuctionNewBidEvent;
 import me.badbones69.crazyauctions.currency.CurrencyManager;
@@ -25,14 +22,15 @@ import org.bukkit.plugin.Plugin;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.logging.Level;
 
 public class GUI implements Listener {
 	
 	private static HashMap<Player, Integer> bidding = new HashMap<>();
 	private static HashMap<Player, String> biddingID = new HashMap<>();
-	private static HashMap<Player, ShopType> Type = new HashMap<>(); // Shop Type
-	private static HashMap<Player, Category> Cat = new HashMap<>(); // Category Type
+	private static HashMap<Player, ShopType> shopType = new HashMap<>(); // Shop Type
+	private static HashMap<Player, Category> shopCategory = new HashMap<>(); // Category Type
 	private static HashMap<Player, List<Integer>> List = new HashMap<>();
 	private static HashMap<Player, String> IDs = new HashMap<>();
 	private static CrazyAuctions crazyAuctions = CrazyAuctions.getInstance();
@@ -49,9 +47,9 @@ public class GUI implements Listener {
 			Files.DATA.saveFile();
 		}
 		if(cat != null) {
-			Cat.put(player, cat);
+			shopCategory.put(player, cat);
 		}else {
-			Cat.put(player, Category.NONE);
+			shopCategory.put(player, Category.NONE);
 		}
 		if(data.contains("Items")) {
 			for(String i : data.getConfigurationSection("Items").getKeys(false)) {
@@ -70,7 +68,7 @@ public class GUI implements Listener {
 					}else {
 						if(sell == ShopType.SELL) {
 							for(String l : config.getStringList("Settings.GUISettings.SellingItemLore")) {
-								lore.add(l.replaceAll("%Price%", Methods.getPrice(i, false)).replaceAll("%price%", Methods.getPrice(i, false)).replaceAll("%Seller%", data.getString("Items." + i + ".Seller")).replaceAll("%seller%", data.getString("Items." + i + ".Seller")));
+								lore.add(l.replaceAll("%Price%", String.format(Locale.ENGLISH, "%,d", Long.parseLong(Methods.getPrice(i, false)))).replaceAll("%price%", String.format(Locale.ENGLISH, "%,d", Long.parseLong(Methods.getPrice(i, false)))).replaceAll("%Seller%", data.getString("Items." + i + ".Seller")).replaceAll("%seller%", data.getString("Items." + i + ".Seller")).replaceAll("%Time%", Methods.convertToTime(data.getLong("Items." + i + ".Time-Till-Expire"))).replaceAll("%time%", Methods.convertToTime(data.getLong("Items." + i + ".Time-Till-Expire"))));
 							}
 							items.add(Methods.addLore(data.getItemStack("Items." + i + ".Item").clone(), lore));
 							ID.add(data.getInt("Items." + i + ".StoreID"));
@@ -91,14 +89,14 @@ public class GUI implements Listener {
 		options.add("Category1");
 		options.add("Category2");
 		if(sell == ShopType.SELL) {
-			Type.put(player, ShopType.SELL);
+			shopType.put(player, ShopType.SELL);
 			if(crazyAuctions.isBiddingEnabled()) {
 				options.add("Bidding/Selling.Selling");
 			}
 			options.add("WhatIsThis.SellingShop");
 		}
 		if(sell == ShopType.BID) {
-			Type.put(player, ShopType.BID);
+			shopType.put(player, ShopType.BID);
 			if(crazyAuctions.isSellingEnabled()) {
 				options.add("Bidding/Selling.Bidding");
 			}
@@ -114,7 +112,7 @@ public class GUI implements Listener {
 			String name = config.getString("Settings.GUISettings.OtherSettings." + o + ".Name");
 			List<String> lore = new ArrayList<>();
 			int slot = config.getInt("Settings.GUISettings.OtherSettings." + o + ".Slot");
-			String cName = Methods.color(config.getString("Settings.GUISettings.Category-Settings." + Cat.get(player).getName() + ".Name"));
+			String cName = Methods.color(config.getString("Settings.GUISettings.Category-Settings." + shopCategory.get(player).getName() + ".Name"));
 			if(config.contains("Settings.GUISettings.OtherSettings." + o + ".Lore")) {
 				for(String l : config.getStringList("Settings.GUISettings.OtherSettings." + o + ".Lore")) {
 					lore.add(l.replaceAll("%Category%", cName).replaceAll("%category%", cName));
@@ -163,7 +161,7 @@ public class GUI implements Listener {
 				inv.setItem(slot - 1, Methods.makeItem(id, 1, name));
 			}
 		}
-		Type.put(player, shop);
+		shopType.put(player, shop);
 		player.openInventory(inv);
 	}
 	
@@ -269,7 +267,7 @@ public class GUI implements Listener {
 		FileConfiguration config = Files.CONFIG.getFile();
 		FileConfiguration data = Files.DATA.getFile();
 		if(!data.contains("Items." + ID)) {
-			openShop(player, ShopType.SELL, Cat.get(player), 1);
+			openShop(player, ShopType.SELL, shopCategory.get(player), 1);
 			player.sendMessage(Messages.ITEM_DOESNT_EXIST.getMessage());
 			return;
 		}
@@ -302,7 +300,7 @@ public class GUI implements Listener {
 		ItemStack item = data.getItemStack("Items." + ID + ".Item");
 		List<String> lore = new ArrayList<>();
 		for(String l : config.getStringList("Settings.GUISettings.SellingLore")) {
-			lore.add(l.replaceAll("%Price%", Methods.getPrice(ID, false)).replaceAll("%price%", Methods.getPrice(ID, false)).replaceAll("%Seller%", data.getString("Items." + ID + ".Seller")).replaceAll("%seller%", data.getString("Items." + ID + ".Seller")));
+			lore.add(l.replaceAll("%Price%", Methods.getPrice(ID, false)).replaceAll("%price%", Methods.getPrice(ID, false)).replaceAll("%Seller%", data.getString("Items." + ID + ".Seller")).replaceAll("%seller%", data.getString("Items." + ID + ".Seller")).replaceAll("%Time%", Methods.convertToTime(data.getLong("Items." + l + ".Time-Till-Expire"))).replaceAll("%time%", Methods.convertToTime(data.getLong("Items." + l + ".Time-Till-Expire"))));
 		}
 		inv.setItem(4, Methods.addLore(item.clone(), lore));
 		IDs.put(player, ID);
@@ -314,21 +312,32 @@ public class GUI implements Listener {
 		FileConfiguration config = Files.CONFIG.getFile();
 		FileConfiguration data = Files.DATA.getFile();
 		if(!data.contains("Items." + ID)) {
-			openShop(player, ShopType.BID, Cat.get(player), 1);
+			openShop(player, ShopType.BID, shopCategory.get(player), 1);
 			player.sendMessage(Messages.ITEM_DOESNT_EXIST.getMessage());
 			return;
 		}
 		Inventory inv = Bukkit.createInventory(null, 27, Methods.color(config.getString("Settings.Bidding-On-Item")));
 		if(!bidding.containsKey(player)) bidding.put(player, 0);
-		inv.setItem(9, Methods.makeItem("160:5", 1, "&a+1"));
-		inv.setItem(10, Methods.makeItem("160:5", 1, "&a+10"));
-		inv.setItem(11, Methods.makeItem("160:5", 1, "&a+100"));
-		inv.setItem(12, Methods.makeItem("160:5", 1, "&a+1000"));
+		if(Version.getCurrentVersion().isNewer(Version.v1_12_R1)) {
+			inv.setItem(9, Methods.makeItem("LIME_STAINED_GLASS_PANE", 1, "&a+1"));
+			inv.setItem(10, Methods.makeItem("LIME_STAINED_GLASS_PANE", 1, "&a+10"));
+			inv.setItem(11, Methods.makeItem("LIME_STAINED_GLASS_PANE", 1, "&a+100"));
+			inv.setItem(12, Methods.makeItem("LIME_STAINED_GLASS_PANE", 1, "&a+1000"));
+			inv.setItem(14, Methods.makeItem("RED_STAINED_GLASS_PANE", 1, "&c-1000"));
+			inv.setItem(15, Methods.makeItem("RED_STAINED_GLASS_PANE", 1, "&c-100"));
+			inv.setItem(16, Methods.makeItem("RED_STAINED_GLASS_PANE", 1, "&c-10"));
+			inv.setItem(17, Methods.makeItem("RED_STAINED_GLASS_PANE", 1, "&c-1"));
+		}else {
+			inv.setItem(9, Methods.makeItem("160:5", 1, "&a+1"));
+			inv.setItem(10, Methods.makeItem("160:5", 1, "&a+10"));
+			inv.setItem(11, Methods.makeItem("160:5", 1, "&a+100"));
+			inv.setItem(12, Methods.makeItem("160:5", 1, "&a+1000"));
+			inv.setItem(14, Methods.makeItem("160:14", 1, "&c-1000"));
+			inv.setItem(15, Methods.makeItem("160:14", 1, "&c-100"));
+			inv.setItem(16, Methods.makeItem("160:14", 1, "&c-10"));
+			inv.setItem(17, Methods.makeItem("160:14", 1, "&c-1"));
+		}
 		inv.setItem(13, getBiddingGlass(player, ID));
-		inv.setItem(14, Methods.makeItem("160:14", 1, "&c-1000"));
-		inv.setItem(15, Methods.makeItem("160:14", 1, "&c-100"));
-		inv.setItem(16, Methods.makeItem("160:14", 1, "&c-10"));
-		inv.setItem(17, Methods.makeItem("160:14", 1, "&c-1"));
 		inv.setItem(22, Methods.makeItem(config.getString("Settings.GUISettings.OtherSettings.Bid.Item"), 1, config.getString("Settings.GUISettings.OtherSettings.Bid.Name"), config.getStringList("Settings.GUISettings.OtherSettings.Bid.Lore")));
 		
 		inv.setItem(4, getBiddingItem(player, ID));
@@ -455,12 +464,12 @@ public class GUI implements Listener {
 							if(item.getItemMeta().hasDisplayName()) {
 								for(Category cat : Category.values()) {
 									if(item.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.GUISettings.Category-Settings." + cat.getName() + ".Name")))) {
-										openShop(player, Type.get(player), cat, 1);
+										openShop(player, shopType.get(player), cat, 1);
 										playClick(player);
 										return;
 									}
 									if(item.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.Back.Name")))) {
-										openShop(player, Type.get(player), Cat.get(player), 1);
+										openShop(player, shopType.get(player), shopCategory.get(player), 1);
 										playClick(player);
 										return;
 									}
@@ -548,7 +557,7 @@ public class GUI implements Listener {
 								if(item.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.NextPage.Name")))) {
 									Methods.updateAuction();
 									int page = Integer.parseInt(inv.getName().split("#")[1]);
-									openShop(player, Type.get(player), Cat.get(player), page + 1);
+									openShop(player, shopType.get(player), shopCategory.get(player), page + 1);
 									playClick(player);
 									return;
 								}
@@ -556,24 +565,24 @@ public class GUI implements Listener {
 									Methods.updateAuction();
 									int page = Integer.parseInt(inv.getName().split("#")[1]);
 									if(page == 1) page++;
-									openShop(player, Type.get(player), Cat.get(player), page - 1);
+									openShop(player, shopType.get(player), shopCategory.get(player), page - 1);
 									playClick(player);
 									return;
 								}
 								if(item.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.Refesh.Name")))) {
 									Methods.updateAuction();
 									int page = Integer.parseInt(inv.getName().split("#")[1]);
-									openShop(player, Type.get(player), Cat.get(player), page);
+									openShop(player, shopType.get(player), shopCategory.get(player), page);
 									playClick(player);
 									return;
 								}
 								if(item.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.Bidding/Selling.Selling.Name")))) {
-									openShop(player, ShopType.BID, Cat.get(player), 1);
+									openShop(player, ShopType.BID, shopCategory.get(player), 1);
 									playClick(player);
 									return;
 								}
 								if(item.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.Bidding/Selling.Bidding.Name")))) {
-									openShop(player, ShopType.SELL, Cat.get(player), 1);
+									openShop(player, ShopType.SELL, shopCategory.get(player), 1);
 									playClick(player);
 									return;
 								}
@@ -588,12 +597,12 @@ public class GUI implements Listener {
 									return;
 								}
 								if(item.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.Category1.Name")))) {
-									openCategories(player, Type.get(player));
+									openCategories(player, shopType.get(player));
 									playClick(player);
 									return;
 								}
 								if(item.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.Category2.Name")))) {
-									openCategories(player, Type.get(player));
+									openCategories(player, shopType.get(player));
 									playClick(player);
 									return;
 								}
@@ -632,10 +641,11 @@ public class GUI implements Listener {
 													player.sendMessage(Messages.ADMIN_FORCE_CENCELLED.getMessage());
 													playClick(player);
 													int page = Integer.parseInt(inv.getName().split("#")[1]);
-													openShop(player, Type.get(player), Cat.get(player), page);
+													openShop(player, shopType.get(player), shopCategory.get(player), page);
 													return;
 												}
 											}
+											final Runnable runnable = () -> inv.setItem(slot, item);
 											if(data.getString("Items." + i + ".Seller").equalsIgnoreCase(player.getName())) {
 												String it = config.getString("Settings.GUISettings.OtherSettings.Your-Item.Item");
 												String name = config.getString("Settings.GUISettings.OtherSettings.Your-Item.Name");
@@ -647,10 +657,10 @@ public class GUI implements Listener {
 												}
 												inv.setItem(slot, I);
 												playClick(player);
-												Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> inv.setItem(slot, item), 3 * 20);
+												Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, runnable, 3 * 20);
 												return;
 											}
-											Long cost = data.getLong("Items." + i + ".Price");
+											long cost = data.getLong("Items." + i + ".Price");
 											if(CurrencyManager.getMoney(player) < cost) {
 												String it = config.getString("Settings.GUISettings.OtherSettings.Cant-Afford.Item");
 												String name = config.getString("Settings.GUISettings.OtherSettings.Cant-Afford.Name");
@@ -662,7 +672,7 @@ public class GUI implements Listener {
 												}
 												inv.setItem(slot, I);
 												playClick(player);
-												Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> inv.setItem(slot, item), 3 * 20);
+												Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, runnable, 3 * 20);
 												return;
 											}
 											if(data.getBoolean("Items." + i + ".Biddable")) {
@@ -677,7 +687,7 @@ public class GUI implements Listener {
 													}
 													inv.setItem(slot, I);
 													playClick(player);
-													Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> inv.setItem(slot, item), 3 * 20);
+													Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, runnable, 3 * 20);
 													return;
 												}
 												playClick(player);
@@ -693,7 +703,7 @@ public class GUI implements Listener {
 								}
 								if(!T) {
 									playClick(player);
-									openShop(player, Type.get(player), Cat.get(player), 1);
+									openShop(player, shopType.get(player), shopCategory.get(player), 1);
 									player.sendMessage(Messages.ITEM_DOESNT_EXIST.getMessage());
 									return;
 								}
@@ -716,7 +726,7 @@ public class GUI implements Listener {
 									String seller = data.getString("Items." + ID + ".Seller");
 									if(!data.contains("Items." + ID)) {
 										playClick(player);
-										openShop(player, Type.get(player), Cat.get(player), 1);
+										openShop(player, shopType.get(player), shopCategory.get(player), 1);
 										player.sendMessage(Messages.ITEM_DOESNT_EXIST.getMessage());
 										return;
 									}
@@ -750,11 +760,11 @@ public class GUI implements Listener {
 									data.set("Items." + ID, null);
 									Files.DATA.saveFile();
 									playClick(player);
-									openShop(player, Type.get(player), Cat.get(player), 1);
+									openShop(player, shopType.get(player), shopCategory.get(player), 1);
 									return;
 								}
 								if(item.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.Cancel.Name")))) {
-									openShop(player, Type.get(player), Cat.get(player), 1);
+									openShop(player, shopType.get(player), shopCategory.get(player), 1);
 									playClick(player);
 									return;
 								}
@@ -772,7 +782,7 @@ public class GUI implements Listener {
 						if(item.hasItemMeta()) {
 							if(item.getItemMeta().hasDisplayName()) {
 								if(item.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.Back.Name")))) {
-									openShop(player, Type.get(player), Cat.get(player), 1);
+									openShop(player, shopType.get(player), shopCategory.get(player), 1);
 									playClick(player);
 									return;
 								}
@@ -801,7 +811,7 @@ public class GUI implements Listener {
 								}
 								if(!T) {
 									playClick(player);
-									openShop(player, Type.get(player), Cat.get(player), 1);
+									openShop(player, shopType.get(player), shopCategory.get(player), 1);
 									player.sendMessage(Messages.ITEM_DOESNT_EXIST.getMessage());
 									return;
 								}
@@ -821,7 +831,7 @@ public class GUI implements Listener {
 								if(item.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.Back.Name")))) {
 									Methods.updateAuction();
 									playClick(player);
-									openShop(player, Type.get(player), Cat.get(player), 1);
+									openShop(player, shopType.get(player), shopCategory.get(player), 1);
 									return;
 								}
 								if(item.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.PreviousPage.Name")))) {
@@ -887,7 +897,7 @@ public class GUI implements Listener {
 								}
 								if(!T) {
 									playClick(player);
-									openShop(player, Type.get(player), Cat.get(player), 1);
+									openShop(player, shopType.get(player), shopCategory.get(player), 1);
 									player.sendMessage(Messages.ITEM_DOESNT_EXIST.getMessage());
 								}
 							}

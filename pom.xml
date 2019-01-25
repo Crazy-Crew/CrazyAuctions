@@ -6,7 +6,7 @@
 
     <groupId>me.badbones69</groupId>
     <artifactId>crazyauctions</artifactId>
-    <version>1.2.6</version>
+    <version>1.2.7</version>
 
     <repositories>
         <repository>
@@ -27,7 +27,7 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot</artifactId>
-            <version>1.12.2-R0.1-SNAPSHOT</version>
+            <version>1.13.2-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -83,9 +83,9 @@
                             <include>me.badbones69:*</include>
                         </includes>
                     </artifactSet>
-                    <!--<finalName>${project.artifactId}[v${project.version}]</finalName>-->
+                    <finalName>Crazy Auctions[v${project.version}-Dev-Build-v2]</finalName>
                     <!--<outputFile>/Users/badbones/Desktop/Stuff/Server/plugins/Crazy Auctions[v${project.version}].jar</outputFile>-->
-                    <outputFile>/Users/badbones/Plugins/Public Plugins/Crazy Auctions/Crazy Auctions[v${project.version}].jar</outputFile>
+                    <!--<outputFile>/Users/badbones/Plugins/Public Plugins/Crazy Auctions/Crazy Auctions[v${project.version}].jar</outputFile>-->
                 </configuration>
                 <executions>
                     <execution>

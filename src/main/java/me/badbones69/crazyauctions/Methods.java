@@ -3,6 +3,7 @@ package me.badbones69.crazyauctions;
 import me.badbones69.crazyauctions.api.FileManager;
 import me.badbones69.crazyauctions.api.FileManager.Files;
 import me.badbones69.crazyauctions.api.Messages;
+import me.badbones69.crazyauctions.api.Version;
 import me.badbones69.crazyauctions.api.events.AuctionWinBidEvent;
 import me.badbones69.crazyauctions.currency.CurrencyManager;
 import org.bukkit.*;
@@ -14,7 +15,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 
-import java.text.NumberFormat;
 import java.util.*;
 
 public class Methods {
@@ -50,7 +50,12 @@ public class Methods {
 		try {
 			item = new ItemStack(m, amount, (short) ty);
 		}catch(Exception e) {
-			item = new ItemStack(Material.STAINED_CLAY, 1, (short) 14);
+			if(Version.getCurrentVersion().isNewer(Version.v1_12_R1)) {
+				item = new ItemStack(Material.matchMaterial("RED_TERRACOTTA"), 1);
+				
+			}else {
+				item = new ItemStack(Material.matchMaterial("STAINED_CLAY"), 1, (short) 14);
+			}
 		}
 		return item;
 	}
@@ -67,7 +72,12 @@ public class Methods {
 		try {
 			item = new ItemStack(m, amount, (short) ty);
 		}catch(Exception e) {
-			item = new ItemStack(Material.STAINED_CLAY, 1, (short) 14);
+			if(Version.getCurrentVersion().isNewer(Version.v1_12_R1)) {
+				item = new ItemStack(Material.matchMaterial("RED_TERRACOTTA"), 1);
+				
+			}else {
+				item = new ItemStack(Material.matchMaterial("STAINED_CLAY"), 1, (short) 14);
+			}
 		}
 		ItemMeta me = item.getItemMeta();
 		me.setDisplayName(color(name));
@@ -88,7 +98,12 @@ public class Methods {
 		try {
 			item = new ItemStack(m, amount, (short) ty);
 		}catch(Exception e) {
-			item = new ItemStack(Material.STAINED_CLAY, 1, (short) 14);
+			if(Version.getCurrentVersion().isNewer(Version.v1_12_R1)) {
+				item = new ItemStack(Material.matchMaterial("RED_TERRACOTTA"), 1);
+				
+			}else {
+				item = new ItemStack(Material.matchMaterial("STAINED_CLAY"), 1, (short) 14);
+			}
 		}
 		ItemMeta me = item.getItemMeta();
 		me.setDisplayName(color(name));
@@ -400,7 +415,7 @@ public class Methods {
 	}
 	
 	public static String getPrice(String ID, Boolean Expired) {
-		Long price = 0L;
+		long price = 0L;
 		if(Expired) {
 			if(Files.DATA.getFile().contains("OutOfTime/Cancelled." + ID + ".Price")) {
 				price = Files.DATA.getFile().getLong("OutOfTime/Cancelled." + ID + ".Price");
@@ -410,7 +425,7 @@ public class Methods {
 				price = Files.DATA.getFile().getLong("Items." + ID + ".Price");
 			}
 		}
-		return NumberFormat.getNumberInstance().format(price);
+		return String.valueOf(price);
 	}
 	
 }
