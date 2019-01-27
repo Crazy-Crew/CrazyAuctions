@@ -5,6 +5,8 @@ import me.badbones69.crazyauctions.api.FileManager.Files;
 import me.badbones69.crazyauctions.api.events.AuctionListEvent;
 import me.badbones69.crazyauctions.controllers.GUI;
 import me.badbones69.crazyauctions.currency.Vault;
+import me.badbones69.crazyauctions.SettingsManager;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -48,7 +50,8 @@ public class Main extends JavaPlugin implements Listener {
 		Bukkit.getScheduler().cancelTask(file);
 		Files.DATA.saveFile();
 	}
-	
+
+	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLable, String[] args) {
 		if(commandLable.equalsIgnoreCase("CrazyAuctions") || commandLable.equalsIgnoreCase("CrazyAuction") || commandLable.equalsIgnoreCase("CA") || commandLable.equalsIgnoreCase("AH") || commandLable.equalsIgnoreCase("HDV")) {
 			if(args.length == 0) {
@@ -222,6 +225,16 @@ public class Main extends JavaPlugin implements Listener {
 								if(crazyAuctions.getItems(player, ShopType.SELL).size() >= SellLimit) {
 									player.sendMessage(Messages.MAX_ITEMS.getMessage());
 									return true;
+								}
+							}
+							// Blacklist by item lore
+							if (item.hasItemMeta() && item.getItemMeta().hasLore()) {
+								for (String lore : getConfig().getStringList("Settings.BlackListLore")) {
+									for (String ilore : item.getItemMeta().getLore()) {
+										if (ilore.matches(lore) || ilore.contains(lore)) {
+											player.sendMessage( Methods.getPrefix() + Methods.color(Messages.ITEM_BLACKLISTED.getMessage()));
+										}
+									}
 								}
 							}
 							if(args[0].equalsIgnoreCase("Bid")) {
