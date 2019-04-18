@@ -30,13 +30,13 @@ public class GUI implements Listener {
 	private static HashMap<Player, Integer> bidding = new HashMap<>();
 	private static HashMap<Player, String> biddingID = new HashMap<>();
 	private static HashMap<Player, ShopType> shopType = new HashMap<>(); // Shop Type
-	private static HashMap<Player, Category> shopCategory = new HashMap<>(); // Category Type
+	private static HashMap<Player, CategoryI> shopCategory = new HashMap<>(); // Category Type
 	private static HashMap<Player, List<Integer>> List = new HashMap<>();
 	private static HashMap<Player, String> IDs = new HashMap<>();
 	private static CrazyAuctions crazyAuctions = CrazyAuctions.getInstance();
 	private static Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin("CrazyAuctions");
 	
-	public static void openShop(Player player, ShopType sell, Category cat, int page) {
+	public static void openShop(Player player, ShopType sell, CategoryI cat, int page) {
 		Methods.updateAuction();
 		FileConfiguration config = Files.CONFIG.getFile();
 		FileConfiguration data = Files.DATA.getFile();
@@ -112,8 +112,12 @@ public class GUI implements Listener {
 			String name = config.getString("Settings.GUISettings.OtherSettings." + o + ".Name");
 			List<String> lore = new ArrayList<>();
 			int slot = config.getInt("Settings.GUISettings.OtherSettings." + o + ".Slot");
-			String cName = Methods.color(config.getString("Settings.GUISettings.Category-Settings." + shopCategory.get(player).getName() + ".Name"));
-			if(config.contains("Settings.GUISettings.OtherSettings." + o + ".Lore")) {
+                        String cName;
+                        if(cat instanceof Category)
+                            cName = Methods.color(config.getString("Settings.GUISettings.Category-Settings." + shopCategory.get(player).getName() + ".Name"));
+			else
+                            cName = shopCategory.get(player).getName();
+                        if(config.contains("Settings.GUISettings.OtherSettings." + o + ".Lore")) {
 				for(String l : config.getStringList("Settings.GUISettings.OtherSettings." + o + ".Lore")) {
 					lore.add(l.replaceAll("%Category%", cName).replaceAll("%category%", cName));
 				}

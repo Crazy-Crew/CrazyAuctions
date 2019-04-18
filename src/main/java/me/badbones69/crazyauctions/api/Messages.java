@@ -44,6 +44,7 @@ public enum Messages {
 	BIDDING_DISABLED("Bidding-Disabled", "&cThe bidding option is disabled."),
 	CRAZYAUCTIONS_HELP("CrazyAuctions-Help", "&c/ah help"),
 	CRAZYAUCTIONS_VIEW("CrazyAuctions-View", "&c/ah view <player>"),
+        CRAZYAUCTIONS_SEARCH("CrazyAuctions-Search", "&c/ah search <itemname>"),
 	CRAZYAUCTIONS_SELL_BID("CrazyAuctions-Sell-Bid", "&c/ah sell/bid <price> [amount of items]"),
 	HELP("Help-Menu", Arrays.asList(
 	"&e-- &6Crazy Auctions Help &e--",
@@ -52,6 +53,7 @@ public enum Messages {
 	"&9/Ah Sell/Bid <Price> [Amount of items] - &eList the item you are holding on the crazy auction.",
 	"&9/Ah Expired/Collect - &eView and manage your cancelled and expired items.",
 	"&9/Ah Listed - &eView and manage the items you are selling.",
+        "&9/Ah search <itemname> - &eSearch for specified item on the crazy auction.",
 	"&9/Ah Help - &eView this help menu."));
 	
 	private String path;

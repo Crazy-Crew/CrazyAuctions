@@ -100,6 +100,27 @@ public class Main extends JavaPlugin implements Listener {
 					sender.sendMessage(Messages.CRAZYAUCTIONS_VIEW.getMessage());
 					return true;
 				}
+                                if(args[0].equalsIgnoreCase("search")) {// CA SEARCH <ITEMNAME>
+					if(!Methods.hasPermission(sender, "Search")) return true;
+                                        if(!(sender instanceof Player)) {
+                                                sender.sendMessage(Messages.PLAYERS_ONLY.getMessage());
+                                                return true;
+                                        }
+                                        Player player = (Player) sender;
+                                        if(args.length >= 2){
+                                            if(crazyAuctions.isSellingEnabled()) {
+                                                    GUI.openShop(player, ShopType.SELL, new Search(args[1]), 1);
+                                            }else if(crazyAuctions.isBiddingEnabled()) {
+                                                    GUI.openShop(player, ShopType.BID, new Search(args[1]), 1);
+                                            }else {
+                                                    player.sendMessage(Methods.getPrefix() + Methods.color("&cThe bidding and selling options are both disabled. Please contact the admin about this."));
+                                            }
+                                            return true;
+                                        }
+                                        sender.sendMessage(Messages.CRAZYAUCTIONS_SEARCH.getMessage());
+                                        
+                                        return true;
+				}
 				if(args[0].equalsIgnoreCase("Expired") || args[0].equalsIgnoreCase("Collect")) {// CA Expired
 					if(!Methods.hasPermission(sender, "Access")) return true;
 					if(!(sender instanceof Player)) {

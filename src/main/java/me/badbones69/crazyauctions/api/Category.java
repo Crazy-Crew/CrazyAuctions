@@ -4,7 +4,7 @@ import org.bukkit.Material;
 
 import java.util.ArrayList;
 
-public enum Category {
+public enum Category implements CategoryI{
 	
 	NONE("None", new ArrayList<>()),
 	OTHER("Other", getOthers()),
@@ -25,10 +25,20 @@ public enum Category {
 		this.Name = name;
 		this.Items = items;
 	}
+        
+        private Category(String search){
+            this.Name = search;
+            this.Items = new ArrayList<>();
+            for(Material ma : Material.values()){
+                if(ma.toString().contains(search.toLowerCase()))
+                    Items.add(ma);
+            }
+        }
 	
 	/**
 	 * @return Returns the type name as a string.
 	 */
+        @Override
 	public String getName() {
 		return Name;
 	}
@@ -46,6 +56,7 @@ public enum Category {
 		return null;
 	}
 	
+        @Override
 	public ArrayList<Material> getItems() {
 		return Items;
 	}
