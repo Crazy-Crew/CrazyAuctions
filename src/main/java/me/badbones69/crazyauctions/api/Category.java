@@ -25,15 +25,7 @@ public enum Category implements CategoryI{
 		this.Name = name;
 		this.Items = items;
 	}
-        
-        private Category(String search){
-            this.Name = search;
-            this.Items = new ArrayList<>();
-            for(Material ma : Material.values()){
-                if(ma.toString().contains(search.toLowerCase()))
-                    Items.add(ma);
-            }
-        }
+    
 	
 	/**
 	 * @return Returns the type name as a string.
