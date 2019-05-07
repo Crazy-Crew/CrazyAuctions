@@ -441,7 +441,7 @@ public class GUI implements Listener {
 		Inventory inv = e.getInventory();
 		Player player = (Player) e.getPlayer();
 		if(inv != null) {
-			if(inv.getName().contains(Methods.color(config.getString("Settings.Bidding-On-Item")))) {
+			if(e.getView().getTitle().contains(Methods.color(config.getString("Settings.Bidding-On-Item")))) {
 				bidding.remove(player);
 			}
 		}
@@ -454,7 +454,7 @@ public class GUI implements Listener {
 		Player player = (Player) e.getWhoClicked();
 		final Inventory inv = e.getInventory();
 		if(inv != null) {
-			if(inv.getName().contains(Methods.color(config.getString("Settings.Categories")))) {
+			if(e.getView().getTitle().contains(Methods.color(config.getString("Settings.Categories")))) {
 				e.setCancelled(true);
 				int slot = e.getRawSlot();
 				if(slot <= inv.getSize()) {
@@ -479,7 +479,7 @@ public class GUI implements Listener {
 					}
 				}
 			}
-			if(inv.getName().contains(Methods.color(config.getString("Settings.Bidding-On-Item")))) {
+			if(e.getView().getTitle().contains(Methods.color(config.getString("Settings.Bidding-On-Item")))) {
 				e.setCancelled(true);
 				int slot = e.getRawSlot();
 				if(slot <= inv.getSize()) {
@@ -546,7 +546,7 @@ public class GUI implements Listener {
 					}
 				}
 			}
-			if(inv.getName().contains(Methods.color(config.getString("Settings.GUIName")))) {
+			if(e.getView().getTitle().contains(Methods.color(config.getString("Settings.GUIName")))) {
 				e.setCancelled(true);
 				final int slot = e.getRawSlot();
 				if(slot <= inv.getSize()) {
@@ -556,14 +556,14 @@ public class GUI implements Listener {
 							if(item.getItemMeta().hasDisplayName()) {
 								if(item.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.NextPage.Name")))) {
 									Methods.updateAuction();
-									int page = Integer.parseInt(inv.getName().split("#")[1]);
+									int page = Integer.parseInt(e.getView().getTitle().split("#")[1]);
 									openShop(player, shopType.get(player), shopCategory.get(player), page + 1);
 									playClick(player);
 									return;
 								}
 								if(item.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.PreviousPage.Name")))) {
 									Methods.updateAuction();
-									int page = Integer.parseInt(inv.getName().split("#")[1]);
+									int page = Integer.parseInt(e.getView().getTitle().split("#")[1]);
 									if(page == 1) page++;
 									openShop(player, shopType.get(player), shopCategory.get(player), page - 1);
 									playClick(player);
@@ -571,7 +571,7 @@ public class GUI implements Listener {
 								}
 								if(item.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.Refesh.Name")))) {
 									Methods.updateAuction();
-									int page = Integer.parseInt(inv.getName().split("#")[1]);
+									int page = Integer.parseInt(e.getView().getTitle().split("#")[1]);
 									openShop(player, shopType.get(player), shopCategory.get(player), page);
 									playClick(player);
 									return;
@@ -640,7 +640,7 @@ public class GUI implements Listener {
 													Files.DATA.saveFile();
 													player.sendMessage(Messages.ADMIN_FORCE_CENCELLED.getMessage());
 													playClick(player);
-													int page = Integer.parseInt(inv.getName().split("#")[1]);
+													int page = Integer.parseInt(e.getView().getTitle().split("#")[1]);
 													openShop(player, shopType.get(player), shopCategory.get(player), page);
 													return;
 												}
@@ -712,7 +712,7 @@ public class GUI implements Listener {
 					}
 				}
 			}
-			if(inv.getName().contains(Methods.color(config.getString("Settings.Buying-Item")))) {
+			if(e.getView().getTitle().contains(Methods.color(config.getString("Settings.Buying-Item")))) {
 				e.setCancelled(true);
 				int slot = e.getRawSlot();
 				if(slot <= inv.getSize()) {
@@ -773,7 +773,7 @@ public class GUI implements Listener {
 					}
 				}
 			}
-			if(inv.getName().contains(Methods.color(config.getString("Settings.Players-Current-Items")))) {
+			if(e.getView().getTitle().contains(Methods.color(config.getString("Settings.Players-Current-Items")))) {
 				e.setCancelled(true);
 				int slot = e.getRawSlot();
 				if(slot <= inv.getSize()) {
@@ -820,7 +820,7 @@ public class GUI implements Listener {
 					}
 				}
 			}
-			if(inv.getName().contains(Methods.color(config.getString("Settings.Cancelled/Expired-Items")))) {
+			if(e.getView().getTitle().contains(Methods.color(config.getString("Settings.Cancelled/Expired-Items")))) {
 				e.setCancelled(true);
 				final int slot = e.getRawSlot();
 				if(slot <= inv.getSize()) {
@@ -836,7 +836,7 @@ public class GUI implements Listener {
 								}
 								if(item.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.PreviousPage.Name")))) {
 									Methods.updateAuction();
-									int page = Integer.parseInt(inv.getName().split("#")[1]);
+									int page = Integer.parseInt(e.getView().getTitle().split("#")[1]);
 									if(page == 1) page++;
 									playClick(player);
 									openPlayersExpiredList(player, (page - 1));
@@ -844,7 +844,7 @@ public class GUI implements Listener {
 								}
 								if(item.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.Return.Name")))) {
 									Methods.updateAuction();
-									int page = Integer.parseInt(inv.getName().split("#")[1]);
+									int page = Integer.parseInt(e.getView().getTitle().split("#")[1]);
 									if(data.contains("OutOfTime/Cancelled")) {
 										for(String i : data.getConfigurationSection("OutOfTime/Cancelled").getKeys(false)) {
 											if(data.getString("OutOfTime/Cancelled." + i + ".Seller").equalsIgnoreCase(player.getName())) {
@@ -866,7 +866,7 @@ public class GUI implements Listener {
 								}
 								if(item.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.NextPage.Name")))) {
 									Methods.updateAuction();
-									int page = Integer.parseInt(inv.getName().split("#")[1]);
+									int page = Integer.parseInt(e.getView().getTitle().split("#")[1]);
 									playClick(player);
 									openPlayersExpiredList(player, (page + 1));
 									return;
