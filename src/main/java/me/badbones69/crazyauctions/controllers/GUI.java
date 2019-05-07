@@ -494,6 +494,7 @@ public class GUI implements Listener {
 									if(CurrencyManager.getMoney(player) < bid) {
 										HashMap<String, String> placeholders = new HashMap<>();
 										placeholders.put("%Money_Needed%", (bid - CurrencyManager.getMoney(player)) + "");
+										placeholders.put("%money_needed%", (bid - CurrencyManager.getMoney(player)) + "");
 										player.sendMessage(Messages.NEED_MORE_MONEY.getMessage(placeholders));
 										return;
 									}
@@ -741,6 +742,7 @@ public class GUI implements Listener {
 										player.closeInventory();
 										HashMap<String, String> placeholders = new HashMap<>();
 										placeholders.put("%Money_Needed%", (cost - CurrencyManager.getMoney(player)) + "");
+										placeholders.put("%money_needed%", (cost - CurrencyManager.getMoney(player)) + "");
 										player.sendMessage(Messages.NEED_MORE_MONEY.getMessage(placeholders));
 										return;
 									}
@@ -750,7 +752,9 @@ public class GUI implements Listener {
 									CurrencyManager.addMoney(Methods.getOfflinePlayer(seller), cost);
 									HashMap<String, String> placeholders = new HashMap<>();
 									placeholders.put("%Price%", Methods.getPrice(ID, false));
+									placeholders.put("%price%", Methods.getPrice(ID, false));
 									placeholders.put("%Player%", player.getName());
+									placeholders.put("%player%", player.getName());
 									player.sendMessage(Messages.BOUGHT_ITEM.getMessage(placeholders));
 									if(Methods.isOnline(seller)) {
 										Player sell = Methods.getPlayer(seller);

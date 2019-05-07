@@ -382,7 +382,9 @@ public class Methods {
 						CurrencyManager.removeMoney(Methods.getOfflinePlayer(winner), price);
 						HashMap<String, String> placeholders = new HashMap<>();
 						placeholders.put("%Price%", getPrice(i, false));
+						placeholders.put("%price%", getPrice(i, false));
 						placeholders.put("%Player%", winner);
+						placeholders.put("%player%", winner);
 						if(Methods.isOnline(winner)) {
 							Player player = Methods.getPlayer(winner);
 							Bukkit.getPluginManager().callEvent(new AuctionWinBidEvent(player, data.getItemStack("Items." + i + ".Item"), price));

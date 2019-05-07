@@ -149,6 +149,7 @@ public class Main extends JavaPlugin implements Listener {
 							if(!Methods.isInt(args[2])) {
 								HashMap<String, String> placeholders = new HashMap<>();
 								placeholders.put("%Arg%", args[2]);
+								placeholders.put("%arg%", args[2]);
 								player.sendMessage(Messages.NOT_A_NUMBER.getMessage(placeholders));
 								return true;
 							}
@@ -159,6 +160,7 @@ public class Main extends JavaPlugin implements Listener {
 						if(!Methods.isLong(args[1])) {
 							HashMap<String, String> placeholders = new HashMap<>();
 							placeholders.put("%Arg%", args[1]);
+							placeholders.put("%arg%", args[1]);
 							player.sendMessage(Messages.NOT_A_NUMBER.getMessage(placeholders));
 							return true;
 						}
@@ -287,6 +289,7 @@ public class Main extends JavaPlugin implements Listener {
 						Bukkit.getPluginManager().callEvent(new AuctionListEvent(player, type, I, price));
 						HashMap<String, String> placeholders = new HashMap<>();
 						placeholders.put("%Price%", price + "");
+						placeholders.put("%price%", price + "");
 						player.sendMessage(Messages.ADDED_ITEM_TO_AUCTION.getMessage(placeholders));
 						if(item.getAmount() <= 1 || (item.getAmount() - amount) <= 0) {
 							Methods.setItemInHand(player, new ItemStack(Material.AIR));
