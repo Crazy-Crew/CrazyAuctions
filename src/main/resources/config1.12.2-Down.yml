@@ -29,34 +29,34 @@ Settings:
       - '&7-------------------------'
       - '&aClick here to purchase.'
       - ''
-      - '&9Price: &e$%Price%'
-      - '&9Seller: &e%Seller%'
+      - '&9Price: &e$%price%'
+      - '&9Seller: &e%seller%'
       - '&7-------------------------'
     CurrentLore: #Lore on items that are in your current items GUI.
       - '&7-------------------------'
       - '&aClick here to cancel.'
       - ''
-      - '&9Price: &e$%Price%'
-      - '&9Expire: &e%Time%'
+      - '&9Price: &e$%price%'
+      - '&9Expire: &e%time%'
       - '&7-------------------------'
     Cancelled/ExpiredLore: #Lore on items that are in your cancelled/expired GUI.
       - '&7-------------------------'
       - '&aClick here to return to you.'
       - ''
-      - '&9Full Expire: &e%Time%'
+      - '&9Full Expire: &e%time%'
       - '&7-------------------------'
     Bidding: #Lore on Bidding Items.
       - '&7-------------------------'
       - '&aClick here to bid.'
       - ''
-      - '&9Seller: &e%Seller%'
-      - '&9Current Bid: &e$%TopBid%'
-      - '&9Top Bidder: &e%TopBidder%'
-      - '&9Time Left: &e%Time%'
+      - '&9Seller: &e%seller%'
+      - '&9Current Bid: &e$%topbid%'
+      - '&9Top Bidder: &e%topbidder%'
+      - '&9Time Left: &e%time%'
       - '&7-------------------------'
     Category-Settings:
       Armor:
-        Item: 'GOLDEN_CHESTPLATE'
+        Item: '315'
         Toggle: true
         Slot: 11
         Name: '&6&lArmor'
@@ -64,7 +64,7 @@ Settings:
           - '&7This category contains all'
           - '&7armor that is currently being sold.'
       Weapons:
-        Item: 'GOLDEN_SWORD'
+        Item: '283'
         Toggle: true
         Slot: 12
         Name: '&6&lWeapons'
@@ -72,7 +72,7 @@ Settings:
           - '&7This category contains all'
           - '&7weapons that is currently being sold.'
       Tools:
-        Item: 'GOLDEN_PICKAXE'
+        Item: '285'
         Toggle: true
         Slot: 13
         Name: '&6&lTools'
@@ -80,7 +80,7 @@ Settings:
           - '&7This category contains all'
           - '&7tools that is currently being sold.'
       Food:
-        Item: 'GOLDEN_APPLE'
+        Item: '322'
         Toggle: true
         Slot: 14
         Name: '&6&lFood'
@@ -88,7 +88,7 @@ Settings:
           - '&7This category contains all'
           - '&7food that is currently being sold.'
       Potions:
-        Item: 'POTION'
+        Item: '373:8227'
         Toggle: true
         Slot: 15
         Name: '&6&lPotions'
@@ -96,7 +96,7 @@ Settings:
           - '&7This category contains all'
           - '&7potions that is currently being sold.'
       Blocks:
-        Item: 'GRASS_BLOCK'
+        Item: '2'
         Toggle: true
         Slot: 16
         Name: '&6&lBlocks'
@@ -104,7 +104,7 @@ Settings:
           - '&7This category contains all'
           - '&7blocks that is currently being sold.'
       Other:
-        Item: 'GOLD_NUGGET'
+        Item: '371'
         Toggle: true
         Slot: 17
         Name: '&6&lOthers'
@@ -112,7 +112,7 @@ Settings:
           - '&7This category contains all the'
           - '&7other items currently being sold.'
       None:
-        Item: 'BARRIER'
+        Item: '166'
         Toggle: true
         Slot: 23
         Name: '&6&lNone'
@@ -121,7 +121,7 @@ Settings:
           - '&7items currently being sold.'
     OtherSettings: #Other Settings for the GUIs.
       SellingItems: #The button for your current items.
-        Item: 'DIAMOND' #The item that this button is.
+        Item: '264' #The item that this button is.
         Toggle: true #If the item is in the gui or not.
         Slot: 46 #The slot it is in. I recommend not changing these. If you do make sure they are still in the bottom row.
         Name: '&6Items You are Selling' #Name of the item.
@@ -129,7 +129,7 @@ Settings:
           - '&aClick here to view all the items you'
           - '&aare currently selling on the auction.'
       Cancelled/ExpiredItems: #The button for Cancelled/Expired Items.
-        Item: 'POISONOUS_POTATO'
+        Item: '394'
         Toggle: true
         Slot: 47
         Name: '&6Collect Expired / Cancelled Items'
@@ -137,44 +137,44 @@ Settings:
           - '&aClick here to view and collect all of the'
           - '&aitems you have cancelled or has expired.'
       PreviousPage: #The button for Previous Page.
-        Item: 'PAPER'
+        Item: '339'
         Toggle: true
         Slot: 49
         Name: '&6Previous Page'
         Lore: {}
       Refesh: #The button for Refresh Page.
-        Item: 'SUNFLOWER'
+        Item: '175'
         Toggle: true
         Slot: 50
         Name: '&6Refresh Page'
         Lore: {}
       NextPage: #The button for Next Page.
-        Item: 'PAPER'
+        Item: '339'
         Toggle: true
         Slot: 51
         Name: '&6Next Page'
         Lore: {}
       Category1: #The button for Next Page.
-        Item: 'CHEST'
+        Item: '54'
         Toggle: true
         Slot: 52
         Name: '&6Categories'
         Lore:
-          - '&bCurrent Category: &6%Category%'
+          - '&bCurrent Category: &6%category%'
           - '&aWant see items in specific categories?'
           - '&aClick here to see all categories of items.'
       Category2: #The button for Next Page.
-        Item: 'CHEST'
+        Item: '54'
         Toggle: true
         Slot: 48
         Name: '&6Categories'
         Lore:
-          - '&bCurrent Category: &6%Category%'
+          - '&bCurrent Category: &6%category%'
           - '&aWant see items in specific categories?'
           - '&aClick here to see all categories of items.'
       Bidding/Selling: #Switch between Bidding and Selling.
         Selling:
-          Item: 'SLIME_BALL'
+          Item: '341'
           Toggle: true
           Slot: 53
           Name: '&6Currently looking at items being sold.'
@@ -182,7 +182,7 @@ Settings:
             - '&7&l(&6&l!&7&l) &7Click here to see items'
             - '&7that you can be bidded on.'
         Bidding:
-          Item: 'MAGMA_CREAM'
+          Item: '378'
           Toggle: true
           Slot: 53
           Name: '&6Currently looking at items that can be bid on.'
@@ -191,7 +191,7 @@ Settings:
             - '&7that you can buy at a price.'
       WhatIsThis: #The info on all the Books buttons.
         SellingShop: #The Book in the main shop.
-          Item: 'BOOK'
+          Item: '340'
           Toggle: true
           Slot: 54
           Name: '&6What Is This Page?'
@@ -204,7 +204,7 @@ Settings:
             - '&amoney by selling items that others'
             - '&amay be interested in buying.'
         BiddingShop: #The Book in the main shop.
-          Item: 'BOOK'
+          Item: '340'
           Toggle: true
           Slot: 54
           Name: '&6What Is This Page?'
@@ -217,7 +217,7 @@ Settings:
             - '&amake money by bidding off items that others'
             - '&amay be interested in bidding on.'
         CurrentItems: #The Book in the Current items GUI.
-          Item: 'BOOK'
+          Item: '340'
           Toggle: true
           Slot: 54
           Name: '&6What Is This Page?'
@@ -229,7 +229,7 @@ Settings:
             - '&aYou can cancel and view your listings'
             - '&aexpire time here.'
         Cancelled/ExpiredItems: #The Book in the Cancelled/Expired Items GUI.
-          Item: 'BOOK'
+          Item: '340'
           Toggle: true
           Slot: 54
           Name: '&6What Is This Page?'
@@ -242,7 +242,7 @@ Settings:
             - '&aJust click on the item and if you have enough'
             - '&ainventory space you will receive that item.'
         Viewing: #The Book in the Viewing Items GUI.
-          Item: 'BOOK'
+          Item: '340'
           Toggle: true
           Slot: 50
           Name: '&6What Is This Page?'
@@ -252,7 +252,7 @@ Settings:
             - '&aand selling market. You can quickly see'
             - '&awhat a specific player is selling.'
         Categories: #The Book in the Viewing Items GUI.
-          Item: 'BOOK'
+          Item: '340'
           Toggle: true
           Slot: 54
           Name: '&6What Is This Page?'
@@ -262,43 +262,43 @@ Settings:
             - '&aa category it will open the gui with only'
             - '&aitems that belong to that category.'
       Back: #The Back Buttons.
-        Item: 'PAPER'
+        Item: '339'
         Slot: 46
         Name: '&6Back'
       Return: #The Return Buttons.
-        Item: 'FLOWER_POT'
+        Item: '390'
         Slot: 50
         Name: '&6Return All'
         Lore:
           - '&aClick here to return all cancelled'
           - '&aand expired items to your inventory.'
       Confirm: #The Confirm Buttons.
-        Item: 'LIME_STAINED_GLASS_PANE'
+        Item: '160:5'
         Name: '&aConfirm'
       Cancel: #The Cancel Buttons.
-        Item: 'RED_STAINED_GLASS_PANE'
+        Item: '160:14'
         Name: '&cCancel'
       Your-Item: #The item that shows when you try to buy/bid on your item.
-        Item: 'BARRIER'
+        Item: '166'
         Name: '&cYou Cant Purchase Your Own Item.'
       Cant-Afford: #The item that shows when you cant afford this item.
-        Item: 'BARRIER'
+        Item: '166'
         Name: '&cYou Cant Afford This Item.'
       Top-Bidder: #The item for when a player is already the top bidder.
-        Item: 'BARRIER'
+        Item: '166'
         Name: '&cYou are already the top bidder.'
       Bidding: #The item in the middle when bidding on an item.
-        Item: 'BLACK_STAINED_GLASS_PANE'
+        Item: '160:15'
         Name: '&7Bidding'
         Lore:
           - '&7<--&aAdd &cRemove&7-->'
-          - '&9Your Current Bid: &e$%Bid%'
-          - '&9Current Top Bid: &e$%TopBid%'
+          - '&9Your Current Bid: &e$%bid%'
+          - '&9Current Top Bid: &e$%topbid%'
       Bid: #The button for when you want to confirm your bid.
-        Item: 'LIGHT_BLUE_STAINED_GLASS_PANE'
+        Item: '160:3'
         Name: '&bBid Now'
         Lore:
           - '&7Click here to Bid Now.'
   BlackList:
-    - 'BEDROCK'
-    - 'END_PORTAL_FRAME'
+    - '7'
+    - '120'

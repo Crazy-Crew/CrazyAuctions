@@ -30,7 +30,6 @@ public class Main extends JavaPlugin implements Listener {
 	
 	@Override
 	public void onEnable() {
-		saveDefaultConfig();
 		fileManager.logInfo(true).setup(this);
 		crazyAuctions.loadCrazyAuctions();
 		Bukkit.getServer().getPluginManager().registerEvents(this, this);
