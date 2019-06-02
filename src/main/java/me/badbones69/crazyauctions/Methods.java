@@ -19,7 +19,7 @@ import java.util.*;
 
 public class Methods {
 	
-	public static Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin("CrazyAuctions");
+	public static Plugin plugin = Main.getInstance();
 	private static FileManager fileManager = FileManager.getInstance();
 	
 	public static String color(String msg) {

@@ -1,5 +1,6 @@
 package me.badbones69.crazyauctions.controllers;
 
+import me.badbones69.crazyauctions.Main;
 import me.badbones69.crazyauctions.Methods;
 import me.badbones69.crazyauctions.api.*;
 import me.badbones69.crazyauctions.api.FileManager.Files;
@@ -34,7 +35,7 @@ public class GUI implements Listener {
 	private static HashMap<Player, List<Integer>> List = new HashMap<>();
 	private static HashMap<Player, String> IDs = new HashMap<>();
 	private static CrazyAuctions crazyAuctions = CrazyAuctions.getInstance();
-	private static Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin("CrazyAuctions");
+	private static Plugin plugin = Main.getInstance();
 	
 	public static void openShop(Player player, ShopType sell, Category cat, int page) {
 		Methods.updateAuction();
@@ -311,6 +312,7 @@ public class GUI implements Listener {
 		Methods.updateAuction();
 		FileConfiguration config = Files.CONFIG.getFile();
 		FileConfiguration data = Files.DATA.getFile();
+		ButtonController btnC = ButtonController.getInstance();
 		if(!data.contains("Items." + ID)) {
 			openShop(player, ShopType.BID, shopCategory.get(player), 1);
 			player.sendMessage(Messages.ITEM_DOESNT_EXIST.getMessage());
@@ -318,25 +320,14 @@ public class GUI implements Listener {
 		}
 		Inventory inv = Bukkit.createInventory(null, 27, Methods.color(config.getString("Settings.Bidding-On-Item")));
 		if(!bidding.containsKey(player)) bidding.put(player, 0);
-		if(Version.getCurrentVersion().isNewer(Version.v1_12_R1)) {
-			inv.setItem(9, Methods.makeItem("LIME_STAINED_GLASS_PANE", 1, "&a+1"));
-			inv.setItem(10, Methods.makeItem("LIME_STAINED_GLASS_PANE", 1, "&a+10"));
-			inv.setItem(11, Methods.makeItem("LIME_STAINED_GLASS_PANE", 1, "&a+100"));
-			inv.setItem(12, Methods.makeItem("LIME_STAINED_GLASS_PANE", 1, "&a+1000"));
-			inv.setItem(14, Methods.makeItem("RED_STAINED_GLASS_PANE", 1, "&c-1000"));
-			inv.setItem(15, Methods.makeItem("RED_STAINED_GLASS_PANE", 1, "&c-100"));
-			inv.setItem(16, Methods.makeItem("RED_STAINED_GLASS_PANE", 1, "&c-10"));
-			inv.setItem(17, Methods.makeItem("RED_STAINED_GLASS_PANE", 1, "&c-1"));
-		}else {
-			inv.setItem(9, Methods.makeItem("160:5", 1, "&a+1"));
-			inv.setItem(10, Methods.makeItem("160:5", 1, "&a+10"));
-			inv.setItem(11, Methods.makeItem("160:5", 1, "&a+100"));
-			inv.setItem(12, Methods.makeItem("160:5", 1, "&a+1000"));
-			inv.setItem(14, Methods.makeItem("160:14", 1, "&c-1000"));
-			inv.setItem(15, Methods.makeItem("160:14", 1, "&c-100"));
-			inv.setItem(16, Methods.makeItem("160:14", 1, "&c-10"));
-			inv.setItem(17, Methods.makeItem("160:14", 1, "&c-1"));
-		}
+		inv.setItem(9, Methods.makeItem(btnC.getIncrement_1().getMaterial(), 1, btnC.getIncrement_1().getButtonName()));
+        inv.setItem(10, Methods.makeItem(btnC.getIncrement_2().getMaterial(), 1, btnC.getIncrement_2().getButtonName()));
+        inv.setItem(11, Methods.makeItem(btnC.getIncrement_3().getMaterial(), 1, btnC.getIncrement_3().getButtonName()));
+        inv.setItem(12, Methods.makeItem(btnC.getIncrement_4().getMaterial(), 1, btnC.getIncrement_4().getButtonName()));
+        inv.setItem(14, Methods.makeItem(btnC.getDecrement_1().getMaterial(), 1, btnC.getDecrement_1().getButtonName()));
+        inv.setItem(15, Methods.makeItem(btnC.getDecrement_2().getMaterial(), 1, btnC.getDecrement_2().getButtonName()));
+        inv.setItem(16, Methods.makeItem(btnC.getDecrement_3().getMaterial(), 1, btnC.getDecrement_3().getButtonName()));
+        inv.setItem(17, Methods.makeItem(btnC.getDecrement_4().getMaterial(), 1, btnC.getDecrement_4().getButtonName()));
 		inv.setItem(13, getBiddingGlass(player, ID));
 		inv.setItem(22, Methods.makeItem(config.getString("Settings.GUISettings.OtherSettings.Bid.Item"), 1, config.getString("Settings.GUISettings.OtherSettings.Bid.Name"), config.getStringList("Settings.GUISettings.OtherSettings.Bid.Lore")));
 		
@@ -518,15 +509,16 @@ public class GUI implements Listener {
 									playClick(player);
 									return;
 								}
+								ButtonController btnC = ButtonController.getInstance();
 								HashMap<String, Integer> priceEdits = new HashMap<>();
-								priceEdits.put("&a+1", 1);
-								priceEdits.put("&a+10", 10);
-								priceEdits.put("&a+100", 100);
-								priceEdits.put("&a+1000", 1000);
-								priceEdits.put("&c-1", -1);
-								priceEdits.put("&c-10", -10);
-								priceEdits.put("&c-100", -100);
-								priceEdits.put("&c-1000", -1000);
+								priceEdits.put(btnC.getIncrement_1().getButtonName(), btnC.getIncrement_1().getValue());
+								priceEdits.put(btnC.getIncrement_2().getButtonName(), btnC.getIncrement_2().getValue());
+								priceEdits.put(btnC.getIncrement_3().getButtonName(), btnC.getIncrement_3().getValue());
+								priceEdits.put(btnC.getIncrement_4().getButtonName(), btnC.getIncrement_4().getValue());
+								priceEdits.put(btnC.getDecrement_1().getButtonName(), btnC.getDecrement_1().getValue());
+								priceEdits.put(btnC.getDecrement_2().getButtonName(), btnC.getDecrement_2().getValue());
+								priceEdits.put(btnC.getDecrement_3().getButtonName(), btnC.getDecrement_3().getValue());
+								priceEdits.put(btnC.getDecrement_4().getButtonName(), btnC.getDecrement_4().getValue());
 								for(String price : priceEdits.keySet()) {
 									if(item.getItemMeta().getDisplayName().equals(Methods.color(price))) {
 										try {

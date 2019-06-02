@@ -3,6 +3,7 @@ package me.badbones69.crazyauctions;
 import me.badbones69.crazyauctions.api.*;
 import me.badbones69.crazyauctions.api.FileManager.Files;
 import me.badbones69.crazyauctions.api.events.AuctionListEvent;
+import me.badbones69.crazyauctions.controllers.ButtonController;
 import me.badbones69.crazyauctions.controllers.GUI;
 import me.badbones69.crazyauctions.controllers.Metrics;
 import me.badbones69.crazyauctions.currency.Vault;
@@ -27,9 +28,11 @@ public class Main extends JavaPlugin implements Listener {
 	
 	public static FileManager fileManager = FileManager.getInstance();
 	public static CrazyAuctions crazyAuctions = CrazyAuctions.getInstance();
+	private static Main instance;
 	
 	@Override
 	public void onEnable() {
+	    instance = this;
 		fileManager.logInfo(true).setup(this);
 		crazyAuctions.loadCrazyAuctions();
 		Bukkit.getServer().getPluginManager().registerEvents(this, this);
@@ -48,6 +51,10 @@ public class Main extends JavaPlugin implements Listener {
 		int file = 0;
 		Bukkit.getScheduler().cancelTask(file);
 		Files.DATA.saveFile();
+	}
+	
+	public static Main getInstance() {
+	    return instance;
 	}
 	
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLable, String[] args) {
@@ -84,6 +91,7 @@ public class Main extends JavaPlugin implements Listener {
 					if(!Methods.hasPermission(sender, "Admin")) return true;
 					fileManager.logInfo(true).setup(this);
 					crazyAuctions.loadCrazyAuctions();
+					ButtonController.getInstance().reload();
 					sender.sendMessage(Messages.RELOAD.getMessage());
 					return true;
 				}
@@ -313,7 +321,7 @@ public class Main extends JavaPlugin implements Listener {
 			@Override
 			public void run() {
 				if(player.getName().equals("BadBones69")) {
-					player.sendMessage(Methods.getPrefix() + Methods.color("&7This server is running your Crazy Auctions Plugin. " + "&7It is running version &av" + Bukkit.getServer().getPluginManager().getPlugin("CrazyAuctions").getDescription().getVersion() + "&7."));
+					player.sendMessage(Methods.getPrefix() + Methods.color("&7This server is running your Crazy Auctions Plugin. " + "&7It is running version &av" + getDescription().getVersion() + "&7."));
 				}
 			}
 		}.runTaskLater(this, 40);

@@ -16,6 +16,40 @@ Settings:
   Max-Beginning-Bid-Price: 1000000 #Maximum starting bid.
   Allow-Damaged-Items: False #Allow items that have been damaged.
   Category-Page-Opens-First: False #If set to true the categories page will open when they do /CA.
+  Increments:
+    1:
+      Amount: 1
+      Color: '&a'
+      Material: '160:5'
+    2:
+      Amount: 10
+      Color: '&a'
+      Material: '160:5'
+    3:
+      Amount: 100
+      Color: '&a'
+      Material: '160:5'
+    4:
+      Amount: 1000
+      Color: '&a'
+      Material: '160:5'
+  Decrements:
+    1:
+      Amount: 1
+      Color: '&c'
+      Material: '160:14'
+    2:
+      Amount: 10
+      Color: '&c'
+      Material: '160:14'
+    3:
+      Amount: 100
+      Color: '&c'
+      Material: '160:14'
+    4:
+      Amount: 1000
+      Color: '&c'
+      Material: '160:14'
   Feature-Toggle: #Toggle if a feature is on or off.
     Selling: true #Able to use the selling part of the auction house.
     Bidding: true #Able to use the bidding part of the auction house.
