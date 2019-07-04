@@ -2,14 +2,14 @@ Settings:
   Prefix: '&7[&4Crazy &bAuctions&7]: ' #Prefix of when you get Crazy Auctions Messages.
   GUIName: '&4Crazy &bAuctions&8' #Name of the Main GUI.
   Players-Current-Items: '&8Your Current Listings' #The Name of the Player Current Items GUI.
-  Cancelled/Expired-Items: '&8Cancelled/Expired Listings' #Name of the Cancelled/Expired GUI.
+  Cancelled/Expired-Items: '&8Cancelled/Expired Listings' #Name of the Canceled/Expired GUI.
   Buying-Item: '&8Purchase Item: Are You Sure?' #Name of the Buying GUI.
   Bidding-On-Item: '&8You Are Bidding On This Item.' #Name of the Bidding GUI.
   Categories: '&8Categories' #Name of the Category GUI.
   Sell-Time: 2d #The time that each item will sell for.
   Bid-Time: 2m 30s #Time for each item that is biddable.
   Full-Expire-Time: 10d #The full time the item is in the crazy auctions.
-  Bid-Winner-Time: 20d #The time the winner of a bid has to claim there prize.
+  Bid-Winner-Time: 20d #The time the winner of a bid has to claim their prize.
   Minimum-Sell-Price: 10 #Minimum amount you can sell a item for.
   Max-Beginning-Sell-Price: 1000000 #Max amount you can sell a item for.
   Minimum-Bid-Price: 100 #Minimum starting bid.
@@ -39,7 +39,7 @@ Settings:
       - '&9Price: &e$%price%'
       - '&9Expire: &e%time%'
       - '&7-------------------------'
-    Cancelled/ExpiredLore: #Lore on items that are in your cancelled/expired GUI.
+    Cancelled/ExpiredLore: #Lore on items that are in your canceled/expired GUI.
       - '&7-------------------------'
       - '&aClick here to return to you.'
       - ''
@@ -70,7 +70,7 @@ Settings:
         Name: '&6&lWeapons'
         Lore:
           - '&7This category contains all'
-          - '&7weapons that is currently being sold.'
+          - '&7weapons that are currently being sold.'
       Tools:
         Item: '285'
         Toggle: true
@@ -78,7 +78,7 @@ Settings:
         Name: '&6&lTools'
         Lore:
           - '&7This category contains all'
-          - '&7tools that is currently being sold.'
+          - '&7tools that are currently being sold.'
       Food:
         Item: '322'
         Toggle: true
@@ -94,7 +94,7 @@ Settings:
         Name: '&6&lPotions'
         Lore:
           - '&7This category contains all'
-          - '&7potions that is currently being sold.'
+          - '&7potions that are currently being sold.'
       Blocks:
         Item: '2'
         Toggle: true
@@ -102,7 +102,7 @@ Settings:
         Name: '&6&lBlocks'
         Lore:
           - '&7This category contains all'
-          - '&7blocks that is currently being sold.'
+          - '&7blocks that are currently being sold.'
       Other:
         Item: '371'
         Toggle: true
@@ -128,14 +128,14 @@ Settings:
         Lore: #Lore of the item.
           - '&aClick here to view all the items you'
           - '&aare currently selling on the auction.'
-      Cancelled/ExpiredItems: #The button for Cancelled/Expired Items.
+      Cancelled/ExpiredItems: #The button for Canceled/Expired Items.
         Item: '394'
         Toggle: true
         Slot: 47
-        Name: '&6Collect Expired / Cancelled Items'
+        Name: '&6Collect Expired / Canceled Items'
         Lore:
           - '&aClick here to view and collect all of the'
-          - '&aitems you have cancelled or has expired.'
+          - '&aitems you have canceled or has expired.'
       PreviousPage: #The button for Previous Page.
         Item: '339'
         Toggle: true
@@ -161,7 +161,7 @@ Settings:
         Name: '&6Categories'
         Lore:
           - '&bCurrent Category: &6%category%'
-          - '&aWant see items in specific categories?'
+          - '&aWant to see items in specific categories?'
           - '&aClick here to see all categories of items.'
       Category2: #The button for Next Page.
         Item: '54'
@@ -170,7 +170,7 @@ Settings:
         Name: '&6Categories'
         Lore:
           - '&bCurrent Category: &6%category%'
-          - '&aWant see items in specific categories?'
+          - '&aWant to see items in specific categories?'
           - '&aClick here to see all categories of items.'
       Bidding/Selling: #Switch between Bidding and Selling.
         Selling:
@@ -180,7 +180,7 @@ Settings:
           Name: '&6Currently looking at items being sold.'
           Lore:
             - '&7&l(&6&l!&7&l) &7Click here to see items'
-            - '&7that you can be bidded on.'
+            - '&7that you can bid on.'
         Bidding:
           Item: '378'
           Toggle: true
@@ -228,7 +228,7 @@ Settings:
             - ''
             - '&aYou can cancel and view your listings'
             - '&aexpire time here.'
-        Cancelled/ExpiredItems: #The Book in the Cancelled/Expired Items GUI.
+        Cancelled/ExpiredItems: #The Book in the Canceled/Expired Items GUI.
           Item: '340'
           Toggle: true
           Slot: 54
@@ -280,10 +280,10 @@ Settings:
         Name: '&cCancel'
       Your-Item: #The item that shows when you try to buy/bid on your item.
         Item: '166'
-        Name: '&cYou Cant Purchase Your Own Item.'
+        Name: '&cYou Can''t Purchase Your Own Item.'
       Cant-Afford: #The item that shows when you cant afford this item.
         Item: '166'
-        Name: '&cYou Cant Afford This Item.'
+        Name: '&cYou Can''t Afford This Item.'
       Top-Bidder: #The item for when a player is already the top bidder.
         Item: '166'
         Name: '&cYou are already the top bidder.'
