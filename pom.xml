@@ -83,9 +83,9 @@
                             <include>me.badbones69:*</include>
                         </includes>
                     </artifactSet>
-                    <finalName>Crazy Auctions[v${project.version}-Dev-Build-v2]</finalName>
-                    <!--<outputFile>/Users/badbones/Desktop/Stuff/Server/plugins/Crazy Auctions[v${project.version}].jar</outputFile>-->
-                    <!--<outputFile>/Users/badbones/Plugins/Public Plugins/Crazy Auctions/Crazy Auctions[v${project.version}].jar</outputFile>-->
+                    <!--                    <finalName>Crazy Auctions[v${project.version}]</finalName>-->
+                    <!--                    <outputFile>/Users/badbones/Desktop/Stuff/Server/plugins/Crazy Auctions[v${project.version}].jar</outputFile>-->
+                    <outputFile>/Users/badbones/Plugins/Public Plugins/Crazy Auctions/Crazy Auctions[v${project.version}].jar</outputFile>
                 </configuration>
                 <executions>
                     <execution>
