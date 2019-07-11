@@ -3,7 +3,9 @@ package me.badbones69.crazyauctions.controllers;
 import me.badbones69.crazyauctions.Methods;
 import me.badbones69.crazyauctions.api.*;
 import me.badbones69.crazyauctions.api.FileManager.Files;
+import me.badbones69.crazyauctions.api.enums.CancelledReason;
 import me.badbones69.crazyauctions.api.events.AuctionBuyEvent;
+import me.badbones69.crazyauctions.api.events.AuctionCancelledEvent;
 import me.badbones69.crazyauctions.api.events.AuctionNewBidEvent;
 import me.badbones69.crazyauctions.currency.CurrencyManager;
 import org.bukkit.Bukkit;
@@ -629,10 +631,12 @@ public class GUI implements Listener {
 													int num = 1;
 													for(; data.contains("OutOfTime/Cancelled." + num); num++) ;
 													String seller = data.getString("Items." + i + ".Seller");
+													Player sellerPlayer = Methods.getPlayer(seller);
 													if(Methods.isOnline(seller)) {
-														Player S = Methods.getPlayer(seller);
-														S.sendMessage(Messages.ADMIN_FORCE_CANCELLED_TO_PLAYER.getMessage());
+														sellerPlayer.sendMessage(Messages.ADMIN_FORCE_CANCELLED_TO_PLAYER.getMessage());
 													}
+													AuctionCancelledEvent event = new AuctionCancelledEvent((sellerPlayer != null ? sellerPlayer : Bukkit.getOfflinePlayer(seller)), data.getItemStack("Items." + i + ".Item"), CancelledReason.ADMIN_FORCE_CANCEL);
+													Bukkit.getPluginManager().callEvent(event);
 													data.set("OutOfTime/Cancelled." + num + ".Seller", data.getString("Items." + i + ".Seller"));
 													data.set("OutOfTime/Cancelled." + num + ".Full-Time", data.getLong("Items." + i + ".Full-Time"));
 													data.set("OutOfTime/Cancelled." + num + ".StoreID", data.getInt("Items." + i + ".StoreID"));
@@ -799,6 +803,8 @@ public class GUI implements Listener {
 										int ID = data.getInt("Items." + i + ".StoreID");
 										if(id == ID) {
 											player.sendMessage(Messages.CANCELLED_ITEM.getMessage());
+											AuctionCancelledEvent event = new AuctionCancelledEvent(player, data.getItemStack("Items." + i + ".Item"), CancelledReason.PLAYER_FORCE_CANCEL);
+											Bukkit.getPluginManager().callEvent(event);
 											int num = 1;
 											for(; data.contains("OutOfTime/Cancelled." + num); num++) ;
 											data.set("OutOfTime/Cancelled." + num + ".Seller", data.getString("Items." + i + ".Seller"));
