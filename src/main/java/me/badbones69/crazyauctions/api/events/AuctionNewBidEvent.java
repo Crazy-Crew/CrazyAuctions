@@ -14,10 +14,10 @@ import org.bukkit.inventory.ItemStack;
  */
 public class AuctionNewBidEvent extends Event {
 	
+	private static final HandlerList handlers = new HandlerList();
 	private Player player;
 	private long bid;
 	private ItemStack item;
-	private static final HandlerList handlers = new HandlerList();
 	
 	/**
 	 *
@@ -31,11 +31,11 @@ public class AuctionNewBidEvent extends Event {
 		this.bid = bid;
 	}
 	
-	public HandlerList getHandlers() {
+	public static HandlerList getHandlerList() {
 		return handlers;
 	}
 	
-	public static HandlerList getHandlerList() {
+	public HandlerList getHandlers() {
 		return handlers;
 	}
 	

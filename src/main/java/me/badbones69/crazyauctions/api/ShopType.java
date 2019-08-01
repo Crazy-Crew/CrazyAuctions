@@ -14,13 +14,6 @@ public enum ShopType {
 	}
 	
 	/**
-	 * @return Returns the type name as a string.
-	 */
-	public String getName() {
-		return name;
-	}
-	
-	/**
 	 * @param name name of the Type you want.
 	 * @return Returns the Type as a Enum.
 	 */
@@ -31,6 +24,13 @@ public enum ShopType {
 			}
 		}
 		return null;
+	}
+	
+	/**
+	 * @return Returns the type name as a string.
+	 */
+	public String getName() {
+		return name;
 	}
 	
 }

@@ -15,11 +15,11 @@ import org.bukkit.inventory.ItemStack;
  */
 public class AuctionExpireEvent extends Event {
 	
+	private static final HandlerList handlers = new HandlerList();
 	private OfflinePlayer offlinePlayer;
 	private Player onlinePlayer;
 	private boolean isOnline;
 	private ItemStack item;
-	private static final HandlerList handlers = new HandlerList();
 	
 	/**
 	 *
@@ -43,11 +43,11 @@ public class AuctionExpireEvent extends Event {
 		this.isOnline = true;
 	}
 	
-	public HandlerList getHandlers() {
+	public static HandlerList getHandlerList() {
 		return handlers;
 	}
 	
-	public static HandlerList getHandlerList() {
+	public HandlerList getHandlers() {
 		return handlers;
 	}
 	

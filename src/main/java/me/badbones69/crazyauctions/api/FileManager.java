@@ -19,6 +19,7 @@ import java.util.HashMap;
  */
 public class FileManager {
 	
+	private static FileManager instance = new FileManager();
 	private Plugin plugin;
 	private String prefix = "";
 	private Boolean log = false;
@@ -27,8 +28,6 @@ public class FileManager {
 	private ArrayList<CustomFile> customFiles = new ArrayList<>();
 	private HashMap<String, String> autoGenerateFiles = new HashMap<>();
 	private HashMap<Files, FileConfiguration> configurations = new HashMap<>();
-	
-	private static FileManager instance = new FileManager();
 	
 	public static FileManager getInstance() {
 		return instance;

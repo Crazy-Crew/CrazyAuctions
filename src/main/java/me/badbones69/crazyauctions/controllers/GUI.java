@@ -439,6 +439,30 @@ public class GUI implements Listener {
 		return Methods.addLore(item.clone(), lore);
 	}
 	
+	private static void playClick(Player player) {
+		if(Files.CONFIG.getFile().contains("Settings.Sounds.Toggle")) {
+			if(Files.CONFIG.getFile().getBoolean("Settings.Sounds.Toggle")) {
+				String sound = Files.CONFIG.getFile().getString("Settings.Sounds.Sound");
+				try {
+					player.playSound(player.getLocation(), Sound.valueOf(sound), 1, 1);
+				}catch(Exception e) {
+					if(Methods.getVersion() >= 191) {
+						player.playSound(player.getLocation(), Sound.valueOf("UI_BUTTON_CLICK"), 1, 1);
+					}else {
+						player.playSound(player.getLocation(), Sound.valueOf("CLICK"), 1, 1);
+					}
+					Bukkit.getLogger().log(Level.WARNING, "[Crazy Auctions]>> You set the sound to " + sound + " and this is not a sound for your minecraft version. " + "Please go to the config and set a correct sound or turn the sound off in the toggle setting.");
+				}
+			}
+		}else {
+			if(Methods.getVersion() >= 191) {
+				player.playSound(player.getLocation(), Sound.valueOf("UI_BUTTON_CLICK"), 1, 1);
+			}else {
+				player.playSound(player.getLocation(), Sound.valueOf("CLICK"), 1, 1);
+			}
+		}
+	}
+	
 	@EventHandler
 	public void onInvClose(InventoryCloseEvent e) {
 		FileConfiguration config = Files.CONFIG.getFile();
@@ -922,30 +946,6 @@ public class GUI implements Listener {
 						}
 					}
 				}
-			}
-		}
-	}
-	
-	private static void playClick(Player player) {
-		if(Files.CONFIG.getFile().contains("Settings.Sounds.Toggle")) {
-			if(Files.CONFIG.getFile().getBoolean("Settings.Sounds.Toggle")) {
-				String sound = Files.CONFIG.getFile().getString("Settings.Sounds.Sound");
-				try {
-					player.playSound(player.getLocation(), Sound.valueOf(sound), 1, 1);
-				}catch(Exception e) {
-					if(Methods.getVersion() >= 191) {
-						player.playSound(player.getLocation(), Sound.valueOf("UI_BUTTON_CLICK"), 1, 1);
-					}else {
-						player.playSound(player.getLocation(), Sound.valueOf("CLICK"), 1, 1);
-					}
-					Bukkit.getLogger().log(Level.WARNING, "[Crazy Auctions]>> You set the sound to " + sound + " and this is not a sound for your minecraft version. " + "Please go to the config and set a correct sound or turn the sound off in the toggle setting.");
-				}
-			}
-		}else {
-			if(Methods.getVersion() >= 191) {
-				player.playSound(player.getLocation(), Sound.valueOf("UI_BUTTON_CLICK"), 1, 1);
-			}else {
-				player.playSound(player.getLocation(), Sound.valueOf("CLICK"), 1, 1);
 			}
 		}
 	}

@@ -27,13 +27,6 @@ public enum Category {
 	}
 	
 	/**
-	 * @return Returns the type name as a string.
-	 */
-	public String getName() {
-		return Name;
-	}
-	
-	/**
 	 * @param name Name of the Type you want.
 	 * @return Returns the Type as a Enum.
 	 */
@@ -44,10 +37,6 @@ public enum Category {
 			}
 		}
 		return null;
-	}
-	
-	public ArrayList<Material> getItems() {
-		return Items;
 	}
 	
 	private static ArrayList<Material> getArmor() {
@@ -184,6 +173,17 @@ public enum Category {
 			}
 		}
 		return ma;
+	}
+	
+	/**
+	 * @return Returns the type name as a string.
+	 */
+	public String getName() {
+		return Name;
+	}
+	
+	public ArrayList<Material> getItems() {
+		return Items;
 	}
 	
 }

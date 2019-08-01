@@ -54,10 +54,10 @@ public enum Messages {
 	"&9/Ah Listed - &eView and manage the items you are selling.",
 	"&9/Ah Help - &eView this help menu."));
 	
+	private static FileManager fileManager = FileManager.getInstance();
 	private String path;
 	private String defaultMessage;
 	private List<String> defaultListMessage;
-	private static FileManager fileManager = FileManager.getInstance();
 	
 	private Messages(String path, String defaultMessage) {
 		this.path = path;
@@ -67,6 +67,43 @@ public enum Messages {
 	private Messages(String path, List<String> defaultListMessage) {
 		this.path = path;
 		this.defaultListMessage = defaultListMessage;
+	}
+	
+	public static String convertList(List<String> list) {
+		String message = "";
+		for(String m : list) {
+			message += Methods.color(m) + "\n";
+		}
+		return message;
+	}
+	
+	public static String convertList(List<String> list, HashMap<String, String> placeholders) {
+		String message = "";
+		for(String m : list) {
+			message += Methods.color(m) + "\n";
+		}
+		for(String ph : placeholders.keySet()) {
+			message = Methods.color(message.replaceAll(ph, placeholders.get(ph))).replaceAll(ph, placeholders.get(ph).toLowerCase());
+		}
+		return message;
+	}
+	
+	public static void addMissingMessages() {
+		FileConfiguration messages = Files.MESSAGES.getFile();
+		boolean saveFile = false;
+		for(Messages message : values()) {
+			if(!messages.contains("Messages." + message.getPath())) {
+				saveFile = true;
+				if(message.getDefaultMessage() != null) {
+					messages.set("Messages." + message.getPath(), message.getDefaultMessage());
+				}else {
+					messages.set("Messages." + message.getPath(), message.getDefaultListMessage());
+				}
+			}
+		}
+		if(saveFile) {
+			Files.MESSAGES.saveFile();
+		}
 	}
 	
 	public String getMessage() {
@@ -145,43 +182,6 @@ public enum Messages {
 			}
 		}
 		return message;
-	}
-	
-	public static String convertList(List<String> list) {
-		String message = "";
-		for(String m : list) {
-			message += Methods.color(m) + "\n";
-		}
-		return message;
-	}
-	
-	public static String convertList(List<String> list, HashMap<String, String> placeholders) {
-		String message = "";
-		for(String m : list) {
-			message += Methods.color(m) + "\n";
-		}
-		for(String ph : placeholders.keySet()) {
-			message = Methods.color(message.replaceAll(ph, placeholders.get(ph))).replaceAll(ph, placeholders.get(ph).toLowerCase());
-		}
-		return message;
-	}
-	
-	public static void addMissingMessages() {
-		FileConfiguration messages = Files.MESSAGES.getFile();
-		Boolean saveFile = false;
-		for(Messages message : values()) {
-			if(!messages.contains("Messages." + message.getPath())) {
-				saveFile = true;
-				if(message.getDefaultMessage() != null) {
-					messages.set("Messages." + message.getPath(), message.getDefaultMessage());
-				}else {
-					messages.set("Messages." + message.getPath(), message.getDefaultListMessage());
-				}
-			}
-		}
-		if(saveFile) {
-			Files.MESSAGES.saveFile();
-		}
 	}
 	
 	private Boolean exists() {

@@ -23,20 +23,6 @@ public enum CurrencyManager { // Currency Manager
 	}
 	
 	/**
-	 * @return Returns the Currency name as a string.
-	 */
-	public String getName() {
-		return name;
-	}
-	
-	/**
-	 * @return Returns the Currency name as a string.
-	 */
-	public String getPluginName() {
-		return pluginName;
-	}
-	
-	/**
 	 * @param name
 	 *            name of the Type you want.
 	 * @return Returns the Currency as a Enum.
@@ -48,17 +34,6 @@ public enum CurrencyManager { // Currency Manager
 			}
 		}
 		return null;
-	}
-	
-	/**
-	 *
-	 * @return Returns true if the server has the plugin.
-	 */
-	public Boolean hasPlugin() {
-		if(Bukkit.getServer().getPluginManager().getPlugin(pluginName) != null) {
-			return Files.CONFIG.getFile().getBoolean("Settings.Currencies." + pluginName + ".Enabled");
-		}
-		return false;
 	}
 	
 	/**
@@ -113,6 +88,31 @@ public enum CurrencyManager { // Currency Manager
 	 */
 	public static void addMoney(OfflinePlayer player, Long amount) {
 		Vault.addMoney(player, amount);
+	}
+	
+	/**
+	 * @return Returns the Currency name as a string.
+	 */
+	public String getName() {
+		return name;
+	}
+	
+	/**
+	 * @return Returns the Currency name as a string.
+	 */
+	public String getPluginName() {
+		return pluginName;
+	}
+	
+	/**
+	 *
+	 * @return Returns true if the server has the plugin.
+	 */
+	public Boolean hasPlugin() {
+		if(Bukkit.getServer().getPluginManager().getPlugin(pluginName) != null) {
+			return Files.CONFIG.getFile().getBoolean("Settings.Currencies." + pluginName + ".Enabled");
+		}
+		return false;
 	}
 	
 }

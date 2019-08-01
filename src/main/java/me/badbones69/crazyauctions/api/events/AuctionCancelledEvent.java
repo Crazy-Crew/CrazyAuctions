@@ -16,12 +16,12 @@ import org.bukkit.inventory.ItemStack;
  */
 public class AuctionCancelledEvent extends Event {
 	
+	private static final HandlerList handlers = new HandlerList();
 	private OfflinePlayer offlinePlayer;
 	private Player onlinePlayer;
 	private boolean isOnline;
 	private ItemStack item;
 	private CancelledReason reason;
-	private static final HandlerList handlers = new HandlerList();
 	
 	/**
 	 *
@@ -47,11 +47,11 @@ public class AuctionCancelledEvent extends Event {
 		this.reason = reason;
 	}
 	
-	public HandlerList getHandlers() {
+	public static HandlerList getHandlerList() {
 		return handlers;
 	}
 	
-	public static HandlerList getHandlerList() {
+	public HandlerList getHandlers() {
 		return handlers;
 	}
 	
