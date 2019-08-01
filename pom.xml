@@ -7,6 +7,7 @@
     <groupId>me.badbones69</groupId>
     <artifactId>crazyauctions</artifactId>
     <version>1.2.10</version>
+    <name>CrazyAuctions</name>
 
     <repositories>
         <repository>
@@ -45,6 +46,7 @@
     </dependencies>
 
     <build>
+        <finalName>${project.name}[v${project.version}]</finalName>
         <defaultGoal>clean install package</defaultGoal>
         <resources>
             <resource>
