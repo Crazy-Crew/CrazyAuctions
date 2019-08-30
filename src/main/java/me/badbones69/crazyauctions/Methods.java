@@ -360,11 +360,13 @@ public class Methods {
 		Calendar cal = Calendar.getInstance();
 		Calendar expireTime = Calendar.getInstance();
 		Calendar fullExpireTime = Calendar.getInstance();
+		boolean shouldSave = false;
 		if(data.contains("OutOfTime/Cancelled")) {
 			for(String i : data.getConfigurationSection("OutOfTime/Cancelled").getKeys(false)) {
 				fullExpireTime.setTimeInMillis(data.getLong("OutOfTime/Cancelled." + i + ".Full-Time"));
 				if(cal.after(fullExpireTime)) {
 					data.set("OutOfTime/Cancelled." + i, null);
+					shouldSave = true;
 				}
 			}
 		}
@@ -413,10 +415,11 @@ public class Methods {
 						data.set("OutOfTime/Cancelled." + num + ".Item", data.getItemStack("Items." + i + ".Item"));
 					}
 					data.set("Items." + i, null);
+					shouldSave = true;
 				}
 			}
 		}
-		Files.DATA.saveFile();
+		if (shouldSave) Files.DATA.saveFile();
 	}
 	
 	public static String getPrice(String ID, Boolean Expired) {
