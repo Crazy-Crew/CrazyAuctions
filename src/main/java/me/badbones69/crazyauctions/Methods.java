@@ -419,7 +419,7 @@ public class Methods {
 				}
 			}
 		}
-		if (shouldSave) Files.DATA.saveFile();
+		if(shouldSave) Files.DATA.saveFile();
 	}
 	
 	public static String getPrice(String ID, Boolean Expired) {
