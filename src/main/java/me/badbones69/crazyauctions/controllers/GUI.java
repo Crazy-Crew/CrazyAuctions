@@ -659,7 +659,7 @@ public class GUI implements Listener {
 														for(; data.contains("OutOfTime/Cancelled." + num); num++) ;
 														String seller = data.getString("Items." + i + ".Seller");
 														Player sellerPlayer = Methods.getPlayer(seller);
-														if(Methods.isOnline(seller)) {
+														if(Methods.isOnline(seller) && sellerPlayer != null) {
 															sellerPlayer.sendMessage(Messages.ADMIN_FORCE_CANCELLED_TO_PLAYER.getMessage());
 														}
 														AuctionCancelledEvent event = new AuctionCancelledEvent((sellerPlayer != null ? sellerPlayer : Bukkit.getOfflinePlayer(seller)), data.getItemStack("Items." + i + ".Item"), CancelledReason.ADMIN_FORCE_CANCEL);
@@ -788,7 +788,7 @@ public class GUI implements Listener {
 									placeholders.put("%Player%", player.getName());
 									placeholders.put("%player%", player.getName());
 									player.sendMessage(Messages.BOUGHT_ITEM.getMessage(placeholders));
-									if(Methods.isOnline(seller)) {
+									if(Methods.isOnline(seller) && Methods.getPlayer(seller) != null) {
 										Player sell = Methods.getPlayer(seller);
 										sell.sendMessage(Messages.PLAYER_BOUGHT_ITEM.getMessage(placeholders));
 									}
