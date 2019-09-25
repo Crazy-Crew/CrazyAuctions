@@ -411,7 +411,7 @@ public class Methods {
 						if(isOnline(seller) && getPlayer(seller) != null) {
 							player.sendMessage(Messages.ITEM_HAS_EXPIRED.getMessage());
 						}
-						AuctionExpireEvent event = new AuctionExpireEvent((player != null ? player : Bukkit.getOfflinePlayer(seller)), data.getItemStack("Items." + i + ".Item"));
+						AuctionExpireEvent event = new AuctionExpireEvent(player, data.getItemStack("Items." + i + ".Item"));
 						Bukkit.getPluginManager().callEvent(event);
 						data.set("OutOfTime/Cancelled." + num + ".Seller", data.getString("Items." + i + ".Seller"));
 						data.set("OutOfTime/Cancelled." + num + ".Full-Time", fullExpireTime.getTimeInMillis());
