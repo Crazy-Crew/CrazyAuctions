@@ -30,7 +30,10 @@ public class Vault {
 	
 	public static Long getMoney(Player player) {
 		if(player != null) {
-			return (long) econ.getBalance(player);
+			try {
+				return (long) econ.getBalance(player);
+			}catch(NullPointerException ignore) {
+			}
 		}
 		return 0L;
 	}

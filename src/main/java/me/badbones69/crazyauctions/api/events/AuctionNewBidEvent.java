@@ -7,10 +7,7 @@ import org.bukkit.inventory.ItemStack;
 
 /**
  *
- * @author BadBones69
- *
  * This event is fired when a player places a new bid onto an item in the auction house.
- *
  */
 public class AuctionNewBidEvent extends Event {
 	
