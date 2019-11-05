@@ -345,6 +345,9 @@ public class Main extends JavaPlugin implements Listener {
 			ma.add(Material.matchMaterial("DIAMOND_SHOVEL"));
 			ma.add(Material.matchMaterial("WOODEN_HOE"));
 			ma.add(Material.matchMaterial("GOLDEN_HOE"));
+			ma.add(Material.matchMaterial("CROSSBOW"));
+			ma.add(Material.matchMaterial("TRIDENT"));
+			ma.add(Material.matchMaterial("TURTLE_HELMET"));
 		}else {
 			ma.add(Material.matchMaterial("GOLD_HELMET"));
 			ma.add(Material.matchMaterial("GOLD_CHESTPLATE"));
