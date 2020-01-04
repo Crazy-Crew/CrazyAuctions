@@ -6,7 +6,7 @@
 
     <groupId>me.badbones69</groupId>
     <artifactId>crazyauctions</artifactId>
-    <version>1.2.11</version>
+    <version>1.2.12</version>
     <name>CrazyAuctions</name>
 
     <properties>
@@ -33,7 +33,7 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.14.4-R0.1-SNAPSHOT</version>
+            <version>1.15.1-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>

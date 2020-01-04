@@ -13,42 +13,42 @@ import org.bukkit.inventory.ItemStack;
  *
  */
 public class AuctionWinBidEvent extends Event {
-	
-	private static final HandlerList handlers = new HandlerList();
-	private Player player;
-	private long bid;
-	private ItemStack item;
-	
-	/**
-	 *
-	 * @param player
-	 * @param item
-	 * @param bid
-	 */
-	public AuctionWinBidEvent(Player player, ItemStack item, long bid) {
-		this.player = player;
-		this.item = item;
-		this.bid = bid;
-	}
-	
-	public static HandlerList getHandlerList() {
-		return handlers;
-	}
-	
-	public HandlerList getHandlers() {
-		return handlers;
-	}
-	
-	public Player getPlayer() {
-		return player;
-	}
-	
-	public ItemStack getItem() {
-		return item;
-	}
-	
-	public long getBid() {
-		return bid;
-	}
-	
+    
+    private static final HandlerList handlers = new HandlerList();
+    private Player player;
+    private long bid;
+    private ItemStack item;
+    
+    /**
+     *
+     * @param player
+     * @param item
+     * @param bid
+     */
+    public AuctionWinBidEvent(Player player, ItemStack item, long bid) {
+        this.player = player;
+        this.item = item;
+        this.bid = bid;
+    }
+    
+    public static HandlerList getHandlerList() {
+        return handlers;
+    }
+    
+    public HandlerList getHandlers() {
+        return handlers;
+    }
+    
+    public Player getPlayer() {
+        return player;
+    }
+    
+    public ItemStack getItem() {
+        return item;
+    }
+    
+    public long getBid() {
+        return bid;
+    }
+    
 }
