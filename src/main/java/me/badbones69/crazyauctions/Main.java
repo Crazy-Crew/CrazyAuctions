@@ -80,6 +80,62 @@ public class Main extends JavaPlugin implements Listener {
                     sender.sendMessage(Messages.HELP.getMessage());
                     return true;
                 }
+                if (args[0].equalsIgnoreCase("test")) {// CA test [times]
+                    if (!Methods.hasPermission(sender, "test")) return true;
+                    int times = 1;
+                    if (args.length >= 2) {
+                        if (!Methods.isInt(args[1])) {
+                            HashMap<String, String> placeholders = new HashMap<>();
+                            placeholders.put("%Arg%", args[1]);
+                            placeholders.put("%arg%", args[1]);
+                            sender.sendMessage(Messages.NOT_A_NUMBER.getMessage(placeholders));
+                            return true;
+                        }
+                        times = Integer.parseInt(args[1]);
+                    }
+                    int price = 10;
+                    int amount = 1;
+                    ItemStack item = Methods.getItemInHand((Player) sender);
+                    // For testing as another player
+                    String seller = "Test-Account";
+                    for (int it = 1; it <= times; it++) {
+                        int num = 1;
+                        Random r = new Random();
+                        for (; Files.DATA.getFile().contains("Items." + num); num++) ;
+                        Files.DATA.getFile().set("Items." + num + ".Price", price);
+                        Files.DATA.getFile().set("Items." + num + ".Seller", seller);
+                        if (args[0].equalsIgnoreCase("Bid")) {
+                            Files.DATA.getFile().set("Items." + num + ".Time-Till-Expire", Methods.convertToMill(Files.CONFIG.getFile().getString("Settings.Bid-Time")));
+                        } else {
+                            Files.DATA.getFile().set("Items." + num + ".Time-Till-Expire", Methods.convertToMill(Files.CONFIG.getFile().getString("Settings.Sell-Time")));
+                        }
+                        Files.DATA.getFile().set("Items." + num + ".Full-Time", Methods.convertToMill(Files.CONFIG.getFile().getString("Settings.Full-Expire-Time")));
+                        int id = r.nextInt(Integer.MAX_VALUE);
+                        for (String i : Files.DATA.getFile().getConfigurationSection("Items").getKeys(false))
+                            if (Files.DATA.getFile().getInt("Items." + i + ".StoreID") == id) id = r.nextInt(Integer.MAX_VALUE);
+                        Files.DATA.getFile().set("Items." + num + ".StoreID", id);
+                        ShopType type = ShopType.SELL;
+                        if (args[0].equalsIgnoreCase("Bid")) {
+                            Files.DATA.getFile().set("Items." + num + ".Biddable", true);
+                        } else {
+                            Files.DATA.getFile().set("Items." + num + ".Biddable", false);
+                        }
+                        Files.DATA.getFile().set("Items." + num + ".TopBidder", "None");
+                        ItemStack I = item.clone();
+                        I.setAmount(amount);
+                        Files.DATA.getFile().set("Items." + num + ".Item", I);
+                    }
+                    Files.DATA.saveFile();
+                    HashMap<String, String> placeholders = new HashMap<>();
+                    placeholders.put("%Price%", price + "");
+                    placeholders.put("%price%", price + "");
+                    sender.sendMessage(Messages.ADDED_ITEM_TO_AUCTION.getMessage(placeholders));
+                    if (item.getAmount() <= 1 || (item.getAmount() - amount) <= 0) {
+                        Methods.setItemInHand((Player) sender, new ItemStack(Material.AIR));
+                    } else {
+                        item.setAmount(item.getAmount() - amount);
+                    }
+                }
                 if (args[0].equalsIgnoreCase("Reload")) {// CA Reload
                     if (!Methods.hasPermission(sender, "Admin")) return true;
                     fileManager.logInfo(true).setup(this);
