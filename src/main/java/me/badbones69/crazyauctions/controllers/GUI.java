@@ -303,7 +303,7 @@ public class GUI implements Listener {
         }
         ItemStack item = data.getItemStack("Items." + ID + ".Item");
         List<String> lore = new ArrayList<>();
-        for (String l : config.getStringList("Settings.GUISettings.SellingLore")) {
+        for (String l : config.getStringList("Settings.GUISettings.SellingItemLore")) {
             lore.add(l.replaceAll("%Price%", Methods.getPrice(ID, false)).replaceAll("%price%", Methods.getPrice(ID, false)).replaceAll("%Seller%", data.getString("Items." + ID + ".Seller")).replaceAll("%seller%", data.getString("Items." + ID + ".Seller")).replaceAll("%Time%", Methods.convertToTime(data.getLong("Items." + l + ".Time-Till-Expire"))).replaceAll("%time%", Methods.convertToTime(data.getLong("Items." + l + ".Time-Till-Expire"))));
         }
         inv.setItem(4, Methods.addLore(item.clone(), lore));
@@ -370,7 +370,7 @@ public class GUI implements Listener {
                         }
                     } else {
                         for (String l : config.getStringList("Settings.GUISettings.SellingItemLore")) {
-                            lore.add(l.replaceAll("%Price%", Methods.getPrice(i, false)).replaceAll("%price%", Methods.getPrice(i, false)).replaceAll("%Seller%", data.getString("Items." + i + ".Seller")).replaceAll("%seller%", data.getString("Items." + i + ".Seller")));
+                            lore.add(l.replaceAll("%Price%", Methods.getPrice(i, false)).replaceAll("%price%", Methods.getPrice(i, false)).replaceAll("%Seller%", data.getString("Items." + i + ".Seller")).replaceAll("%seller%", data.getString("Items." + i + ".Seller")).replaceAll("%Time%", Methods.convertToTime(data.getLong("Items." + i + ".Time-Till-Expire"))).replaceAll("%time%", Methods.convertToTime(data.getLong("Items." + i + ".Time-Till-Expire"))));
                         }
                     }
                     items.add(Methods.addLore(data.getItemStack("Items." + i + ".Item").clone(), lore));
