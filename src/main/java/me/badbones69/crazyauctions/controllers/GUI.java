@@ -56,7 +56,7 @@ public class GUI implements Listener {
         if (data.contains("Items")) {
             for (String i : data.getConfigurationSection("Items").getKeys(false)) {
                 List<String> lore = new ArrayList<>();
-                if (cat.getItems().contains(data.getItemStack("Items." + i + ".Item").getType()) || cat == Category.NONE) {
+                if (data.getItemStack("Items." + i + ".Item") != null && (cat.getItems().contains(data.getItemStack("Items." + i + ".Item").getType()) || cat == Category.NONE)) {
                     if (data.getBoolean("Items." + i + ".Biddable")) {
                         if (sell == ShopType.BID) {
                             String seller = data.getString("Items." + i + ".Seller");
