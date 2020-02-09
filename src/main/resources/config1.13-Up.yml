@@ -15,6 +15,7 @@ Settings:
   Minimum-Bid-Price: 100 #Minimum starting bid.
   Max-Beginning-Bid-Price: 1000000 #Maximum starting bid.
   Allow-Damaged-Items: false #Allow items that have been damaged.
+  Allow-Lore-Items: false #Allow items that have lore.
   Category-Page-Opens-First: false #If set to true the categories page will open when they do /CA.
   Feature-Toggle: #Toggle if a feature is on or off.
     Selling: true #Able to use the selling part of the auction house.

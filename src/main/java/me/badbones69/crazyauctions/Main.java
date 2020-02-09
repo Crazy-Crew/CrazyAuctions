@@ -306,6 +306,16 @@ public class Main extends JavaPlugin implements Listener {
                                 }
                             }
                         }
+                        if (!Files.CONFIG.getFile().getBoolean("Settings.Allow-Lore-Items")) {
+                            for (Material i : getDamageableItems()) {
+                                if (item.getType() == i) {
+                                    if (item.getItemMeta().hasLore()) {
+                                        player.sendMessage(Messages.ITEM_HAS_LORE.getMessage());
+                                        return true;
+                                    }
+                                }
+                            }
+                        }
                         String seller = player.getName();
                         // For testing as another player
                         //String seller = "Test-Account";

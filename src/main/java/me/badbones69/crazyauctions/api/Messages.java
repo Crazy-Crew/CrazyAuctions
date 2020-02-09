@@ -26,6 +26,7 @@ public enum Messages {
     ITEM_DOESNT_EXIST("Item-Doesnt-Exist", "&cThat item isnt in the crazy auctions any more."),
     MAX_ITEMS("Max-Items", "&cYou cant list any more items to the Crazy Auctions."),
     ITEM_BLACKLISTED("Item-BlackListed", "&cThat item is not allowed to be sold here."),
+    ITEM_HAS_LORE("Item-Has-Lore","&cThat item has lore, which means its a special admin and/or plugin item and is not allowed to be sold here."),
     ITEM_DAMAGED("Item-Damaged", "&cThat item is damaged and is not allowed to be sold here."),
     SOLD_MESSAGE("Sold-Msg", "&7Thank you for buying this item."),
     BID_MORE_MONEY("Bid-More-Money", "&cYour bid is to low, please bid more."),
