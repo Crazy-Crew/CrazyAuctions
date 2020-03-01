@@ -28,11 +28,11 @@ public class Methods {
     }
     
     public static String getPrefix() {
-        return color(Files.CONFIG.getFile().getString("Settings.Prefix"));
+        return color(Files.CONFIG.getFile().getString("Settings.Prefix", ""));
     }
     
     public static String getPrefix(String msg) {
-        return color(Files.CONFIG.getFile().getString("Settings.Prefix") + msg);
+        return color(Files.CONFIG.getFile().getString("Settings.Prefix", "") + msg);
     }
     
     public static String removeColor(String msg) {
