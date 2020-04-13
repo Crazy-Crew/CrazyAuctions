@@ -160,7 +160,9 @@ public class Methods {
     public static ItemStack addLore(ItemStack item, List<String> list) {
         ArrayList<String> lore = new ArrayList<>();
         ItemMeta m = item.getItemMeta();
-        if (item.getItemMeta().hasLore()) lore.addAll(item.getItemMeta().getLore());
+        if (item.hasItemMeta() && item.getItemMeta().hasLore()) {
+            lore.addAll(item.getItemMeta().getLore());
+        }
         for (String i : list)
             lore.add(color(i));
         m.setLore(lore);
