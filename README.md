@@ -10,6 +10,9 @@ Source Code for Crazy Auctions
 
 ## Jenkins: 
  https://jenkins.badbones69.com/job/Crazy-Auctions/
+ 
+## Nexus:
+https://nexus.badbones69.com/#browse/browse:maven-releases:me%2Fbadbones69%2Fcrazyauctions
 
 ## Maven:
 ```xml
