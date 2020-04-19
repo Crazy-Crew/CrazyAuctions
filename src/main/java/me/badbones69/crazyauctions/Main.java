@@ -115,11 +115,7 @@ public class Main extends JavaPlugin implements Listener {
                             if (Files.DATA.getFile().getInt("Items." + i + ".StoreID") == id) id = r.nextInt(Integer.MAX_VALUE);
                         Files.DATA.getFile().set("Items." + num + ".StoreID", id);
                         ShopType type = ShopType.SELL;
-                        if (args[0].equalsIgnoreCase("Bid")) {
-                            Files.DATA.getFile().set("Items." + num + ".Biddable", true);
-                        } else {
-                            Files.DATA.getFile().set("Items." + num + ".Biddable", false);
-                        }
+                        Files.DATA.getFile().set("Items." + num + ".Biddable", args[0].equalsIgnoreCase("Bid"));
                         Files.DATA.getFile().set("Items." + num + ".TopBidder", "None");
                         ItemStack I = item.clone();
                         I.setAmount(amount);
