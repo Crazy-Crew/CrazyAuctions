@@ -7,7 +7,6 @@ Source Code for Crazy Auctions
 ## Latest Version:
 [![Latest Version](https://img.shields.io/badge/Latest%20Version-1.2.12-blue)](https://github.com/badbones69/Crazy-Auctions/releases/latest)
 
-
 ## Jenkins: 
  https://jenkins.badbones69.com/job/Crazy-Auctions/
  
