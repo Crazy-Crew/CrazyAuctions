@@ -96,40 +96,45 @@ public class Main extends JavaPlugin implements Listener {
                     int price = 10;
                     int amount = 1;
                     ItemStack item = Methods.getItemInHand((Player) sender);
-                    // For testing as another player
-                    String seller = "Test-Account";
-                    for (int it = 1; it <= times; it++) {
-                        int num = 1;
-                        Random r = new Random();
-                        for (; Files.DATA.getFile().contains("Items." + num); num++) ;
-                        Files.DATA.getFile().set("Items." + num + ".Price", price);
-                        Files.DATA.getFile().set("Items." + num + ".Seller", seller);
-                        if (args[0].equalsIgnoreCase("Bid")) {
-                            Files.DATA.getFile().set("Items." + num + ".Time-Till-Expire", Methods.convertToMill(Files.CONFIG.getFile().getString("Settings.Bid-Time")));
-                        } else {
-                            Files.DATA.getFile().set("Items." + num + ".Time-Till-Expire", Methods.convertToMill(Files.CONFIG.getFile().getString("Settings.Sell-Time")));
+                    if (item != null && item.getType() != Material.AIR) {
+                        // For testing as another player
+                        String seller = "Test-Account";
+                        for (int it = 1; it <= times; it++) {
+                            int num = 1;
+                            Random r = new Random();
+                            for (; Files.DATA.getFile().contains("Items." + num); num++) ;
+                            Files.DATA.getFile().set("Items." + num + ".Price", price);
+                            Files.DATA.getFile().set("Items." + num + ".Seller", seller);
+                            if (args[0].equalsIgnoreCase("Bid")) {
+                                Files.DATA.getFile().set("Items." + num + ".Time-Till-Expire", Methods.convertToMill(Files.CONFIG.getFile().getString("Settings.Bid-Time")));
+                            } else {
+                                Files.DATA.getFile().set("Items." + num + ".Time-Till-Expire", Methods.convertToMill(Files.CONFIG.getFile().getString("Settings.Sell-Time")));
+                            }
+                            Files.DATA.getFile().set("Items." + num + ".Full-Time", Methods.convertToMill(Files.CONFIG.getFile().getString("Settings.Full-Expire-Time")));
+                            int id = r.nextInt(Integer.MAX_VALUE);
+                            for (String i : Files.DATA.getFile().getConfigurationSection("Items").getKeys(false))
+                                if (Files.DATA.getFile().getInt("Items." + i + ".StoreID") == id) id = r.nextInt(Integer.MAX_VALUE);
+                            Files.DATA.getFile().set("Items." + num + ".StoreID", id);
+                            ShopType type = ShopType.SELL;
+                            Files.DATA.getFile().set("Items." + num + ".Biddable", args[0].equalsIgnoreCase("Bid"));
+                            Files.DATA.getFile().set("Items." + num + ".TopBidder", "None");
+                            ItemStack I = item.clone();
+                            I.setAmount(amount);
+                            Files.DATA.getFile().set("Items." + num + ".Item", I);
                         }
-                        Files.DATA.getFile().set("Items." + num + ".Full-Time", Methods.convertToMill(Files.CONFIG.getFile().getString("Settings.Full-Expire-Time")));
-                        int id = r.nextInt(Integer.MAX_VALUE);
-                        for (String i : Files.DATA.getFile().getConfigurationSection("Items").getKeys(false))
-                            if (Files.DATA.getFile().getInt("Items." + i + ".StoreID") == id) id = r.nextInt(Integer.MAX_VALUE);
-                        Files.DATA.getFile().set("Items." + num + ".StoreID", id);
-                        ShopType type = ShopType.SELL;
-                        Files.DATA.getFile().set("Items." + num + ".Biddable", args[0].equalsIgnoreCase("Bid"));
-                        Files.DATA.getFile().set("Items." + num + ".TopBidder", "None");
-                        ItemStack I = item.clone();
-                        I.setAmount(amount);
-                        Files.DATA.getFile().set("Items." + num + ".Item", I);
-                    }
-                    Files.DATA.saveFile();
-                    HashMap<String, String> placeholders = new HashMap<>();
-                    placeholders.put("%Price%", price + "");
-                    placeholders.put("%price%", price + "");
-                    sender.sendMessage(Messages.ADDED_ITEM_TO_AUCTION.getMessage(placeholders));
-                    if (item.getAmount() <= 1 || (item.getAmount() - amount) <= 0) {
-                        Methods.setItemInHand((Player) sender, new ItemStack(Material.AIR));
+                        Files.DATA.saveFile();
+                        HashMap<String, String> placeholders = new HashMap<>();
+                        placeholders.put("%Price%", price + "");
+                        placeholders.put("%price%", price + "");
+                        sender.sendMessage(Messages.ADDED_ITEM_TO_AUCTION.getMessage(placeholders));
+                        if (item.getAmount() <= 1 || (item.getAmount() - amount) <= 0) {
+                            Methods.setItemInHand((Player) sender, new ItemStack(Material.AIR));
+                        } else {
+                            item.setAmount(item.getAmount() - amount);
+                        }
                     } else {
-                        item.setAmount(item.getAmount() - amount);
+                        sender.sendMessage(Messages.DOSENT_HAVE_ITEM_IN_HAND.getMessage());
+                        return true;
                     }
                 }
                 if (args[0].equalsIgnoreCase("Reload")) {// CA Reload
