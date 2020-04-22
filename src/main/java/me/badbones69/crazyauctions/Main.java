@@ -132,6 +132,7 @@ public class Main extends JavaPlugin implements Listener {
                         } else {
                             item.setAmount(item.getAmount() - amount);
                         }
+                        return true;
                     } else {
                         sender.sendMessage(Messages.DOSENT_HAVE_ITEM_IN_HAND.getMessage());
                         return true;
