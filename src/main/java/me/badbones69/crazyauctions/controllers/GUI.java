@@ -644,8 +644,8 @@ public class GUI implements Listener {
                                 }
                             }
                             if (List.containsKey(player)) {
-                                if (List.get(player).size() > slot) {
-                                    int id = List.get(player).get(slot - 1);
+                                if (List.get(player).size() >= slot) {
+                                    int id = List.get(player).get(slot);
                                     boolean T = false;
                                     if (data.contains("Items")) {
                                         for (String i : data.getConfigurationSection("Items").getKeys(false)) {
