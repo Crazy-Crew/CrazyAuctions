@@ -114,7 +114,7 @@
                     <relocations>
                         <relocation>
                             <pattern>de.tr7zw.changeme.nbtapi</pattern>
-                            <shadedPattern>me.badbones69</shadedPattern>
+                            <shadedPattern>me.badbones69.crazyauctions.hooks.nbtapi</shadedPattern>
                         </relocation>
                     </relocations>
                 </configuration>
