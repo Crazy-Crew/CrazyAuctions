@@ -1,0 +1,42 @@
+Users:
+  <UUID>:
+    Name: 'BadBones69'
+    Selling:
+      <StoreID-1>:
+        Price: 10
+        Expire-Time: expire milliseconds
+        Item:
+          <ItemStack>:
+      <StoreID-2>:
+        Price: 10
+        Expire-Time: expire milliseconds
+        Item:
+          <ItemStack>:
+    Bidding:
+      <StoreID-3>:
+        Price: 10
+        Expire-Time: expire milliseconds
+        Top-Bidder:
+          UUID: <UUID>
+          Name: <Name>
+          Bid: 10
+        Item:
+          <ItemStack>:
+      <StoreID-4>:
+        Price: 10
+        Expire-Time: expire milliseconds
+        Top-Bidder:
+          UUID: <UUID>
+          Name: <Name>
+          Bid: 10
+        Item:
+          <ItemStack>:
+    Expired:
+      <StoreID-5>:
+        Expire-Time: expire milliseconds
+        Item:
+          <ItemStack>:
+      <StoreID-6>:
+        Expire-Time: expire milliseconds
+        Item:
+          <ItemStack>:

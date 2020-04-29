@@ -1,4 +1,10 @@
 Settings:
+  Prefix: '&7[&4Crazy &bAuctions&7]: '
+  Timers:
+    Selling-Time: 2d
+    Bidding-Time: 2h
+    Expire-Time: 10d
+    Bidding-Winner-Time: 20d
   Categories:
     Armor:
       Display:
