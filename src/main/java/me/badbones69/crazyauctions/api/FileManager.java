@@ -472,7 +472,7 @@ public class FileManager {
             if (file != null) {
                 try {
                     file.save(new File(plugin.getDataFolder(), homeFolder + "/" + fileName));
-                    if (log) System.out.println(prefix + "Successfuly saved the " + fileName + ".");
+                    if (log) System.out.println(prefix + "Successfully saved the " + fileName + ".");
                     return true;
                 } catch (Exception e) {
                     System.out.println(prefix + "Could not save " + fileName + "!");
@@ -487,13 +487,13 @@ public class FileManager {
         
         /**
          * Overrides the loaded state file and loads the filesystems file.
-         * @return True if it reloaded correct and false if the file wasn't found or errored.
+         * @return True if it reloaded correct and false if the file wasn't found or error.
          */
         public boolean reloadFile() {
             if (file != null) {
                 try {
                     file = YamlConfiguration.loadConfiguration(new File(plugin.getDataFolder(), "/" + homeFolder + "/" + fileName));
-                    if (log) System.out.println(prefix + "Successfuly reload the " + fileName + ".");
+                    if (log) System.out.println(prefix + "Successfully reload the " + fileName + ".");
                     return true;
                 } catch (Exception e) {
                     System.out.println(prefix + "Could not reload the " + fileName + "!");
