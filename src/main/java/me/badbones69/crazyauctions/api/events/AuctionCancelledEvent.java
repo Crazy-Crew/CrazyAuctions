@@ -1,6 +1,9 @@
 package me.badbones69.crazyauctions.api.events;
 
 import me.badbones69.crazyauctions.api.enums.CancelledReason;
+import me.badbones69.crazyauctions.api.objects.items.BidItem;
+import me.badbones69.crazyauctions.api.objects.items.SellItem;
+import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -17,34 +20,21 @@ import org.bukkit.inventory.ItemStack;
 public class AuctionCancelledEvent extends Event {
     
     private static final HandlerList handlers = new HandlerList();
-    private OfflinePlayer offlinePlayer;
-    private Player onlinePlayer;
-    private boolean isOnline;
-    private ItemStack item;
+    private SellItem sellItem;
+    private BidItem bidItem;
     private CancelledReason reason;
+    private boolean isSell;
     
-    /**
-     *
-     * @param offlinePlayer The player who's item is cancelled.
-     * @param item The item that is cancelled.
-     */
-    public AuctionCancelledEvent(OfflinePlayer offlinePlayer, ItemStack item, CancelledReason reason) {
-        this.offlinePlayer = offlinePlayer;
-        this.item = item;
-        this.isOnline = false;
+    public AuctionCancelledEvent(SellItem sellItem, CancelledReason reason) {
+        this.sellItem = sellItem;
         this.reason = reason;
+        isSell = true;
     }
     
-    /**
-     *
-     * @param onlinePlayer The player who's item is cancelled.
-     * @param item The item that is cancelled.
-     */
-    public AuctionCancelledEvent(Player onlinePlayer, ItemStack item, CancelledReason reason) {
-        this.onlinePlayer = onlinePlayer;
-        this.item = item;
-        this.isOnline = true;
+    public AuctionCancelledEvent(BidItem bidItem, CancelledReason reason) {
+        this.bidItem = bidItem;
         this.reason = reason;
+        isSell = false;
     }
     
     public static HandlerList getHandlerList() {
@@ -55,20 +45,32 @@ public class AuctionCancelledEvent extends Event {
         return handlers;
     }
     
+    public SellItem getSellItem() {
+        return sellItem;
+    }
+    
+    public BidItem getBidItem() {
+        return bidItem;
+    }
+    
+    public boolean isSellItem() {
+        return isSell;
+    }
+    
     public OfflinePlayer getOfflinePlayer() {
-        return offlinePlayer;
+        return Bukkit.getOfflinePlayer(isSell ? sellItem.getOwnerUUID() : bidItem.getOwnerUUID());
     }
     
     public Player getOnlinePlayer() {
-        return onlinePlayer;
+        return Bukkit.getPlayer(isSell ? sellItem.getOwnerUUID() : bidItem.getOwnerUUID());
     }
     
     public boolean isOnline() {
-        return isOnline;
+        return getOfflinePlayer().isOnline();
     }
     
     public ItemStack getItem() {
-        return item;
+        return isSell ? sellItem.getItem() : bidItem.getItem();
     }
     
     public CancelledReason getReason() {

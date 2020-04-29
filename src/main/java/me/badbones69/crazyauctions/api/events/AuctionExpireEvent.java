@@ -1,5 +1,7 @@
 package me.badbones69.crazyauctions.api.events;
 
+import me.badbones69.crazyauctions.api.objects.items.ExpiredItem;
+import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -16,31 +18,10 @@ import org.bukkit.inventory.ItemStack;
 public class AuctionExpireEvent extends Event {
     
     private static final HandlerList handlers = new HandlerList();
-    private OfflinePlayer offlinePlayer;
-    private Player onlinePlayer;
-    private boolean isOnline;
-    private ItemStack item;
+    private ExpiredItem expiredItem;
     
-    /**
-     *
-     * @param offlinePlayer The player who's item is expiring.
-     * @param item The item that is expiring.
-     */
-    public AuctionExpireEvent(OfflinePlayer offlinePlayer, ItemStack item) {
-        this.offlinePlayer = offlinePlayer;
-        this.item = item;
-        this.isOnline = false;
-    }
-    
-    /**
-     *
-     * @param onlinePlayer The player who's item is expiring.
-     * @param item The item that is expiring.
-     */
-    public AuctionExpireEvent(Player onlinePlayer, ItemStack item) {
-        this.onlinePlayer = onlinePlayer;
-        this.item = item;
-        this.isOnline = true;
+    public AuctionExpireEvent(ExpiredItem expiredItem) {
+        this.expiredItem = expiredItem;
     }
     
     public static HandlerList getHandlerList() {
@@ -51,20 +32,24 @@ public class AuctionExpireEvent extends Event {
         return handlers;
     }
     
+    public ExpiredItem getExpiredItem() {
+        return expiredItem;
+    }
+    
     public OfflinePlayer getOfflinePlayer() {
-        return offlinePlayer;
+        return Bukkit.getOfflinePlayer(expiredItem.getOwnerUUID());
     }
     
     public Player getOnlinePlayer() {
-        return onlinePlayer;
+        return Bukkit.getPlayer(expiredItem.getOwnerUUID());
     }
     
     public boolean isOnline() {
-        return isOnline;
+        return getOfflinePlayer().isOnline();
     }
     
     public ItemStack getItem() {
-        return item;
+        return expiredItem.getItem();
     }
     
 }

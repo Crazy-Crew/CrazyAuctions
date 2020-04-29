@@ -1,5 +1,8 @@
 package me.badbones69.crazyauctions.api.events;
 
+import me.badbones69.crazyauctions.api.objects.TopBidder;
+import me.badbones69.crazyauctions.api.objects.items.BidItem;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
@@ -15,20 +18,12 @@ import org.bukkit.inventory.ItemStack;
 public class AuctionWinBidEvent extends Event {
     
     private static final HandlerList handlers = new HandlerList();
-    private Player player;
-    private long bid;
-    private ItemStack item;
+    private BidItem bidItem;
+    private TopBidder topBidder;
     
-    /**
-     *
-     * @param player
-     * @param item
-     * @param bid
-     */
-    public AuctionWinBidEvent(Player player, ItemStack item, long bid) {
-        this.player = player;
-        this.item = item;
-        this.bid = bid;
+    public AuctionWinBidEvent(BidItem bidItem) {
+        this.bidItem = bidItem;
+        topBidder = bidItem.getTopBidder();
     }
     
     public static HandlerList getHandlerList() {
@@ -39,16 +34,24 @@ public class AuctionWinBidEvent extends Event {
         return handlers;
     }
     
+    public BidItem getBidItem() {
+        return bidItem;
+    }
+    
+    public TopBidder getTopBidder() {
+        return topBidder;
+    }
+    
     public Player getPlayer() {
-        return player;
+        return Bukkit.getPlayer(topBidder.getOwnerUUID());
     }
     
     public ItemStack getItem() {
-        return item;
+        return bidItem.getItem();
     }
     
     public long getBid() {
-        return bid;
+        return topBidder.getBid();
     }
     
 }

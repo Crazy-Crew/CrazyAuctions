@@ -1,5 +1,6 @@
 package me.badbones69.crazyauctions.api.events;
 
+import me.badbones69.crazyauctions.api.objects.items.SellItem;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
@@ -15,20 +16,12 @@ import org.bukkit.inventory.ItemStack;
 public class AuctionBuyEvent extends Event {
     
     private static final HandlerList handlers = new HandlerList();
-    private Player player;
-    private long price;
-    private ItemStack item;
+    private Player buyer;
+    private SellItem sellItem;
     
-    /**
-     *
-     * @param player
-     * @param item
-     * @param price
-     */
-    public AuctionBuyEvent(Player player, ItemStack item, long price) {
-        this.player = player;
-        this.item = item;
-        this.price = price;
+    public AuctionBuyEvent(Player buyer, SellItem sellItem) {
+        this.buyer = buyer;
+        this.sellItem = sellItem;
     }
     
     public static HandlerList getHandlerList() {
@@ -39,16 +32,20 @@ public class AuctionBuyEvent extends Event {
         return handlers;
     }
     
+    public SellItem getSellItem() {
+        return sellItem;
+    }
+    
     public Player getPlayer() {
-        return player;
+        return buyer;
     }
     
     public ItemStack getItem() {
-        return item;
+        return sellItem.getItem();
     }
     
     public long getPrice() {
-        return price;
+        return sellItem.getPrice();
     }
     
 }
