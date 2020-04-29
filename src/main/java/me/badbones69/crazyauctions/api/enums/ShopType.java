@@ -2,7 +2,7 @@ package me.badbones69.crazyauctions.api.enums;
 
 public enum ShopType {
     
-    SELL("Sell"), BID("Bid");
+    SELL("sell"), BID("bid");
     
     private String name;
     

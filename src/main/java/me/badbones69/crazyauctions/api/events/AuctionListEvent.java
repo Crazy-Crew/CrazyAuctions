@@ -1,6 +1,6 @@
 package me.badbones69.crazyauctions.api.events;
 
-import me.badbones69.crazyauctions.api.ShopType;
+import me.badbones69.crazyauctions.api.enums.ShopType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
