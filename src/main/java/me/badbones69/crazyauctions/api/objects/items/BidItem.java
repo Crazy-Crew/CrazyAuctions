@@ -5,6 +5,7 @@ import me.badbones69.crazyauctions.api.objects.TopBidder;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.Calendar;
 import java.util.UUID;
 
 public class BidItem {
@@ -16,17 +17,11 @@ public class BidItem {
     private TopBidder topBidder;
     private long price;
     private long expireTime;
+    private Calendar expire;
     private boolean sold;
     
     public BidItem(Player owner, ItemStack item, long price) {
-        ownerUUID = owner.getUniqueId();
-        ownerName = owner.getName();
-        storeID = UUID.randomUUID();
-        topBidder = new TopBidder();
-        this.item = item;
-        this.price = price;
-        expireTime = TimeManager.BID_TIME.getTime().getTimeInMillis();
-        sold = false;
+        new BidItem(owner.getUniqueId(), owner.getName(), UUID.randomUUID(), new TopBidder(), item, price, TimeManager.BID_TIME.getTime().getTimeInMillis());
     }
     
     public BidItem(UUID ownerUUID, String ownerName, UUID storeID, TopBidder topBidder, ItemStack item, long price, long expireTime) {
@@ -37,6 +32,8 @@ public class BidItem {
         this.item = item;
         this.price = price;
         this.expireTime = expireTime;
+        expire = Calendar.getInstance();
+        expire.setTimeInMillis(expireTime);
         sold = false;
     }
     
@@ -66,6 +63,10 @@ public class BidItem {
     
     public long getExpireTime() {
         return expireTime;
+    }
+    
+    public boolean isExpired() {
+        return Calendar.getInstance().after(expire);
     }
     
     public void setSold(boolean sold) {

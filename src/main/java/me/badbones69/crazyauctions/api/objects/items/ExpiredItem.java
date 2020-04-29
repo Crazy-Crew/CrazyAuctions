@@ -3,6 +3,7 @@ package me.badbones69.crazyauctions.api.objects.items;
 import me.badbones69.crazyauctions.api.managers.TimeManager;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.Calendar;
 import java.util.UUID;
 
 public class ExpiredItem {
@@ -12,13 +13,18 @@ public class ExpiredItem {
     private UUID storeID;
     private ItemStack item;
     private long expireTime;
+    private Calendar expire;
+    
+    public ExpiredItem(SellItem sellItem) {
+        new ExpiredItem(sellItem.getOwnerUUID(), sellItem.getOwnerName(), sellItem.getStoreID(), sellItem.getItem());
+    }
+    
+    public ExpiredItem(BidItem bidItem) {
+        new ExpiredItem(bidItem.getOwnerUUID(), bidItem.getOwnerName(), bidItem.getStoreID(), bidItem.getItem());
+    }
     
     public ExpiredItem(UUID ownerUUID, String ownerName, UUID storeID, ItemStack item) {
-        this.ownerUUID = ownerUUID;
-        this.ownerName = ownerName;
-        this.storeID = storeID;
-        this.item = item;
-        expireTime = TimeManager.EXPIRE_TIME.getTime().getTimeInMillis();
+        new ExpiredItem(ownerUUID, ownerName, storeID, item, TimeManager.EXPIRE_TIME.getTime().getTimeInMillis());
     }
     
     public ExpiredItem(UUID ownerUUID, String ownerName, UUID storeID, ItemStack item, long expireTime) {
@@ -27,6 +33,8 @@ public class ExpiredItem {
         this.storeID = storeID;
         this.item = item;
         this.expireTime = expireTime;
+        expire = Calendar.getInstance();
+        expire.setTimeInMillis(expireTime);
     }
     
     public UUID getOwnerUUID() {
@@ -47,6 +55,10 @@ public class ExpiredItem {
     
     public long getExpireTime() {
         return expireTime;
+    }
+    
+    public boolean isExpired() {
+        return Calendar.getInstance().after(expire);
     }
     
 }
