@@ -1,5 +1,6 @@
-package me.badbones69.crazyauctions.api;
+package me.badbones69.crazyauctions.api.enums;
 
+import com.apple.eio.FileManager;
 import me.badbones69.crazyauctions.Methods;
 import me.badbones69.crazyauctions.api.FileManager.Files;
 import org.bukkit.configuration.file.FileConfiguration;

@@ -1,5 +1,6 @@
 package me.badbones69.crazyauctions.api;
 
+import me.badbones69.crazyauctions.api.enums.Version;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
@@ -10,6 +11,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 /**
  *
@@ -22,12 +26,13 @@ public class FileManager {
     private static FileManager instance = new FileManager();
     private Plugin plugin;
     private String prefix = "";
-    private Boolean log = false;
-    private HashMap<Files, File> files = new HashMap<>();
-    private ArrayList<String> homeFolders = new ArrayList<>();
-    private ArrayList<CustomFile> customFiles = new ArrayList<>();
-    private HashMap<String, String> autoGenerateFiles = new HashMap<>();
-    private HashMap<Files, FileConfiguration> configurations = new HashMap<>();
+    private boolean log = false;
+    private Map<Files, File> files = new HashMap<>();
+    private List<String> homeFolders = new ArrayList<>();
+    private List<CustomFile> customFiles = new ArrayList<>();
+    private Map<String, String> jarHomeFolders = new HashMap<>();
+    private Map<String, String> autoGenerateFiles = new HashMap<>();
+    private Map<Files, FileConfiguration> configurations = new HashMap<>();
     
     public static FileManager getInstance() {
         return instance;
@@ -45,26 +50,18 @@ public class FileManager {
         }
         files.clear();
         customFiles.clear();
+        configurations.clear();
         //Loads all the normal static files.
         for (Files file : Files.values()) {
             File newFile = new File(plugin.getDataFolder(), file.getFileLocation());
             if (log) System.out.println(prefix + "Loading the " + file.getFileName());
             if (!newFile.exists()) {
                 try {
-                    String fileLocation = file.getFileLocation();
-                    //Switch between 1.12.2- and 1.13+ config version.
-                    if (file == Files.CONFIG) {
-                        if (Version.getCurrentVersion().isOlder(Version.v1_13_R2)) {
-                            fileLocation = "config1.12.2-Down.yml";
-                        } else {
-                            fileLocation = "config1.13-Up.yml";
-                        }
-                    }
                     File serverFile = new File(plugin.getDataFolder(), "/" + file.getFileLocation());
-                    InputStream jarFile = getClass().getResourceAsStream("/" + fileLocation);
+                    InputStream jarFile = getClass().getResourceAsStream("/" + file.getFileJar());
                     copyFile(jarFile, serverFile);
                 } catch (Exception e) {
-                    if (log) System.out.println(prefix + "Failed to load " + file.getFileName());
+                    if (log) System.out.println(prefix + "Failed to load file: " + file.getFileName());
                     e.printStackTrace();
                     continue;
                 }
@@ -74,7 +71,7 @@ public class FileManager {
             if (log) System.out.println(prefix + "Successfully loaded " + file.getFileName());
         }
         //Starts to load all the custom files.
-        if (homeFolders.size() > 0) {
+        if (!homeFolders.isEmpty()) {
             if (log) System.out.println(prefix + "Loading custom files.");
             for (String homeFolder : homeFolders) {
                 File homeFile = new File(plugin.getDataFolder(), "/" + homeFolder);
@@ -95,19 +92,19 @@ public class FileManager {
                 } else {
                     homeFile.mkdir();
                     if (log) System.out.println(prefix + "The folder " + homeFolder + "/ was not found so it was created.");
-                    for (String fileName : autoGenerateFiles.keySet()) {
-                        if (autoGenerateFiles.get(fileName).equalsIgnoreCase(homeFolder)) {
-                            homeFolder = autoGenerateFiles.get(fileName);
+                    for (Entry<String, String> file : autoGenerateFiles.entrySet()) {
+                        if (file.getValue().equalsIgnoreCase(homeFolder)) {
+                            homeFolder = file.getValue();
                             try {
-                                File serverFile = new File(plugin.getDataFolder(), homeFolder + "/" + fileName);
-                                InputStream jarFile = getClass().getResourceAsStream(homeFolder + "/" + fileName);
+                                File serverFile = new File(plugin.getDataFolder(), homeFolder + "/" + file.getKey());
+                                InputStream jarFile = getClass().getResourceAsStream((jarHomeFolders.getOrDefault(file.getKey(), homeFolder)) + "/" + file.getKey());
                                 copyFile(jarFile, serverFile);
-                                if (fileName.toLowerCase().endsWith(".yml")) {
-                                    customFiles.add(new CustomFile(fileName, homeFolder, plugin));
+                                if (file.getKey().toLowerCase().endsWith(".yml")) {
+                                    customFiles.add(new CustomFile(file.getKey(), homeFolder, plugin));
                                 }
-                                if (log) System.out.println(prefix + "Created new default file: " + homeFolder + "/" + fileName + ".");
+                                if (log) System.out.println(prefix + "Created new default file: " + homeFolder + "/" + file.getKey() + ".");
                             } catch (Exception e) {
-                                if (log) System.out.println(prefix + "Failed to create new default file: " + homeFolder + "/" + fileName + "!");
+                                if (log) System.out.println(prefix + "Failed to create new default file: " + homeFolder + "/" + file.getKey() + "!");
                                 e.printStackTrace();
                             }
                         }
@@ -123,7 +120,7 @@ public class FileManager {
      * Turn on the logger system for the FileManager.
      * @param log True to turn it on and false for it to be off.
      */
-    public FileManager logInfo(Boolean log) {
+    public FileManager logInfo(boolean log) {
         this.log = log;
         return this;
     }
@@ -132,7 +129,7 @@ public class FileManager {
      * Check if the logger is logging in console.
      * @return True if it is and false if it isn't.
      */
-    public Boolean isLogging() {
+    public boolean isLogging() {
         return log;
     }
     
@@ -165,11 +162,24 @@ public class FileManager {
     }
     
     /**
+     * Register a file that needs to be generated when it's home folder doesn't exist. Make sure to have a "/" in front of the home folder's name.
+     * @param fileName The name of the file you want to auto-generate when the folder doesn't exist.
+     * @param homeFolder The folder that has custom files in it.
+     * @param jarHomeFolder The folder that the file is found in the jar.
+     */
+    public FileManager registerDefaultGenerateFiles(String fileName, String homeFolder, String jarHomeFolder) {
+        autoGenerateFiles.put(fileName, homeFolder);
+        jarHomeFolders.put(fileName, jarHomeFolder);
+        return this;
+    }
+    
+    /**
      * Unregister a file that doesn't need to be generated when it's home folder doesn't exist. Make sure to have a "/" in front of the home folder's name.
      * @param fileName The file that you want to remove from auto-generating.
      */
     public FileManager unregisterDefaultGenerateFiles(String fileName) {
         autoGenerateFiles.remove(fileName);
+        jarHomeFolders.remove(fileName);
         return this;
     }
     
@@ -217,7 +227,7 @@ public class FileManager {
         if (file != null) {
             try {
                 file.getFile().save(new File(plugin.getDataFolder(), file.getHomeFolder() + "/" + file.getFileName()));
-                if (log) System.out.println(prefix + "Successfuly saved the " + file.getFileName() + ".");
+                if (log) System.out.println(prefix + "Successfully saved the " + file.getFileName() + ".");
             } catch (Exception e) {
                 System.out.println(prefix + "Could not save " + file.getFileName() + "!");
                 e.printStackTrace();
@@ -232,7 +242,7 @@ public class FileManager {
      * @param file The custom file you are saving.
      * @return True if the file saved correct and false if there was an error.
      */
-    public Boolean saveFile(CustomFile file) {
+    public boolean saveFile(CustomFile file) {
         return file.saveFile();
     }
     
@@ -251,7 +261,7 @@ public class FileManager {
         if (file != null) {
             try {
                 file.file = YamlConfiguration.loadConfiguration(new File(plugin.getDataFolder(), "/" + file.getHomeFolder() + "/" + file.getFileName()));
-                if (log) System.out.println(prefix + "Successfuly reload the " + file.getFileName() + ".");
+                if (log) System.out.println(prefix + "Successfully reload the " + file.getFileName() + ".");
             } catch (Exception e) {
                 System.out.println(prefix + "Could not reload the " + file.getFileName() + "!");
                 e.printStackTrace();
@@ -265,7 +275,7 @@ public class FileManager {
      * Overrides the loaded state file and loads the filesystems file.
      * @return True if it reloaded correct and false if the file wasn't found.
      */
-    public Boolean reloadFile(CustomFile file) {
+    public boolean reloadFile(CustomFile file) {
         return file.reloadFile();
     }
     
@@ -273,38 +283,57 @@ public class FileManager {
      * Was found here: https://bukkit.org/threads/extracting-file-from-jar.16962
      */
     private void copyFile(InputStream in, File out) throws Exception {
-        try (FileOutputStream fos = new FileOutputStream(out)) {
+        try (InputStream fis = in; FileOutputStream fos = new FileOutputStream(out)) {
             byte[] buf = new byte[1024];
             int i;
-            while ((i = in.read(buf)) != -1) {
+            while ((i = fis.read(buf)) != -1) {
                 fos.write(buf, 0, i);
             }
-        } finally {
-            if (in != null) {
-                in.close();
-            }
-            
         }
     }
     
     public enum Files {
         
-        //ENUM_NAME("FileName.yml", "FilePath.yml"),
-        CONFIG("config.yml", "config.yml"),
+        //ENUM_NAME("fileName.yml", "fileLocation.yml"),
+        //ENUM_NAME("fileName.yml", "newFileLocation.yml", "oldFileLocation.yml"),
+        CONFIG("config.yml", "config.yml", "config1.13-Up.yml", "config1.12.2-Down.yml"),
         DATA("Data.yml", "Data.yml"),
         MESSAGES("Messages.yml", "Messages.yml");
         
         private String fileName;
+        private String fileJar;
         private String fileLocation;
         
         /**
          * The files that the server will try and load.
          * @param fileName The file name that will be in the plugin's folder.
-         * @param fileLocation The location the file is in while in the Jar.
+         * @param fileLocation The location the file in the plugin's folder.
          */
         private Files(String fileName, String fileLocation) {
+            this(fileName, fileLocation, fileLocation);
+        }
+        
+        /**
+         * The files that the server will try and load.
+         * @param fileName The file name that will be in the plugin's folder.
+         * @param fileLocation The location of the file will be in the plugin's folder.
+         * @param fileJar The location of the file in the jar.
+         */
+        private Files(String fileName, String fileLocation, String fileJar) {
             this.fileName = fileName;
             this.fileLocation = fileLocation;
+            this.fileJar = fileJar;
+        }
+        
+        /**
+         * The files that the server will try and load.
+         * @param fileName The file name that will be in the plugin's folder.
+         * @param fileLocation The location of the file will be in the plugin's folder.
+         * @param newFileJar The location of the 1.13+ file version in the jar.
+         * @param oldFileJar The location of the 1.12.2- file version in the jar.
+         */
+        private Files(String fileName, String fileLocation, String newFileJar, String oldFileJar) {
+            this(fileName, fileLocation, Version.isNewer(Version.v1_12_R1) ? newFileJar : oldFileJar);
         }
         
         /**
@@ -321,6 +350,14 @@ public class FileManager {
          */
         public String getFileLocation() {
             return fileLocation;
+        }
+        
+        /**
+         * Get the location of the file in the jar.
+         * @return The location of the file in the jar.
+         */
+        public String getFileJar() {
+            return fileJar;
         }
         
         /**
@@ -423,7 +460,7 @@ public class FileManager {
          * Check if the file actually exists in the file system.
          * @return True if it does and false if it doesn't.
          */
-        public Boolean exists() {
+        public boolean exists() {
             return file != null;
         }
         
@@ -431,7 +468,7 @@ public class FileManager {
          * Save the custom file.
          * @return True if it saved correct and false if something went wrong.
          */
-        public Boolean saveFile() {
+        public boolean saveFile() {
             if (file != null) {
                 try {
                     file.save(new File(plugin.getDataFolder(), homeFolder + "/" + fileName));
@@ -452,7 +489,7 @@ public class FileManager {
          * Overrides the loaded state file and loads the filesystems file.
          * @return True if it reloaded correct and false if the file wasn't found or errored.
          */
-        public Boolean reloadFile() {
+        public boolean reloadFile() {
             if (file != null) {
                 try {
                     file = YamlConfiguration.loadConfiguration(new File(plugin.getDataFolder(), "/" + homeFolder + "/" + fileName));

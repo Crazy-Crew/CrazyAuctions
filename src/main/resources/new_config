@@ -1,0 +1,11 @@
+Settings:
+  Categories:
+    Armor:
+      Display:
+        Slot: 1
+        Item: ''
+        Name: ''
+        Lore:
+          - ''
+      Items:
+        - ''
