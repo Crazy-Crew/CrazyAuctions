@@ -1,0 +1,161 @@
+Settings:
+  Categories:
+    Armor:
+      Display:
+        Slot: 11
+        Item: 'GOLDEN_CHESTPLATE'
+        Name: '&6&lArmor'
+        Lore:
+          - '&7This category contains all'
+          - '&7armor that is currently being sold.'
+      Items:
+        - 'LEATHER_HELMET'
+        - 'CHAINMAIL_HELMET'
+        - 'GOLDEN_HELMET'
+        - 'IRON_HELMET'
+        - 'DIAMOND_HELMET'
+        - 'LEATHER_CHESTPLATE'
+        - 'CHAINMAIL_CHESTPLATE'
+        - 'GOLDEN_CHESTPLATE'
+        - 'IRON_CHESTPLATE'
+        - 'DIAMOND_CHESTPLATE'
+        - 'LEATHER_LEGGINGS'
+        - 'CHAINMAIL_LEGGINGS'
+        - 'GOLDEN_LEGGINGS'
+        - 'IRON_LEGGINGS'
+        - 'DIAMOND_LEGGINGS'
+        - 'LEATHER_BOOTS'
+        - 'CHAINMAIL_BOOTS'
+        - 'GOLDEN_BOOTS'
+        - 'IRON_BOOTS'
+        - 'DIAMOND_BOOTS'
+    Weapons:
+      Display:
+        Slot: 12
+        Item: 'GOLDEN_SWORD'
+        Name: '&6&lWeapons'
+        Lore:
+          - '&7This category contains all'
+          - '&7weapons that are currently being sold.'
+      Items:
+        - 'WOODEN_SWORD'
+        - 'STONE_SWORD'
+        - 'IRON_SWORD'
+        - 'GOLDEN_SWORD'
+        - 'DIAMOND_SWORD'
+        - 'WOODEN_AXE'
+        - 'STONE_AXE'
+        - 'IRON_AXE'
+        - 'GOLDEN_AXE'
+        - 'DIAMOND_AXE'
+        - 'BOW'
+    Tools:
+      Display:
+        Slot: 13
+        Item: 'GOLDEN_PICKAXE'
+        Name: '&6&lTools'
+        Lore:
+          - '&7This category contains all'
+          - '&7tools that are currently being sold.'
+      Items:
+        - 'WOODEN_PICKAXE'
+        - 'STONE_PICKAXE'
+        - 'IRON_PICKAXE'
+        - 'GOLDEN_PICKAXE'
+        - 'DIAMOND_PICKAXE'
+        - 'WOODEN_AXE'
+        - 'STONE_AXE'
+        - 'IRON_AXE'
+        - 'GOLDEN_AXE'
+        - 'DIAMOND_AXE'
+        - 'WOODEN_SHOVEL'
+        - 'STONE_SHOVEL'
+        - 'IRON_SHOVEL'
+        - 'GOLDEN_SHOVEL'
+        - 'DIAMOND_SHOVEL'
+        - 'WOODEN_HOE'
+        - 'STONE_HOE'
+        - 'IRON_HOE'
+        - 'GOLDEN_HOE'
+        - 'DIAMOND_HOE'
+        - 'SHEARS'
+    Food:
+      Display:
+        Slot: 14
+        Item: 'GOLDEN_APPLE'
+        Name: '&6&lFood'
+        Lore:
+          - '&7This category contains all'
+          - '&7food that is currently being sold.'
+      Items:
+        - 'APPLE'
+        - 'BAKED_POTATO'
+        - 'BEEF'
+        - 'BEETROOT'
+        - 'BEETROOT_SOUP'
+        - 'BREAD'
+        - 'CARROT'
+        - 'CHICKEN'
+        - 'CHORUS_FRUIT'
+        - 'COD'
+        - 'COOKED_BEEF'
+        - 'COOKED_CHICKEN'
+        - 'COOKED_COD'
+        - 'COOKED_MUTTON'
+        - 'COOKED_PORKCHOP'
+        - 'COOKED_RABBIT'
+        - 'COOKED_SALMON'
+        - 'COOKIE'
+        - 'DRIED_KELP'
+        - 'ENCHANTED_GOLDEN_APPLE'
+        - 'GOLDEN_APPLE'
+        - 'GOLDEN_CARROT'
+        - 'HONEY_BOTTLE'
+        - 'MELON_SLICE'
+        - 'MUSHROOM_STEW'
+        - 'MUTTON'
+        - 'POISONOUS_POTATO'
+        - 'PORKCHOP'
+        - 'POTATO'
+        - 'PUFFERFISH'
+        - 'PUMPKIN_PIE'
+        - 'RABBIT'
+        - 'RABBIT_STEW'
+        - 'ROTTEN_FLESH'
+        - 'SALMON'
+        - 'SPIDER_EYE'
+        - 'SUSPICIOUS_STEW'
+        - 'SWEET_BERRIES'
+        - 'TROPICAL_FISH'
+    Potions:
+      Display:
+        Slot: 15
+        Item: 'POTION'
+        Name: '&6&lPotions'
+        Lore:
+          - '&7This category contains all'
+          - '&7potions that are currently being sold.'
+      Items:
+        - 'POTION'
+        - 'SPLASH_POTION'
+        - 'LINGERING_POTION'
+    Blocks:
+      Display:
+        Slot: 16
+        Item: 'GRASS_BLOCK'
+        Name: '&6&lBlocks'
+        Lore:
+          - '&7This category contains all'
+          - '&7blocks that are currently being sold.'
+      Items:
+        - ''
+    Other:
+      Display:
+        Slot: 17
+        Item: 'GOLD_NUGGET'
+        Name: '&6&lOthers'
+        Lore:
+          - '&7This category contains all the'
+          - '&7other items currently being sold.'
+      Items:
+        - ''
