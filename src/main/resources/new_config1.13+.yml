@@ -5,6 +5,184 @@ Settings:
     Bidding-Time: 2h
     Expire-Time: 10d
     Bidding-Winner-Time: 20d
+  Buttons:
+    Current-Items:
+      Enabled: true
+      Slot: 46
+      Item: 'DIAMOND'
+      Name: '&6Items You are Selling'
+      Lore:
+        - '&aClick here to view all the items you'
+        - '&aare currently selling on the auction.'
+    Expired-Items:
+      Enabled: true
+      Slot: 47
+      Item: 'POISONOUS_POTATO'
+      Name: '&6Collect Expired / Canceled Items'
+      Lore:
+        - '&aClick here to view and collect all of the'
+        - '&aitems you have canceled or has expired.'
+    Next-Page:
+      Enabled: true
+      Slot: 51
+      Item: 'PAPER'
+      Name: '&6Next Page'
+      Lore: {}
+    Refresh:
+      Enabled: true
+      Slot: 50
+      Item: 'SUNFLOWER'
+      Name: '&6Refresh Page'
+      Lore: {}
+    Previous-Page:
+      Enabled: true
+      Slot: 49
+      Item: 'PAPER'
+      Name: '&6Previous Page'
+      Lore: {}
+    Category-1:
+      Enabled: true
+      Slot: 48
+      Item: 'CHEST'
+      Name: '&6Categories'
+      Lore:
+        - '&bCurrent Category: &6%category%'
+        - '&aWant to see items in specific categories?'
+        - '&aClick here to see all categories of items.'
+    Category-2:
+      Enabled: true
+      Slot: 52
+      Item: 'CHEST'
+      Name: '&6Categories'
+      Lore:
+        - '&bCurrent Category: &6%category%'
+        - '&aWant to see items in specific categories?'
+        - '&aClick here to see all categories of items.'
+    Back-Button:
+      Enabled: true
+      Slot: 46
+      Item: 'PAPER'
+      Name: '&6Back'
+      Lore: {}
+    Return-All-Button:
+      Enabled: true
+      Slot: 50
+      Item: 'FLOWER_POT'
+      Name: '&6Return All'
+      Lore:
+        - '&aClick here to return all cancelled'
+        - '&aand expired items to your inventory.'
+    Confirm:
+      Enabled: true
+      Item: 'LIME_STAINED_GLASS_PANE'
+      Name: '&aConfirm'
+      Lore: {}
+    Cancel:
+      Enabled: true
+      Item: 'RED_STAINED_GLASS_PANE'
+      Name: '&cCancel'
+      Lore: {}
+    Your-Item:
+      Enabled: true
+      Item: 'BARRIER'
+      Name: '&cYou can''t purchase your own item!'
+      Lore: {}
+    Cant-Afford:
+      Enabled: true
+      Item: 'BARRIER'
+      Name: '&cYou can''t afford this item!'
+      Lore: {}
+    Top-Bidder:
+      Enabled: true
+      Item: 'BARRIER'
+      Name: '&cYou are already the top bidder.'
+      Lore: {}
+    Bidding-Explain:
+      Enabled: true
+      Item: 'BLACK_STAINED_GLASS_PANE'
+      Name: '&7How bidding works'
+      Lore:
+        - '&7<--&aAdd &cRemove&7-->'
+        - '&9Your Current Bid: &e$%Bid%'
+        - '&9Current Top Bid: &e$%topbid%'
+    Bid-Confirm:
+      Enabled: true
+      Item: 'LIGHT_BLUE_STAINED_GLASS_PANE'
+      Name: '&bConfirm Bid'
+      Lore:
+        - '&7Click here to confirm your bid.'
+    What-Is-This:
+      Selling:
+        Enabled: true
+        Slot: 54
+        Item: 'BOOK'
+        Name: '&6What Is This Page?'
+        Lore:
+          - '&aThis is the crazy auctions, here you can'
+          - '&aput items for sale, and buy items'
+          - '&athat others have put for sale.'
+          - ''
+          - '&aThe auction is also a great place to make'
+          - '&amoney by selling items that others'
+          - '&amay be interested in buying.'
+      Bidding:
+        Enabled: true
+        Slot: 54
+        Item: 'BOOK'
+        Name: '&6What Is This Page?'
+        Lore:
+          - '&aThis is the crazy auctions, here you can'
+          - '&aput items for sale, and bid on items'
+          - '&athat others have put for sale.'
+          - ''
+          - '&aThe bidding auction is also a great place to'
+          - '&amake money by bidding off items that others'
+          - '&amay be interested in bidding on.'
+      Current-Items:
+        Enabled: true
+        Slot: 54
+        Item: 'BOOK'
+        Name: '&6What Is This Page?'
+        Lore:
+          - '&aThese are your current listings, all of'
+          - '&athe items you currently have listed on'
+          - '&acrazy auctions are displayed here.'
+          - ''
+          - '&aYou can cancel and view your listings'
+          - '&aexpire time here.'
+      Expired-Items:
+        Enabled: true
+        Slot: 54
+        Item: 'BOOK'
+        Name: '&6What Is This Page?'
+        Lore:
+          - '&aThis page houses all of your cancelled and'
+          - '&aexpired items, when a listings is cancelled'
+          - '&aor expires you will be able to return that'
+          - '&aitem back to you from this menu.'
+          - ''
+          - '&aJust click on the item and if you have enough'
+          - '&ainventory space you will receive that item.'
+      Viewing:
+        Enabled: true
+        Slot: 50
+        Item: 'BOOK'
+        Name: '&6What Is This Page?'
+        Lore:
+          - '&aThis page shows all the items that'
+          - '&aa player has currently on the bidding'
+          - '&aand selling market. You can quickly see'
+          - '&awhat a specific player is selling.'
+      Categories:
+        Enabled: true
+        Slot: 54
+        Item: 'BOOK'
+        Name: '&6What Is This Page?'
+        Lore:
+          - '&aThis page shows all the categories'
+          - '&athat you can choose from. When you click'
+          - '&aa category it will open the gui with only'
+          - '&aitems that belong to that category.'
   Categories:
     Armor:
       Display:
