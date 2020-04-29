@@ -7,8 +7,11 @@ import me.badbones69.crazyauctions.api.managers.MenuManager;
 import me.badbones69.crazyauctions.api.managers.TimeManager;
 import me.badbones69.crazyauctions.api.objects.Button;
 import me.badbones69.crazyauctions.api.objects.Category;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +20,7 @@ public class CrazyAuctions {
     
     private static CrazyAuctions instance = new CrazyAuctions();
     private String prefix;
+    private Plugin plugin;
     private List<Category> categories = new ArrayList<>();
     private AuctionManager auctionManager = AuctionManager.getInstance();
     private MenuManager menuManager = MenuManager.getInstance();
@@ -26,6 +30,7 @@ public class CrazyAuctions {
     }
     
     public void load() {
+        plugin = Bukkit.getServer().getPluginManager().getPlugin("CrazyAuctions");
         categories.clear();
         FileConfiguration config = Files.CONFIG.getFile();
         prefix = config.getString("Settings.Prefix");
@@ -43,6 +48,19 @@ public class CrazyAuctions {
         System.out.println("[CrazyAuctions] Selling Items: " + auctionManager.getSellingItems().size());
         System.out.println("[CrazyAuctions] Bidding Items: " + auctionManager.getBiddingItems().size());
         System.out.println("[CrazyAuctions] Expired Items: " + auctionManager.getExpiredItems().size());
+    }
+    
+    public void saveAuctionHouse() {
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                auctionManager.saveAuctionHouse();
+            }
+        }.runTaskAsynchronously(plugin);
+    }
+    
+    public Plugin getPlugin() {
+        return plugin;
     }
     
     public String getPrefix() {
