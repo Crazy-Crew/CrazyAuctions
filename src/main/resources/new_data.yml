@@ -5,17 +5,23 @@ Users:
       <StoreID-1>:
         Price: 10
         Expire-Time: expire milliseconds
+        World: <World>
+        World-Group: <World-Group-ID>
         Item:
           <ItemStack>:
       <StoreID-2>:
         Price: 10
         Expire-Time: expire milliseconds
+        World: <World>
+        World-Group: <World-Group-ID>
         Item:
           <ItemStack>:
     Bidding:
       <StoreID-3>:
         Price: 10
         Expire-Time: expire milliseconds
+        World: <World>
+        World-Group: <World-Group-ID>
         Top-Bidder:
           UUID: <UUID>
           Name: <Name>
@@ -25,6 +31,8 @@ Users:
       <StoreID-4>:
         Price: 10
         Expire-Time: expire milliseconds
+        World: <World>
+        World-Group: <World-Group-ID>
         Top-Bidder:
           UUID: <UUID>
           Name: <Name>

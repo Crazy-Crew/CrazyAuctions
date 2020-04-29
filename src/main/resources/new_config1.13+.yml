@@ -5,6 +5,19 @@ Settings:
     Bidding-Time: 2h
     Expire-Time: 10d
     Bidding-Winner-Time: 20d
+  Multi-World:
+    Enabled: true
+    Per-World: true #If set to false it will use world groups.
+    World-Groups: #Groups of worlds that have their CA's connected. If none are found it will auto set to Per-World.
+      1:
+        - 'Survival_1'
+        - 'Survival_2'
+      2:
+        - 'OP_Prison_1'
+        - 'OP_Prison_2'
+      3:
+        - 'Sky_Block_1'
+        - 'Sky_Block_2'
   Buttons:
     Current-Items:
       Enabled: true

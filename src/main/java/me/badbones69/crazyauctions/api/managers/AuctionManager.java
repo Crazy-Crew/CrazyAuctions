@@ -1,6 +1,7 @@
 package me.badbones69.crazyauctions.api.managers;
 
 import me.badbones69.crazyauctions.api.FileManager.Files;
+import me.badbones69.crazyauctions.api.multiworld.MultiWorldManager;
 import me.badbones69.crazyauctions.api.objects.TopBidder;
 import me.badbones69.crazyauctions.api.objects.UserItems;
 import me.badbones69.crazyauctions.api.objects.items.BidItem;
@@ -16,6 +17,7 @@ import java.util.UUID;
 public class AuctionManager {
     
     private static AuctionManager instance = new AuctionManager();
+    private MultiWorldManager multiWorldManager = MultiWorldManager.getInstance();
     private boolean isSaving = false;
     private List<SellItem> sellingItems = new ArrayList<>();
     private List<BidItem> biddingItems = new ArrayList<>();
@@ -54,6 +56,13 @@ public class AuctionManager {
                         String itemPath = path + "Selling." + sellItem.getStoreID() + ".";
                         data.set(itemPath + "Price", sellItem.getPrice());
                         data.set(itemPath + "Expire-Time", sellItem.getExpireTime());
+                        if (sellItem.isMultiWorld()) {
+                            if (sellItem.isPerWorld()) {
+                                data.set(itemPath + "World", sellItem.getWorld());
+                            } else {
+                                data.set(itemPath + "World-Group", sellItem.getWorldGroup().getID());
+                            }
+                        }
                         data.set(itemPath + "Item", sellItem.getItem());
                     } else {
                         String itemPath = path + "Expired." + sellItem.getStoreID() + ".";
@@ -70,6 +79,13 @@ public class AuctionManager {
                         String itemPath = path + "Bidding." + bidItem.getStoreID() + ".";
                         data.set(itemPath + "Price", bidItem.getPrice());
                         data.set(itemPath + "Expire-Time", bidItem.getExpireTime());
+                        if (bidItem.isMultiWorld()) {
+                            if (bidItem.isPerWorld()) {
+                                data.set(itemPath + "World", bidItem.getWorld());
+                            } else {
+                                data.set(itemPath + "World-Group", bidItem.getWorldGroup().getID());
+                            }
+                        }
                         data.set(itemPath + "Top-Bidder.UUID", topBidder.getOwnerUUID());
                         data.set(itemPath + "Top-Bidder.Name", topBidder.getOwnerName());
                         data.set(itemPath + "Top-Bidder.Bid", topBidder.getBid());
@@ -146,7 +162,9 @@ public class AuctionManager {
                     items.addSellItem(new SellItem(uuid, name, UUID.fromString(storeID),
                     data.getItemStack(itemPath + "Item"),
                     data.getLong(itemPath + "Price"),
-                    data.getLong(itemPath + "Expire-Time")));
+                    data.getLong(itemPath + "Expire-Time"),
+                    data.getString(path + "World", ""),
+                    multiWorldManager.getWorldGroup(data.getString(path + "World-Group"))));
                 }
             }
         }
@@ -162,7 +180,9 @@ public class AuctionManager {
                     new TopBidder(UUID.fromString(data.getString(itemPath + "Top-Bidder.UUID")), data.getString(itemPath + "Top-Bidder.Name"), data.getInt(itemPath + "Top-Bidder.Bid")),
                     data.getItemStack(itemPath + "Item"),
                     data.getLong(itemPath + "Price"),
-                    data.getLong(itemPath + "Expire-Time")));
+                    data.getLong(itemPath + "Expire-Time"),
+                    data.getString(path + "World", ""),
+                    multiWorldManager.getWorldGroup(data.getString(path + "World-Group"))));
                 }
             }
         }

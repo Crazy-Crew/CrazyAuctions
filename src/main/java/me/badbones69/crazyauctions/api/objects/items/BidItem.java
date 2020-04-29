@@ -1,6 +1,7 @@
 package me.badbones69.crazyauctions.api.objects.items;
 
 import me.badbones69.crazyauctions.api.managers.TimeManager;
+import me.badbones69.crazyauctions.api.multiworld.WorldGroup;
 import me.badbones69.crazyauctions.api.objects.TopBidder;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -18,13 +19,23 @@ public class BidItem {
     private long price;
     private long expireTime;
     private Calendar expire;
+    private String world;
+    private WorldGroup worldGroup;
     private boolean sold;
     
     public BidItem(Player owner, ItemStack item, long price) {
-        new BidItem(owner.getUniqueId(), owner.getName(), UUID.randomUUID(), new TopBidder(), item, price, TimeManager.BID_TIME.getTime().getTimeInMillis());
+        new BidItem(owner, item, price, "", null);
+    }
+    
+    public BidItem(Player owner, ItemStack item, long price, String world, WorldGroup worldGroup) {
+        new BidItem(owner.getUniqueId(), owner.getName(), UUID.randomUUID(), new TopBidder(), item, price, TimeManager.BID_TIME.getTime().getTimeInMillis(), world, worldGroup);
     }
     
     public BidItem(UUID ownerUUID, String ownerName, UUID storeID, TopBidder topBidder, ItemStack item, long price, long expireTime) {
+        new BidItem(ownerUUID, ownerName, storeID, topBidder, item, price, expireTime, "", null);
+    }
+    
+    public BidItem(UUID ownerUUID, String ownerName, UUID storeID, TopBidder topBidder, ItemStack item, long price, long expireTime, String world, WorldGroup worldGroup) {
         this.ownerUUID = ownerUUID;
         this.ownerName = ownerName;
         this.storeID = storeID;
@@ -34,6 +45,8 @@ public class BidItem {
         this.expireTime = expireTime;
         expire = Calendar.getInstance();
         expire.setTimeInMillis(expireTime);
+        this.world = world != null ? world : "";
+        this.worldGroup = worldGroup;
         sold = false;
     }
     
@@ -67,6 +80,22 @@ public class BidItem {
     
     public boolean isExpired() {
         return Calendar.getInstance().after(expire);
+    }
+    
+    public String getWorld() {
+        return world;
+    }
+    
+    public WorldGroup getWorldGroup() {
+        return worldGroup;
+    }
+    
+    public boolean isPerWorld() {
+        return !world.isEmpty();
+    }
+    
+    public boolean isMultiWorld() {
+        return !world.isEmpty() || worldGroup != null;
     }
     
     public void setSold(boolean sold) {
