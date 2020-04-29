@@ -33,7 +33,7 @@ public class CrazyAuctions {
         plugin = Bukkit.getServer().getPluginManager().getPlugin("CrazyAuctions");
         categories.clear();
         FileConfiguration config = Files.CONFIG.getFile();
-        prefix = config.getString("Settings.Prefix");
+        prefix = color(config.getString("Settings.Prefix"));
         config.getConfigurationSection("Settings.Categories").getKeys(false).forEach(category -> categories.add(new Category(category)));
         //Load Managers
         TimeManager.load();
