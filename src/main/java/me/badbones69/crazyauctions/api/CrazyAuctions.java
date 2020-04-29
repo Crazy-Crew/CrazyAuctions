@@ -1,6 +1,7 @@
 package me.badbones69.crazyauctions.api;
 
 import me.badbones69.crazyauctions.api.FileManager.Files;
+import me.badbones69.crazyauctions.api.managers.AuctionManager;
 import me.badbones69.crazyauctions.api.managers.TimeManager;
 import me.badbones69.crazyauctions.api.objects.Category;
 import org.bukkit.ChatColor;
@@ -14,6 +15,7 @@ public class CrazyAuctions {
     private static CrazyAuctions instance = new CrazyAuctions();
     private String prefix;
     private List<Category> categories = new ArrayList<>();
+    private AuctionManager auctionManager = AuctionManager.getInstance();
     
     public static CrazyAuctions getInstance() {
         return instance;
@@ -26,6 +28,11 @@ public class CrazyAuctions {
         config.getConfigurationSection("Settings.Categories").getKeys(false).forEach(category -> categories.add(new Category(category)));
         //Load Managers
         TimeManager.load();
+        auctionManager.loadAuctionHouse();
+        System.out.println("[CrazyAuctions] Loaded Auctions Items!");
+        System.out.println("[CrazyAuctions] Selling Items: " + auctionManager.getSellingItems().size());
+        System.out.println("[CrazyAuctions] Bidding Items: " + auctionManager.getBiddingItems().size());
+        System.out.println("[CrazyAuctions] Expired Items: " + auctionManager.getExpiredItems().size());
     }
     
     public String getPrefix() {

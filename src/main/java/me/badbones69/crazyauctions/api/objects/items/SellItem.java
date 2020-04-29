@@ -1,4 +1,4 @@
-package me.badbones69.crazyauctions.api.objects;
+package me.badbones69.crazyauctions.api.objects.items;
 
 import me.badbones69.crazyauctions.api.managers.TimeManager;
 import org.bukkit.entity.Player;
@@ -14,6 +14,7 @@ public class SellItem {
     private ItemStack item;
     private long price;
     private long expireTime;
+    private boolean sold;
     
     public SellItem(Player owner, ItemStack item, long price) {
         ownerUUID = owner.getUniqueId();
@@ -22,6 +23,7 @@ public class SellItem {
         this.item = item;
         this.price = price;
         expireTime = TimeManager.SELL_TIME.getTime().getTimeInMillis();
+        sold = false;
     }
     
     public SellItem(UUID ownerUUID, String ownerName, UUID storeID, ItemStack item, long price, long expireTime) {
@@ -31,6 +33,7 @@ public class SellItem {
         this.item = item;
         this.price = price;
         this.expireTime = expireTime;
+        sold = false;
     }
     
     public UUID getOwnerUUID() {
@@ -55,6 +58,14 @@ public class SellItem {
     
     public long getExpireTime() {
         return expireTime;
+    }
+    
+    public void setSold(boolean sold) {
+        this.sold = sold;
+    }
+    
+    public boolean isSold() {
+        return sold;
     }
     
 }
