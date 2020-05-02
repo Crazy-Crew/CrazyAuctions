@@ -5,6 +5,7 @@ import me.badbones69.crazyauctions.api.enums.MenuButtons;
 import me.badbones69.crazyauctions.api.managers.AuctionManager;
 import me.badbones69.crazyauctions.api.managers.MenuManager;
 import me.badbones69.crazyauctions.api.managers.TimeManager;
+import me.badbones69.crazyauctions.api.multiworld.MultiWorldManager;
 import me.badbones69.crazyauctions.api.objects.Button;
 import me.badbones69.crazyauctions.api.objects.Category;
 import org.bukkit.Bukkit;
@@ -23,6 +24,7 @@ public class CrazyAuctions {
     private Plugin plugin;
     private List<Category> categories = new ArrayList<>();
     private AuctionManager auctionManager = AuctionManager.getInstance();
+    private MultiWorldManager multiWorldManager = MultiWorldManager.getInstance();
     private MenuManager menuManager = MenuManager.getInstance();
     
     public static CrazyAuctions getInstance() {
@@ -43,7 +45,12 @@ public class CrazyAuctions {
             Button button = menuManager.getButton(menuButton);
             System.out.println("[CrazyAuctions] " + menuButton.name() + " Slot:" + button.getSlot() + " Enabled: " + button.isEnabled() + " Item Type:" + button.getItem().getMaterial());
         }
-        auctionManager.loadAuctionHouse();
+        multiWorldManager.load();
+        System.out.println("[CrazyAuctions] Loaded Multi-World Manager!");
+        System.out.println("[CrazyAuctions] Is Enabled: " + multiWorldManager.isEnabled());
+        System.out.println("[CrazyAuctions] Is Per-World: " + multiWorldManager.isPerWorld());
+        System.out.println("[CrazyAuctions] World Groups: " + multiWorldManager.getWorldGroups().size());
+        auctionManager.load();
         System.out.println("[CrazyAuctions] Loaded Auctions Items!");
         System.out.println("[CrazyAuctions] Selling Items: " + auctionManager.getSellingItems().size());
         System.out.println("[CrazyAuctions] Bidding Items: " + auctionManager.getBiddingItems().size());

@@ -9,8 +9,8 @@ Settings:
     Enabled: true
     Per-World: true #If set to false it will use world groups.
     World-Groups: #Groups of worlds that have their CA's connected. If none are found it will auto set to Per-World.
-      1:
-        - 'Survival_1'
+      1: #Group ID
+        - 'Survival_1' #List of worlds in the group.
         - 'Survival_2'
       2:
         - 'OP_Prison_1'

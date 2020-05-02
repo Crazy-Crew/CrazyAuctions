@@ -1,8 +1,7 @@
 package me.badbones69.crazyauctions.api.events;
 
 import me.badbones69.crazyauctions.api.enums.ShopType;
-import me.badbones69.crazyauctions.api.objects.items.BidItem;
-import me.badbones69.crazyauctions.api.objects.items.SellItem;
+import me.badbones69.crazyauctions.api.interfaces.AuctionItem;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -19,21 +18,12 @@ import org.bukkit.inventory.ItemStack;
 public class AuctionListEvent extends Event {
     
     private static final HandlerList handlers = new HandlerList();
-    private SellItem sellItem;
-    private BidItem bidItem;
+    private AuctionItem auctionItem;
     private ShopType shop;
-    private boolean isSell;
     
-    public AuctionListEvent(SellItem sellItem) {
-        this.sellItem = sellItem;
+    public AuctionListEvent(AuctionItem auctionItem) {
+        this.auctionItem = auctionItem;
         this.shop = ShopType.SELL;
-        isSell = true;
-    }
-    
-    public AuctionListEvent(BidItem bidItem) {
-        this.bidItem = bidItem;
-        this.shop = ShopType.BID;
-        isSell = false;
     }
     
     public static HandlerList getHandlerList() {
@@ -44,16 +34,12 @@ public class AuctionListEvent extends Event {
         return handlers;
     }
     
-    public SellItem getSellItem() {
-        return sellItem;
-    }
-    
-    public BidItem getBidItem() {
-        return bidItem;
+    public AuctionItem getAuctionItem() {
+        return auctionItem;
     }
     
     public Player getPlayer() {
-        return Bukkit.getPlayer(isSell ? sellItem.getOwnerUUID() : bidItem.getOwnerUUID());
+        return Bukkit.getPlayer(auctionItem.getOwnerUUID());
     }
     
     public ShopType getShopType() {
@@ -61,11 +47,11 @@ public class AuctionListEvent extends Event {
     }
     
     public ItemStack getItem() {
-        return isSell ? sellItem.getItem() : bidItem.getItem();
+        return auctionItem.getItem();
     }
     
     public long getPrice() {
-        return isSell ? sellItem.getPrice() : bidItem.getPrice();
+        return auctionItem.getPrice();
     }
     
 }

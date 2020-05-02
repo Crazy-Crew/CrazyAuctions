@@ -1,8 +1,6 @@
-package me.badbones69.crazyauctions.api.objects;
+package me.badbones69.crazyauctions.api.objects.items;
 
-import me.badbones69.crazyauctions.api.objects.items.BidItem;
-import me.badbones69.crazyauctions.api.objects.items.ExpiredItem;
-import me.badbones69.crazyauctions.api.objects.items.SellItem;
+import me.badbones69.crazyauctions.api.interfaces.AuctionItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,11 +15,7 @@ public class UserItems {
     private List<ExpiredItem> expiredItems;
     
     public UserItems(UUID ownerUUID, String name) {
-        this.ownerUUID = ownerUUID;
-        this.name = name;
-        sellingItems = new ArrayList<>();
-        biddingItems = new ArrayList<>();
-        expiredItems = new ArrayList<>();
+        new UserItems(ownerUUID, name, new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
     }
     
     public UserItems(UUID ownerUUID, String name, List<SellItem> sellingItems, List<BidItem> biddingItems, List<ExpiredItem> expiredItems) {
@@ -40,24 +34,32 @@ public class UserItems {
         return name;
     }
     
-    public void addSellItem(SellItem item) {
-        sellingItems.add(item);
+    public void addAuctionItem(AuctionItem auctionItem) {
+        if (auctionItem instanceof SellItem) {
+            sellingItems.add((SellItem) auctionItem);
+        } else if (auctionItem instanceof BidItem) {
+            biddingItems.add((BidItem) auctionItem);
+        } else {
+            expiredItems.add((ExpiredItem) auctionItem);
+        }
+    }
+    
+    public void removeAuctionItem(AuctionItem auctionItem) {
+        if (auctionItem instanceof SellItem) {
+            sellingItems.remove(auctionItem);
+        } else if (auctionItem instanceof BidItem) {
+            biddingItems.remove(auctionItem);
+        } else {
+            expiredItems.remove(auctionItem);
+        }
     }
     
     public List<SellItem> getSellingItems() {
         return sellingItems;
     }
     
-    public void addBiddingItem(BidItem item) {
-        biddingItems.add(item);
-    }
-    
     public List<BidItem> getBiddingItems() {
         return biddingItems;
-    }
-    
-    public void addExpiredItem(ExpiredItem item) {
-        expiredItems.add(item);
     }
     
     public List<ExpiredItem> getExpiredItems() {

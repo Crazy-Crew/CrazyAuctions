@@ -1,12 +1,15 @@
 package me.badbones69.crazyauctions.api.objects.items;
 
+import me.badbones69.crazyauctions.api.interfaces.AuctionItem;
 import me.badbones69.crazyauctions.api.managers.TimeManager;
+import me.badbones69.crazyauctions.api.multiworld.PerWorld;
+import me.badbones69.crazyauctions.api.multiworld.WorldGroup;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Calendar;
 import java.util.UUID;
 
-public class ExpiredItem {
+public class ExpiredItem implements AuctionItem {
     
     private UUID ownerUUID;
     private String ownerName;
@@ -53,12 +56,47 @@ public class ExpiredItem {
         return item;
     }
     
+    @Override
+    public long getPrice() {
+        return 0;
+    }
+    
     public long getExpireTime() {
         return expireTime;
     }
     
     public boolean isExpired() {
         return Calendar.getInstance().after(expire);
+    }
+    
+    @Override
+    public PerWorld getPerWorld() {
+        return null;
+    }
+    
+    @Override
+    public WorldGroup getWorldGroup() {
+        return null;
+    }
+    
+    @Override
+    public boolean isPerWorld() {
+        return false;
+    }
+    
+    @Override
+    public boolean isMultiWorld() {
+        return false;
+    }
+    
+    @Override
+    public void setSold(boolean sold) {
+        //Empty
+    }
+    
+    @Override
+    public boolean isSold() {
+        return false;
     }
     
 }

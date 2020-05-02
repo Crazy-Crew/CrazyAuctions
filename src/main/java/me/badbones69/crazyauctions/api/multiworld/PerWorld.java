@@ -1,27 +1,27 @@
 package me.badbones69.crazyauctions.api.multiworld;
 
 import me.badbones69.crazyauctions.api.interfaces.AuctionItem;
+import org.bukkit.Bukkit;
+import org.bukkit.World;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class WorldGroup {
+public class PerWorld {
     
-    private String id;
-    private List<String> worlds = new ArrayList<>();
+    private String worldName;
     private List<AuctionItem> auctionItems = new ArrayList<>();
     
-    public WorldGroup(String id, List<String> worlds) {
-        this.id = id;
-        this.worlds.addAll(worlds);
+    public PerWorld(String worldName) {
+        this.worldName = worldName;
     }
     
-    public String getID() {
-        return id;
+    public World getWorld() {
+        return Bukkit.getWorld(worldName);
     }
     
-    public List<String> getWorlds() {
-        return worlds;
+    public String getWorldName() {
+        return worldName;
     }
     
     public void addAuctionItem(AuctionItem auctionItem) {

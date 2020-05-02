@@ -1,6 +1,8 @@
 package me.badbones69.crazyauctions.api.objects.items;
 
+import me.badbones69.crazyauctions.api.interfaces.AuctionItem;
 import me.badbones69.crazyauctions.api.managers.TimeManager;
+import me.badbones69.crazyauctions.api.multiworld.PerWorld;
 import me.badbones69.crazyauctions.api.multiworld.WorldGroup;
 import me.badbones69.crazyauctions.api.objects.TopBidder;
 import org.bukkit.entity.Player;
@@ -9,7 +11,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.Calendar;
 import java.util.UUID;
 
-public class BidItem {
+public class BidItem implements AuctionItem {
     
     private UUID ownerUUID;
     private String ownerName;
@@ -19,23 +21,23 @@ public class BidItem {
     private long price;
     private long expireTime;
     private Calendar expire;
-    private String world;
+    private PerWorld perWorld;
     private WorldGroup worldGroup;
     private boolean sold;
     
     public BidItem(Player owner, ItemStack item, long price) {
-        new BidItem(owner, item, price, "", null);
+        new BidItem(owner, item, price, null, null);
     }
     
-    public BidItem(Player owner, ItemStack item, long price, String world, WorldGroup worldGroup) {
-        new BidItem(owner.getUniqueId(), owner.getName(), UUID.randomUUID(), new TopBidder(), item, price, TimeManager.BID_TIME.getTime().getTimeInMillis(), world, worldGroup);
+    public BidItem(Player owner, ItemStack item, long price, PerWorld perWorld, WorldGroup worldGroup) {
+        new BidItem(owner.getUniqueId(), owner.getName(), UUID.randomUUID(), new TopBidder(), item, price, TimeManager.BID_TIME.getTime().getTimeInMillis(), perWorld, worldGroup);
     }
     
     public BidItem(UUID ownerUUID, String ownerName, UUID storeID, TopBidder topBidder, ItemStack item, long price, long expireTime) {
-        new BidItem(ownerUUID, ownerName, storeID, topBidder, item, price, expireTime, "", null);
+        new BidItem(ownerUUID, ownerName, storeID, topBidder, item, price, expireTime, null, null);
     }
     
-    public BidItem(UUID ownerUUID, String ownerName, UUID storeID, TopBidder topBidder, ItemStack item, long price, long expireTime, String world, WorldGroup worldGroup) {
+    public BidItem(UUID ownerUUID, String ownerName, UUID storeID, TopBidder topBidder, ItemStack item, long price, long expireTime, PerWorld perWorld, WorldGroup worldGroup) {
         this.ownerUUID = ownerUUID;
         this.ownerName = ownerName;
         this.storeID = storeID;
@@ -45,7 +47,7 @@ public class BidItem {
         this.expireTime = expireTime;
         expire = Calendar.getInstance();
         expire.setTimeInMillis(expireTime);
-        this.world = world != null ? world : "";
+        this.perWorld = perWorld;
         this.worldGroup = worldGroup;
         sold = false;
     }
@@ -82,8 +84,8 @@ public class BidItem {
         return Calendar.getInstance().after(expire);
     }
     
-    public String getWorld() {
-        return world;
+    public PerWorld getPerWorld() {
+        return perWorld;
     }
     
     public WorldGroup getWorldGroup() {
@@ -91,11 +93,11 @@ public class BidItem {
     }
     
     public boolean isPerWorld() {
-        return !world.isEmpty();
+        return perWorld != null;
     }
     
     public boolean isMultiWorld() {
-        return !world.isEmpty() || worldGroup != null;
+        return perWorld == null && worldGroup != null;
     }
     
     public void setSold(boolean sold) {
