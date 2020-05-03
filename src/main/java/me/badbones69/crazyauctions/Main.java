@@ -40,7 +40,7 @@ public class Main extends JavaPlugin implements Listener {
             saveDefaultConfig();
         }
         Messages.addMissingMessages();
-        new Metrics(this); //Starts up bStats
+        new Metrics(this, 4624); //Starts up bStats
     }
     
     @Override
