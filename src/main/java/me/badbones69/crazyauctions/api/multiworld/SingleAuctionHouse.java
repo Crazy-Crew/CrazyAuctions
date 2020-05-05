@@ -11,10 +11,9 @@ import me.badbones69.crazyauctions.api.objects.items.SellItem;
 import java.util.ArrayList;
 import java.util.List;
 
-public class WorldGroup {
+public class SingleAuctionHouse {
     
-    private String id;
-    private List<String> worlds = new ArrayList<>();
+    private static SingleAuctionHouse instance = new SingleAuctionHouse();
     private List<AuctionHouse> sellingAuctionHouses = new ArrayList<>();
     private List<AuctionHouse> biddingAuctionHouses = new ArrayList<>();
     private List<SellItem> sellingItems = new ArrayList<>();
@@ -23,17 +22,8 @@ public class WorldGroup {
     private List<AuctionItem> auctionItems = new ArrayList<>();
     private AuctionManager auctionManager = AuctionManager.getInstance();
     
-    public WorldGroup(String id, List<String> worlds) {
-        this.id = id;
-        this.worlds.addAll(worlds);
-    }
-    
-    public String getID() {
-        return id;
-    }
-    
-    public List<String> getWorlds() {
-        return worlds;
+    public static SingleAuctionHouse getInstance() {
+        return instance;
     }
     
     public void startUpAuctionHouses() {

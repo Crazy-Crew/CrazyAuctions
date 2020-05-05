@@ -6,6 +6,8 @@ import me.badbones69.crazyauctions.api.enums.ShopType;
 import me.badbones69.crazyauctions.api.interfaces.AuctionItem;
 import me.badbones69.crazyauctions.api.managers.AuctionManager;
 import me.badbones69.crazyauctions.api.managers.MenuManager;
+import me.badbones69.crazyauctions.api.objects.items.BidItem;
+import me.badbones69.crazyauctions.api.objects.items.SellItem;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -24,13 +26,17 @@ public class AuctionHouse implements InventoryHolder {
     private int page;
     private ShopType shopType;
     private MenuPage menuPage;
+    private List<SellItem> linkedSellItems;
+    private List<BidItem> linkedBidItems;
     private static MenuManager menuManager = MenuManager.getInstance();
     private static AuctionManager auctionManager = AuctionManager.getInstance();
     private ItemStack air = new ItemStack(Material.AIR);
     
-    public AuctionHouse(int page, ShopType shopType) {
+    public AuctionHouse(int page, ShopType shopType, List<SellItem> linkedSellItems, List<BidItem> linkedBidItems) {
         this.page = page;
         this.shopType = shopType;
+        this.linkedSellItems = linkedSellItems;
+        this.linkedBidItems = linkedBidItems;
         menuPage = shopType == ShopType.SELL ? MenuPage.AUCTION_SELLING : MenuPage.AUCTION_BIDDING;
         inventory = Bukkit.createInventory(this, menuPage.getSlots(), menuManager.getInventoryName(menuPage));
         setNavBar();
@@ -88,13 +94,13 @@ public class AuctionHouse implements InventoryHolder {
     }
     
     private List<AuctionItem> getPageItems() {
-        List<AuctionItem> auctionItems = new ArrayList<>(shopType == ShopType.SELL ? auctionManager.getSellingItems() : auctionManager.getBiddingItems());
+        List<AuctionItem> itemList = new ArrayList<>(shopType == ShopType.SELL ? linkedSellItems : linkedBidItems);
         List<AuctionItem> pageItems = new ArrayList<>();
         int maxItems = 45;
         int index = page * maxItems - maxItems;
-        int endIndex = index >= auctionItems.size() ? auctionItems.size() - 1 : index + maxItems;
+        int endIndex = index >= itemList.size() ? itemList.size() - 1 : index + maxItems;
         while (index < endIndex) {
-            if (index < auctionItems.size()) pageItems.add(auctionItems.get(index));
+            if (index < itemList.size()) pageItems.add(itemList.get(index));
             index++;
         }
         return pageItems;

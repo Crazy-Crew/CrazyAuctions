@@ -6,6 +6,7 @@ import me.badbones69.crazyauctions.api.multiworld.PerWorld;
 import me.badbones69.crazyauctions.api.multiworld.WorldGroup;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,11 +48,30 @@ public class MultiWorldManager {
         return perWorld;
     }
     
-    public WorldGroup getWorldGroup(AuctionItem auctionItem) {
+    public WorldGroup getWorldGroup(Player player) {
+        return getWorldGroup(player.getWorld().getName());
+    }
+    
+    public WorldGroup getWorldGroup(World world) {
+        return getWorldGroup(world.getName());
+    }
+    
+    public WorldGroup getWorldGroup(String worldString) {
+        for (WorldGroup worldGroup : worldGroups) {
+            for (String world : worldGroup.getWorlds()) {
+                if (world.equalsIgnoreCase(worldString)) {
+                    return worldGroup;
+                }
+            }
+        }
+        return null;
+    }
+    
+    public WorldGroup getWorldGroupFromID(AuctionItem auctionItem) {
         return auctionItem.getWorldGroup();
     }
     
-    public WorldGroup getWorldGroup(String id) {
+    public WorldGroup getWorldGroupFromID(String id) {
         for (WorldGroup worldGroup : worldGroups) {
             if (worldGroup.getID().equalsIgnoreCase(id)) {
                 return worldGroup;
@@ -68,8 +88,12 @@ public class MultiWorldManager {
         return auctionItem.getPerWorld();
     }
     
-    public PerWorld getPerWorld(World world) {
-        return getPerWorld(world.getName());
+    public PerWorld getPerWorld(Player player) {
+        return getPerWorld(player.getWorld().getName());
+    }
+    
+    public PerWorld getPerWorld(World worldString) {
+        return getPerWorld(worldString.getName());
     }
     
     public PerWorld getPerWorld(String worldString) {

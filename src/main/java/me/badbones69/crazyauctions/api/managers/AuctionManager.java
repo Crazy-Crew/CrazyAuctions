@@ -3,6 +3,9 @@ package me.badbones69.crazyauctions.api.managers;
 import me.badbones69.crazyauctions.api.FileManager.Files;
 import me.badbones69.crazyauctions.api.enums.ShopType;
 import me.badbones69.crazyauctions.api.interfaces.AuctionItem;
+import me.badbones69.crazyauctions.api.multiworld.PerWorld;
+import me.badbones69.crazyauctions.api.multiworld.SingleAuctionHouse;
+import me.badbones69.crazyauctions.api.multiworld.WorldGroup;
 import me.badbones69.crazyauctions.api.objects.gui.AuctionHouse;
 import me.badbones69.crazyauctions.api.objects.items.*;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -17,29 +20,132 @@ public class AuctionManager {
     
     private static AuctionManager instance = new AuctionManager();
     private MultiWorldManager multiWorldManager = MultiWorldManager.getInstance();
+    private SingleAuctionHouse singleAuctionHouse = SingleAuctionHouse.getInstance();
     private boolean isSaving = false;
-    private List<SellItem> sellingItems = new ArrayList<>();
-    private List<BidItem> biddingItems = new ArrayList<>();
-    private List<ExpiredItem> expiredItems = new ArrayList<>();
     private List<UserItems> userItemList = new ArrayList<>();
-    private List<AuctionHouse> sellingAuctionHouses = new ArrayList<>();
-    private List<AuctionHouse> biddingAuctionHouses = new ArrayList<>();
     
     public void load() {
-        sellingItems.clear();
-        biddingItems.clear();
-        expiredItems.clear();
         userItemList.clear();
-        //Load Selling, Bidding, and Expired items.
-        for (UserItems userItems : loadUserItems()) {
-            userItemList.add(userItems);
-            sellingItems.addAll(userItems.getSellingItems());
-            biddingItems.addAll(userItems.getBiddingItems());
-            expiredItems.addAll(userItems.getExpiredItems());
-        }
-        sellingAuctionHouses.forEach(AuctionHouse :: updateInventory);
-        biddingAuctionHouses.forEach(AuctionHouse :: updateInventory);
+        userItemList.addAll(loadUserItems());
         startUpAuctionHouses();
+    }
+    
+    public static AuctionManager getInstance() {
+        return instance;
+    }
+    
+    public boolean isAuctionHouseSaving() {
+        return isSaving;
+    }
+    
+    public AuctionHouse createAuctionHouse(ShopType shopType, List<SellItem> sellingItems, List<BidItem> biddingItems) {
+        return new AuctionHouse(biddingItems.size() + 1, shopType, sellingItems, biddingItems);
+    }
+    
+    public void openAuctionHouse(Player player) {
+        openAuctionHouse(player, ShopType.SELL, 1);
+    }
+    
+    public void openAuctionHouse(Player player, ShopType shopType) {
+        openAuctionHouse(player, shopType, 1);
+    }
+    
+    public void openAuctionHouse(Player player, ShopType shopType, int page) {
+        getAuctionHouse(player, shopType, page).openInventory(player);
+    }
+    
+    public AuctionHouse getAuctionHouse(Player player) {
+        return getAuctionHouse(player, ShopType.SELL, 1);
+    }
+    
+    public AuctionHouse getAuctionHouse(Player player, ShopType shopType) {
+        return getAuctionHouse(player, shopType, 1);
+    }
+    
+    public AuctionHouse getAuctionHouse(Player player, ShopType shopType, int page) {
+        if (multiWorldManager.isEnabled()) {
+            if (multiWorldManager.isPerWorld()) {
+                return multiWorldManager.getPerWorld(player).getAuctionHouse(shopType, page);
+            } else {
+                return multiWorldManager.getWorldGroup(player).getAuctionHouse(shopType, page);
+            }
+        } else {
+            return singleAuctionHouse.getAuctionHouse(shopType, page);
+        }
+    }
+    
+    public int getMaxPage(List<AuctionItem> auctionItems) {
+        int maxPage = 1;
+        int amount = auctionItems.size();
+        for (; amount > 45; amount -= 45, maxPage++) ;
+        return maxPage;
+    }
+    
+    public void addAuctionItem(AuctionItem auctionItem) {
+        addAuctionItem(auctionItem, getUserItems(auctionItem));
+    }
+    
+    public void addAuctionItem(AuctionItem auctionItem, UserItems userItems) {
+        userItems.addAuctionItem(auctionItem);
+        if (multiWorldManager.isEnabled()) {
+            if (multiWorldManager.isPerWorld() && auctionItem.isPerWorld()) {
+                auctionItem.getPerWorld().addAuctionItem(auctionItem);
+            } else if (auctionItem.isMultiWorld()) {
+                auctionItem.getWorldGroup().addAuctionItem(auctionItem);
+            }
+        } else {
+            singleAuctionHouse.addAuctionItem(auctionItem);
+        }
+    }
+    
+    public void removeAuctionItem(AuctionItem auctionItem) {
+        removeAuctionItem(auctionItem, getUserItems(auctionItem));
+    }
+    
+    public void removeAuctionItem(AuctionItem auctionItem, UserItems userItems) {
+        userItems.removeAuctionItem(auctionItem);
+        if (multiWorldManager.isEnabled()) {
+            if (multiWorldManager.isPerWorld() && auctionItem.isPerWorld()) {
+                auctionItem.getPerWorld().removeAuctionItem(auctionItem);
+            } else if (auctionItem.isMultiWorld()) {
+                auctionItem.getWorldGroup().removeAuctionItem(auctionItem);
+            }
+        } else {
+            singleAuctionHouse.removeAuctionItem(auctionItem);
+        }
+    }
+    
+    public UserItems getUserItems(AuctionItem sellItem) {
+        return getUserItems(sellItem.getOwnerUUID());
+    }
+    
+    public UserItems getUserItems(Player player) {
+        return getUserItems(player.getUniqueId());
+    }
+    
+    public UserItems getUserItems(UUID uuid) {
+        for (UserItems item : userItemList) {
+            if (item.getOwnerUUID().equals(uuid)) {
+                return item;
+            }
+        }
+        return null;
+    }
+    
+    private void startUpAuctionHouses() {
+        if (multiWorldManager.isEnabled()) {
+            if (multiWorldManager.isPerWorld()) {
+                for (PerWorld perWorld : multiWorldManager.getPerWorlds()) {
+                    perWorld.startUpAuctionHouses();
+                }
+            } else {
+                for (WorldGroup worldGroup : multiWorldManager.getWorldGroups()) {
+                    worldGroup.startUpAuctionHouses();
+                }
+            }
+        } else {
+            singleAuctionHouse.startUpAuctionHouses();
+        }
     }
     
     public void saveAuctionHouse() {
@@ -117,140 +223,6 @@ public class AuctionManager {
         isSaving = false;
     }
     
-    public boolean isAuctionHouseSaving() {
-        return isSaving;
-    }
-    
-    public void openAuctionHouse(Player player) {
-        openAuctionHouse(player, ShopType.SELL, 1);
-    }
-    
-    public void openAuctionHouse(Player player, ShopType shopType) {
-        openAuctionHouse(player, shopType, 1);
-    }
-    
-    public void openAuctionHouse(Player player, ShopType shopType, int page) {
-        getAuctionHouse(shopType, page).openInventory(player);
-    }
-    
-    public void createAuctionHouse(ShopType shopType) {
-        if (shopType == ShopType.SELL) {
-            sellingAuctionHouses.add(new AuctionHouse(sellingAuctionHouses.size() + 1, shopType));
-        } else {
-            biddingAuctionHouses.add(new AuctionHouse(biddingAuctionHouses.size() + 1, shopType));
-        }
-    }
-    
-    public void updateAuctionHouseLastPage(ShopType shopType) {
-        updateAuctionHouse(shopType, getMaxPage(shopType));
-    }
-    
-    public void updateAuctionHouse(ShopType shopType) {
-        updateAuctionHouse(shopType, 1);
-    }
-    
-    public void updateAuctionHouse(ShopType shopType, int page) {
-        getAuctionHouse(shopType, page).updateInventory();
-    }
-    
-    public AuctionHouse getAuctionHouse(ShopType shopType) {
-        return getAuctionHouse(shopType, 1);
-    }
-    
-    public AuctionHouse getAuctionHouse(ShopType shopType, int page) {
-        page = page > 0 ? page - 1 : 0;
-        if (shopType == ShopType.SELL) {
-            return sellingAuctionHouses.get(page);
-        } else {
-            return biddingAuctionHouses.get(page);
-        }
-    }
-    
-    public int getMaxPage(ShopType shopType) {
-        int maxPage = 1;
-        int amount = (shopType == ShopType.SELL ? sellingItems : biddingItems).size();
-        for (; amount > 45; amount -= 45, maxPage++) ;
-        return maxPage;
-    }
-    
-    public void addAuctionItem(AuctionItem auctionItem) {
-        if (auctionItem instanceof SellItem) {
-            sellingItems.add((SellItem) auctionItem);
-        } else if (auctionItem instanceof BidItem) {
-            biddingItems.add((BidItem) auctionItem);
-        } else {
-            expiredItems.add((ExpiredItem) auctionItem);
-        }
-        getUserItems(auctionItem).addAuctionItem(auctionItem);
-        if (multiWorldManager.isEnabled()) {
-            if (multiWorldManager.isPerWorld() && auctionItem.isPerWorld()) {
-                auctionItem.getPerWorld().addAuctionItem(auctionItem);
-            } else if (auctionItem.isMultiWorld()) {
-                auctionItem.getWorldGroup().addAuctionItem(auctionItem);
-            }
-        }
-    }
-    
-    public void removeAuctionItem(AuctionItem auctionItem) {
-        if (auctionItem instanceof SellItem) {
-            sellingItems.remove(auctionItem);
-        } else if (auctionItem instanceof BidItem) {
-            biddingItems.remove(auctionItem);
-        } else {
-            expiredItems.remove(auctionItem);
-        }
-        getUserItems(auctionItem).removeAuctionItem(auctionItem);
-        if (multiWorldManager.isEnabled()) {
-            if (multiWorldManager.isPerWorld() && auctionItem.isPerWorld()) {
-                auctionItem.getPerWorld().removeAuctionItem(auctionItem);
-            } else if (auctionItem.isMultiWorld()) {
-                auctionItem.getWorldGroup().removeAuctionItem(auctionItem);
-            }
-        }
-    }
-    
-    public List<SellItem> getSellingItems() {
-        return sellingItems;
-    }
-    
-    public List<BidItem> getBiddingItems() {
-        return biddingItems;
-    }
-    
-    public List<ExpiredItem> getExpiredItems() {
-        return expiredItems;
-    }
-    
-    public static AuctionManager getInstance() {
-        return instance;
-    }
-    
-    public UserItems getUserItems(AuctionItem sellItem) {
-        return getUserItems(sellItem.getOwnerUUID());
-    }
-    
-    public UserItems getUserItems(UUID uuid) {
-        for (UserItems item : userItemList) {
-            if (item.getOwnerUUID().equals(uuid)) {
-                return item;
-            }
-        }
-        return null;
-    }
-    
-    private void startUpAuctionHouses() {
-        if (sellingAuctionHouses.isEmpty()) {
-            for (int page = 1; page <= getMaxPage(ShopType.SELL); page++) {
-                createAuctionHouse(ShopType.SELL);
-            }
-        }
-        if (biddingAuctionHouses.isEmpty()) {
-            for (int page = 1; page <= getMaxPage(ShopType.BID); page++) {
-                createAuctionHouse(ShopType.BID);
-            }
-        }
-    }
-    
     private List<UserItems> loadUserItems() {
         FileConfiguration data = Files.DATA.getFile();
         List<UserItems> userItems = new ArrayList<>();
@@ -267,14 +239,14 @@ public class AuctionManager {
                         Calendar expire = Calendar.getInstance();
                         expire.setTimeInMillis(data.getLong(itemPath + "Expire-Time"));
                         if (now.after(expire)) {
-                            userItem.addAuctionItem(new ExpiredItem(uuid, name, UUID.fromString(storeID), data.getItemStack(itemPath + "Item")));
+                            addAuctionItem(new ExpiredItem(uuid, name, UUID.fromString(storeID), data.getItemStack(itemPath + "Item")), userItem);
                         } else {
-                            userItem.addAuctionItem(new SellItem(uuid, name, UUID.fromString(storeID),
+                            addAuctionItem(new SellItem(uuid, name, UUID.fromString(storeID),
                             data.getItemStack(itemPath + "Item"),
                             data.getLong(itemPath + "Price"),
                             data.getLong(itemPath + "Expire-Time"),
                             multiWorldManager.getPerWorld(data.getString(path + "World", "")),
-                            multiWorldManager.getWorldGroup(data.getString(path + "World-Group"))));
+                            multiWorldManager.getWorldGroup(data.getString(path + "World-Group"))), userItem);
                         }
                     }
                 }
@@ -284,24 +256,24 @@ public class AuctionManager {
                         Calendar expire = Calendar.getInstance();
                         expire.setTimeInMillis(data.getLong(itemPath + "Expire-Time"));
                         if (now.after(expire)) {
-                            userItem.addAuctionItem(new ExpiredItem(uuid, name, UUID.fromString(storeID), data.getItemStack(itemPath + "Item")));
+                            addAuctionItem(new ExpiredItem(uuid, name, UUID.fromString(storeID), data.getItemStack(itemPath + "Item")), userItem);
                         } else {
-                            userItem.addAuctionItem(new BidItem(uuid, name, UUID.fromString(storeID),
+                            addAuctionItem(new BidItem(uuid, name, UUID.fromString(storeID),
                             new TopBidder(UUID.fromString(data.getString(itemPath + "Top-Bidder.UUID")), data.getString(itemPath + "Top-Bidder.Name"), data.getInt(itemPath + "Top-Bidder.Bid")),
                             data.getItemStack(itemPath + "Item"),
                             data.getLong(itemPath + "Price"),
                             data.getLong(itemPath + "Expire-Time"),
                             multiWorldManager.getPerWorld(data.getString(path + "World", "")),
-                            multiWorldManager.getWorldGroup(data.getString(path + "World-Group"))));
+                            multiWorldManager.getWorldGroup(data.getString(path + "World-Group"))), userItem);
                         }
                     }
                 }
                 if (data.contains(path + "Expired")) {
                     for (String storeID : data.getConfigurationSection(path + "Expired").getKeys(false)) {
                         String itemPath = path + "Expired." + storeID + ".";
-                        userItem.addAuctionItem(new ExpiredItem(uuid, name, UUID.fromString(storeID),
+                        addAuctionItem(new ExpiredItem(uuid, name, UUID.fromString(storeID),
                         data.getItemStack(itemPath + "Item"),
-                        data.getLong(itemPath + "Expire-Time")));
+                        data.getLong(itemPath + "Expire-Time")), userItem);
                     }
                 }
                 userItems.add(userItem);
