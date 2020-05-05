@@ -1,4 +1,6 @@
-package me.badbones69.crazyauctions.api.objects;
+package me.badbones69.crazyauctions.api.objects.gui;
+
+import me.badbones69.crazyauctions.api.objects.ItemBuilder;
 
 public class Button {
     

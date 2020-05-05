@@ -1,5 +1,8 @@
 package me.badbones69.crazyauctions.api.enums;
 
+import me.badbones69.crazyauctions.api.managers.MenuManager;
+import me.badbones69.crazyauctions.api.objects.gui.Button;
+
 public enum MenuButtons {
     
     CURRENT_ITEMS("Current-Items"),
@@ -28,6 +31,7 @@ public enum MenuButtons {
     WHAT_IS_THIS_CATEGORIES("What-Is-This.Categories");
     
     private String path;
+    private MenuManager menuManager = MenuManager.getInstance();
     
     private MenuButtons(String path) {
         this.path = path;
@@ -35,6 +39,10 @@ public enum MenuButtons {
     
     public String getPath() {
         return path;
+    }
+    
+    public Button getButton() {
+        return menuManager.getButton(this);
     }
     
 }

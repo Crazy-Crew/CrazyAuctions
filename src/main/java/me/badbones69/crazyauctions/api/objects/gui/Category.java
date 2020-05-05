@@ -1,6 +1,7 @@
-package me.badbones69.crazyauctions.api.objects;
+package me.badbones69.crazyauctions.api.objects.gui;
 
 import me.badbones69.crazyauctions.api.FileManager.Files;
+import me.badbones69.crazyauctions.api.objects.ItemBuilder;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.ArrayList;

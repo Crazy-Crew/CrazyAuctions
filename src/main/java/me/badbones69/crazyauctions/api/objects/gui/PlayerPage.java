@@ -1,4 +1,4 @@
-package me.badbones69.crazyauctions.api.objects;
+package me.badbones69.crazyauctions.api.objects.gui;
 
 import java.util.UUID;
 

@@ -4,7 +4,6 @@ import me.badbones69.crazyauctions.api.interfaces.AuctionItem;
 import me.badbones69.crazyauctions.api.managers.TimeManager;
 import me.badbones69.crazyauctions.api.multiworld.PerWorld;
 import me.badbones69.crazyauctions.api.multiworld.WorldGroup;
-import me.badbones69.crazyauctions.api.objects.TopBidder;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 

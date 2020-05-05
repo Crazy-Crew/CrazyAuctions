@@ -18,6 +18,21 @@ Settings:
       3:
         - 'Sky_Block_1'
         - 'Sky_Block_2'
+  Menu-Pages:
+    Category-Menu:
+      Name: '&l&7>> &8Auction Categories'
+    Auction-Selling:
+      Name: '&l&7>> &8Selling Auction House'
+    Auction-Bidding:
+      Name: '&l&7>> &8Bidding Auction House'
+    Current-Sales:
+      Name: '&l&7>> &8Currently For Sale'
+    Expired:
+      Name: '&l&7>> &8Expired Items'
+    Buying-Page:
+      Name: '&l&7>> &8Confirm Your Purchase'
+    Bidding-Page:
+      Name: '&l&7>> &8Place Your Bid'
   Buttons:
     Current-Items:
       Enabled: true

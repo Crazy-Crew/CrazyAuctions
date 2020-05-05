@@ -1,6 +1,6 @@
 package me.badbones69.crazyauctions.api.events;
 
-import me.badbones69.crazyauctions.api.objects.TopBidder;
+import me.badbones69.crazyauctions.api.objects.items.TopBidder;
 import me.badbones69.crazyauctions.api.objects.items.BidItem;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
