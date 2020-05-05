@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
 
-public class AuctionMenu implements InventoryHolder {
+public class AuctionHouse implements InventoryHolder {
     
     private Inventory inventory;
     private int page;
@@ -28,7 +28,7 @@ public class AuctionMenu implements InventoryHolder {
     private static AuctionManager auctionManager = AuctionManager.getInstance();
     private ItemStack air = new ItemStack(Material.AIR);
     
-    public AuctionMenu(int page, ShopType shopType) {
+    public AuctionHouse(int page, ShopType shopType) {
         this.page = page;
         this.shopType = shopType;
         menuPage = shopType == ShopType.SELL ? MenuPage.AUCTION_SELLING : MenuPage.AUCTION_BIDDING;
