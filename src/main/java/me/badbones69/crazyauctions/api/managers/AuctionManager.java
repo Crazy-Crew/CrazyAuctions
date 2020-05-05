@@ -1,10 +1,12 @@
 package me.badbones69.crazyauctions.api.managers;
 
 import me.badbones69.crazyauctions.api.FileManager.Files;
+import me.badbones69.crazyauctions.api.enums.ShopType;
 import me.badbones69.crazyauctions.api.interfaces.AuctionItem;
-import me.badbones69.crazyauctions.api.multiworld.MultiWorldManager;
+import me.badbones69.crazyauctions.api.objects.gui.AuctionHouse;
 import me.badbones69.crazyauctions.api.objects.items.*;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -20,6 +22,8 @@ public class AuctionManager {
     private List<BidItem> biddingItems = new ArrayList<>();
     private List<ExpiredItem> expiredItems = new ArrayList<>();
     private List<UserItems> userItemList = new ArrayList<>();
+    private List<AuctionHouse> sellingAuctionHouses = new ArrayList<>();
+    private List<AuctionHouse> biddingAuctionHouses = new ArrayList<>();
     
     public void load() {
         sellingItems.clear();
@@ -33,6 +37,9 @@ public class AuctionManager {
             biddingItems.addAll(userItems.getBiddingItems());
             expiredItems.addAll(userItems.getExpiredItems());
         }
+        sellingAuctionHouses.forEach(AuctionHouse :: updateInventory);
+        biddingAuctionHouses.forEach(AuctionHouse :: updateInventory);
+        startUpAuctionHouses();
     }
     
     public void saveAuctionHouse() {
@@ -114,6 +121,58 @@ public class AuctionManager {
         return isSaving;
     }
     
+    public void openAuctionHouse(Player player) {
+        openAuctionHouse(player, ShopType.SELL, 1);
+    }
+    
+    public void openAuctionHouse(Player player, ShopType shopType) {
+        openAuctionHouse(player, shopType, 1);
+    }
+    
+    public void openAuctionHouse(Player player, ShopType shopType, int page) {
+        getAuctionHouse(shopType, page).openInventory(player);
+    }
+    
+    public void createAuctionHouse(ShopType shopType) {
+        if (shopType == ShopType.SELL) {
+            sellingAuctionHouses.add(new AuctionHouse(sellingAuctionHouses.size() + 1, shopType));
+        } else {
+            biddingAuctionHouses.add(new AuctionHouse(biddingAuctionHouses.size() + 1, shopType));
+        }
+    }
+    
+    public void updateAuctionHouseLastPage(ShopType shopType) {
+        updateAuctionHouse(shopType, getMaxPage(shopType));
+    }
+    
+    public void updateAuctionHouse(ShopType shopType) {
+        updateAuctionHouse(shopType, 1);
+    }
+    
+    public void updateAuctionHouse(ShopType shopType, int page) {
+        getAuctionHouse(shopType, page).updateInventory();
+    }
+    
+    public AuctionHouse getAuctionHouse(ShopType shopType) {
+        return getAuctionHouse(shopType, 1);
+    }
+    
+    public AuctionHouse getAuctionHouse(ShopType shopType, int page) {
+        page = page > 0 ? page - 1 : 0;
+        if (shopType == ShopType.SELL) {
+            return sellingAuctionHouses.get(page);
+        } else {
+            return biddingAuctionHouses.get(page);
+        }
+    }
+    
+    public int getMaxPage(ShopType shopType) {
+        int maxPage = 1;
+        int amount = (shopType == ShopType.SELL ? sellingItems : biddingItems).size();
+        for (; amount > 45; amount -= 45, maxPage++) ;
+        return maxPage;
+    }
+    
     public void addAuctionItem(AuctionItem auctionItem) {
         if (auctionItem instanceof SellItem) {
             sellingItems.add((SellItem) auctionItem);
@@ -177,6 +236,19 @@ public class AuctionManager {
             }
         }
         return null;
+    }
+    
+    private void startUpAuctionHouses() {
+        if (sellingAuctionHouses.isEmpty()) {
+            for (int page = 1; page <= getMaxPage(ShopType.SELL); page++) {
+                createAuctionHouse(ShopType.SELL);
+            }
+        }
+        if (biddingAuctionHouses.isEmpty()) {
+            for (int page = 1; page <= getMaxPage(ShopType.BID); page++) {
+                createAuctionHouse(ShopType.BID);
+            }
+        }
     }
     
     private List<UserItems> loadUserItems() {

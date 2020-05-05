@@ -2,7 +2,7 @@ package me.badbones69.crazyauctions.api.objects.items;
 
 import me.badbones69.crazyauctions.api.interfaces.AuctionItem;
 import me.badbones69.crazyauctions.api.managers.TimeManager;
-import me.badbones69.crazyauctions.api.multiworld.MultiWorldManager;
+import me.badbones69.crazyauctions.api.managers.MultiWorldManager;
 import me.badbones69.crazyauctions.api.multiworld.PerWorld;
 import me.badbones69.crazyauctions.api.multiworld.WorldGroup;
 import org.bukkit.entity.Player;

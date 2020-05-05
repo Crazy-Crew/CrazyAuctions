@@ -1,7 +1,9 @@
-package me.badbones69.crazyauctions.api.multiworld;
+package me.badbones69.crazyauctions.api.managers;
 
 import me.badbones69.crazyauctions.api.FileManager.Files;
 import me.badbones69.crazyauctions.api.interfaces.AuctionItem;
+import me.badbones69.crazyauctions.api.multiworld.PerWorld;
+import me.badbones69.crazyauctions.api.multiworld.WorldGroup;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 

@@ -5,7 +5,7 @@ import me.badbones69.crazyauctions.api.enums.MenuButtons;
 import me.badbones69.crazyauctions.api.managers.AuctionManager;
 import me.badbones69.crazyauctions.api.managers.MenuManager;
 import me.badbones69.crazyauctions.api.managers.TimeManager;
-import me.badbones69.crazyauctions.api.multiworld.MultiWorldManager;
+import me.badbones69.crazyauctions.api.managers.MultiWorldManager;
 import me.badbones69.crazyauctions.api.objects.gui.Button;
 import me.badbones69.crazyauctions.api.objects.gui.Category;
 import org.bukkit.Bukkit;
