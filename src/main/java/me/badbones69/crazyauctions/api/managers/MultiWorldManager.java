@@ -4,6 +4,7 @@ import me.badbones69.crazyauctions.api.FileManager.Files;
 import me.badbones69.crazyauctions.api.interfaces.AuctionItem;
 import me.badbones69.crazyauctions.api.multiworld.PerWorld;
 import me.badbones69.crazyauctions.api.multiworld.WorldGroup;
+import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -19,7 +20,6 @@ public class MultiWorldManager {
     private List<PerWorld> perWorlds = new ArrayList<>();
     private List<WorldGroup> worldGroups = new ArrayList<>();
     
-    //TODO Need to make some kind of grabber for per world auction houses.
     public void load() {
         worldGroups.clear();
         perWorlds.clear();
@@ -27,7 +27,11 @@ public class MultiWorldManager {
         String path = "Settings.Multi-World.";
         enabled = config.getBoolean(path + "Enabled");
         perWorld = config.getBoolean(path + "Per-World");
-        if (!perWorld) {
+        if (perWorld) {
+            for (World world : Bukkit.getWorlds()) {
+                perWorlds.add(new PerWorld(world));
+            }
+        } else {
             if (config.contains(path + "World-Groups")) {
                 for (String id : config.getConfigurationSection(path + "World-Groups").getKeys(false)) {
                     worldGroups.add(new WorldGroup(id, config.getStringList(path + "World-Groups." + id)));
@@ -38,6 +42,10 @@ public class MultiWorldManager {
                 perWorld = true;
             }
         }
+    }
+    
+    public static MultiWorldManager getInstance() {
+        return instance;
     }
     
     public boolean isEnabled() {
@@ -56,6 +64,10 @@ public class MultiWorldManager {
         return getWorldGroup(world.getName());
     }
     
+    public WorldGroup getWorldGroup(AuctionItem auctionItem) {
+        return auctionItem.getWorldGroup();
+    }
+    
     public WorldGroup getWorldGroup(String worldString) {
         for (WorldGroup worldGroup : worldGroups) {
             for (String world : worldGroup.getWorlds()) {
@@ -65,10 +77,6 @@ public class MultiWorldManager {
             }
         }
         return null;
-    }
-    
-    public WorldGroup getWorldGroupFromID(AuctionItem auctionItem) {
-        return auctionItem.getWorldGroup();
     }
     
     public WorldGroup getWorldGroupFromID(String id) {
@@ -107,10 +115,6 @@ public class MultiWorldManager {
     
     public List<PerWorld> getPerWorlds() {
         return perWorlds;
-    }
-    
-    public static MultiWorldManager getInstance() {
-        return instance;
     }
     
 }

@@ -32,7 +32,7 @@ public class MenuManager {
             .setMaterial(config.getString(path + "Item", "Stone"))
             .setName(config.getString(path + "Name", ""))
             .setLore(config.getStringList(path + "Lore")),
-            config.getInt(path + "Slot", 0),
+            (config.getInt(path + "Slot", 1) - 1),
             config.getBoolean(path + "Enabled", true)));
         }
         Arrays.stream(MenuPage.values()).forEach(menuPage -> menuPageNames.put(menuPage, Methods.color(config.getString("Settings.Menu-Pages." + menuPage.getPathName() + ".Name", "&l&7>> &8Crazy Auctions"))));

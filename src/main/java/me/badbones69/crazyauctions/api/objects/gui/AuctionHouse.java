@@ -81,11 +81,11 @@ public class AuctionHouse implements InventoryHolder {
         setButton(menuManager.getButton(MenuButtons.CURRENT_ITEMS));
         setButton(menuManager.getButton(MenuButtons.EXPIRED_ITEMS));
         setButton(menuManager.getButton(MenuButtons.CATEGORY_1));
-        setButton(menuManager.getButton(MenuButtons.BACK_BUTTON));
+        setButton(menuManager.getButton(MenuButtons.PREVIOUS_PAGE));
         setButton(menuManager.getButton(MenuButtons.REFRESH));
         setButton(menuManager.getButton(MenuButtons.NEXT_PAGE));
         setButton(menuManager.getButton(MenuButtons.CATEGORY_2));
-        setButton(menuManager.getButton(shopType == ShopType.SELL ? MenuButtons.BIDDING_ITEMS : MenuButtons.SELLING_ITEMS));
+        setButton(menuManager.getButton(shopType == ShopType.SELL ? MenuButtons.SELLING_ITEMS : MenuButtons.BIDDING_ITEMS));
         setButton(menuManager.getButton(shopType == ShopType.SELL ? MenuButtons.WHAT_IS_THIS_SELLING : MenuButtons.WHAT_IS_THIS_BIDDING));
     }
     

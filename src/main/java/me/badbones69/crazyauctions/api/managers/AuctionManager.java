@@ -8,6 +8,7 @@ import me.badbones69.crazyauctions.api.multiworld.SingleAuctionHouse;
 import me.badbones69.crazyauctions.api.multiworld.WorldGroup;
 import me.badbones69.crazyauctions.api.objects.gui.AuctionHouse;
 import me.badbones69.crazyauctions.api.objects.items.*;
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
@@ -22,11 +23,13 @@ public class AuctionManager {
     private MultiWorldManager multiWorldManager = MultiWorldManager.getInstance();
     private SingleAuctionHouse singleAuctionHouse = SingleAuctionHouse.getInstance();
     private boolean isSaving = false;
+    private ShopType defaultShop;
     private List<UserItems> userItemList = new ArrayList<>();
     
     public void load() {
         userItemList.clear();
         userItemList.addAll(loadUserItems());
+        defaultShop = ShopType.SELL;
         startUpAuctionHouses();
     }
     
@@ -43,7 +46,7 @@ public class AuctionManager {
     }
     
     public void openAuctionHouse(Player player) {
-        openAuctionHouse(player, ShopType.SELL, 1);
+        openAuctionHouse(player, defaultShop, 1);
     }
     
     public void openAuctionHouse(Player player, ShopType shopType) {
@@ -55,7 +58,7 @@ public class AuctionManager {
     }
     
     public AuctionHouse getAuctionHouse(Player player) {
-        return getAuctionHouse(player, ShopType.SELL, 1);
+        return getAuctionHouse(player, defaultShop, 1);
     }
     
     public AuctionHouse getAuctionHouse(Player player, ShopType shopType) {
@@ -74,10 +77,21 @@ public class AuctionManager {
         }
     }
     
-    public int getMaxPage(List<AuctionItem> auctionItems) {
+    public AuctionHouse getAuctionHouse(AuctionItem auctionItem) {
+        if (multiWorldManager.isEnabled()) {
+            if (multiWorldManager.isPerWorld()) {
+                return multiWorldManager.getPerWorld(auctionItem).getAuctionHouse(shopType, page);
+            } else {
+                return multiWorldManager.getWorldGroup(auctionItem).getAuctionHouse(shopType, page);
+            }
+        } else {
+            return singleAuctionHouse.getAuctionHouse(shopType, page);
+        }
+    }
+    
+    public int getMaxPage(int size) {
         int maxPage = 1;
-        int amount = auctionItems.size();
-        for (; amount > 45; amount -= 45, maxPage++) ;
+        for (; size > 45; size -= 45, maxPage++) ;
         return maxPage;
     }
     
@@ -129,7 +143,9 @@ public class AuctionManager {
                 return item;
             }
         }
-        return null;
+        UserItems userItems = new UserItems(uuid, Bukkit.getOfflinePlayer(uuid).getName());
+        userItemList.add(userItems);
+        return userItems;
     }
     
     private void startUpAuctionHouses() {

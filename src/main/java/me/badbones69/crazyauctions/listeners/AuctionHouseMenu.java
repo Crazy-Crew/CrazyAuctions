@@ -14,7 +14,7 @@ public class AuctionHouseMenu implements Listener {
     @EventHandler
     public void onInventoryClick(InventoryClickEvent e) {
         Inventory inventory = e.getClickedInventory();
-        if (inventory.getHolder() instanceof AuctionHouse) {
+        if (inventory != null && inventory.getHolder() instanceof AuctionHouse) {
             e.setCancelled(true);
         }
     }

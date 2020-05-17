@@ -18,6 +18,7 @@ public class ExpiredItem implements AuctionItem {
     private long expireTime;
     private Calendar expire;
     
+    //TODO Add multi-world support as right now players can grab these items from any world.
     public ExpiredItem(SellItem sellItem) {
         new ExpiredItem(sellItem.getOwnerUUID(), sellItem.getOwnerName(), sellItem.getStoreID(), sellItem.getItem());
     }

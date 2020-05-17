@@ -38,12 +38,12 @@ public class WorldGroup {
     
     public void startUpAuctionHouses() {
         if (sellingAuctionHouses.isEmpty()) {
-            for (int page = 1; page <= auctionManager.getMaxPage(new ArrayList<>(sellingItems)); page++) {
+            for (int page = 1; page <= auctionManager.getMaxPage(sellingItems.size()); page++) {
                 addAuctionHouse(auctionManager.createAuctionHouse(ShopType.SELL, sellingItems, new ArrayList<>()));
             }
         }
         if (biddingAuctionHouses.isEmpty()) {
-            for (int page = 1; page <= auctionManager.getMaxPage(new ArrayList<>(biddingItems)); page++) {
+            for (int page = 1; page <= auctionManager.getMaxPage(biddingItems.size()); page++) {
                 addAuctionHouse(auctionManager.createAuctionHouse(ShopType.BID, new ArrayList<>(), biddingItems));
             }
         }

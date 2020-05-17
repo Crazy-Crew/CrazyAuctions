@@ -20,20 +20,20 @@ public class SingleAuctionHouse {
     private List<BidItem> biddingItems = new ArrayList<>();
     private List<ExpiredItem> expiredItems = new ArrayList<>();
     private List<AuctionItem> auctionItems = new ArrayList<>();
-    private AuctionManager auctionManager = AuctionManager.getInstance();
     
     public static SingleAuctionHouse getInstance() {
         return instance;
     }
     
     public void startUpAuctionHouses() {
+        AuctionManager auctionManager = AuctionManager.getInstance();
         if (sellingAuctionHouses.isEmpty()) {
-            for (int page = 1; page <= auctionManager.getMaxPage(new ArrayList<>(sellingItems)); page++) {
+            for (int page = 1; page <= auctionManager.getMaxPage(sellingItems.size()); page++) {
                 addAuctionHouse(auctionManager.createAuctionHouse(ShopType.SELL, sellingItems, new ArrayList<>()));
             }
         }
         if (biddingAuctionHouses.isEmpty()) {
-            for (int page = 1; page <= auctionManager.getMaxPage(new ArrayList<>(biddingItems)); page++) {
+            for (int page = 1; page <= auctionManager.getMaxPage(biddingItems.size()); page++) {
                 addAuctionHouse(auctionManager.createAuctionHouse(ShopType.BID, new ArrayList<>(), biddingItems));
             }
         }
@@ -49,6 +49,18 @@ public class SingleAuctionHouse {
     
     public AuctionHouse getAuctionHouse(ShopType shopType) {
         return getAuctionHouse(shopType, 1);
+    }
+    
+    //TODO Currently trying to get auction house object from a AuctionItem.
+    public AuctionHouse getAuctionHouse(AuctionItem auctionItem) {
+        if (auctionItem instanceof SellItem) {
+            for (AuctionHouse auctionHouse : sellingAuctionHouses) {
+                if (auctionHouse.get)
+            }
+        } else if (auctionItem instanceof BidItem) {
+            biddingItems.add((BidItem) auctionItem);
+        }
+        return null;
     }
     
     public AuctionHouse getAuctionHouse(ShopType shopType, int page) {
@@ -69,6 +81,7 @@ public class SingleAuctionHouse {
             expiredItems.add((ExpiredItem) auctionItem);
         }
         auctionItems.add(auctionItem);
+        
     }
     
     public void removeAuctionItem(AuctionItem auctionItem) {

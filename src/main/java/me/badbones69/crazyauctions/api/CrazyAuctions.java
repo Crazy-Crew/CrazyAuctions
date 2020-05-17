@@ -4,8 +4,8 @@ import me.badbones69.crazyauctions.api.FileManager.Files;
 import me.badbones69.crazyauctions.api.enums.MenuButtons;
 import me.badbones69.crazyauctions.api.managers.AuctionManager;
 import me.badbones69.crazyauctions.api.managers.MenuManager;
-import me.badbones69.crazyauctions.api.managers.TimeManager;
 import me.badbones69.crazyauctions.api.managers.MultiWorldManager;
+import me.badbones69.crazyauctions.api.managers.TimeManager;
 import me.badbones69.crazyauctions.api.objects.gui.Button;
 import me.badbones69.crazyauctions.api.objects.gui.Category;
 import org.bukkit.Bukkit;
@@ -49,12 +49,13 @@ public class CrazyAuctions {
         System.out.println("[CrazyAuctions] Loaded Multi-World Manager!");
         System.out.println("[CrazyAuctions] Is Enabled: " + multiWorldManager.isEnabled());
         System.out.println("[CrazyAuctions] Is Per-World: " + multiWorldManager.isPerWorld());
+        System.out.println("[CrazyAuctions] Per-Worlds: " + multiWorldManager.getPerWorlds().size());
         System.out.println("[CrazyAuctions] World Groups: " + multiWorldManager.getWorldGroups().size());
         auctionManager.load();
         System.out.println("[CrazyAuctions] Loaded Auctions Items!");
-        System.out.println("[CrazyAuctions] Selling Items: " + auctionManager.getSellingItems().size());
-        System.out.println("[CrazyAuctions] Bidding Items: " + auctionManager.getBiddingItems().size());
-        System.out.println("[CrazyAuctions] Expired Items: " + auctionManager.getExpiredItems().size());
+        //System.out.println("[CrazyAuctions] Selling Items: " + auctionManager.getSellingItems().size());
+        //System.out.println("[CrazyAuctions] Bidding Items: " + auctionManager.getBiddingItems().size());
+        //System.out.println("[CrazyAuctions] Expired Items: " + auctionManager.getExpiredItems().size());
     }
     
     public void saveAuctionHouse() {
