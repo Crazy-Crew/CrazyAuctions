@@ -302,3 +302,4 @@ Settings:
   BlackList:
     - '7'
     - '120'
+    - 'WRITTEN_BOOK'
