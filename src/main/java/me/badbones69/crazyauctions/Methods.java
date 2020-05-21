@@ -175,7 +175,7 @@ public class Methods {
     public static Integer getVersion() {
         String ver = Bukkit.getServer().getClass().getPackage().getName();
         ver = ver.substring(ver.lastIndexOf('.') + 1);
-        ver = ver.replaceAll("_", "").replaceAll("R", "").replaceAll("v", "");
+        ver = ver.replace("_", "").replace("R", "").replace("v", "");
         return Integer.parseInt(ver);
     }
     
@@ -344,16 +344,16 @@ public class Methods {
         Calendar cal = Calendar.getInstance();
         for (String i : time.split(" ")) {
             if (i.contains("D") || i.contains("d")) {
-                cal.add(Calendar.DATE, Integer.parseInt(i.replaceAll("D", "").replaceAll("d", "")));
+                cal.add(Calendar.DATE, Integer.parseInt(i.replace("D", "").replace("d", "")));
             }
             if (i.contains("H") || i.contains("h")) {
-                cal.add(Calendar.HOUR, Integer.parseInt(i.replaceAll("H", "").replaceAll("h", "")));
+                cal.add(Calendar.HOUR, Integer.parseInt(i.replace("H", "").replace("h", "")));
             }
             if (i.contains("M") || i.contains("m")) {
-                cal.add(Calendar.MINUTE, Integer.parseInt(i.replaceAll("M", "").replaceAll("m", "")));
+                cal.add(Calendar.MINUTE, Integer.parseInt(i.replace("M", "").replace("m", "")));
             }
             if (i.contains("S") || i.contains("s")) {
-                cal.add(Calendar.SECOND, Integer.parseInt(i.replaceAll("S", "").replaceAll("s", "")));
+                cal.add(Calendar.SECOND, Integer.parseInt(i.replace("S", "").replace("s", "")));
             }
         }
         return cal.getTimeInMillis();

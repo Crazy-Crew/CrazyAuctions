@@ -84,7 +84,7 @@ public enum Messages {
             message += Methods.color(m) + "\n";
         }
         for (String ph : placeholders.keySet()) {
-            message = Methods.color(message.replaceAll(ph, placeholders.get(ph))).replaceAll(ph, placeholders.get(ph).toLowerCase());
+            message = Methods.color(message.replace(ph, placeholders.get(ph))).replace(ph, placeholders.get(ph).toLowerCase());
         }
         return message;
     }
@@ -139,7 +139,7 @@ public enum Messages {
             }
             for (String ph : placeholders.keySet()) {
                 if (message.contains(ph)) {
-                    message = message.replaceAll(ph, placeholders.get(ph)).replaceAll(ph, placeholders.get(ph).toLowerCase());
+                    message = message.replace(ph, placeholders.get(ph)).replace(ph, placeholders.get(ph).toLowerCase());
                 }
             }
         }
@@ -178,7 +178,7 @@ public enum Messages {
             }
             for (String ph : placeholders.keySet()) {
                 if (message.contains(ph)) {
-                    message = message.replaceAll(ph, placeholders.get(ph)).replaceAll(ph, placeholders.get(ph).toLowerCase());
+                    message = message.replace(ph, placeholders.get(ph)).replace(ph, placeholders.get(ph).toLowerCase());
                 }
             }
         }
