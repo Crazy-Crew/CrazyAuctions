@@ -301,4 +301,3 @@ Settings:
   BlackList:
     - 'BEDROCK'
     - 'END_PORTAL_FRAME'
-    - 'WRITTEN_BOOK'

@@ -45,6 +45,7 @@ public enum Messages {
     CRAZYAUCTIONS_HELP("CrazyAuctions-Help", "&c/ah help"),
     CRAZYAUCTIONS_VIEW("CrazyAuctions-View", "&c/ah view <player>"),
     CRAZYAUCTIONS_SELL_BID("CrazyAuctions-Sell-Bid", "&c/ah sell/bid <price> [amount of items]"),
+    BOOK_NOT_ALLOWED("Book-Not-Allowed", "&cThat book is not able to be sold in this auction house!"),
     HELP("Help-Menu", Arrays.asList(
     "&e-- &6Crazy Auctions Help &e--",
     "&9/Ah - &eOpens the crazy auction.",

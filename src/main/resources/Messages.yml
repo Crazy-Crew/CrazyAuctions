@@ -34,6 +34,7 @@ Messages:
   CrazyAuctions-Help: '&c/ah help'
   CrazyAuctions-View: '&c/ah view <player>'
   CrazyAuctions-Sell-Bid: '&c/ah sell/bid <price> [amount of items]'
+  Book-Not-Allowed: '&cThat book is not able to be sold in this auction house!'
   Help-Menu:
     - '&e-- &6Crazy Auctions Help &e--'
     - '&9/Ah - &eOpens the crazy auction.'

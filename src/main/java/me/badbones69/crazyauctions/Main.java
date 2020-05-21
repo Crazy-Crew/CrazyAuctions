@@ -132,11 +132,10 @@ public class Main extends JavaPlugin implements Listener {
                         } else {
                             item.setAmount(item.getAmount() - amount);
                         }
-                        return true;
                     } else {
                         sender.sendMessage(Messages.DOSENT_HAVE_ITEM_IN_HAND.getMessage());
-                        return true;
                     }
+                    return true;
                 }
                 if (args[0].equalsIgnoreCase("Reload")) {// CA Reload
                     if (!Methods.hasPermission(sender, "Admin")) return true;
@@ -308,6 +307,10 @@ public class Main extends JavaPlugin implements Listener {
                                 }
                             }
                         }
+                        if (!allowBook(item)) {
+                            player.sendMessage(Messages.BOOK_NOT_ALLOWED.getMessage());
+                            return true;
+                        }
                         String seller = player.getName();
                         // For testing as another player
                         //String seller = "Test-Account";
@@ -341,6 +344,7 @@ public class Main extends JavaPlugin implements Listener {
                         Files.DATA.getFile().set("Items." + num + ".TopBidder", "None");
                         ItemStack I = item.clone();
                         I.setAmount(amount);
+                        System.out.println(I.toString().length());
                         Files.DATA.getFile().set("Items." + num + ".Item", I);
                         Files.DATA.saveFile();
                         Bukkit.getPluginManager().callEvent(new AuctionListEvent(player, type, I, price));
@@ -388,7 +392,7 @@ public class Main extends JavaPlugin implements Listener {
     
     private ArrayList<Material> getDamageableItems() {
         ArrayList<Material> ma = new ArrayList<>();
-        if (Version.getCurrentVersion().isNewer(Version.v1_12_R1)) {
+        if (Version.isNewer(Version.v1_12_R1)) {
             ma.add(Material.matchMaterial("GOLDEN_HELMET"));
             ma.add(Material.matchMaterial("GOLDEN_CHESTPLATE"));
             ma.add(Material.matchMaterial("GOLDEN_LEGGINGS"));
@@ -458,6 +462,17 @@ public class Main extends JavaPlugin implements Listener {
         ma.add(Material.ANVIL);
         ma.add(Material.FISHING_ROD);
         return ma;
+    }
+    
+    private boolean allowBook(ItemStack item) {
+        if (item.getType() == Material.WRITTEN_BOOK || item.getType() == getMaterial("WRITABLE_BOOK", "BOOK_AND_QUILL")) {
+            return item.toString().length() > 2000;
+        }
+        return true;
+    }
+    
+    public Material getMaterial(String newMaterial, String oldMaterial) {
+        return Material.matchMaterial(Version.isNewer(Version.v1_12_R1) ? newMaterial : oldMaterial);
     }
     
 }
