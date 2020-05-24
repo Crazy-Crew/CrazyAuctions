@@ -15,6 +15,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -465,8 +466,8 @@ public class Main extends JavaPlugin implements Listener {
     }
     
     private boolean allowBook(ItemStack item) {
-        if (item.getType() == Material.WRITTEN_BOOK || item.getType() == getMaterial("WRITABLE_BOOK", "BOOK_AND_QUILL")) {
-            return item.toString().length() > 2000;
+        if (item != null && item.hasItemMeta() && item.getItemMeta() instanceof BookMeta) {
+            return ((BookMeta) item.getItemMeta()).getPages().stream().mapToInt(String :: length).sum() < 2000;
         }
         return true;
     }
