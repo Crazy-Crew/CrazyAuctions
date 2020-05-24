@@ -345,7 +345,6 @@ public class Main extends JavaPlugin implements Listener {
                         Files.DATA.getFile().set("Items." + num + ".TopBidder", "None");
                         ItemStack I = item.clone();
                         I.setAmount(amount);
-                        System.out.println(I.toString().length());
                         Files.DATA.getFile().set("Items." + num + ".Item", I);
                         Files.DATA.saveFile();
                         Bukkit.getPluginManager().callEvent(new AuctionListEvent(player, type, I, price));
