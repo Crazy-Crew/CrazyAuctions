@@ -19,6 +19,7 @@ import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.yaml.snakeyaml.error.YAMLException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -466,6 +467,15 @@ public class Main extends JavaPlugin implements Listener {
     
     private boolean allowBook(ItemStack item) {
         if (item != null && item.hasItemMeta() && item.getItemMeta() instanceof BookMeta) {
+            System.out.println("[Crazy Auctions] Checking " + item.getType() + " for illegal unicode.");
+            try {
+                Files.TEST_FILE.getFile().set("Test", item);
+                Files.TEST_FILE.saveFile();
+                System.out.println("[Crazy Auctions] " + item.getType() + " has passed unicode checks.");
+            } catch (YAMLException e) {
+                System.out.println("[Crazy Auctions] " + item.getType() + " has failed unicode checks and has been denied.");
+                return false;
+            }
             return ((BookMeta) item.getItemMeta()).getPages().stream().mapToInt(String :: length).sum() < 2000;
         }
         return true;

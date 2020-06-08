@@ -54,7 +54,7 @@ public class FileManager {
                     String fileLocation = file.getFileLocation();
                     //Switch between 1.12.2- and 1.13+ config version.
                     if (file == Files.CONFIG) {
-                        if (Version.getCurrentVersion().isOlder(Version.v1_13_R2)) {
+                        if (Version.isOlder(Version.v1_13_R2)) {
                             fileLocation = "config1.12.2-Down.yml";
                         } else {
                             fileLocation = "config1.13-Up.yml";
@@ -292,7 +292,8 @@ public class FileManager {
         //ENUM_NAME("FileName.yml", "FilePath.yml"),
         CONFIG("config.yml", "config.yml"),
         DATA("Data.yml", "Data.yml"),
-        MESSAGES("Messages.yml", "Messages.yml");
+        MESSAGES("Messages.yml", "Messages.yml"),
+        TEST_FILE("Test-File.yml", "Test-File.yml");
         
         private String fileName;
         private String fileLocation;
