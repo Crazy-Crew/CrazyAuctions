@@ -39,7 +39,7 @@ Messages:
     - '&e-- &6Crazy Auctions Help &e--'
     - '&9/Ah - &eOpens the crazy auction.'
     - '&9/Ah View <Player> - &eSee what a player is selling.'
-    - '&9/Ah Sell/Bid <Price> [Amount of items] - &eList the item you are holding on the crazy auction.'
+    - '&9/Ah Sell/Bid <Price> [Amount of items] [Timeframe] - &eList the item you are holding on the crazy auction.'
     - '&9/Ah Expired/Collect - &eView and manage your canceled and expired items.'
     - '&9/Ah Listed - &eView and manage the items you are selling.'
     - '&9/Ah Help - &eView this help menu.'

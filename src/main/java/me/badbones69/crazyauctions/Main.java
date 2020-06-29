@@ -180,7 +180,7 @@ public class Main extends JavaPlugin implements Listener {
                     GUI.openPlayersCurrentList(player, 1);
                     return true;
                 }
-                if (args[0].equalsIgnoreCase("Sell") || args[0].equalsIgnoreCase("Bid")) {// /CA Sell/Bid <Price> [Amount of Items]
+                if (args[0].equalsIgnoreCase("Sell") || args[0].equalsIgnoreCase("Bid")) {// /CA Sell/Bid <Price> [Amount of Items] [timeframe]
                     if (!(sender instanceof Player)) {
                         sender.sendMessage(Messages.PLAYERS_ONLY.getMessage());
                         return true;
@@ -314,6 +314,21 @@ public class Main extends JavaPlugin implements Listener {
                             return true;
                         }
                         String seller = player.getName();
+
+                        //Get default timeframe
+                        String timeframe;
+                        if (args[0].equalsIgnoreCase("Bid")) {
+                            timeframe = Files.CONFIG.getFile().getString("Settings.Bid-Time");
+                        }
+                        else {
+                            timeframe = Files.CONFIG.getFile().getString("Settings.Sell-Time");
+                        }
+
+                        //If we have a timeframe specified, use that instead!
+                        if (args.length == 4) {
+                            timeframe = args[3];
+                        }
+
                         // For testing as another player
                         //String seller = "Test-Account";
                         int num = 1;
@@ -321,11 +336,9 @@ public class Main extends JavaPlugin implements Listener {
                         for (; Files.DATA.getFile().contains("Items." + num); num++) ;
                         Files.DATA.getFile().set("Items." + num + ".Price", price);
                         Files.DATA.getFile().set("Items." + num + ".Seller", seller);
-                        if (args[0].equalsIgnoreCase("Bid")) {
-                            Files.DATA.getFile().set("Items." + num + ".Time-Till-Expire", Methods.convertToMill(Files.CONFIG.getFile().getString("Settings.Bid-Time")));
-                        } else {
-                            Files.DATA.getFile().set("Items." + num + ".Time-Till-Expire", Methods.convertToMill(Files.CONFIG.getFile().getString("Settings.Sell-Time")));
-                        }
+
+                        Files.DATA.getFile().set("Items." + num + ".Time-Till-Expire", Methods.convertToMill(timeframe));
+
                         Files.DATA.getFile().set("Items." + num + ".Full-Time", Methods.convertToMill(Files.CONFIG.getFile().getString("Settings.Full-Expire-Time")));
                         int id = r.nextInt(999999);
                         // Runs 3x to check for same ID.
