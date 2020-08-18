@@ -55,7 +55,7 @@ public class SingleAuctionHouse {
     public AuctionHouse getAuctionHouse(AuctionItem auctionItem) {
         if (auctionItem instanceof SellItem) {
             for (AuctionHouse auctionHouse : sellingAuctionHouses) {
-                if (auctionHouse.get)
+                //if (auctionHouse.get)
             }
         } else if (auctionItem instanceof BidItem) {
             biddingItems.add((BidItem) auctionItem);

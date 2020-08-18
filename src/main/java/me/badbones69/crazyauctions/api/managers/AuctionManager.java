@@ -80,12 +80,12 @@ public class AuctionManager {
     public AuctionHouse getAuctionHouse(AuctionItem auctionItem) {
         if (multiWorldManager.isEnabled()) {
             if (multiWorldManager.isPerWorld()) {
-                return multiWorldManager.getPerWorld(auctionItem).getAuctionHouse(shopType, page);
+                return multiWorldManager.getPerWorld(auctionItem).getAuctionHouse(defaultShop, 1);
             } else {
-                return multiWorldManager.getWorldGroup(auctionItem).getAuctionHouse(shopType, page);
+                return multiWorldManager.getWorldGroup(auctionItem).getAuctionHouse(defaultShop, 1);
             }
         } else {
-            return singleAuctionHouse.getAuctionHouse(shopType, page);
+            return singleAuctionHouse.getAuctionHouse(defaultShop, 1);
         }
     }
     
