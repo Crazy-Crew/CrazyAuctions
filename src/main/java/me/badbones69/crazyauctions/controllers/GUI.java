@@ -322,7 +322,7 @@ public class GUI implements Listener {
         }
         Inventory inv = Bukkit.createInventory(null, 27, Methods.color(config.getString("Settings.Bidding-On-Item")));
         if (!bidding.containsKey(player)) bidding.put(player, 0);
-        if (Version.getCurrentVersion().isNewer(Version.v1_12_R1)) {
+        if (Version.isNewer(Version.v1_12_R1)) {
             inv.setItem(9, Methods.makeItem("LIME_STAINED_GLASS_PANE", 1, "&a+1"));
             inv.setItem(10, Methods.makeItem("LIME_STAINED_GLASS_PANE", 1, "&a+10"));
             inv.setItem(11, Methods.makeItem("LIME_STAINED_GLASS_PANE", 1, "&a+100"));

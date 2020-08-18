@@ -205,6 +205,9 @@ public class FileManager {
         } catch (IOException e) {
             System.out.println(prefix + "Could not save " + file.getFileName() + "!");
             e.printStackTrace();
+        } catch (NullPointerException e) {
+            System.out.println(prefix + "File is null " + file.getFileName() + "!");
+            e.printStackTrace();
         }
     }
     
