@@ -6,10 +6,11 @@
 
     <groupId>me.badbones69</groupId>
     <artifactId>crazyauctions</artifactId>
-    <version>1.2.15</version>
+    <version>1.2.16-SNAPSHOT</version>
     <name>CrazyAuctions</name>
 
     <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <!--This is used to show the build number for jenkins.-->
         <build.number/>
     </properties>
@@ -37,8 +38,8 @@
             <url>http://nexus.hc.to/content/repositories/pub_releases</url>
         </repository>
         <repository>
-            <id>reserve-repo</id>
-            <url>https://dl.bintray.com/theneweconomy/java/</url>
+            <id>codemc-repo</id>
+            <url>https://repo.codemc.io/repository/maven-public/</url>
         </repository>
     </repositories>
 
@@ -46,7 +47,7 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.16.2-R0.1-SNAPSHOT</version>
+            <version>1.16.3-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
             <exclusions>
                 <exclusion>
@@ -58,7 +59,7 @@
         <dependency>
             <groupId>net.milkbowl.vault</groupId>
             <artifactId>VaultAPI</artifactId>
-            <version>1.6</version>
+            <version>1.7</version>
             <scope>provided</scope>
             <exclusions>
                 <exclusion>
@@ -70,14 +71,13 @@
         <dependency>
             <groupId>net.tnemc</groupId>
             <artifactId>Reserve</artifactId>
-            <version>0.1.0.10</version>
+            <version>0.1.5.0</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
 
     <build>
         <finalName>${project.name}[v${project.version}]</finalName>
-        <defaultGoal>clean install package</defaultGoal>
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
@@ -85,46 +85,14 @@
             </resource>
         </resources>
         <plugins>
-            <!-- Set to java 8 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
                 </configuration>
-            </plugin>
-            <!-- Generates only the jar -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>3.1.2</version>
-                <executions>
-                    <execution>
-                        <id>default-jar</id>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>1.5</version>
-                <configuration>
-                    <artifactSet>
-                        <includes>
-                            <include>me.badbones69:*</include>
-                        </includes>
-                    </artifactSet>
-                    <!--                    <outputFile>/Users/badbones/Desktop/Minecraft/Server/plugins/CrazyAuctions[v${project.version}].jar</outputFile>-->
-                </configuration>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
     </build>
