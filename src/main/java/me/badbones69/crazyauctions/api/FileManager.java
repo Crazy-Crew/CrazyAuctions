@@ -3,6 +3,7 @@ package me.badbones69.crazyauctions.api;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -201,10 +202,23 @@ public class FileManager {
      */
     public void saveFile(Files file) {
         try {
-            configurations.get(file).save(files.get(file));
-        } catch (IOException e) {
-            System.out.println(prefix + "Could not save " + file.getFileName() + "!");
-            e.printStackTrace();
+            File targetFile = files.get(file);
+            FileConfiguration configuration = configurations.get(file);
+
+            YamlConfiguration copy = new YamlConfiguration();
+            configuration.getValues(false).forEach(copy::set);
+
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    try {
+                        copy.save(targetFile);
+                    } catch (IOException e) {
+                        System.out.println(prefix + "Could not save " + file.getFileName() + "!");
+                        e.printStackTrace();
+                    }
+                }
+            }.runTaskAsynchronously(plugin);
         } catch (NullPointerException e) {
             System.out.println(prefix + "File is null " + file.getFileName() + "!");
             e.printStackTrace();
