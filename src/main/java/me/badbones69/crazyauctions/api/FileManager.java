@@ -200,7 +200,7 @@ public class FileManager {
     /**
      * Saves the file from the loaded state to the file system.
      */
-    public void saveFile(Files file) {
+    public void saveFile(Files file, boolean sync) {
         try {
             File targetFile = files.get(file);
             FileConfiguration configuration = configurations.get(file);
@@ -208,7 +208,7 @@ public class FileManager {
             YamlConfiguration copy = new YamlConfiguration();
             configuration.getValues(false).forEach(copy::set);
 
-            new BukkitRunnable() {
+            BukkitRunnable runnable = new BukkitRunnable() {
                 @Override
                 public void run() {
                     try {
@@ -218,7 +218,12 @@ public class FileManager {
                         e.printStackTrace();
                     }
                 }
-            }.runTaskAsynchronously(plugin);
+            };
+            if (sync) {
+                runnable.run();
+            } else {
+                runnable.runTaskAsynchronously(plugin);
+            }
         } catch (NullPointerException e) {
             System.out.println(prefix + "File is null " + file.getFileName() + "!");
             e.printStackTrace();
@@ -352,10 +357,14 @@ public class FileManager {
         /**
          * Saves the file from the loaded state to the file system.
          */
-        public void saveFile() {
-            getInstance().saveFile(this);
+        public void saveFile(boolean sync) {
+            getInstance().saveFile(this, sync);
         }
-        
+
+        public void saveFile() {
+            getInstance().saveFile(this, false);
+        }
+
         /**
          * Overrides the loaded state file and loads the file systems file.
          */

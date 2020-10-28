@@ -49,7 +49,7 @@ public class Main extends JavaPlugin implements Listener {
     public void onDisable() {
         int file = 0;
         Bukkit.getScheduler().cancelTask(file);
-        Files.DATA.saveFile();
+        Files.DATA.saveFile(true);
     }
     
     public boolean onCommand(CommandSender sender, Command cmd, String commandLable, String[] args) {
