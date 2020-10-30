@@ -117,6 +117,7 @@ public enum Category {
             ma.add(Material.NETHERITE_PICKAXE);
             ma.add(Material.NETHERITE_AXE);
             ma.add(Material.NETHERITE_HOE);
+            ma.add(Material.NETHERITE_SHOVEL);
         }
         return ma;
     }
