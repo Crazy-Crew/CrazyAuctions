@@ -68,6 +68,12 @@ public enum Category {
         ma.add(Material.DIAMOND_CHESTPLATE);
         ma.add(Material.DIAMOND_LEGGINGS);
         ma.add(Material.DIAMOND_BOOTS);
+        if (Version.getCurrentVersion().isNewer(Version.v1_15_R1)) {
+            ma.add(Material.NETHERITE_HELMET);
+            ma.add(Material.NETHERITE_CHESTPLATE);
+            ma.add(Material.NETHERITE_LEGGINGS);
+            ma.add(Material.NETHERITE_BOOTS);
+        }
         return ma;
     }
     
@@ -107,6 +113,12 @@ public enum Category {
         ma.add(Material.STONE_HOE);
         ma.add(Material.IRON_HOE);
         ma.add(Material.DIAMOND_HOE);
+        if (Version.getCurrentVersion().isNewer(Version.v1_15_R1)) {
+            ma.add(Material.NETHERITE_PICKAXE);
+            ma.add(Material.NETHERITE_AXE);
+            ma.add(Material.NETHERITE_HOE);
+            ma.add(Material.NETHERITE_SHOVEL);
+        }
         return ma;
     }
     
@@ -130,6 +142,10 @@ public enum Category {
         ma.add(Material.IRON_AXE);
         ma.add(Material.DIAMOND_AXE);
         ma.add(Material.BOW);
+        if (Version.getCurrentVersion().isNewer(Version.v1_15_R1)) {
+            ma.add(Material.NETHERITE_SWORD);
+            ma.add(Material.NETHERITE_AXE);
+        }
         return ma;
     }
     
