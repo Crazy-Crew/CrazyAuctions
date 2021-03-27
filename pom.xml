@@ -48,12 +48,6 @@
             <artifactId>spigot-api</artifactId>
             <version>1.16.5-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
-            <exclusions>
-                <exclusion>
-                    <artifactId>bungeecord-chat</artifactId>
-                    <groupId>net.md-5</groupId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>net.milkbowl.vault</groupId>
