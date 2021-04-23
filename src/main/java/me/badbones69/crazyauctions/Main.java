@@ -38,9 +38,14 @@ public class Main extends JavaPlugin implements Listener {
         Bukkit.getServer().getPluginManager().registerEvents(new GUI(), this);
         Methods.updateAuction();
         startCheck();
-        if (!Vault.setupEconomy()) {
-            saveDefaultConfig();
-        }
+
+        //Will run the task when all plugins are loaded
+        Bukkit.getScheduler().runTask(this, () -> {
+            if (!Vault.setupEconomy()) {
+                saveDefaultConfig();
+            }
+        });
+
         Messages.addMissingMessages();
         new Metrics(this, 4624); //Starts up bStats
     }
