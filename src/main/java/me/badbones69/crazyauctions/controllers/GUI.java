@@ -21,7 +21,10 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
 import java.util.logging.Level;
 
 public class GUI implements Listener {
@@ -191,7 +194,7 @@ public class GUI implements Listener {
         }
         if (data.contains("Items")) {
             for (String i : data.getConfigurationSection("Items").getKeys(false)) {
-                if (UUID.fromString(data.getString("Items." + i + ".Seller")).equals(player.getUniqueId())) {
+                if (data.getString("Items." + i + ".Seller").equalsIgnoreCase(player.getName())) {
                     List<String> lore = new ArrayList<>();
                     for (String l : config.getStringList("Settings.GUISettings.CurrentLore")) {
                         lore.add(l.replace("%Price%", Methods.getPrice(i, false)).replace("%price%", Methods.getPrice(i, false)).replace("%Time%", Methods.convertToTime(data.getLong("Items." + i + ".Time-Till-Expire"))).replace("%time%", Methods.convertToTime(data.getLong("Items." + i + ".Time-Till-Expire"))));
@@ -219,7 +222,7 @@ public class GUI implements Listener {
         if (data.contains("OutOfTime/Cancelled")) {
             for (String i : data.getConfigurationSection("OutOfTime/Cancelled").getKeys(false)) {
                 if (data.getString("OutOfTime/Cancelled." + i + ".Seller") != null) {
-                    if (UUID.fromString(data.getString("OutOfTime/Cancelled." + i + ".Seller")).equals(player.getUniqueId())) {
+                    if (data.getString("OutOfTime/Cancelled." + i + ".Seller").equalsIgnoreCase(player.getName())) {
                         List<String> lore = new ArrayList<>();
                         for (String l : config.getStringList("Settings.GUISettings.Cancelled/ExpiredLore")) {
                             lore.add(l.replace("%Price%", Methods.getPrice(i, true)).replace("%price%", Methods.getPrice(i, true)).replace("%Time%", Methods.convertToTime(data.getLong("OutOfTime/Cancelled." + i + ".Full-Time"))).replace("%time%", Methods.convertToTime(data.getLong("OutOfTime/Cancelled." + i + ".Full-Time"))));
@@ -531,7 +534,7 @@ public class GUI implements Listener {
                                     }
                                     Bukkit.getPluginManager().callEvent(new AuctionNewBidEvent(player, data.getItemStack("Items." + ID + ".Item"), bid));
                                     data.set("Items." + ID + ".Price", bid);
-                                    data.set("Items." + ID + ".TopBidder", player.getUniqueId().toString());
+                                    data.set("Items." + ID + ".TopBidder", player.getName());
                                     HashMap<String, String> placeholders = new HashMap<>();
                                     placeholders.put("%Bid%", bid + "");
                                     player.sendMessage(Messages.BID_MESSAGE.getMessage(placeholders));
@@ -673,7 +676,7 @@ public class GUI implements Listener {
                                                     }
                                                 }
                                                 final Runnable runnable = () -> inv.setItem(slot, item);
-                                                if (UUID.fromString(data.getString("Items." + i + ".Seller")).equals(player.getUniqueId())) {
+                                                if (data.getString("Items." + i + ".Seller").equalsIgnoreCase(player.getName())) {
                                                     String it = config.getString("Settings.GUISettings.OtherSettings.Your-Item.Item");
                                                     String name = config.getString("Settings.GUISettings.OtherSettings.Your-Item.Name");
                                                     ItemStack I;
@@ -703,7 +706,7 @@ public class GUI implements Listener {
                                                     return;
                                                 }
                                                 if (data.getBoolean("Items." + i + ".Biddable")) {
-                                                    if (player.getUniqueId().equals(UUID.fromString(data.getString("Items." + i + ".TopBidder")))) {
+                                                    if (player.getName().equalsIgnoreCase(data.getString("Items." + i + ".TopBidder"))) {
                                                         String it = config.getString("Settings.GUISettings.OtherSettings.Top-Bidder.Item");
                                                         String name = config.getString("Settings.GUISettings.OtherSettings.Top-Bidder.Name");
                                                         ItemStack I;
@@ -882,7 +885,7 @@ public class GUI implements Listener {
                                     int page = Integer.parseInt(e.getView().getTitle().split("#")[1]);
                                     if (data.contains("OutOfTime/Cancelled")) {
                                         for (String i : data.getConfigurationSection("OutOfTime/Cancelled").getKeys(false)) {
-                                            if (UUID.fromString(data.getString("OutOfTime/Cancelled." + i + ".Seller")).equals(player.getUniqueId())) {
+                                            if (data.getString("OutOfTime/Cancelled." + i + ".Seller").equalsIgnoreCase(player.getName())) {
                                                 if (Methods.isInvFull(player)) {
                                                     player.sendMessage(Messages.INVENTORY_FULL.getMessage());
                                                     break;
