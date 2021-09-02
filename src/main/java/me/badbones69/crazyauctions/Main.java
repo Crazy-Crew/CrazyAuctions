@@ -372,23 +372,17 @@ public class Main extends JavaPlugin implements Listener {
     @EventHandler
     public void onJoin(PlayerJoinEvent e) {
         final Player player = e.getPlayer();
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                if (player.getName().equals("BadBones69")) {
-                    player.sendMessage(Methods.getPrefix() + Methods.color("&7This server is running your Crazy Auctions Plugin. " + "&7It is running version &av" + Bukkit.getServer().getPluginManager().getPlugin("CrazyAuctions").getDescription().getVersion() + "&7."));
-                }
-            }
-        }.runTaskLater(this, 40);
+        if (player.getName().equalsIgnoreCase("BadBones69")) {
+            Bukkit.getScheduler().runTaskLater(this, () -> {
+                player.sendMessage(Methods.getPrefix() + Methods.color("&7This server is running your Crazy Auctions Plugin. " + "&7It is running version &av" + Bukkit.getServer().getPluginManager().getPlugin("CrazyAuctions").getDescription().getVersion() + "&7."));
+            }, 40);
+        }
     }
     
     private void startCheck() {
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                Methods.updateAuction();
-            }
-        }.runTaskTimer(this, 20, 5 * 20);
+        Bukkit.getScheduler().runTaskTimer(this, () -> {
+            Methods.updateAuction();
+        }, 20, 5 * 20);
     }
     
     private ArrayList<Material> getDamageableItems() {

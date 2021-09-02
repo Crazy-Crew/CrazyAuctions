@@ -17,14 +17,26 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Methods {
     
     public static Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin("CrazyAuctions");
     private static FileManager fileManager = FileManager.getInstance();
     
-    public static String color(String msg) {
-        return ChatColor.translateAlternateColorCodes('&', msg);
+    public final static Pattern HEX_PATTERN = Pattern.compile("#[a-fA-F0-9]{6}");
+    
+    public static String color(String message) {
+        if (Version.isNewer(Version.v1_15_R1)) {
+            Matcher matcher = HEX_PATTERN.matcher(message);
+            StringBuffer buffer = new StringBuffer();
+            while (matcher.find()) {
+                matcher.appendReplacement(buffer, net.md_5.bungee.api.ChatColor.of(matcher.group()).toString());
+            }
+            return ChatColor.translateAlternateColorCodes('&', matcher.appendTail(buffer).toString());
+        }
+        return ChatColor.translateAlternateColorCodes('&', message);
     }
     
     public static String getPrefix() {
