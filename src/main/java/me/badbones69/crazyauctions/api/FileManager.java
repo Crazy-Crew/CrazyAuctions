@@ -3,6 +3,7 @@ package me.badbones69.crazyauctions.api;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -199,12 +200,30 @@ public class FileManager {
     /**
      * Saves the file from the loaded state to the file system.
      */
-    public void saveFile(Files file) {
+    public void saveFile(Files file, boolean sync) {
         try {
-            configurations.get(file).save(files.get(file));
-        } catch (IOException e) {
-            System.out.println(prefix + "Could not save " + file.getFileName() + "!");
-            e.printStackTrace();
+            File targetFile = files.get(file);
+            FileConfiguration configuration = configurations.get(file);
+
+            YamlConfiguration copy = new YamlConfiguration();
+            configuration.getValues(false).forEach(copy::set);
+
+            BukkitRunnable runnable = new BukkitRunnable() {
+                @Override
+                public void run() {
+                    try {
+                        copy.save(targetFile);
+                    } catch (IOException e) {
+                        System.out.println(prefix + "Could not save " + file.getFileName() + "!");
+                        e.printStackTrace();
+                    }
+                }
+            };
+            if (sync) {
+                runnable.run();
+            } else {
+                runnable.runTaskAsynchronously(plugin);
+            }
         } catch (NullPointerException e) {
             System.out.println(prefix + "File is null " + file.getFileName() + "!");
             e.printStackTrace();
@@ -338,10 +357,14 @@ public class FileManager {
         /**
          * Saves the file from the loaded state to the file system.
          */
-        public void saveFile() {
-            getInstance().saveFile(this);
+        public void saveFile(boolean sync) {
+            getInstance().saveFile(this, sync);
         }
-        
+
+        public void saveFile() {
+            getInstance().saveFile(this, false);
+        }
+
         /**
          * Overrides the loaded state file and loads the file systems file.
          */
