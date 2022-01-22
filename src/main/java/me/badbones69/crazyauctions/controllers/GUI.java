@@ -4,6 +4,7 @@ import me.badbones69.crazyauctions.Methods;
 import me.badbones69.crazyauctions.api.*;
 import me.badbones69.crazyauctions.api.FileManager.Files;
 import me.badbones69.crazyauctions.api.enums.CancelledReason;
+import me.badbones69.crazyauctions.api.enums.GuiType;
 import me.badbones69.crazyauctions.api.events.AuctionBuyEvent;
 import me.badbones69.crazyauctions.api.events.AuctionCancelledEvent;
 import me.badbones69.crazyauctions.api.events.AuctionNewBidEvent;
@@ -18,6 +19,7 @@ import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
@@ -81,7 +83,7 @@ public class GUI implements Listener {
         }
         int maxPage = Methods.getMaxPage(items);
         for (; page > maxPage; page--) ;
-        Inventory inv = Bukkit.createInventory(null, 54, Methods.color(config.getString("Settings.GUIName") + " #" + page));
+        Inventory inv = new CrazyInventoryHolder(GuiType.SHOP, page).getInventory();
         List<String> options = new ArrayList<>();
         options.add("SellingItems");
         options.add("Cancelled/ExpiredItems");
@@ -136,7 +138,7 @@ public class GUI implements Listener {
     public static void openCategories(Player player, ShopType shop) {
         Methods.updateAuction();
         FileConfiguration config = Files.CONFIG.getFile();
-        Inventory inv = Bukkit.createInventory(null, 54, Methods.color(config.getString("Settings.Categories")));
+        Inventory inv = new CrazyInventoryHolder(GuiType.CATEGORIES).getInventory();
         List<String> options = new ArrayList<>();
         options.add("OtherSettings.Back");
         options.add("OtherSettings.WhatIsThis.Categories");
@@ -173,7 +175,7 @@ public class GUI implements Listener {
         FileConfiguration data = Files.DATA.getFile();
         List<ItemStack> items = new ArrayList<>();
         List<Integer> ID = new ArrayList<>();
-        Inventory inv = Bukkit.createInventory(null, 54, Methods.color(config.getString("Settings.Players-Current-Items")));
+        Inventory inv = new CrazyInventoryHolder(GuiType.CURRENT_LIST).getInventory();
         List<String> options = new ArrayList<>();
         options.add("Back");
         options.add("WhatIsThis.CurrentItems");
@@ -235,7 +237,7 @@ public class GUI implements Listener {
         }
         int maxPage = Methods.getMaxPage(items);
         for (; page > maxPage; page--) ;
-        Inventory inv = Bukkit.createInventory(null, 54, Methods.color(config.getString("Settings.Cancelled/Expired-Items") + " #" + page));
+        Inventory inv = new CrazyInventoryHolder(GuiType.EXPIRED_LIST, page).getInventory();
         List<String> options = new ArrayList<>();
         options.add("Back");
         options.add("PreviousPage");
@@ -275,7 +277,7 @@ public class GUI implements Listener {
             player.sendMessage(Messages.ITEM_DOESNT_EXIST.getMessage());
             return;
         }
-        Inventory inv = Bukkit.createInventory(null, 9, Methods.color(config.getString("Settings.Buying-Item")));
+        Inventory inv = new CrazyInventoryHolder(GuiType.BUYING).getInventory();
         List<String> options = new ArrayList<>();
         options.add("Confirm");
         options.add("Cancel");
@@ -320,7 +322,7 @@ public class GUI implements Listener {
             player.sendMessage(Messages.ITEM_DOESNT_EXIST.getMessage());
             return;
         }
-        Inventory inv = Bukkit.createInventory(null, 27, Methods.color(config.getString("Settings.Bidding-On-Item")));
+        Inventory inv = new CrazyInventoryHolder(GuiType.BIDDING).getInventory();
         if (!bidding.containsKey(player)) bidding.put(player, 0);
         if (Version.isNewer(Version.v1_12_R1)) {
             inv.setItem(9, Methods.makeItem("LIME_STAINED_GLASS_PANE", 1, "&a+1"));
@@ -380,7 +382,7 @@ public class GUI implements Listener {
         }
         int maxPage = Methods.getMaxPage(items);
         for (; page > maxPage; page--) ;
-        Inventory inv = Bukkit.createInventory(null, 54, Methods.color(config.getString("Settings.GUIName") + " #" + page));
+        Inventory inv = new CrazyInventoryHolder(GuiType.SHOP, page).getInventory();
         List<String> options = new ArrayList<>();
         options.add("WhatIsThis.Viewing");
         for (String o : options) {
@@ -463,13 +465,14 @@ public class GUI implements Listener {
     
     @EventHandler
     public void onInvClose(InventoryCloseEvent e) {
-        FileConfiguration config = Files.CONFIG.getFile();
         Inventory inv = e.getInventory();
         Player player = (Player) e.getPlayer();
         if (inv != null) {
-            if (e.getView().getTitle().contains(Methods.color(config.getString("Settings.Bidding-On-Item")))) {
-                bidding.remove(player);
-            }
+        	if (inv.getHolder() != null && inv.getHolder() instanceof CrazyInventoryHolder) {
+        		if (GuiType.BIDDING.equals(((CrazyInventoryHolder) inv.getHolder()).getGuiType())) {
+        			bidding.remove(player);
+        		}
+        	}
         }
     }
     
@@ -480,471 +483,514 @@ public class GUI implements Listener {
         Player player = (Player) e.getWhoClicked();
         final Inventory inv = e.getInventory();
         if (inv != null) {
-            if (e.getView().getTitle().contains(Methods.color(config.getString("Settings.Categories")))) {
-                e.setCancelled(true);
-                int slot = e.getRawSlot();
-                if (slot <= inv.getSize()) {
-                    if (e.getCurrentItem() != null) {
-                        ItemStack item = e.getCurrentItem();
-                        if (item.hasItemMeta()) {
-                            if (item.getItemMeta().hasDisplayName()) {
-                                for (Category cat : Category.values()) {
-                                    if (item.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.GUISettings.Category-Settings." + cat.getName() + ".Name")))) {
-                                        openShop(player, shopType.get(player), cat, 1);
-                                        playClick(player);
-                                        return;
-                                    }
-                                    if (item.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.Back.Name")))) {
-                                        openShop(player, shopType.get(player), shopCategory.get(player), 1);
-                                        playClick(player);
-                                        return;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            if (e.getView().getTitle().contains(Methods.color(config.getString("Settings.Bidding-On-Item")))) {
-                e.setCancelled(true);
-                int slot = e.getRawSlot();
-                if (slot <= inv.getSize()) {
-                    if (e.getCurrentItem() != null) {
-                        ItemStack item = e.getCurrentItem();
-                        if (item.hasItemMeta()) {
-                            if (item.getItemMeta().hasDisplayName()) {
-                                if (item.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.Bid.Name")))) {
-                                    String ID = biddingID.get(player);
-                                    int bid = bidding.get(player);
-                                    String topBidder = data.getString("Items." + ID + ".TopBidder");
-                                    if (CurrencyManager.getMoney(player) < bid) {
-                                        HashMap<String, String> placeholders = new HashMap<>();
-                                        placeholders.put("%Money_Needed%", (bid - CurrencyManager.getMoney(player)) + "");
-                                        placeholders.put("%money_needed%", (bid - CurrencyManager.getMoney(player)) + "");
-                                        player.sendMessage(Messages.NEED_MORE_MONEY.getMessage(placeholders));
-                                        return;
-                                    }
-                                    if (data.getLong("Items." + ID + ".Price") > bid) {
-                                        player.sendMessage(Messages.BID_MORE_MONEY.getMessage());
-                                        return;
-                                    }
-                                    if (data.getLong("Items." + ID + ".Price") >= bid && !topBidder.equalsIgnoreCase("None")) {
-                                        player.sendMessage(Messages.BID_MORE_MONEY.getMessage());
-                                        return;
-                                    }
-                                    Bukkit.getPluginManager().callEvent(new AuctionNewBidEvent(player, data.getItemStack("Items." + ID + ".Item"), bid));
-                                    data.set("Items." + ID + ".Price", bid);
-                                    data.set("Items." + ID + ".TopBidder", player.getName());
-                                    HashMap<String, String> placeholders = new HashMap<>();
-                                    placeholders.put("%Bid%", bid + "");
-                                    player.sendMessage(Messages.BID_MESSAGE.getMessage(placeholders));
-                                    Files.DATA.saveFile();
-                                    bidding.put(player, 0);
-                                    player.closeInventory();
-                                    playClick(player);
-                                    return;
-                                }
-                                HashMap<String, Integer> priceEdits = new HashMap<>();
-                                priceEdits.put("&a+1", 1);
-                                priceEdits.put("&a+10", 10);
-                                priceEdits.put("&a+100", 100);
-                                priceEdits.put("&a+1000", 1000);
-                                priceEdits.put("&c-1", -1);
-                                priceEdits.put("&c-10", -10);
-                                priceEdits.put("&c-100", -100);
-                                priceEdits.put("&c-1000", -1000);
-                                for (String price : priceEdits.keySet()) {
-                                    if (item.getItemMeta().getDisplayName().equals(Methods.color(price))) {
-                                        try {
-                                            bidding.put(player, (bidding.get(player) + priceEdits.get(price)));
-                                            inv.setItem(4, getBiddingItem(player, biddingID.get(player)));
-                                            inv.setItem(13, getBiddingGlass(player, biddingID.get(player)));
-                                            playClick(player);
-                                            return;
-                                        } catch (Exception ex) {
-                                            player.closeInventory();
-                                            player.sendMessage(Messages.ITEM_DOESNT_EXIST.getMessage());
-                                            return;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            if (e.getView().getTitle().contains(Methods.color(config.getString("Settings.GUIName")))) {
-                e.setCancelled(true);
-                final int slot = e.getRawSlot();
-                if (slot <= inv.getSize()) {
-                    if (e.getCurrentItem() != null) {
-                        final ItemStack item = e.getCurrentItem();
-                        if (item.hasItemMeta()) {
-                            if (item.getItemMeta().hasDisplayName()) {
-                                if (item.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.NextPage.Name")))) {
-                                    Methods.updateAuction();
-                                    int page = Integer.parseInt(e.getView().getTitle().split("#")[1]);
-                                    openShop(player, shopType.get(player), shopCategory.get(player), page + 1);
-                                    playClick(player);
-                                    return;
-                                }
-                                if (item.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.PreviousPage.Name")))) {
-                                    Methods.updateAuction();
-                                    int page = Integer.parseInt(e.getView().getTitle().split("#")[1]);
-                                    if (page == 1) page++;
-                                    openShop(player, shopType.get(player), shopCategory.get(player), page - 1);
-                                    playClick(player);
-                                    return;
-                                }
-                                if (item.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.Refesh.Name")))) {
-                                    Methods.updateAuction();
-                                    int page = Integer.parseInt(e.getView().getTitle().split("#")[1]);
-                                    openShop(player, shopType.get(player), shopCategory.get(player), page);
-                                    playClick(player);
-                                    return;
-                                }
-                                if (item.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.Bidding/Selling.Selling.Name")))) {
-                                    openShop(player, ShopType.BID, shopCategory.get(player), 1);
-                                    playClick(player);
-                                    return;
-                                }
-                                if (item.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.Bidding/Selling.Bidding.Name")))) {
-                                    openShop(player, ShopType.SELL, shopCategory.get(player), 1);
-                                    playClick(player);
-                                    return;
-                                }
-                                if (item.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.Cancelled/ExpiredItems.Name")))) {
-                                    openPlayersExpiredList(player, 1);
-                                    playClick(player);
-                                    return;
-                                }
-                                if (item.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.SellingItems.Name")))) {
-                                    openPlayersCurrentList(player, 1);
-                                    playClick(player);
-                                    return;
-                                }
-                                if (item.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.Category1.Name")))) {
-                                    openCategories(player, shopType.get(player));
-                                    playClick(player);
-                                    return;
-                                }
-                                if (item.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.Category2.Name")))) {
-                                    openCategories(player, shopType.get(player));
-                                    playClick(player);
-                                    return;
-                                }
-                                if (item.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.Your-Item.Name")))) {
-                                    return;
-                                }
-                                if (item.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.Cant-Afford.Name")))) {
-                                    return;
-                                }
-                                if (item.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.Top-Bidder.Name")))) {
-                                    return;
-                                }
-                            }
-                            if (List.containsKey(player)) {
-                                if (List.get(player).size() >= slot) {
-                                    int id = List.get(player).get(slot);
-                                    boolean T = false;
-                                    if (data.contains("Items")) {
-                                        for (String i : data.getConfigurationSection("Items").getKeys(false)) {
-                                            int ID = data.getInt("Items." + i + ".StoreID");
-                                            if (id == ID) {
-                                                if (player.hasPermission("crazyAuctions.admin") || player.hasPermission("crazyauctions.force-end")) {
-                                                    if (e.getAction() == InventoryAction.MOVE_TO_OTHER_INVENTORY) {
-                                                        int num = 1;
-                                                        for (; data.contains("OutOfTime/Cancelled." + num); num++) ;
-                                                        String seller = data.getString("Items." + i + ".Seller");
-                                                        Player sellerPlayer = Methods.getPlayer(seller);
-                                                        if (Methods.isOnline(seller) && sellerPlayer != null) {
-                                                            sellerPlayer.sendMessage(Messages.ADMIN_FORCE_CANCELLED_TO_PLAYER.getMessage());
-                                                        }
-                                                        AuctionCancelledEvent event = new AuctionCancelledEvent((sellerPlayer != null ? sellerPlayer : Bukkit.getOfflinePlayer(seller)), data.getItemStack("Items." + i + ".Item"), CancelledReason.ADMIN_FORCE_CANCEL);
-                                                        Bukkit.getPluginManager().callEvent(event);
-                                                        data.set("OutOfTime/Cancelled." + num + ".Seller", data.getString("Items." + i + ".Seller"));
-                                                        data.set("OutOfTime/Cancelled." + num + ".Full-Time", data.getLong("Items." + i + ".Full-Time"));
-                                                        data.set("OutOfTime/Cancelled." + num + ".StoreID", data.getInt("Items." + i + ".StoreID"));
-                                                        data.set("OutOfTime/Cancelled." + num + ".Item", data.getItemStack("Items." + i + ".Item"));
-                                                        data.set("Items." + i, null);
-                                                        Files.DATA.saveFile();
-                                                        player.sendMessage(Messages.ADMIN_FORCE_CENCELLED.getMessage());
-                                                        playClick(player);
-                                                        int page = Integer.parseInt(e.getView().getTitle().split("#")[1]);
-                                                        openShop(player, shopType.get(player), shopCategory.get(player), page);
-                                                        return;
-                                                    }
-                                                }
-                                                final Runnable runnable = () -> inv.setItem(slot, item);
-                                                if (data.getString("Items." + i + ".Seller").equalsIgnoreCase(player.getName())) {
-                                                    String it = config.getString("Settings.GUISettings.OtherSettings.Your-Item.Item");
-                                                    String name = config.getString("Settings.GUISettings.OtherSettings.Your-Item.Name");
-                                                    ItemStack I;
-                                                    if (config.contains("Settings.GUISettings.OtherSettings.Your-Item.Lore")) {
-                                                        I = Methods.makeItem(it, 1, name, config.getStringList("Settings.GUISettings.OtherSettings.Your-Item.Lore"));
-                                                    } else {
-                                                        I = Methods.makeItem(it, 1, name);
-                                                    }
-                                                    inv.setItem(slot, I);
-                                                    playClick(player);
-                                                    Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, runnable, 3 * 20);
-                                                    return;
-                                                }
-                                                long cost = data.getLong("Items." + i + ".Price");
-                                                if (CurrencyManager.getMoney(player) < cost) {
-                                                    String it = config.getString("Settings.GUISettings.OtherSettings.Cant-Afford.Item");
-                                                    String name = config.getString("Settings.GUISettings.OtherSettings.Cant-Afford.Name");
-                                                    ItemStack I;
-                                                    if (config.contains("Settings.GUISettings.OtherSettings.Cant-Afford.Lore")) {
-                                                        I = Methods.makeItem(it, 1, name, config.getStringList("Settings.GUISettings.OtherSettings.Cant-Afford.Lore"));
-                                                    } else {
-                                                        I = Methods.makeItem(it, 1, name);
-                                                    }
-                                                    inv.setItem(slot, I);
-                                                    playClick(player);
-                                                    Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, runnable, 3 * 20);
-                                                    return;
-                                                }
-                                                if (data.getBoolean("Items." + i + ".Biddable")) {
-                                                    if (player.getName().equalsIgnoreCase(data.getString("Items." + i + ".TopBidder"))) {
-                                                        String it = config.getString("Settings.GUISettings.OtherSettings.Top-Bidder.Item");
-                                                        String name = config.getString("Settings.GUISettings.OtherSettings.Top-Bidder.Name");
-                                                        ItemStack I;
-                                                        if (config.contains("Settings.GUISettings.OtherSettings.Top-Bidder.Lore")) {
-                                                            I = Methods.makeItem(it, 1, name, config.getStringList("Settings.GUISettings.OtherSettings.Top-Bidder.Lore"));
-                                                        } else {
-                                                            I = Methods.makeItem(it, 1, name);
-                                                        }
-                                                        inv.setItem(slot, I);
-                                                        playClick(player);
-                                                        Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, runnable, 3 * 20);
-                                                        return;
-                                                    }
-                                                    playClick(player);
-                                                    openBidding(player, i);
-                                                    biddingID.put(player, i);
-                                                } else {
-                                                    playClick(player);
-                                                    openBuying(player, i);
-                                                }
-                                                return;
-                                            }
-                                        }
-                                    }
-                                    if (!T) {
-                                        playClick(player);
-                                        openShop(player, shopType.get(player), shopCategory.get(player), 1);
-                                        player.sendMessage(Messages.ITEM_DOESNT_EXIST.getMessage());
-                                        return;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            if (e.getView().getTitle().contains(Methods.color(config.getString("Settings.Buying-Item")))) {
-                e.setCancelled(true);
-                int slot = e.getRawSlot();
-                if (slot <= inv.getSize()) {
-                    if (e.getCurrentItem() != null) {
-                        ItemStack item = e.getCurrentItem();
-                        if (item.hasItemMeta()) {
-                            if (item.getItemMeta().hasDisplayName()) {
-                                if (item.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.Confirm.Name")))) {
-                                    String ID = IDs.get(player);
-                                    long cost = data.getLong("Items." + ID + ".Price");
-                                    String seller = data.getString("Items." + ID + ".Seller");
-                                    if (!data.contains("Items." + ID)) {
-                                        playClick(player);
-                                        openShop(player, shopType.get(player), shopCategory.get(player), 1);
-                                        player.sendMessage(Messages.ITEM_DOESNT_EXIST.getMessage());
-                                        return;
-                                    }
-                                    if (Methods.isInvFull(player)) {
-                                        playClick(player);
-                                        player.closeInventory();
-                                        player.sendMessage(Messages.INVENTORY_FULL.getMessage());
-                                        return;
-                                    }
-                                    if (CurrencyManager.getMoney(player) < cost) {
-                                        playClick(player);
-                                        player.closeInventory();
-                                        HashMap<String, String> placeholders = new HashMap<>();
-                                        placeholders.put("%Money_Needed%", (cost - CurrencyManager.getMoney(player)) + "");
-                                        placeholders.put("%money_needed%", (cost - CurrencyManager.getMoney(player)) + "");
-                                        player.sendMessage(Messages.NEED_MORE_MONEY.getMessage(placeholders));
-                                        return;
-                                    }
-                                    ItemStack i = data.getItemStack("Items." + ID + ".Item");
-                                    Bukkit.getPluginManager().callEvent(new AuctionBuyEvent(player, i, cost));
-                                    CurrencyManager.removeMoney(player, cost);
-                                    CurrencyManager.addMoney(Methods.getOfflinePlayer(seller), cost);
-                                    HashMap<String, String> placeholders = new HashMap<>();
-                                    placeholders.put("%Price%", Methods.getPrice(ID, false));
-                                    placeholders.put("%price%", Methods.getPrice(ID, false));
-                                    placeholders.put("%Player%", player.getName());
-                                    placeholders.put("%player%", player.getName());
-                                    player.sendMessage(Messages.BOUGHT_ITEM.getMessage(placeholders));
-                                    if (Methods.isOnline(seller) && Methods.getPlayer(seller) != null) {
-                                        Player sell = Methods.getPlayer(seller);
-                                        sell.sendMessage(Messages.PLAYER_BOUGHT_ITEM.getMessage(placeholders));
-                                    }
-                                    player.getInventory().addItem(i);
-                                    data.set("Items." + ID, null);
-                                    Files.DATA.saveFile();
-                                    playClick(player);
-                                    openShop(player, shopType.get(player), shopCategory.get(player), 1);
-                                    return;
-                                }
-                                if (item.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.Cancel.Name")))) {
-                                    openShop(player, shopType.get(player), shopCategory.get(player), 1);
-                                    playClick(player);
-                                    return;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            if (e.getView().getTitle().contains(Methods.color(config.getString("Settings.Players-Current-Items")))) {
-                e.setCancelled(true);
-                int slot = e.getRawSlot();
-                if (slot <= inv.getSize()) {
-                    if (e.getCurrentItem() != null) {
-                        ItemStack item = e.getCurrentItem();
-                        if (item.hasItemMeta()) {
-                            if (item.getItemMeta().hasDisplayName()) {
-                                if (item.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.Back.Name")))) {
-                                    openShop(player, shopType.get(player), shopCategory.get(player), 1);
-                                    playClick(player);
-                                    return;
-                                }
-                            }
-                            if (List.containsKey(player)) {
-                                if (List.get(player).size() >= slot) {
-                                    int id = List.get(player).get(slot);
-                                    boolean T = false;
-                                    if (data.contains("Items")) {
-                                        for (String i : data.getConfigurationSection("Items").getKeys(false)) {
-                                            int ID = data.getInt("Items." + i + ".StoreID");
-                                            if (id == ID) {
-                                                player.sendMessage(Messages.CANCELLED_ITEM.getMessage());
-                                                AuctionCancelledEvent event = new AuctionCancelledEvent(player, data.getItemStack("Items." + i + ".Item"), CancelledReason.PLAYER_FORCE_CANCEL);
-                                                Bukkit.getPluginManager().callEvent(event);
-                                                int num = 1;
-                                                for (; data.contains("OutOfTime/Cancelled." + num); num++) ;
-                                                data.set("OutOfTime/Cancelled." + num + ".Seller", data.getString("Items." + i + ".Seller"));
-                                                data.set("OutOfTime/Cancelled." + num + ".Full-Time", data.getLong("Items." + i + ".Full-Time"));
-                                                data.set("OutOfTime/Cancelled." + num + ".StoreID", data.getInt("Items." + i + ".StoreID"));
-                                                data.set("OutOfTime/Cancelled." + num + ".Item", data.getItemStack("Items." + i + ".Item"));
-                                                data.set("Items." + i, null);
-                                                Files.DATA.saveFile();
-                                                playClick(player);
-                                                openPlayersCurrentList(player, 1);
-                                                return;
-                                            }
-                                        }
-                                    }
-                                    if (!T) {
-                                        playClick(player);
-                                        openShop(player, shopType.get(player), shopCategory.get(player), 1);
-                                        player.sendMessage(Messages.ITEM_DOESNT_EXIST.getMessage());
-                                        return;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            if (e.getView().getTitle().contains(Methods.color(config.getString("Settings.Cancelled/Expired-Items")))) {
-                e.setCancelled(true);
-                final int slot = e.getRawSlot();
-                if (slot <= inv.getSize()) {
-                    if (e.getCurrentItem() != null) {
-                        final ItemStack item = e.getCurrentItem();
-                        if (item.hasItemMeta()) {
-                            if (item.getItemMeta().hasDisplayName()) {
-                                if (item.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.Back.Name")))) {
-                                    Methods.updateAuction();
-                                    playClick(player);
-                                    openShop(player, shopType.get(player), shopCategory.get(player), 1);
-                                    return;
-                                }
-                                if (item.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.PreviousPage.Name")))) {
-                                    Methods.updateAuction();
-                                    int page = Integer.parseInt(e.getView().getTitle().split("#")[1]);
-                                    if (page == 1) page++;
-                                    playClick(player);
-                                    openPlayersExpiredList(player, (page - 1));
-                                    return;
-                                }
-                                if (item.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.Return.Name")))) {
-                                    Methods.updateAuction();
-                                    int page = Integer.parseInt(e.getView().getTitle().split("#")[1]);
-                                    if (data.contains("OutOfTime/Cancelled")) {
-                                        for (String i : data.getConfigurationSection("OutOfTime/Cancelled").getKeys(false)) {
-                                            if (data.getString("OutOfTime/Cancelled." + i + ".Seller").equalsIgnoreCase(player.getName())) {
-                                                if (Methods.isInvFull(player)) {
-                                                    player.sendMessage(Messages.INVENTORY_FULL.getMessage());
-                                                    break;
-                                                } else {
-                                                    player.getInventory().addItem(data.getItemStack("OutOfTime/Cancelled." + i + ".Item"));
-                                                    data.set("OutOfTime/Cancelled." + i, null);
-                                                }
-                                            }
-                                        }
-                                    }
-                                    player.sendMessage(Messages.GOT_ITEM_BACK.getMessage());
-                                    Files.DATA.saveFile();
-                                    playClick(player);
-                                    openPlayersExpiredList(player, page);
-                                    return;
-                                }
-                                if (item.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.NextPage.Name")))) {
-                                    Methods.updateAuction();
-                                    int page = Integer.parseInt(e.getView().getTitle().split("#")[1]);
-                                    playClick(player);
-                                    openPlayersExpiredList(player, (page + 1));
-                                    return;
-                                }
-                            }
-                            if (List.containsKey(player)) {
-                                if (List.get(player).size() >= slot) {
-                                    int id = List.get(player).get(slot);
-                                    boolean T = false;
-                                    if (data.contains("OutOfTime/Cancelled")) {
-                                        for (String i : data.getConfigurationSection("OutOfTime/Cancelled").getKeys(false)) {
-                                            int ID = data.getInt("OutOfTime/Cancelled." + i + ".StoreID");
-                                            if (id == ID) {
-                                                if (!Methods.isInvFull(player)) {
-                                                    player.sendMessage(Messages.GOT_ITEM_BACK.getMessage());
-                                                    ItemStack IT = data.getItemStack("OutOfTime/Cancelled." + i + ".Item");
-                                                    player.getInventory().addItem(IT);
-                                                    data.set("OutOfTime/Cancelled." + i, null);
-                                                    Files.DATA.saveFile();
-                                                    playClick(player);
-                                                    openPlayersExpiredList(player, 1);
-                                                } else {
-                                                    player.sendMessage(Messages.INVENTORY_FULL.getMessage());
-                                                }
-                                                return;
-                                            }
-                                        }
-                                    }
-                                    if (!T) {
-                                        playClick(player);
-                                        openShop(player, shopType.get(player), shopCategory.get(player), 1);
-                                        player.sendMessage(Messages.ITEM_DOESNT_EXIST.getMessage());
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
+        	if (inv.getHolder() != null && inv.getHolder() instanceof CrazyInventoryHolder) {
+        		CrazyInventoryHolder holder = (CrazyInventoryHolder) inv.getHolder();
+	            if (GuiType.CATEGORIES.equals(holder.getGuiType())) {
+	                e.setCancelled(true);
+	                int slot = e.getRawSlot();
+	                if (slot <= inv.getSize()) {
+	                    if (e.getCurrentItem() != null) {
+	                        ItemStack item = e.getCurrentItem();
+	                        if (item.hasItemMeta()) {
+	                            if (item.getItemMeta().hasDisplayName()) {
+	                                for (Category cat : Category.values()) {
+	                                    if (item.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.GUISettings.Category-Settings." + cat.getName() + ".Name")))) {
+	                                        openShop(player, shopType.get(player), cat, 1);
+	                                        playClick(player);
+	                                        return;
+	                                    }
+	                                    if (item.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.Back.Name")))) {
+	                                        openShop(player, shopType.get(player), shopCategory.get(player), 1);
+	                                        playClick(player);
+	                                        return;
+	                                    }
+	                                }
+	                            }
+	                        }
+	                    }
+	                }
+	            }
+	            if (GuiType.BIDDING.equals(holder.getGuiType())) {
+	                e.setCancelled(true);
+	                int slot = e.getRawSlot();
+	                if (slot <= inv.getSize()) {
+	                    if (e.getCurrentItem() != null) {
+	                        ItemStack item = e.getCurrentItem();
+	                        if (item.hasItemMeta()) {
+	                            if (item.getItemMeta().hasDisplayName()) {
+	                                if (item.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.Bid.Name")))) {
+	                                    String ID = biddingID.get(player);
+	                                    int bid = bidding.get(player);
+	                                    String topBidder = data.getString("Items." + ID + ".TopBidder");
+	                                    if (CurrencyManager.getMoney(player) < bid) {
+	                                        HashMap<String, String> placeholders = new HashMap<>();
+	                                        placeholders.put("%Money_Needed%", (bid - CurrencyManager.getMoney(player)) + "");
+	                                        placeholders.put("%money_needed%", (bid - CurrencyManager.getMoney(player)) + "");
+	                                        player.sendMessage(Messages.NEED_MORE_MONEY.getMessage(placeholders));
+	                                        return;
+	                                    }
+	                                    if (data.getLong("Items." + ID + ".Price") > bid) {
+	                                        player.sendMessage(Messages.BID_MORE_MONEY.getMessage());
+	                                        return;
+	                                    }
+	                                    if (data.getLong("Items." + ID + ".Price") >= bid && !topBidder.equalsIgnoreCase("None")) {
+	                                        player.sendMessage(Messages.BID_MORE_MONEY.getMessage());
+	                                        return;
+	                                    }
+	                                    Bukkit.getPluginManager().callEvent(new AuctionNewBidEvent(player, data.getItemStack("Items." + ID + ".Item"), bid));
+	                                    data.set("Items." + ID + ".Price", bid);
+	                                    data.set("Items." + ID + ".TopBidder", player.getName());
+	                                    HashMap<String, String> placeholders = new HashMap<>();
+	                                    placeholders.put("%Bid%", bid + "");
+	                                    player.sendMessage(Messages.BID_MESSAGE.getMessage(placeholders));
+	                                    Files.DATA.saveFile();
+	                                    bidding.put(player, 0);
+	                                    player.closeInventory();
+	                                    playClick(player);
+	                                    return;
+	                                }
+	                                HashMap<String, Integer> priceEdits = new HashMap<>();
+	                                priceEdits.put("&a+1", 1);
+	                                priceEdits.put("&a+10", 10);
+	                                priceEdits.put("&a+100", 100);
+	                                priceEdits.put("&a+1000", 1000);
+	                                priceEdits.put("&c-1", -1);
+	                                priceEdits.put("&c-10", -10);
+	                                priceEdits.put("&c-100", -100);
+	                                priceEdits.put("&c-1000", -1000);
+	                                for (String price : priceEdits.keySet()) {
+	                                    if (item.getItemMeta().getDisplayName().equals(Methods.color(price))) {
+	                                        try {
+	                                            bidding.put(player, (bidding.get(player) + priceEdits.get(price)));
+	                                            inv.setItem(4, getBiddingItem(player, biddingID.get(player)));
+	                                            inv.setItem(13, getBiddingGlass(player, biddingID.get(player)));
+	                                            playClick(player);
+	                                            return;
+	                                        } catch (Exception ex) {
+	                                            player.closeInventory();
+	                                            player.sendMessage(Messages.ITEM_DOESNT_EXIST.getMessage());
+	                                            return;
+	                                        }
+	                                    }
+	                                }
+	                            }
+	                        }
+	                    }
+	                }
+	            }
+	            if (GuiType.SHOP.equals(holder.getGuiType())) {
+	                e.setCancelled(true);
+	                final int slot = e.getRawSlot();
+	                if (slot <= inv.getSize()) {
+	                    if (e.getCurrentItem() != null) {
+	                        final ItemStack item = e.getCurrentItem();
+	                        if (item.hasItemMeta()) {
+	                            if (item.getItemMeta().hasDisplayName()) {
+	                                if (item.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.NextPage.Name")))) {
+	                                    Methods.updateAuction();
+	                                    int page = holder.getPage();
+	                                    openShop(player, shopType.get(player), shopCategory.get(player), page + 1);
+	                                    playClick(player);
+	                                    return;
+	                                }
+	                                if (item.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.PreviousPage.Name")))) {
+	                                    Methods.updateAuction();
+	                                    int page = holder.getPage();
+	                                    if (page == 1) page++;
+	                                    openShop(player, shopType.get(player), shopCategory.get(player), page - 1);
+	                                    playClick(player);
+	                                    return;
+	                                }
+	                                if (item.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.Refesh.Name")))) {
+	                                    Methods.updateAuction();
+	                                    int page = holder.getPage();
+	                                    openShop(player, shopType.get(player), shopCategory.get(player), page);
+	                                    playClick(player);
+	                                    return;
+	                                }
+	                                if (item.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.Bidding/Selling.Selling.Name")))) {
+	                                    openShop(player, ShopType.BID, shopCategory.get(player), 1);
+	                                    playClick(player);
+	                                    return;
+	                                }
+	                                if (item.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.Bidding/Selling.Bidding.Name")))) {
+	                                    openShop(player, ShopType.SELL, shopCategory.get(player), 1);
+	                                    playClick(player);
+	                                    return;
+	                                }
+	                                if (item.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.Cancelled/ExpiredItems.Name")))) {
+	                                    openPlayersExpiredList(player, 1);
+	                                    playClick(player);
+	                                    return;
+	                                }
+	                                if (item.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.SellingItems.Name")))) {
+	                                    openPlayersCurrentList(player, 1);
+	                                    playClick(player);
+	                                    return;
+	                                }
+	                                if (item.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.Category1.Name")))) {
+	                                    openCategories(player, shopType.get(player));
+	                                    playClick(player);
+	                                    return;
+	                                }
+	                                if (item.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.Category2.Name")))) {
+	                                    openCategories(player, shopType.get(player));
+	                                    playClick(player);
+	                                    return;
+	                                }
+	                                if (item.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.Your-Item.Name")))) {
+	                                    return;
+	                                }
+	                                if (item.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.Cant-Afford.Name")))) {
+	                                    return;
+	                                }
+	                                if (item.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.Top-Bidder.Name")))) {
+	                                    return;
+	                                }
+	                            }
+	                            if (List.containsKey(player)) {
+	                                if (List.get(player).size() >= slot) {
+	                                    int id = List.get(player).get(slot);
+	                                    boolean T = false;
+	                                    if (data.contains("Items")) {
+	                                        for (String i : data.getConfigurationSection("Items").getKeys(false)) {
+	                                            int ID = data.getInt("Items." + i + ".StoreID");
+	                                            if (id == ID) {
+	                                                if (player.hasPermission("crazyAuctions.admin") || player.hasPermission("crazyauctions.force-end")) {
+	                                                    if (e.getAction() == InventoryAction.MOVE_TO_OTHER_INVENTORY) {
+	                                                        int num = 1;
+	                                                        for (; data.contains("OutOfTime/Cancelled." + num); num++) ;
+	                                                        String seller = data.getString("Items." + i + ".Seller");
+	                                                        Player sellerPlayer = Methods.getPlayer(seller);
+	                                                        if (Methods.isOnline(seller) && sellerPlayer != null) {
+	                                                            sellerPlayer.sendMessage(Messages.ADMIN_FORCE_CANCELLED_TO_PLAYER.getMessage());
+	                                                        }
+	                                                        AuctionCancelledEvent event = new AuctionCancelledEvent((sellerPlayer != null ? sellerPlayer : Bukkit.getOfflinePlayer(seller)), data.getItemStack("Items." + i + ".Item"), CancelledReason.ADMIN_FORCE_CANCEL);
+	                                                        Bukkit.getPluginManager().callEvent(event);
+	                                                        data.set("OutOfTime/Cancelled." + num + ".Seller", data.getString("Items." + i + ".Seller"));
+	                                                        data.set("OutOfTime/Cancelled." + num + ".Full-Time", data.getLong("Items." + i + ".Full-Time"));
+	                                                        data.set("OutOfTime/Cancelled." + num + ".StoreID", data.getInt("Items." + i + ".StoreID"));
+	                                                        data.set("OutOfTime/Cancelled." + num + ".Item", data.getItemStack("Items." + i + ".Item"));
+	                                                        data.set("Items." + i, null);
+	                                                        Files.DATA.saveFile();
+	                                                        player.sendMessage(Messages.ADMIN_FORCE_CENCELLED.getMessage());
+	                                                        playClick(player);
+	                                                        int page = holder.getPage();
+	                                                        openShop(player, shopType.get(player), shopCategory.get(player), page);
+	                                                        return;
+	                                                    }
+	                                                }
+	                                                final Runnable runnable = () -> inv.setItem(slot, item);
+	                                                if (data.getString("Items." + i + ".Seller").equalsIgnoreCase(player.getName())) {
+	                                                    String it = config.getString("Settings.GUISettings.OtherSettings.Your-Item.Item");
+	                                                    String name = config.getString("Settings.GUISettings.OtherSettings.Your-Item.Name");
+	                                                    ItemStack I;
+	                                                    if (config.contains("Settings.GUISettings.OtherSettings.Your-Item.Lore")) {
+	                                                        I = Methods.makeItem(it, 1, name, config.getStringList("Settings.GUISettings.OtherSettings.Your-Item.Lore"));
+	                                                    } else {
+	                                                        I = Methods.makeItem(it, 1, name);
+	                                                    }
+	                                                    inv.setItem(slot, I);
+	                                                    playClick(player);
+	                                                    Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, runnable, 3 * 20);
+	                                                    return;
+	                                                }
+	                                                long cost = data.getLong("Items." + i + ".Price");
+	                                                if (CurrencyManager.getMoney(player) < cost) {
+	                                                    String it = config.getString("Settings.GUISettings.OtherSettings.Cant-Afford.Item");
+	                                                    String name = config.getString("Settings.GUISettings.OtherSettings.Cant-Afford.Name");
+	                                                    ItemStack I;
+	                                                    if (config.contains("Settings.GUISettings.OtherSettings.Cant-Afford.Lore")) {
+	                                                        I = Methods.makeItem(it, 1, name, config.getStringList("Settings.GUISettings.OtherSettings.Cant-Afford.Lore"));
+	                                                    } else {
+	                                                        I = Methods.makeItem(it, 1, name);
+	                                                    }
+	                                                    inv.setItem(slot, I);
+	                                                    playClick(player);
+	                                                    Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, runnable, 3 * 20);
+	                                                    return;
+	                                                }
+	                                                if (data.getBoolean("Items." + i + ".Biddable")) {
+	                                                    if (player.getName().equalsIgnoreCase(data.getString("Items." + i + ".TopBidder"))) {
+	                                                        String it = config.getString("Settings.GUISettings.OtherSettings.Top-Bidder.Item");
+	                                                        String name = config.getString("Settings.GUISettings.OtherSettings.Top-Bidder.Name");
+	                                                        ItemStack I;
+	                                                        if (config.contains("Settings.GUISettings.OtherSettings.Top-Bidder.Lore")) {
+	                                                            I = Methods.makeItem(it, 1, name, config.getStringList("Settings.GUISettings.OtherSettings.Top-Bidder.Lore"));
+	                                                        } else {
+	                                                            I = Methods.makeItem(it, 1, name);
+	                                                        }
+	                                                        inv.setItem(slot, I);
+	                                                        playClick(player);
+	                                                        Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, runnable, 3 * 20);
+	                                                        return;
+	                                                    }
+	                                                    playClick(player);
+	                                                    openBidding(player, i);
+	                                                    biddingID.put(player, i);
+	                                                } else {
+	                                                    playClick(player);
+	                                                    openBuying(player, i);
+	                                                }
+	                                                return;
+	                                            }
+	                                        }
+	                                    }
+	                                    if (!T) {
+	                                        playClick(player);
+	                                        openShop(player, shopType.get(player), shopCategory.get(player), 1);
+	                                        player.sendMessage(Messages.ITEM_DOESNT_EXIST.getMessage());
+	                                        return;
+	                                    }
+	                                }
+	                            }
+	                        }
+	                    }
+	                }
+	            }
+	            if (GuiType.BUYING.equals(holder.getGuiType())) {
+	                e.setCancelled(true);
+	                int slot = e.getRawSlot();
+	                if (slot <= inv.getSize()) {
+	                    if (e.getCurrentItem() != null) {
+	                        ItemStack item = e.getCurrentItem();
+	                        if (item.hasItemMeta()) {
+	                            if (item.getItemMeta().hasDisplayName()) {
+	                                if (item.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.Confirm.Name")))) {
+	                                    String ID = IDs.get(player);
+	                                    long cost = data.getLong("Items." + ID + ".Price");
+	                                    String seller = data.getString("Items." + ID + ".Seller");
+	                                    if (!data.contains("Items." + ID)) {
+	                                        playClick(player);
+	                                        openShop(player, shopType.get(player), shopCategory.get(player), 1);
+	                                        player.sendMessage(Messages.ITEM_DOESNT_EXIST.getMessage());
+	                                        return;
+	                                    }
+	                                    if (Methods.isInvFull(player)) {
+	                                        playClick(player);
+	                                        player.closeInventory();
+	                                        player.sendMessage(Messages.INVENTORY_FULL.getMessage());
+	                                        return;
+	                                    }
+	                                    if (CurrencyManager.getMoney(player) < cost) {
+	                                        playClick(player);
+	                                        player.closeInventory();
+	                                        HashMap<String, String> placeholders = new HashMap<>();
+	                                        placeholders.put("%Money_Needed%", (cost - CurrencyManager.getMoney(player)) + "");
+	                                        placeholders.put("%money_needed%", (cost - CurrencyManager.getMoney(player)) + "");
+	                                        player.sendMessage(Messages.NEED_MORE_MONEY.getMessage(placeholders));
+	                                        return;
+	                                    }
+	                                    ItemStack i = data.getItemStack("Items." + ID + ".Item");
+	                                    Bukkit.getPluginManager().callEvent(new AuctionBuyEvent(player, i, cost));
+	                                    CurrencyManager.removeMoney(player, cost);
+	                                    CurrencyManager.addMoney(Methods.getOfflinePlayer(seller), cost);
+	                                    HashMap<String, String> placeholders = new HashMap<>();
+	                                    placeholders.put("%Price%", Methods.getPrice(ID, false));
+	                                    placeholders.put("%price%", Methods.getPrice(ID, false));
+	                                    placeholders.put("%Player%", player.getName());
+	                                    placeholders.put("%player%", player.getName());
+	                                    player.sendMessage(Messages.BOUGHT_ITEM.getMessage(placeholders));
+	                                    if (Methods.isOnline(seller) && Methods.getPlayer(seller) != null) {
+	                                        Player sell = Methods.getPlayer(seller);
+	                                        sell.sendMessage(Messages.PLAYER_BOUGHT_ITEM.getMessage(placeholders));
+	                                    }
+	                                    player.getInventory().addItem(i);
+	                                    data.set("Items." + ID, null);
+	                                    Files.DATA.saveFile();
+	                                    playClick(player);
+	                                    openShop(player, shopType.get(player), shopCategory.get(player), 1);
+	                                    return;
+	                                }
+	                                if (item.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.Cancel.Name")))) {
+	                                    openShop(player, shopType.get(player), shopCategory.get(player), 1);
+	                                    playClick(player);
+	                                    return;
+	                                }
+	                            }
+	                        }
+	                    }
+	                }
+	            }
+	            if (GuiType.CURRENT_LIST.equals(holder.getGuiType())) {
+	                e.setCancelled(true);
+	                int slot = e.getRawSlot();
+	                if (slot <= inv.getSize()) {
+	                    if (e.getCurrentItem() != null) {
+	                        ItemStack item = e.getCurrentItem();
+	                        if (item.hasItemMeta()) {
+	                            if (item.getItemMeta().hasDisplayName()) {
+	                                if (item.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.Back.Name")))) {
+	                                    openShop(player, shopType.get(player), shopCategory.get(player), 1);
+	                                    playClick(player);
+	                                    return;
+	                                }
+	                            }
+	                            if (List.containsKey(player)) {
+	                                if (List.get(player).size() >= slot) {
+	                                    int id = List.get(player).get(slot);
+	                                    boolean T = false;
+	                                    if (data.contains("Items")) {
+	                                        for (String i : data.getConfigurationSection("Items").getKeys(false)) {
+	                                            int ID = data.getInt("Items." + i + ".StoreID");
+	                                            if (id == ID) {
+	                                                player.sendMessage(Messages.CANCELLED_ITEM.getMessage());
+	                                                AuctionCancelledEvent event = new AuctionCancelledEvent(player, data.getItemStack("Items." + i + ".Item"), CancelledReason.PLAYER_FORCE_CANCEL);
+	                                                Bukkit.getPluginManager().callEvent(event);
+	                                                int num = 1;
+	                                                for (; data.contains("OutOfTime/Cancelled." + num); num++) ;
+	                                                data.set("OutOfTime/Cancelled." + num + ".Seller", data.getString("Items." + i + ".Seller"));
+	                                                data.set("OutOfTime/Cancelled." + num + ".Full-Time", data.getLong("Items." + i + ".Full-Time"));
+	                                                data.set("OutOfTime/Cancelled." + num + ".StoreID", data.getInt("Items." + i + ".StoreID"));
+	                                                data.set("OutOfTime/Cancelled." + num + ".Item", data.getItemStack("Items." + i + ".Item"));
+	                                                data.set("Items." + i, null);
+	                                                Files.DATA.saveFile();
+	                                                playClick(player);
+	                                                openPlayersCurrentList(player, 1);
+	                                                return;
+	                                            }
+	                                        }
+	                                    }
+	                                    if (!T) {
+	                                        playClick(player);
+	                                        openShop(player, shopType.get(player), shopCategory.get(player), 1);
+	                                        player.sendMessage(Messages.ITEM_DOESNT_EXIST.getMessage());
+	                                        return;
+	                                    }
+	                                }
+	                            }
+	                        }
+	                    }
+	                }
+	            }
+	            if (GuiType.EXPIRED_LIST.equals(holder.getGuiType())) {
+	                e.setCancelled(true);
+	                final int slot = e.getRawSlot();
+	                if (slot <= inv.getSize()) {
+	                    if (e.getCurrentItem() != null) {
+	                        final ItemStack item = e.getCurrentItem();
+	                        if (item.hasItemMeta()) {
+	                            if (item.getItemMeta().hasDisplayName()) {
+	                                if (item.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.Back.Name")))) {
+	                                    Methods.updateAuction();
+	                                    playClick(player);
+	                                    openShop(player, shopType.get(player), shopCategory.get(player), 1);
+	                                    return;
+	                                }
+	                                if (item.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.PreviousPage.Name")))) {
+	                                    Methods.updateAuction();
+	                                    int page = holder.getPage();
+	                                    if (page == 1) page++;
+	                                    playClick(player);
+	                                    openPlayersExpiredList(player, (page - 1));
+	                                    return;
+	                                }
+	                                if (item.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.Return.Name")))) {
+	                                    Methods.updateAuction();
+	                                    int page = holder.getPage();
+	                                    if (data.contains("OutOfTime/Cancelled")) {
+	                                        for (String i : data.getConfigurationSection("OutOfTime/Cancelled").getKeys(false)) {
+	                                            if (data.getString("OutOfTime/Cancelled." + i + ".Seller").equalsIgnoreCase(player.getName())) {
+	                                                if (Methods.isInvFull(player)) {
+	                                                    player.sendMessage(Messages.INVENTORY_FULL.getMessage());
+	                                                    break;
+	                                                } else {
+	                                                    player.getInventory().addItem(data.getItemStack("OutOfTime/Cancelled." + i + ".Item"));
+	                                                    data.set("OutOfTime/Cancelled." + i, null);
+	                                                }
+	                                            }
+	                                        }
+	                                    }
+	                                    player.sendMessage(Messages.GOT_ITEM_BACK.getMessage());
+	                                    Files.DATA.saveFile();
+	                                    playClick(player);
+	                                    openPlayersExpiredList(player, page);
+	                                    return;
+	                                }
+	                                if (item.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.NextPage.Name")))) {
+	                                    Methods.updateAuction();
+	                                    int page = holder.getPage();
+	                                    playClick(player);
+	                                    openPlayersExpiredList(player, (page + 1));
+	                                    return;
+	                                }
+	                            }
+	                            if (List.containsKey(player)) {
+	                                if (List.get(player).size() >= slot) {
+	                                    int id = List.get(player).get(slot);
+	                                    boolean T = false;
+	                                    if (data.contains("OutOfTime/Cancelled")) {
+	                                        for (String i : data.getConfigurationSection("OutOfTime/Cancelled").getKeys(false)) {
+	                                            int ID = data.getInt("OutOfTime/Cancelled." + i + ".StoreID");
+	                                            if (id == ID) {
+	                                                if (!Methods.isInvFull(player)) {
+	                                                    player.sendMessage(Messages.GOT_ITEM_BACK.getMessage());
+	                                                    ItemStack IT = data.getItemStack("OutOfTime/Cancelled." + i + ".Item");
+	                                                    player.getInventory().addItem(IT);
+	                                                    data.set("OutOfTime/Cancelled." + i, null);
+	                                                    Files.DATA.saveFile();
+	                                                    playClick(player);
+	                                                    openPlayersExpiredList(player, 1);
+	                                                } else {
+	                                                    player.sendMessage(Messages.INVENTORY_FULL.getMessage());
+	                                                }
+	                                                return;
+	                                            }
+	                                        }
+	                                    }
+	                                    if (!T) {
+	                                        playClick(player);
+	                                        openShop(player, shopType.get(player), shopCategory.get(player), 1);
+	                                        player.sendMessage(Messages.ITEM_DOESNT_EXIST.getMessage());
+	                                    }
+	                                }
+	                            }
+	                        }
+	                    }
+	                }
+	            }
             }
         }
     }
+    
+    
+    private static class CrazyInventoryHolder implements InventoryHolder {
+    	
+    	
+    	private final Inventory inventory;
+    	private final GuiType type;
+    	private final int page;
+    	
+    	
+    	public CrazyInventoryHolder(GuiType type) {
+    		this(type, 0);
+    	}
+    	
+    	
+    	public CrazyInventoryHolder(GuiType type, int page) {
+    		FileConfiguration config = Files.CONFIG.getFile();
+    		this.type = type;
+    		this.page = page;
+    		this.inventory = Bukkit.createInventory(this, type.getSize(), Methods.color(type.isPaginable() ? (config.getString(type.getTitlePath()) + " #" + page) : (config.getString(type.getTitlePath()))));
+    	}
+    	
+
+		@Override
+		public Inventory getInventory() {
+			return this.inventory;
+		}
+		
+		
+		public GuiType getGuiType() {
+			return this.type;
+		}
+		
+		
+		public int getPage() {
+			return this.page;
+		}
+    	
+    }
+    
     
 }
