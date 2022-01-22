@@ -12,3 +12,7 @@ target/
 \.DS_Store
 
 dependency-reduced-pom.xml
+
+.settings/
+.classpath
+.project
