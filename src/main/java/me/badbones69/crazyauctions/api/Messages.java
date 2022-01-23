@@ -44,7 +44,7 @@ public enum Messages {
     BIDDING_DISABLED("Bidding-Disabled", "&cThe bidding option is disabled."),
     CRAZYAUCTIONS_HELP("CrazyAuctions-Help", "&c/ah help"),
     CRAZYAUCTIONS_VIEW("CrazyAuctions-View", "&c/ah view <player>"),
-    CRAZYAUCTIONS_SEARCH("CrazyAuctions-View", "&c/ah search <player>"),
+    CRAZYAUCTIONS_SEARCH("CrazyAuctions-View", "&c/ah search <phrase>"),
     CRAZYAUCTIONS_SELL_BID("CrazyAuctions-Sell-Bid", "&c/ah sell/bid <price> [amount of items]"),
     BOOK_NOT_ALLOWED("Book-Not-Allowed", "&cThat book is not able to be sold in this auction house!"),
     HELP("Help-Menu", Arrays.asList(
