@@ -2,6 +2,7 @@ package me.badbones69.crazyauctions;
 
 import me.badbones69.crazyauctions.api.*;
 import me.badbones69.crazyauctions.api.FileManager.Files;
+import me.badbones69.crazyauctions.api.enums.GuiType;
 import me.badbones69.crazyauctions.api.events.AuctionListEvent;
 import me.badbones69.crazyauctions.controllers.GUI;
 import me.badbones69.crazyauctions.controllers.Metrics;
@@ -18,7 +19,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.yaml.snakeyaml.error.YAMLException;
 
 import java.util.ArrayList;
@@ -64,7 +64,7 @@ public class Main extends JavaPlugin implements Listener {
                 Player player = (Player) sender;
                 if (Files.CONFIG.getFile().contains("Settings.Category-Page-Opens-First")) {
                     if (Files.CONFIG.getFile().getBoolean("Settings.Category-Page-Opens-First")) {
-                        GUI.openCategories(player, ShopType.SELL);
+                        GUI.openCategories(player, ShopType.SELL, GuiType.SHOP, new HashMap<>());
                         return true;
                     }
                 }

@@ -25,11 +25,15 @@ import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
+import com.google.common.collect.ImmutableMap;
+
 import java.util.AbstractMap;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Objects;
 import java.util.logging.Level;
 
@@ -139,10 +143,10 @@ public class GUI implements Listener {
         player.openInventory(inv);
     }
     
-    public static void openCategories(Player player, ShopType shop) {
+    public static void openCategories(Player player, ShopType shop, GuiType futureGui, Map<String, Object> futureData) {
         Methods.updateAuction();
         FileConfiguration config = Files.CONFIG.getFile();
-        Inventory inv = new CrazyInventoryHolder(GuiType.CATEGORIES).getInventory();
+        Inventory inv = new CrazyInventoryHolder(GuiType.CATEGORIES, ImmutableMap.of("futureGui", futureGui, "futureData", futureData)).getInventory();
         List<String> options = new ArrayList<>();
         options.add("OtherSettings.Back");
         options.add("OtherSettings.WhatIsThis.Categories");
@@ -220,21 +224,25 @@ public class GUI implements Listener {
     }
     
     public static void openSearch(Player player, ShopType sell, Category cat, String phrase, int page) {
+    	final String lowerPhrase = phrase.toLowerCase();
         Methods.updateAuction();
+        if (cat != null) {
+            shopCategory.put(player, cat);
+        } else {
+            shopCategory.put(player, Category.NONE);
+        }
         FileConfiguration config = Files.CONFIG.getFile();
         FileConfiguration data = Files.DATA.getFile();
         List<ItemStack> items = new ArrayList<>();
         List<Integer> ID = new ArrayList<>();
         if (data.contains("Items")) {
-        	
-        	
         	ConfigurationSection itemsSection = data.getConfigurationSection("Items");
         	itemsSection.getKeys(false).parallelStream().map(itemsSection::getConfigurationSection).map(sec -> {
-        		ItemStack item = data.getItemStack("Item");
-        		if (item != null && cat.getItems().contains(item.getType()) || cat == Category.NONE) {
-        			if (item.getItemMeta() != null && item.getItemMeta().hasDisplayName() && ChatColor.stripColor(item.getItemMeta().getDisplayName()).contains(phrase)) {
+        		ItemStack item = sec.getItemStack("Item");
+        		if (item != null && (cat.getItems().contains(item.getType()) || cat == Category.NONE)) {
+        			if (item.getItemMeta() != null && item.getItemMeta().getDisplayName() != null && ChatColor.stripColor(item.getItemMeta().getDisplayName()).toLowerCase().contains(lowerPhrase)) {
         				List<String> lore = new ArrayList<>();
-            			if (data.getBoolean("Biddable") && sell == ShopType.BID) {
+            			if (sec.getBoolean("Biddable") && sell == ShopType.BID) {
             				// bid
             				String price = Methods.getPrice(sec.getName(), false);
             				String seller = sec.getString("Seller");
@@ -243,7 +251,8 @@ public class GUI implements Listener {
                             for (String l : config.getStringList("Settings.GUISettings.Bidding")) {
                                 lore.add(l.replace("%TopBid%", price).replace("%topbid%", price).replace("%Seller%", seller).replace("%seller%", seller).replace("%TopBidder%", topbidder).replace("%topbidder%", topbidder).replace("%Time%", time).replace("%time%", time));
                             }
-            			} else {
+                            return new AbstractMap.SimpleEntry<>(sec, Methods.addLore(item.clone(), lore));
+            			} else if (sell == ShopType.SELL) {
             				// sell
             				String price = String.format(Locale.ENGLISH, "%,d", sec.getLong("Price"));
             				String seller = sec.getString("Seller");
@@ -251,8 +260,8 @@ public class GUI implements Listener {
             				for (String l : config.getStringList("Settings.GUISettings.SellingItemLore")) {
                                 lore.add(l.replace("%Price%", price).replace("%price%", price).replace("%Seller%", seller).replace("%seller%", seller).replace("%Time%", time).replace("%time%", time));
                             }
+            				return new AbstractMap.SimpleEntry<>(sec, Methods.addLore(item.clone(), lore));
             			}
-            			return new AbstractMap.SimpleEntry<>(sec, Methods.addLore(item.clone(), lore));
         			}
         		} return null;
         	}).filter(Objects::nonNull).sequential().sorted((e1, e2) -> -Long.compare(e1.getKey().getLong("Time-Till-Expire"), e2.getKey().getLong("Time-Till-Expire"))).forEachOrdered(e -> {
@@ -265,7 +274,7 @@ public class GUI implements Listener {
         
         int maxPage = -Math.floorDiv(-items.size(), 45); // simple integer ceil divide
         page = Math.min(page, maxPage); // check page out of bounds
-        Inventory inv = new CrazyInventoryHolder(GuiType.SEARCH, page).getInventory();
+        Inventory inv = new CrazyInventoryHolder(GuiType.SEARCH, page, ImmutableMap.of("phrase", phrase)).getInventory();
         List<String> options = new ArrayList<>();
         options.add("SellingItems");
         options.add("Cancelled/ExpiredItems");
@@ -296,7 +305,7 @@ public class GUI implements Listener {
             String name = config.getString("Settings.GUISettings.OtherSettings." + o + ".Name");
             List<String> lore = new ArrayList<>();
             int slot = config.getInt("Settings.GUISettings.OtherSettings." + o + ".Slot");
-            String cName = Methods.color(config.getString("Settings.GUISettings.Category-Settings." + shopCategory.get(player).getName() + ".Name"));
+            String cName = Methods.color(config.getString("Settings.GUISettings.Category-Settings." + cat.getName() + ".Name"));
             if (config.contains("Settings.GUISettings.OtherSettings." + o + ".Lore")) {
                 for (String l : config.getStringList("Settings.GUISettings.OtherSettings." + o + ".Lore")) {
                     lore.add(l.replace("%Category%", cName).replace("%category%", cName));
@@ -584,9 +593,9 @@ public class GUI implements Listener {
         final Inventory inv = e.getInventory();
         if (inv != null) {
         	if (inv.getHolder() != null && inv.getHolder() instanceof CrazyInventoryHolder) {
+        		e.setCancelled(true);
         		CrazyInventoryHolder holder = (CrazyInventoryHolder) inv.getHolder();
 	            if (GuiType.CATEGORIES.equals(holder.getGuiType())) {
-	                e.setCancelled(true);
 	                int slot = e.getRawSlot();
 	                if (slot <= inv.getSize()) {
 	                    if (e.getCurrentItem() != null) {
@@ -595,7 +604,10 @@ public class GUI implements Listener {
 	                            if (item.getItemMeta().hasDisplayName()) {
 	                                for (Category cat : Category.values()) {
 	                                    if (item.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.GUISettings.Category-Settings." + cat.getName() + ".Name")))) {
-	                                        openShop(player, shopType.get(player), cat, 1);
+	                                        GuiType futureGui = (GuiType) holder.getDataValue("futureGui");
+											Map<String, Object> futureData = (Map<String, Object>) holder.getDataValue("futureData");
+	                                        if (GuiType.SHOP.equals(futureGui)) openShop(player, shopType.get(player), cat, 1);
+	                                        if (GuiType.SEARCH.equals(futureGui)) openSearch(player, shopType.get(player), cat, (String) futureData.get("phrase"), 1);
 	                                        playClick(player);
 	                                        return;
 	                                    }
@@ -611,7 +623,6 @@ public class GUI implements Listener {
 	                }
 	            }
 	            if (GuiType.BIDDING.equals(holder.getGuiType())) {
-	                e.setCancelled(true);
 	                int slot = e.getRawSlot();
 	                if (slot <= inv.getSize()) {
 	                    if (e.getCurrentItem() != null) {
@@ -679,7 +690,6 @@ public class GUI implements Listener {
 	                }
 	            }
 	            if (GuiType.SHOP.equals(holder.getGuiType())) {
-	                e.setCancelled(true);
 	                final int slot = e.getRawSlot();
 	                if (slot <= inv.getSize()) {
 	                    if (e.getCurrentItem() != null) {
@@ -729,12 +739,12 @@ public class GUI implements Listener {
 	                                    return;
 	                                }
 	                                if (item.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.Category1.Name")))) {
-	                                    openCategories(player, shopType.get(player));
+	                                    openCategories(player, shopType.get(player), holder.getGuiType(), new HashMap<>());
 	                                    playClick(player);
 	                                    return;
 	                                }
 	                                if (item.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.Category2.Name")))) {
-	                                    openCategories(player, shopType.get(player));
+	                                    openCategories(player, shopType.get(player), holder.getGuiType(), new HashMap<>());
 	                                    playClick(player);
 	                                    return;
 	                                }
@@ -849,9 +859,8 @@ public class GUI implements Listener {
 	                }
 	            }
 	            if (GuiType.SEARCH.equals(holder.getGuiType())) {
-	            	CrazySearchInventoryHolder search = (CrazySearchInventoryHolder) holder;
-	                e.setCancelled(true);
 	                final int slot = e.getRawSlot();
+	                final String phrase = (String) holder.getDataValue("phrase");
 	                if (slot <= inv.getSize()) {
 	                    if (e.getCurrentItem() != null) {
 	                        final ItemStack item = e.getCurrentItem();
@@ -860,7 +869,7 @@ public class GUI implements Listener {
 	                                if (item.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.NextPage.Name")))) {
 	                                    Methods.updateAuction();
 	                                    int page = holder.getPage();
-	                                    openSearch(player, shopType.get(player), shopCategory.get(player), search.getPhrase(), page + 1);
+	                                    openSearch(player, shopType.get(player), shopCategory.get(player), phrase, page + 1);
 	                                    playClick(player);
 	                                    return;
 	                                }
@@ -868,24 +877,24 @@ public class GUI implements Listener {
 	                                    Methods.updateAuction();
 	                                    int page = holder.getPage();
 	                                    if (page == 1) page++;
-	                                    openSearch(player, shopType.get(player), shopCategory.get(player), search.getPhrase(), page - 1);
+	                                    openSearch(player, shopType.get(player), shopCategory.get(player), phrase, page - 1);
 	                                    playClick(player);
 	                                    return;
 	                                }
 	                                if (item.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.Refesh.Name")))) {
 	                                    Methods.updateAuction();
 	                                    int page = holder.getPage();
-	                                    openSearch(player, shopType.get(player), shopCategory.get(player), search.getPhrase(), page);
+	                                    openSearch(player, shopType.get(player), shopCategory.get(player), phrase, page);
 	                                    playClick(player);
 	                                    return;
 	                                }
 	                                if (item.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.Bidding/Selling.Selling.Name")))) {
-	                                    openSearch(player, ShopType.BID, shopCategory.get(player), search.getPhrase(), 1);
+	                                    openSearch(player, ShopType.BID, shopCategory.get(player), phrase, 1);
 	                                    playClick(player);
 	                                    return;
 	                                }
 	                                if (item.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.Bidding/Selling.Bidding.Name")))) {
-	                                    openSearch(player, ShopType.SELL, shopCategory.get(player), search.getPhrase(), 1);
+	                                    openSearch(player, ShopType.SELL, shopCategory.get(player), phrase, 1);
 	                                    playClick(player);
 	                                    return;
 	                                }
@@ -900,12 +909,12 @@ public class GUI implements Listener {
 	                                    return;
 	                                }
 	                                if (item.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.Category1.Name")))) {
-	                                    openCategories(player, shopType.get(player));
+	                                    openCategories(player, shopType.get(player), holder.getGuiType(), ImmutableMap.of("phrase", phrase));
 	                                    playClick(player);
 	                                    return;
 	                                }
 	                                if (item.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.Category2.Name")))) {
-	                                    openCategories(player, shopType.get(player));
+	                                    openCategories(player, shopType.get(player), holder.getGuiType(), ImmutableMap.of("phrase", phrase));
 	                                    playClick(player);
 	                                    return;
 	                                }
@@ -947,7 +956,7 @@ public class GUI implements Listener {
 	                                                        player.sendMessage(Messages.ADMIN_FORCE_CENCELLED.getMessage());
 	                                                        playClick(player);
 	                                                        int page = holder.getPage();
-	                                                        openSearch(player, shopType.get(player), shopCategory.get(player), search.getPhrase(), page);
+	                                                        openSearch(player, shopType.get(player), shopCategory.get(player), phrase, page);
 	                                                        return;
 	                                                    }
 	                                                }
@@ -1009,7 +1018,7 @@ public class GUI implements Listener {
 	                                    }
 	                                    if (!T) {
 	                                        playClick(player);
-	                                        openSearch(player, shopType.get(player), shopCategory.get(player), search.getPhrase(), 1);
+	                                        openSearch(player, shopType.get(player), shopCategory.get(player), phrase, 1);
 	                                        player.sendMessage(Messages.ITEM_DOESNT_EXIST.getMessage());
 	                                        return;
 	                                    }
@@ -1020,7 +1029,6 @@ public class GUI implements Listener {
 	                }
 	            }
 	            if (GuiType.BUYING.equals(holder.getGuiType())) {
-	                e.setCancelled(true);
 	                int slot = e.getRawSlot();
 	                if (slot <= inv.getSize()) {
 	                    if (e.getCurrentItem() != null) {
@@ -1084,7 +1092,6 @@ public class GUI implements Listener {
 	                }
 	            }
 	            if (GuiType.CURRENT_LIST.equals(holder.getGuiType())) {
-	                e.setCancelled(true);
 	                int slot = e.getRawSlot();
 	                if (slot <= inv.getSize()) {
 	                    if (e.getCurrentItem() != null) {
@@ -1135,7 +1142,6 @@ public class GUI implements Listener {
 	                }
 	            }
 	            if (GuiType.EXPIRED_LIST.equals(holder.getGuiType())) {
-	                e.setCancelled(true);
 	                final int slot = e.getRawSlot();
 	                if (slot <= inv.getSize()) {
 	                    if (e.getCurrentItem() != null) {
@@ -1230,6 +1236,7 @@ public class GUI implements Listener {
     	
     	private final Inventory inventory;
     	private final GuiType type;
+    	private final Map<String, Object> data;
     	private final int page;
     	
     	
@@ -1237,11 +1244,19 @@ public class GUI implements Listener {
     		this(type, 0);
     	}
     	
-    	
     	public CrazyInventoryHolder(GuiType type, int page) {
+    		this(type, page, new HashMap<>());
+    	}
+    	
+    	public CrazyInventoryHolder(GuiType type, Map<String, Object> data) {
+    		this(type, 0, data);
+    	}
+    	
+    	public CrazyInventoryHolder(GuiType type, int page, Map<String, Object> data) {
     		FileConfiguration config = Files.CONFIG.getFile();
     		this.type = type;
     		this.page = page;
+    		this.data = Collections.unmodifiableMap(data);
     		this.inventory = Bukkit.createInventory(this, type.getSize(), Methods.color(type.isPaginable() ? (config.getString(type.getTitlePath()) + " #" + page) : (config.getString(type.getTitlePath()))));
     	}
     	
@@ -1260,25 +1275,11 @@ public class GUI implements Listener {
 		public int getPage() {
 			return this.page;
 		}
-    	
-    }
-    
-    
-    private static class CrazySearchInventoryHolder extends CrazyInventoryHolder {
-
 		
-    	private final String phrase;
-    	
-    	
-    	public CrazySearchInventoryHolder(int page, String phrase) {
-			super(GuiType.SEARCH, page);
-			this.phrase = phrase;
+		
+		public Object getDataValue(String key) {
+			return this.data.get(key);
 		}
-    	
-    	
-    	public String getPhrase() {
-    		return this.phrase;
-    	}
     	
     }
     
