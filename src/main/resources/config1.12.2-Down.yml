@@ -1,6 +1,7 @@
 Settings:
   Prefix: '&7[&4Crazy &bAuctions&7]: ' #Prefix of when you get Crazy Auctions Messages.
   GUIName: '&4Crazy &bAuctions&8' #Name of the Main GUI.
+  Search: '&8Search...' #Name of the Search GUI.
   Players-Current-Items: '&8Your Current Listings' #The Name of the Player Current Items GUI.
   Cancelled/Expired-Items: '&8Cancelled/Expired Listings' #Name of the Canceled/Expired GUI.
   Buying-Item: '&8Purchase Item: Are You Sure?' #Name of the Buying GUI.

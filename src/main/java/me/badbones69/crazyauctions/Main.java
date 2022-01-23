@@ -22,6 +22,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.yaml.snakeyaml.error.YAMLException;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Random;
 
@@ -158,6 +159,20 @@ public class Main extends JavaPlugin implements Listener {
                         return true;
                     }
                     sender.sendMessage(Messages.CRAZYAUCTIONS_VIEW.getMessage());
+                    return true;
+                }
+                if (args[0].equalsIgnoreCase("Search")) {// CA Search <Phrase>
+                    if (!Methods.hasPermission(sender, "Search")) return true;
+                    if (!(sender instanceof Player)) {
+                        sender.sendMessage(Messages.PLAYERS_ONLY.getMessage());
+                        return true;
+                    }
+                    if (args.length >= 2) {
+                        Player player = (Player) sender;
+                        GUI.openSearch(player, ShopType.SELL, Category.NONE, String.join(" ",  Arrays.copyOfRange(args, 1, args.length)), 1);
+                        return true;
+                    }
+                    sender.sendMessage(Messages.CRAZYAUCTIONS_SEARCH.getMessage());
                     return true;
                 }
                 if (args[0].equalsIgnoreCase("Expired") || args[0].equalsIgnoreCase("Collect")) {// CA Expired

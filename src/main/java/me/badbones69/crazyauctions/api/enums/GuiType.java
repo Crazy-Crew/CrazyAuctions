@@ -9,6 +9,7 @@ public enum GuiType {
 	CURRENT_LIST(54, "Settings.Players-Current-Items"),
 	CATEGORIES(54, "Settings.Categories"),
 	SHOP(54, "Settings.GUIName", true),
+	SEARCH(54, "Settings.Search", true),
 	;
 	
 	
