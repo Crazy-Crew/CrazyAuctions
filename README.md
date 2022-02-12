@@ -1,4 +1,4 @@
-# Crazy Auctions
+# Crazy Auctions - Issues tab has been disabled, A rewrite is pending.
 Source Code for Crazy Auctions
 
 ## Build Status:
