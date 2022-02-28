@@ -53,7 +53,7 @@ public class Main extends JavaPlugin implements Listener {
     }
     
     public boolean onCommand(CommandSender sender, Command cmd, String commandLable, String[] args) {
-        if (commandLable.equalsIgnoreCase("CrazyAuctions") || commandLable.equalsIgnoreCase("CrazyAuction") || commandLable.equalsIgnoreCase("CA") || commandLable.equalsIgnoreCase("AH") || commandLable.equalsIgnoreCase("HDV")) {
+        if (commandLable.equalsIgnoreCase("Ihale") ||commandLable.equalsIgnoreCase("İhale") || commandLable.equalsIgnoreCase("CrazyAuctions") || commandLable.equalsIgnoreCase("CrazyAuction") || commandLable.equalsIgnoreCase("CA") || commandLable.equalsIgnoreCase("AH") || commandLable.equalsIgnoreCase("HDV")) {
             if (args.length == 0) {
                 if (!Methods.hasPermission(sender, "Access")) return true;
                 if (!(sender instanceof Player)) {
@@ -77,7 +77,7 @@ public class Main extends JavaPlugin implements Listener {
                 return true;
             }
             if (args.length >= 1) {
-                if (args[0].equalsIgnoreCase("Help")) {// CA Help
+                if (args[0].equalsIgnoreCase("Help") || args[0].equalsIgnoreCase("Yardım")) {// CA Help
                     if (!Methods.hasPermission(sender, "Access")) return true;
                     sender.sendMessage(Messages.HELP.getMessage());
                     return true;
@@ -139,14 +139,14 @@ public class Main extends JavaPlugin implements Listener {
                     }
                     return true;
                 }
-                if (args[0].equalsIgnoreCase("Reload")) {// CA Reload
+                if (args[0].equalsIgnoreCase("Reload") || args[0].equalsIgnoreCase("Yenile")) {// CA Reload
                     if (!Methods.hasPermission(sender, "Admin")) return true;
                     fileManager.logInfo(true).setup(this);
                     crazyAuctions.loadCrazyAuctions();
                     sender.sendMessage(Messages.RELOAD.getMessage());
                     return true;
                 }
-                if (args[0].equalsIgnoreCase("View")) {// CA View <Player>
+                if (args[0].equalsIgnoreCase("View") || args[0].equalsIgnoreCase("Görüntüle") || args[0].equalsIgnoreCase("Goruntule")) {// CA View <Player>
                     if (!Methods.hasPermission(sender, "View")) return true;
                     if (!(sender instanceof Player)) {
                         sender.sendMessage(Messages.PLAYERS_ONLY.getMessage());
@@ -160,7 +160,7 @@ public class Main extends JavaPlugin implements Listener {
                     sender.sendMessage(Messages.CRAZYAUCTIONS_VIEW.getMessage());
                     return true;
                 }
-                if (args[0].equalsIgnoreCase("Expired") || args[0].equalsIgnoreCase("Collect")) {// CA Expired
+                if (args[0].equalsIgnoreCase("Expired") || args[0].equalsIgnoreCase("Collect") || args[0].equalsIgnoreCase("Depo")) {// CA Expired
                     if (!Methods.hasPermission(sender, "Access")) return true;
                     if (!(sender instanceof Player)) {
                         sender.sendMessage(Messages.PLAYERS_ONLY.getMessage());
@@ -180,14 +180,14 @@ public class Main extends JavaPlugin implements Listener {
                     GUI.openPlayersCurrentList(player, 1);
                     return true;
                 }
-                if (args[0].equalsIgnoreCase("Sell") || args[0].equalsIgnoreCase("Bid")) {// /CA Sell/Bid <Price> [Amount of Items]
+                if (args[0].equalsIgnoreCase("Sell") || args[0].equalsIgnoreCase("Bid") || args[0].equalsIgnoreCase("Sat")) {// /CA Sell/Bid <Price> [Amount of Items]
                     if (!(sender instanceof Player)) {
                         sender.sendMessage(Messages.PLAYERS_ONLY.getMessage());
                         return true;
                     }
                     if (args.length >= 2) {
                         Player player = (Player) sender;
-                        if (args[0].equalsIgnoreCase("Sell")) {
+                        if (args[0].equalsIgnoreCase("Sell") || args[0].equalsIgnoreCase("Sat")) {
                             if (!crazyAuctions.isSellingEnabled()) {
                                 player.sendMessage(Messages.SELLING_DISABLED.getMessage());
                                 return true;
@@ -280,7 +280,7 @@ public class Main extends JavaPlugin implements Listener {
                                     }
                                 }
                             }
-                            if (args[0].equalsIgnoreCase("Sell")) {
+                            if (args[0].equalsIgnoreCase("Sell") || args[0].equalsIgnoreCase("Sat")) {
                                 if (crazyAuctions.getItems(player, ShopType.SELL).size() >= SellLimit) {
                                     player.sendMessage(Messages.MAX_ITEMS.getMessage());
                                     return true;
@@ -367,16 +367,6 @@ public class Main extends JavaPlugin implements Listener {
         }
         sender.sendMessage(Messages.CRAZYAUCTIONS_HELP.getMessage());
         return false;
-    }
-    
-    @EventHandler
-    public void onJoin(PlayerJoinEvent e) {
-        final Player player = e.getPlayer();
-        if (player.getName().equalsIgnoreCase("BadBones69")) {
-            Bukkit.getScheduler().runTaskLater(this, () -> {
-                player.sendMessage(Methods.getPrefix() + Methods.color("&7This server is running your Crazy Auctions Plugin. " + "&7It is running version &av" + Bukkit.getServer().getPluginManager().getPlugin("CrazyAuctions").getDescription().getVersion() + "&7."));
-            }, 40);
-        }
     }
     
     private void startCheck() {
