@@ -223,50 +223,51 @@ public class GUI implements Listener {
         player.openInventory(inv);
     }
     
+    private static Map.Entry<ConfigurationSection, ItemStack> formatSearchItem(FileConfiguration config, ShopType sell, Category cat, ConfigurationSection sec, String lowerPhrase) {
+        ItemStack item = sec.getItemStack("Item");
+        if (item != null && (cat.getItems().contains(item.getType()) || cat == Category.NONE) && item.getItemMeta() != null && item.getItemMeta().getDisplayName() != null && ChatColor.stripColor(item.getItemMeta().getDisplayName()).toLowerCase().contains(lowerPhrase)) {
+            List<String> lore = new ArrayList<>();
+            if (sec.getBoolean("Biddable") && sell == ShopType.BID) {
+                // bid
+                String price = Methods.getPrice(sec.getName(), false);
+                String seller = sec.getString("Seller");
+                String topbidder = sec.getString("TopBidder");
+                String time = Methods.convertToTime(sec.getLong("Time-Till-Expire"));
+                for (String l : config.getStringList("Settings.GUISettings.Bidding")) {
+                    lore.add(l.replace("%TopBid%", price).replace("%topbid%", price).replace("%Seller%", seller).replace("%seller%", seller).replace("%TopBidder%", topbidder).replace("%topbidder%", topbidder).replace("%Time%", time).replace("%time%", time));
+                }
+                return new AbstractMap.SimpleEntry<>(sec, Methods.addLore(item.clone(), lore));
+            } else if (sell == ShopType.SELL) {
+                // sell
+                String price = String.format(Locale.ENGLISH, "%,d", sec.getLong("Price"));
+                String seller = sec.getString("Seller");
+                String time = Methods.convertToTime(sec.getLong("Time-Till-Expire"));
+                for (String l : config.getStringList("Settings.GUISettings.SellingItemLore")) {
+                    lore.add(l.replace("%Price%", price).replace("%price%", price).replace("%Seller%", seller).replace("%seller%", seller).replace("%Time%", time).replace("%time%", time));
+                }
+                return new AbstractMap.SimpleEntry<>(sec, Methods.addLore(item.clone(), lore));
+            }
+        }
+        return null;
+    }
+    
     public static void openSearch(Player player, ShopType sell, Category cat, String phrase, int page) {
         final String lowerPhrase = phrase.toLowerCase();
         Methods.updateAuction();
-        if (cat != null) {
-            shopCategory.put(player, cat);
-        } else {
-            shopCategory.put(player, Category.NONE);
-        }
+        shopCategory.put(player, cat != null ? cat : Category.NONE);
         FileConfiguration config = Files.CONFIG.getFile();
         FileConfiguration data = Files.DATA.getFile();
         List<ItemStack> items = new ArrayList<>();
         List<Integer> ID = new ArrayList<>();
         if (data.contains("Items")) {
             ConfigurationSection itemsSection = data.getConfigurationSection("Items");
-            itemsSection.getKeys(false).parallelStream().map(itemsSection::getConfigurationSection).map(sec -> {
-                ItemStack item = sec.getItemStack("Item");
-                if (item != null && (cat.getItems().contains(item.getType()) || cat == Category.NONE) && item.getItemMeta() != null && item.getItemMeta().getDisplayName() != null && ChatColor.stripColor(item.getItemMeta().getDisplayName()).toLowerCase().contains(lowerPhrase)) {
-                    List<String> lore = new ArrayList<>();
-                    if (sec.getBoolean("Biddable") && sell == ShopType.BID) {
-                        // bid
-                        String price = Methods.getPrice(sec.getName(), false);
-                        String seller = sec.getString("Seller");
-                        String topbidder = sec.getString("TopBidder");
-                        String time = Methods.convertToTime(sec.getLong("Time-Till-Expire"));
-                        for (String l : config.getStringList("Settings.GUISettings.Bidding")) {
-                            lore.add(l.replace("%TopBid%", price).replace("%topbid%", price).replace("%Seller%", seller).replace("%seller%", seller).replace("%TopBidder%", topbidder).replace("%topbidder%", topbidder).replace("%Time%", time).replace("%time%", time));
-                        }
-                        return new AbstractMap.SimpleEntry<>(sec, Methods.addLore(item.clone(), lore));
-                    } else if (sell == ShopType.SELL) {
-                        // sell
-                        String price = String.format(Locale.ENGLISH, "%,d", sec.getLong("Price"));
-                        String seller = sec.getString("Seller");
-                        String time = Methods.convertToTime(sec.getLong("Time-Till-Expire"));
-                        for (String l : config.getStringList("Settings.GUISettings.SellingItemLore")) {
-                            lore.add(l.replace("%Price%", price).replace("%price%", price).replace("%Seller%", seller).replace("%seller%", seller).replace("%Time%", time).replace("%time%", time));
-                        }
-                        return new AbstractMap.SimpleEntry<>(sec, Methods.addLore(item.clone(), lore));
+            itemsSection.getKeys(false).parallelStream().map(itemsSection::getConfigurationSection).map(sec -> formatSearchItem(config, sell, cat, sec, lowerPhrase))
+                    .filter(Objects::nonNull).sequential().sorted((e1, e2) -> -Long.compare(e1.getKey().getLong("Time-Till-Expire"), e2.getKey().getLong("Time-Till-Expire")))
+                    .forEachOrdered(e -> {
+                        items.add(e.getValue());
+                        ID.add(e.getKey().getInt("StoreID"));
                     }
-                }
-                return null;
-            }).filter(Objects::nonNull).sequential().sorted((e1, e2) -> -Long.compare(e1.getKey().getLong("Time-Till-Expire"), e2.getKey().getLong("Time-Till-Expire"))).forEachOrdered(e -> {
-                items.add(e.getValue());
-                ID.add(e.getKey().getInt("StoreID"));
-            });
+            );
         }
         
         int maxPage = -Math.floorDiv(-items.size(), 45); // simple integer ceil divide
@@ -280,19 +281,22 @@ public class GUI implements Listener {
         options.add("NextPage");
         options.add("Category1");
         options.add("Category2");
-        if (sell == ShopType.SELL) {
-            shopType.put(player, ShopType.SELL);
-            if (crazyAuctions.isBiddingEnabled()) {
-                options.add("Bidding/Selling.Selling");
+        shopType.put(player, sell);
+        switch (sell) {
+            case SELL: {
+                if (crazyAuctions.isBiddingEnabled()) {
+                    options.add("Bidding/Selling.Selling");
+                }
+                options.add("WhatIsThis.SellingShop");
+                break;
             }
-            options.add("WhatIsThis.SellingShop");
-        }
-        if (sell == ShopType.BID) {
-            shopType.put(player, ShopType.BID);
-            if (crazyAuctions.isSellingEnabled()) {
-                options.add("Bidding/Selling.Bidding");
+            case BID: {
+                if (crazyAuctions.isSellingEnabled()) {
+                    options.add("Bidding/Selling.Bidding");
+                }
+                options.add("WhatIsThis.BiddingShop");
+                break;
             }
-            options.add("WhatIsThis.BiddingShop");
         }
         for (String o : options) {
             if (!config.getBoolean("Settings.GUISettings.OtherSettings." + o + ".Toggle", true)) {
@@ -573,10 +577,8 @@ public class GUI implements Listener {
     public void onInvClose(InventoryCloseEvent e) {
         Inventory inv = e.getInventory();
         Player player = (Player) e.getPlayer();
-        if (inv != null && inv.getHolder() != null && inv.getHolder() instanceof CrazyInventoryHolder) {
-            if (GuiType.BIDDING.equals(((CrazyInventoryHolder) inv.getHolder()).getGuiType())) {
-                bidding.remove(player);
-            }
+        if (inv != null && inv.getHolder() != null && inv.getHolder() instanceof CrazyInventoryHolder && GuiType.BIDDING.equals(((CrazyInventoryHolder) inv.getHolder()).getGuiType())) {
+            bidding.remove(player);
         }
     }
     
