@@ -441,7 +441,7 @@ public class Methods {
         }
         if (shouldSave) {
         	new Thread(Files.DATA::saveFile, "Crazy-Auctions-Save-Task").start(); // save file in new thread
-        };
+        }
     }
     
     public static String getPrice(String ID, Boolean Expired) {
