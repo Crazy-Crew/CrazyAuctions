@@ -297,6 +297,7 @@ public class GUI implements Listener {
                 options.add("WhatIsThis.BiddingShop");
                 break;
             }
+            default: break;
         }
         for (String o : options) {
             if (!config.getBoolean("Settings.GUISettings.OtherSettings." + o + ".Toggle", true)) {
