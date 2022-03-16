@@ -112,6 +112,7 @@ public class GUI implements Listener {
             }
             String id = config.getString("Settings.GUISettings.OtherSettings." + o + ".Item");
             String name = config.getString("Settings.GUISettings.OtherSettings." + o + ".Name");
+            int model = config.getInt("Settings.GUISettings.OtherSettings." + o + ".Model");
             List<String> lore = new ArrayList<>();
             int slot = config.getInt("Settings.GUISettings.OtherSettings." + o + ".Slot");
             String cName = Methods.color(config.getString("Settings.GUISettings.Category-Settings." + shopCategory.get(player).getName() + ".Name"));
@@ -119,9 +120,9 @@ public class GUI implements Listener {
                 for (String l : config.getStringList("Settings.GUISettings.OtherSettings." + o + ".Lore")) {
                     lore.add(l.replace("%Category%", cName).replace("%category%", cName));
                 }
-                inv.setItem(slot - 1, Methods.makeItem(id, 1, name, lore));
+                inv.setItem(slot - 1, Methods.makeItem(id, 1, name, model, lore));
             } else {
-                inv.setItem(slot - 1, Methods.makeItem(id, 1, name));
+                inv.setItem(slot - 1, Methods.makeItem(id, 1, name, model));
             }
         }
         for (ItemStack item : Methods.getPage(items, page)) {
@@ -156,11 +157,12 @@ public class GUI implements Listener {
             }
             String id = config.getString("Settings.GUISettings." + o + ".Item");
             String name = config.getString("Settings.GUISettings." + o + ".Name");
+            int model = config.getInt("Settings.GUISettings." + o + ".Model");
             int slot = config.getInt("Settings.GUISettings." + o + ".Slot");
             if (config.contains("Settings.GUISettings." + o + ".Lore")) {
-                inv.setItem(slot - 1, Methods.makeItem(id, 1, name, config.getStringList("Settings.GUISettings." + o + ".Lore")));
+                inv.setItem(slot - 1, Methods.makeItem(id, 1, name, model, config.getStringList("Settings.GUISettings." + o + ".Lore")));
             } else {
-                inv.setItem(slot - 1, Methods.makeItem(id, 1, name));
+                inv.setItem(slot - 1, Methods.makeItem(id, 1, name, model));
             }
         }
         shopType.put(player, shop);
@@ -185,11 +187,12 @@ public class GUI implements Listener {
             }
             String id = config.getString("Settings.GUISettings.OtherSettings." + o + ".Item");
             String name = config.getString("Settings.GUISettings.OtherSettings." + o + ".Name");
+            int model = config.getInt("Settings.GUISettings.OtherSettings." + o + ".Model");
             int slot = config.getInt("Settings.GUISettings.OtherSettings." + o + ".Slot");
             if (config.contains("Settings.GUISettings.OtherSettings." + o + ".Lore")) {
-                inv.setItem(slot - 1, Methods.makeItem(id, 1, name, config.getStringList("Settings.GUISettings.OtherSettings." + o + ".Lore")));
+                inv.setItem(slot - 1, Methods.makeItem(id, 1, name, model, config.getStringList("Settings.GUISettings.OtherSettings." + o + ".Lore")));
             } else {
-                inv.setItem(slot - 1, Methods.makeItem(id, 1, name));
+                inv.setItem(slot - 1, Methods.makeItem(id, 1, name, model));
             }
         }
         if (data.contains("Items")) {
@@ -250,11 +253,12 @@ public class GUI implements Listener {
             }
             String id = config.getString("Settings.GUISettings.OtherSettings." + o + ".Item");
             String name = config.getString("Settings.GUISettings.OtherSettings." + o + ".Name");
+            int model = config.getInt("Settings.GUISettings.OtherSettings." + o + ".Model");
             int slot = config.getInt("Settings.GUISettings.OtherSettings." + o + ".Slot");
             if (config.contains("Settings.GUISettings.OtherSettings." + o + ".Lore")) {
-                inv.setItem(slot - 1, Methods.makeItem(id, 1, name, config.getStringList("Settings.GUISettings.OtherSettings." + o + ".Lore")));
+                inv.setItem(slot - 1, Methods.makeItem(id, 1, name, model, config.getStringList("Settings.GUISettings.OtherSettings." + o + ".Lore")));
             } else {
-                inv.setItem(slot - 1, Methods.makeItem(id, 1, name));
+                inv.setItem(slot - 1, Methods.makeItem(id, 1, name, model));
             }
         }
         for (ItemStack item : Methods.getPage(items, page)) {
@@ -282,11 +286,12 @@ public class GUI implements Listener {
         for (String o : options) {
             String id = config.getString("Settings.GUISettings.OtherSettings." + o + ".Item");
             String name = config.getString("Settings.GUISettings.OtherSettings." + o + ".Name");
+            int model = config.getInt("Settings.GUISettings.OtherSettings." + o + ".Model");
             ItemStack item;
             if (config.contains("Settings.GUISettings.OtherSettings." + o + ".Lore")) {
-                item = Methods.makeItem(id, 1, name, config.getStringList("Settings.GUISettings.OtherSettings." + o + ".Lore"));
+                item = Methods.makeItem(id, 1, name, model, config.getStringList("Settings.GUISettings.OtherSettings." + o + ".Lore"));
             } else {
-                item = Methods.makeItem(id, 1, name);
+                item = Methods.makeItem(id, 1, name, model);
             }
             if (o.equals("Confirm")) {
                 inv.setItem(0, item);
@@ -323,26 +328,26 @@ public class GUI implements Listener {
         Inventory inv = Bukkit.createInventory(null, 27, Methods.color(config.getString("Settings.Bidding-On-Item")));
         if (!bidding.containsKey(player)) bidding.put(player, 0);
         if (Version.isNewer(Version.v1_12_R1)) {
-            inv.setItem(9, Methods.makeItem("LIME_STAINED_GLASS_PANE", 1, "&a+1"));
-            inv.setItem(10, Methods.makeItem("LIME_STAINED_GLASS_PANE", 1, "&a+10"));
-            inv.setItem(11, Methods.makeItem("LIME_STAINED_GLASS_PANE", 1, "&a+100"));
-            inv.setItem(12, Methods.makeItem("LIME_STAINED_GLASS_PANE", 1, "&a+1000"));
-            inv.setItem(14, Methods.makeItem("RED_STAINED_GLASS_PANE", 1, "&c-1000"));
-            inv.setItem(15, Methods.makeItem("RED_STAINED_GLASS_PANE", 1, "&c-100"));
-            inv.setItem(16, Methods.makeItem("RED_STAINED_GLASS_PANE", 1, "&c-10"));
-            inv.setItem(17, Methods.makeItem("RED_STAINED_GLASS_PANE", 1, "&c-1"));
+            inv.setItem(9, Methods.makeItem("LIME_STAINED_GLASS_PANE", 1, "&a+1", 0));
+            inv.setItem(10, Methods.makeItem("LIME_STAINED_GLASS_PANE", 1, "&a+10", 0));
+            inv.setItem(11, Methods.makeItem("LIME_STAINED_GLASS_PANE", 1, "&a+100", 0));
+            inv.setItem(12, Methods.makeItem("LIME_STAINED_GLASS_PANE", 1, "&a+1000", 0));
+            inv.setItem(14, Methods.makeItem("RED_STAINED_GLASS_PANE", 1, "&c-1000", 0));
+            inv.setItem(15, Methods.makeItem("RED_STAINED_GLASS_PANE", 1, "&c-100", 0));
+            inv.setItem(16, Methods.makeItem("RED_STAINED_GLASS_PANE", 1, "&c-10", 0));
+            inv.setItem(17, Methods.makeItem("RED_STAINED_GLASS_PANE", 1, "&c-1", 0));
         } else {
-            inv.setItem(9, Methods.makeItem("160:5", 1, "&a+1"));
-            inv.setItem(10, Methods.makeItem("160:5", 1, "&a+10"));
-            inv.setItem(11, Methods.makeItem("160:5", 1, "&a+100"));
-            inv.setItem(12, Methods.makeItem("160:5", 1, "&a+1000"));
-            inv.setItem(14, Methods.makeItem("160:14", 1, "&c-1000"));
-            inv.setItem(15, Methods.makeItem("160:14", 1, "&c-100"));
-            inv.setItem(16, Methods.makeItem("160:14", 1, "&c-10"));
-            inv.setItem(17, Methods.makeItem("160:14", 1, "&c-1"));
+            inv.setItem(9, Methods.makeItem("160:5", 1, "&a+1", 0));
+            inv.setItem(10, Methods.makeItem("160:5", 1, "&a+10", 0));
+            inv.setItem(11, Methods.makeItem("160:5", 1, "&a+100", 0));
+            inv.setItem(12, Methods.makeItem("160:5", 1, "&a+1000", 0));
+            inv.setItem(14, Methods.makeItem("160:14", 1, "&c-1000", 0));
+            inv.setItem(15, Methods.makeItem("160:14", 1, "&c-100", 0));
+            inv.setItem(16, Methods.makeItem("160:14", 1, "&c-10", 0));
+            inv.setItem(17, Methods.makeItem("160:14", 1, "&c-1", 0));
         }
         inv.setItem(13, getBiddingGlass(player, ID));
-        inv.setItem(22, Methods.makeItem(config.getString("Settings.GUISettings.OtherSettings.Bid.Item"), 1, config.getString("Settings.GUISettings.OtherSettings.Bid.Name"), config.getStringList("Settings.GUISettings.OtherSettings.Bid.Lore")));
+        inv.setItem(22, Methods.makeItem(config.getString("Settings.GUISettings.OtherSettings.Bid.Item"), 1, config.getString("Settings.GUISettings.OtherSettings.Bid.Name"), 0, config.getStringList("Settings.GUISettings.OtherSettings.Bid.Lore")));
         
         inv.setItem(4, getBiddingItem(player, ID));
         player.openInventory(inv);
@@ -391,11 +396,12 @@ public class GUI implements Listener {
             }
             String id = config.getString("Settings.GUISettings.OtherSettings." + o + ".Item");
             String name = config.getString("Settings.GUISettings.OtherSettings." + o + ".Name");
+            int model = config.getInt("Settings.GUISettings.OtherSettings." + o + ".Model");
             int slot = config.getInt("Settings.GUISettings.OtherSettings." + o + ".Slot");
             if (config.contains("Settings.GUISettings.OtherSettings." + o + ".Lore")) {
-                inv.setItem(slot - 1, Methods.makeItem(id, 1, name, config.getStringList("Settings.GUISettings.OtherSettings." + o + ".Lore")));
+                inv.setItem(slot - 1, Methods.makeItem(id, 1, name, model, config.getStringList("Settings.GUISettings.OtherSettings." + o + ".Lore")));
             } else {
-                inv.setItem(slot - 1, Methods.makeItem(id, 1, name));
+                inv.setItem(slot - 1, Methods.makeItem(id, 1, name, model));
             }
         }
         for (ItemStack item : Methods.getPage(items, page)) {
@@ -410,6 +416,7 @@ public class GUI implements Listener {
         FileConfiguration config = Files.CONFIG.getFile();
         String id = config.getString("Settings.GUISettings.OtherSettings.Bidding.Item");
         String name = config.getString("Settings.GUISettings.OtherSettings.Bidding.Name");
+        int model = config.getInt("Settings.GUISettings.OtherSettings.Bidding.Model");
         ItemStack item;
         int bid = bidding.get(player);
         if (config.contains("Settings.GUISettings.OtherSettings.Bidding.Lore")) {
@@ -417,9 +424,9 @@ public class GUI implements Listener {
             for (String l : config.getStringList("Settings.GUISettings.OtherSettings.Bidding.Lore")) {
                 lore.add(l.replace("%Bid%", bid + "").replace("%bid%", bid + "").replace("%TopBid%", Methods.getPrice(ID, false)).replace("%topbid%", Methods.getPrice(ID, false)));
             }
-            item = Methods.makeItem(id, 1, name, lore);
+            item = Methods.makeItem(id, 1, name, model, lore);
         } else {
-            item = Methods.makeItem(id, 1, name);
+            item = Methods.makeItem(id, 1, name, model);
         }
         return item;
     }
@@ -679,11 +686,12 @@ public class GUI implements Listener {
                                                 if (data.getString("Items." + i + ".Seller").equalsIgnoreCase(player.getName())) {
                                                     String it = config.getString("Settings.GUISettings.OtherSettings.Your-Item.Item");
                                                     String name = config.getString("Settings.GUISettings.OtherSettings.Your-Item.Name");
+                                                    int model = config.getInt("Settings.GUISettings.OtherSettings.Your-Item.Model");
                                                     ItemStack I;
                                                     if (config.contains("Settings.GUISettings.OtherSettings.Your-Item.Lore")) {
-                                                        I = Methods.makeItem(it, 1, name, config.getStringList("Settings.GUISettings.OtherSettings.Your-Item.Lore"));
+                                                        I = Methods.makeItem(it, 1, name, model, config.getStringList("Settings.GUISettings.OtherSettings.Your-Item.Lore"));
                                                     } else {
-                                                        I = Methods.makeItem(it, 1, name);
+                                                        I = Methods.makeItem(it, 1, name, model);
                                                     }
                                                     inv.setItem(slot, I);
                                                     playClick(player);
@@ -694,11 +702,12 @@ public class GUI implements Listener {
                                                 if (CurrencyManager.getMoney(player) < cost) {
                                                     String it = config.getString("Settings.GUISettings.OtherSettings.Cant-Afford.Item");
                                                     String name = config.getString("Settings.GUISettings.OtherSettings.Cant-Afford.Name");
+                                                    int model = config.getInt("Settings.GUISettings.OtherSettings.Cant-Afford.Model");
                                                     ItemStack I;
                                                     if (config.contains("Settings.GUISettings.OtherSettings.Cant-Afford.Lore")) {
-                                                        I = Methods.makeItem(it, 1, name, config.getStringList("Settings.GUISettings.OtherSettings.Cant-Afford.Lore"));
+                                                        I = Methods.makeItem(it, 1, name, model, config.getStringList("Settings.GUISettings.OtherSettings.Cant-Afford.Lore"));
                                                     } else {
-                                                        I = Methods.makeItem(it, 1, name);
+                                                        I = Methods.makeItem(it, 1, name, model);
                                                     }
                                                     inv.setItem(slot, I);
                                                     playClick(player);
@@ -709,11 +718,12 @@ public class GUI implements Listener {
                                                     if (player.getName().equalsIgnoreCase(data.getString("Items." + i + ".TopBidder"))) {
                                                         String it = config.getString("Settings.GUISettings.OtherSettings.Top-Bidder.Item");
                                                         String name = config.getString("Settings.GUISettings.OtherSettings.Top-Bidder.Name");
+                                                        int model = config.getInt("Settings.GUISettings.OtherSettings.Top-Bidder.Model");
                                                         ItemStack I;
                                                         if (config.contains("Settings.GUISettings.OtherSettings.Top-Bidder.Lore")) {
-                                                            I = Methods.makeItem(it, 1, name, config.getStringList("Settings.GUISettings.OtherSettings.Top-Bidder.Lore"));
+                                                            I = Methods.makeItem(it, 1, name, model, config.getStringList("Settings.GUISettings.OtherSettings.Top-Bidder.Lore"));
                                                         } else {
-                                                            I = Methods.makeItem(it, 1, name);
+                                                            I = Methods.makeItem(it, 1, name, model);
                                                         }
                                                         inv.setItem(slot, I);
                                                         playClick(player);
@@ -946,5 +956,4 @@ public class GUI implements Listener {
             }
         }
     }
-    
 }

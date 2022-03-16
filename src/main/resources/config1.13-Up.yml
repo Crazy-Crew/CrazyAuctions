@@ -66,6 +66,7 @@ Settings:
         Item: 'GOLDEN_SWORD'
         Toggle: true
         Slot: 12
+        Model: 0
         Name: '&6&lWeapons'
         Lore:
           - '&7This category contains all'
@@ -75,6 +76,7 @@ Settings:
         Toggle: true
         Slot: 13
         Name: '&6&lTools'
+        Model: 0
         Lore:
           - '&7This category contains all'
           - '&7tools that are currently being sold.'
@@ -83,6 +85,7 @@ Settings:
         Toggle: true
         Slot: 14
         Name: '&6&lFood'
+        Model: 0
         Lore:
           - '&7This category contains all'
           - '&7food that is currently being sold.'
@@ -91,6 +94,7 @@ Settings:
         Toggle: true
         Slot: 15
         Name: '&6&lPotions'
+        Model: 0
         Lore:
           - '&7This category contains all'
           - '&7potions that are currently being sold.'
@@ -99,6 +103,7 @@ Settings:
         Toggle: true
         Slot: 16
         Name: '&6&lBlocks'
+        Model: 0
         Lore:
           - '&7This category contains all'
           - '&7blocks that are currently being sold.'
@@ -107,6 +112,7 @@ Settings:
         Toggle: true
         Slot: 17
         Name: '&6&lOthers'
+        Model: 0
         Lore:
           - '&7This category contains all the'
           - '&7other items currently being sold.'
@@ -115,6 +121,7 @@ Settings:
         Toggle: true
         Slot: 23
         Name: '&6&lNone'
+        Model: 0
         Lore:
           - '&7This category contains all'
           - '&7items currently being sold.'
@@ -124,6 +131,7 @@ Settings:
         Toggle: true #If the item is in the gui or not.
         Slot: 46 #The slot it is in. I recommend not changing these. If you do make sure they are still in the bottom row.
         Name: '&6Items You are Selling' #Name of the item.
+        Model: 0 #Custom model of the item.
         Lore: #Lore of the item.
           - '&aClick here to view all the items you'
           - '&aare currently selling on the auction.'
@@ -132,6 +140,7 @@ Settings:
         Toggle: true
         Slot: 47
         Name: '&6Collect Expired / Canceled Items'
+        Model: 0
         Lore:
           - '&aClick here to view and collect all of the'
           - '&aitems you have canceled or has expired.'
@@ -140,24 +149,28 @@ Settings:
         Toggle: true
         Slot: 49
         Name: '&6Previous Page'
+        Model: 0
         Lore: {}
       Refesh: #The button for Refresh Page.
         Item: 'SUNFLOWER'
         Toggle: true
         Slot: 50
         Name: '&6Refresh Page'
+        Model: 0
         Lore: {}
       NextPage: #The button for Next Page.
         Item: 'PAPER'
         Toggle: true
         Slot: 51
         Name: '&6Next Page'
+        Model: 0
         Lore: {}
       Category1: #The button for Next Page.
         Item: 'CHEST'
         Toggle: true
         Slot: 52
         Name: '&6Categories'
+        Model: 0
         Lore:
           - '&bCurrent Category: &6%category%'
           - '&aWant to see items in specific categories?'
@@ -167,6 +180,7 @@ Settings:
         Toggle: true
         Slot: 48
         Name: '&6Categories'
+        Model: 0
         Lore:
           - '&bCurrent Category: &6%category%'
           - '&aWant to see items in specific categories?'
@@ -177,6 +191,7 @@ Settings:
           Toggle: true
           Slot: 53
           Name: '&6Currently looking at items being sold.'
+          Model: 0
           Lore:
             - '&7&l(&6&l!&7&l) &7Click here to see items'
             - '&7that you can bid on.'
@@ -185,6 +200,7 @@ Settings:
           Toggle: true
           Slot: 53
           Name: '&6Currently looking at items that can be bid on.'
+          Model: 0
           Lore:
             - '&7&l(&6&l!&7&l) &7Click here to see items'
             - '&7that you can buy at a price.'
@@ -194,6 +210,7 @@ Settings:
           Toggle: true
           Slot: 54
           Name: '&6What Is This Page?'
+          Model: 0
           Lore:
             - '&aThis is the crazy auctions, here you can'
             - '&aput items for sale, and buy items'
@@ -207,6 +224,7 @@ Settings:
           Toggle: true
           Slot: 54
           Name: '&6What Is This Page?'
+          Model: 0
           Lore:
             - '&aThis is the crazy auctions, here you can'
             - '&aput items for sale, and bid on items'
@@ -220,6 +238,7 @@ Settings:
           Toggle: true
           Slot: 54
           Name: '&6What Is This Page?'
+          Model: 0
           Lore:
             - '&aThese are your current listings, all of'
             - '&athe items you currently have listed on'
@@ -232,6 +251,7 @@ Settings:
           Toggle: true
           Slot: 54
           Name: '&6What Is This Page?'
+          Model: 0
           Lore:
             - '&aThis page houses all of your cancelled and'
             - '&aexpired items, when a listings is cancelled'
@@ -245,6 +265,7 @@ Settings:
           Toggle: true
           Slot: 50
           Name: '&6What Is This Page?'
+          Model: 0
           Lore:
             - '&aThis page shows all the items that'
             - '&aa player has currently on the bidding'
@@ -255,6 +276,7 @@ Settings:
           Toggle: true
           Slot: 54
           Name: '&6What Is This Page?'
+          Model: 0
           Lore:
             - '&aThis page shows all the categories'
             - '&athat you can choose from. When you click'
@@ -268,27 +290,34 @@ Settings:
         Item: 'FLOWER_POT'
         Slot: 50
         Name: '&6Return All'
+        Model: 0
         Lore:
           - '&aClick here to return all cancelled'
           - '&aand expired items to your inventory.'
       Confirm: #The Confirm Buttons.
         Item: 'LIME_STAINED_GLASS_PANE'
         Name: '&aConfirm'
+        Model: 0
       Cancel: #The Cancel Buttons.
         Item: 'RED_STAINED_GLASS_PANE'
         Name: '&cCancel'
+        Model: 0
       Your-Item: #The item that shows when you try to buy/bid on your item.
         Item: 'BARRIER'
         Name: '&cYou Can''t Purchase Your Own Item.'
+        Model: 0
       Cant-Afford: #The item that shows when you cant afford this item.
         Item: 'BARRIER'
         Name: '&cYou Can''t Afford This Item.'
+        Model: 0
       Top-Bidder: #The item for when a player is already the top bidder.
         Item: 'BARRIER'
         Name: '&cYou are already the top bidder.'
+        Model: 0
       Bidding: #The item in the middle when bidding on an item.
         Item: 'BLACK_STAINED_GLASS_PANE'
         Name: '&7Bidding'
+        Model: 0
         Lore:
           - '&7<--&aAdd &cRemove&7-->'
           - '&9Your Current Bid: &e$%Bid%'
@@ -296,6 +325,7 @@ Settings:
       Bid: #The button for when you want to confirm your bid.
         Item: 'LIGHT_BLUE_STAINED_GLASS_PANE'
         Name: '&bBid Now'
+        Model: 0
         Lore:
           - '&7Click here to Bid Now.'
   BlackList:

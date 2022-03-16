@@ -73,7 +73,7 @@ public class Methods {
         return item;
     }
     
-    public static ItemStack makeItem(String type, int amount, String name) {
+    public static ItemStack makeItem(String type, int amount, String name, int model) {
         int ty = 0;
         if (type.contains(":")) {
             String[] b = type.split(":");
@@ -94,11 +94,12 @@ public class Methods {
         }
         ItemMeta me = item.getItemMeta();
         me.setDisplayName(color(name));
+        me.setCustomModelData(model);
         item.setItemMeta(me);
         return item;
     }
     
-    public static ItemStack makeItem(String type, int amount, String name, List<String> lore) {
+    public static ItemStack makeItem(String type, int amount, String name, int model, List<String> lore) {
         ArrayList<String> l = new ArrayList<>();
         int ty = 0;
         if (type.contains(":")) {
@@ -120,6 +121,7 @@ public class Methods {
         }
         ItemMeta me = item.getItemMeta();
         me.setDisplayName(color(name));
+        me.setCustomModelData(model);
         for (String L : lore)
             l.add(color(L));
         me.setLore(l);
@@ -127,19 +129,21 @@ public class Methods {
         return item;
     }
     
-    public static ItemStack makeItem(Material material, int amount, int type, String name) {
+    public static ItemStack makeItem(Material material, int amount, int type, String name, int model) {
         ItemStack item = new ItemStack(material, amount, (short) type);
         ItemMeta m = item.getItemMeta();
         m.setDisplayName(color(name));
+        m.setCustomModelData(model);
         item.setItemMeta(m);
         return item;
     }
     
-    public static ItemStack makeItem(Material material, int amount, int type, String name, List<String> lore) {
+    public static ItemStack makeItem(Material material, int amount, int type, String name, int model, List<String> lore) {
         ArrayList<String> l = new ArrayList<>();
         ItemStack item = new ItemStack(material, amount, (short) type);
         ItemMeta m = item.getItemMeta();
         m.setDisplayName(color(name));
+        m.setCustomModelData(model);
         for (String L : lore)
             l.add(color(L));
         m.setLore(l);
@@ -147,10 +151,11 @@ public class Methods {
         return item;
     }
     
-    public static ItemStack makeItem(Material material, int amount, int type, String name, List<String> lore, Map<Enchantment, Integer> enchants) {
+    public static ItemStack makeItem(Material material, int amount, int type, String name, int model, List<String> lore, Map<Enchantment, Integer> enchants) {
         ItemStack item = new ItemStack(material, amount, (short) type);
         ItemMeta m = item.getItemMeta();
         m.setDisplayName(name);
+        m.setCustomModelData(model);
         m.setLore(lore);
         item.setItemMeta(m);
         item.addUnsafeEnchantments(enchants);
@@ -454,6 +459,5 @@ public class Methods {
             }
         }
         return String.valueOf(price);
-    }
-    
+    }  
 }
