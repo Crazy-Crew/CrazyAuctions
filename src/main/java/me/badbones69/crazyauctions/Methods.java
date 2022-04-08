@@ -63,7 +63,7 @@ public class Methods {
         try {
             item = new ItemStack(m, amount, (short) ty);
         } catch (Exception e) {
-            if (Version.getCurrentVersion().isNewer(Version.v1_12_R1)) {
+            if (Version.isNewer(Version.v1_12_R1)) {
                 item = new ItemStack(Material.matchMaterial("RED_TERRACOTTA"), 1);
                 
             } else {
@@ -85,7 +85,7 @@ public class Methods {
         try {
             item = new ItemStack(m, amount, (short) ty);
         } catch (Exception e) {
-            if (Version.getCurrentVersion().isNewer(Version.v1_12_R1)) {
+            if (Version.isNewer(Version.v1_12_R1)) {
                 item = new ItemStack(Material.matchMaterial("RED_TERRACOTTA"), 1);
                 
             } else {
@@ -111,7 +111,7 @@ public class Methods {
         try {
             item = new ItemStack(m, amount, (short) ty);
         } catch (Exception e) {
-            if (Version.getCurrentVersion().isNewer(Version.v1_12_R1)) {
+            if (Version.isNewer(Version.v1_12_R1)) {
                 item = new ItemStack(Material.matchMaterial("RED_TERRACOTTA"), 1);
                 
             } else {

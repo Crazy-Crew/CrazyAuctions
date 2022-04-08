@@ -55,8 +55,8 @@ public enum Messages {
     "&9/Ah Listed - &eView and manage the items you are selling.",
     "&9/Ah Help - &eView this help menu."));
     
-    private static FileManager fileManager = FileManager.getInstance();
-    private String path;
+    private static final FileManager fileManager = FileManager.getInstance();
+    private final String path;
     private String defaultMessage;
     private List<String> defaultListMessage;
     

@@ -25,7 +25,7 @@ public class AuctionCancelledEvent extends Event {
     
     /**
      *
-     * @param offlinePlayer The player who's item is cancelled.
+     * @param offlinePlayer The player whose item is cancelled.
      * @param item The item that is cancelled.
      */
     public AuctionCancelledEvent(OfflinePlayer offlinePlayer, ItemStack item, CancelledReason reason) {
@@ -37,7 +37,7 @@ public class AuctionCancelledEvent extends Event {
     
     /**
      *
-     * @param onlinePlayer The player who's item is cancelled.
+     * @param onlinePlayer The player whose item is cancelled.
      * @param item The item that is cancelled.
      */
     public AuctionCancelledEvent(Player onlinePlayer, ItemStack item, CancelledReason reason) {

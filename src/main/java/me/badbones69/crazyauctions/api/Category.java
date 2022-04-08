@@ -15,20 +15,20 @@ public enum Category {
     POTIONS("Potions", getPotions()),
     BLOCKS("Blocks", getBlocks());
     
-    private String Name;
-    private ArrayList<Material> Items;
+    private final String name;
+    private final ArrayList<Material> items;
     
     /**
      * @param name Name of the Shop Type.
      */
     private Category(String name, ArrayList<Material> items) {
-        this.Name = name;
-        this.Items = items;
+        this.name = name;
+        this.items = items;
     }
     
     /**
      * @param name Name of the Type you want.
-     * @return Returns the Type as a Enum.
+     * @return Returns the Type as an Enum.
      */
     public static Category getFromName(String name) {
         for (Category type : Category.values()) {
@@ -41,7 +41,7 @@ public enum Category {
     
     private static ArrayList<Material> getArmor() {
         ArrayList<Material> ma = new ArrayList<>();
-        if (Version.getCurrentVersion().isNewer(Version.v1_12_R1)) {
+        if (Version.isNewer(Version.v1_12_R1)) {
             ma.add(Material.matchMaterial("GOLDEN_HELMET"));
             ma.add(Material.matchMaterial("GOLDEN_CHESTPLATE"));
             ma.add(Material.matchMaterial("GOLDEN_LEGGINGS"));
@@ -68,7 +68,7 @@ public enum Category {
         ma.add(Material.DIAMOND_CHESTPLATE);
         ma.add(Material.DIAMOND_LEGGINGS);
         ma.add(Material.DIAMOND_BOOTS);
-        if (Version.getCurrentVersion().isNewer(Version.v1_15_R1)) {
+        if (Version.isNewer(Version.v1_15_R1)) {
             ma.add(Material.NETHERITE_HELMET);
             ma.add(Material.NETHERITE_CHESTPLATE);
             ma.add(Material.NETHERITE_LEGGINGS);
@@ -79,7 +79,7 @@ public enum Category {
     
     private static ArrayList<Material> getTools() {
         ArrayList<Material> ma = new ArrayList<>();
-        if (Version.getCurrentVersion().isNewer(Version.v1_12_R1)) {
+        if (Version.isNewer(Version.v1_12_R1)) {
             ma.add(Material.matchMaterial("WOODEN_PICKAXE"));
             ma.add(Material.matchMaterial("WOODEN_AXE"));
             ma.add(Material.matchMaterial("WOODEN_SHOVEL"));
@@ -113,7 +113,7 @@ public enum Category {
         ma.add(Material.STONE_HOE);
         ma.add(Material.IRON_HOE);
         ma.add(Material.DIAMOND_HOE);
-        if (Version.getCurrentVersion().isNewer(Version.v1_15_R1)) {
+        if (Version.isNewer(Version.v1_15_R1)) {
             ma.add(Material.NETHERITE_PICKAXE);
             ma.add(Material.NETHERITE_AXE);
             ma.add(Material.NETHERITE_HOE);
@@ -124,7 +124,7 @@ public enum Category {
     
     private static ArrayList<Material> getWeapons() {
         ArrayList<Material> ma = new ArrayList<>();
-        if (Version.getCurrentVersion().isNewer(Version.v1_12_R1)) {
+        if (Version.isNewer(Version.v1_12_R1)) {
             ma.add(Material.matchMaterial("WOODEN_SWORD"));
             ma.add(Material.matchMaterial("WOODEN_AXE"));
             ma.add(Material.matchMaterial("GOLDEN_SWORD"));
@@ -142,7 +142,7 @@ public enum Category {
         ma.add(Material.IRON_AXE);
         ma.add(Material.DIAMOND_AXE);
         ma.add(Material.BOW);
-        if (Version.getCurrentVersion().isNewer(Version.v1_15_R1)) {
+        if (Version.isNewer(Version.v1_15_R1)) {
             ma.add(Material.NETHERITE_SWORD);
             ma.add(Material.NETHERITE_AXE);
         }
@@ -195,11 +195,11 @@ public enum Category {
      * @return Returns the type name as a string.
      */
     public String getName() {
-        return Name;
+        return name;
     }
     
     public ArrayList<Material> getItems() {
-        return Items;
+        return items;
     }
     
 }

@@ -9,7 +9,8 @@ public enum CurrencyManager { // Currency Manager
     
     VAULT("Vault", "Money");
     
-    private String pluginName, name;
+    private final String pluginName;
+    private final String name;
     
     /**
      * @param pluginname

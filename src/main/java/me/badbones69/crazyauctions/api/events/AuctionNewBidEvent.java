@@ -18,9 +18,9 @@ public class AuctionNewBidEvent extends Event {
     
     /**
      *
-     * @param player
-     * @param item
-     * @param bid
+     * @param player The player who placed the bid.
+     * @param item The item that was bid on.
+     * @param bid The amount of money that was bid.
      */
     public AuctionNewBidEvent(Player player, ItemStack item, long bid) {
         this.player = player;

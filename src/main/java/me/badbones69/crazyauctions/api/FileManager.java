@@ -190,7 +190,7 @@ public class FileManager {
      */
     public CustomFile getFile(String name) {
         for (CustomFile file : customFiles) {
-            if (file.getName().toLowerCase().equalsIgnoreCase(name.toLowerCase())) {
+            if (file.getName().equalsIgnoreCase(name)) {
                 return file;
             }
         }
@@ -204,10 +204,10 @@ public class FileManager {
         try {
             File targetFile = files.get(file);
             FileConfiguration configuration = configurations.get(file);
-
+            
             YamlConfiguration copy = new YamlConfiguration();
-            configuration.getValues(false).forEach(copy::set);
-
+            configuration.getValues(false).forEach(copy :: set);
+            
             BukkitRunnable runnable = new BukkitRunnable() {
                 @Override
                 public void run() {
@@ -317,8 +317,8 @@ public class FileManager {
         MESSAGES("Messages.yml", "Messages.yml"),
         TEST_FILE("Test-File.yml", "Test-File.yml");
         
-        private String fileName;
-        private String fileLocation;
+        private final String fileName;
+        private final String fileLocation;
         
         /**
          * The files that the server will try and load.
@@ -360,11 +360,11 @@ public class FileManager {
         public void saveFile(boolean sync) {
             getInstance().saveFile(this, sync);
         }
-
+        
         public void saveFile() {
             getInstance().saveFile(this, false);
         }
-
+        
         /**
          * Overrides the loaded state file and loads the file systems file.
          */

@@ -21,9 +21,9 @@ public class AuctionWinBidEvent extends Event {
     
     /**
      *
-     * @param player
-     * @param item
-     * @param bid
+     * @param player The player who won the item.
+     * @param item The item that was won.
+     * @param bid The bid that was placed on the item.
      */
     public AuctionWinBidEvent(Player player, ItemStack item, long bid) {
         this.player = player;

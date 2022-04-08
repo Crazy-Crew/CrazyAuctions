@@ -10,12 +10,12 @@ Settings:
   Bid-Time: 2m 30s #Time for each item that is biddable.
   Full-Expire-Time: 10d #The full time the item is in the crazy auctions.
   Bid-Winner-Time: 20d #The time the winner of a bid has to claim their prize.
-  Minimum-Sell-Price: 10 #Minimum amount you can sell a item for.
-  Max-Beginning-Sell-Price: 1000000 #Max amount you can sell a item for.
+  Minimum-Sell-Price: 10 #Minimum amount you can sell an item for.
+  Max-Beginning-Sell-Price: 1000000 #Max amount you can sell an item for.
   Minimum-Bid-Price: 100 #Minimum starting bid.
   Max-Beginning-Bid-Price: 1000000 #Maximum starting bid.
   Allow-Damaged-Items: false #Allow items that have been damaged.
-  Category-Page-Opens-First: false #If set to true the categories page will open when they do /CA.
+  Category-Page-Opens-First: false #If set to true the categories' page will open when they do /CA.
   Feature-Toggle: #Toggle if a feature is on or off.
     Selling: true #Able to use the selling part of the auction house.
     Bidding: true #Able to use the bidding part of the auction house.
@@ -140,19 +140,19 @@ Settings:
         Toggle: true
         Slot: 49
         Name: '&6Previous Page'
-        Lore: {}
+        Lore: { }
       Refesh: #The button for Refresh Page.
         Item: 'SUNFLOWER'
         Toggle: true
         Slot: 50
         Name: '&6Refresh Page'
-        Lore: {}
+        Lore: { }
       NextPage: #The button for Next Page.
         Item: 'PAPER'
         Toggle: true
         Slot: 51
         Name: '&6Next Page'
-        Lore: {}
+        Lore: { }
       Category1: #The button for Next Page.
         Item: 'CHEST'
         Toggle: true
@@ -280,7 +280,7 @@ Settings:
       Your-Item: #The item that shows when you try to buy/bid on your item.
         Item: 'BARRIER'
         Name: '&cYou Can''t Purchase Your Own Item.'
-      Cant-Afford: #The item that shows when you cant afford this item.
+      Cant-Afford: #The item that shows when you can't afford this item.
         Item: 'BARRIER'
         Name: '&cYou Can''t Afford This Item.'
       Top-Bidder: #The item for when a player is already the top bidder.

@@ -19,7 +19,7 @@ public enum Version {
     
     private static Version currentVersion;
     private static Version latest;
-    private int versionInteger;
+    private final int versionInteger;
     
     private Version(int versionInteger) {
         this.versionInteger = versionInteger;
@@ -116,9 +116,9 @@ public enum Version {
     }
     
     /**
-     * Checks to see if the current version is older then the checked version.
+     * Checks to see if the current version is older than the checked version.
      * @param version The version you are checking.
-     * @return True if older then the checked version and false if the same or newer.
+     * @return True if older than the checked version and false if the same or newer.
      */
     public static boolean isOlder(Version version) {
         if (currentVersion == null) getCurrentVersion();

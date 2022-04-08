@@ -23,7 +23,7 @@ public class AuctionExpireEvent extends Event {
     
     /**
      *
-     * @param offlinePlayer The player who's item is expiring.
+     * @param offlinePlayer The player whose item is expiring.
      * @param item The item that is expiring.
      */
     public AuctionExpireEvent(OfflinePlayer offlinePlayer, ItemStack item) {
@@ -34,7 +34,7 @@ public class AuctionExpireEvent extends Event {
     
     /**
      *
-     * @param onlinePlayer The player who's item is expiring.
+     * @param onlinePlayer The player whose item is expiring.
      * @param item The item that is expiring.
      */
     public AuctionExpireEvent(Player onlinePlayer, ItemStack item) {

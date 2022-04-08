@@ -21,9 +21,9 @@ public class AuctionBuyEvent extends Event {
     
     /**
      *
-     * @param player
-     * @param item
-     * @param price
+     * @param player The player who bought the item.
+     * @param item The item that was bought.
+     * @param price The price of the item.
      */
     public AuctionBuyEvent(Player player, ItemStack item, long price) {
         this.player = player;

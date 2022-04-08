@@ -23,10 +23,10 @@ public class AuctionListEvent extends Event {
     
     /**
      *
-     * @param player
-     * @param shop
-     * @param item
-     * @param price
+     * @param player The player who is listing the item.
+     * @param shop The shop type the item is being listed to.
+     * @param item The item being listed.
+     * @param price The price the item is being listed for.
      */
     public AuctionListEvent(Player player, ShopType shop, ItemStack item, long price) {
         this.player = player;

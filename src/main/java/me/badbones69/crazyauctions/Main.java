@@ -18,7 +18,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.yaml.snakeyaml.error.YAMLException;
 
 import java.util.ArrayList;
@@ -373,16 +372,12 @@ public class Main extends JavaPlugin implements Listener {
     public void onJoin(PlayerJoinEvent e) {
         final Player player = e.getPlayer();
         if (player.getName().equalsIgnoreCase("BadBones69")) {
-            Bukkit.getScheduler().runTaskLater(this, () -> {
-                player.sendMessage(Methods.getPrefix() + Methods.color("&7This server is running your Crazy Auctions Plugin. " + "&7It is running version &av" + Bukkit.getServer().getPluginManager().getPlugin("CrazyAuctions").getDescription().getVersion() + "&7."));
-            }, 40);
+            Bukkit.getScheduler().runTaskLater(this, () -> player.sendMessage(Methods.getPrefix() + Methods.color("&7This server is running your Crazy Auctions Plugin. " + "&7It is running version &av" + Bukkit.getServer().getPluginManager().getPlugin("CrazyAuctions").getDescription().getVersion() + "&7.")), 40);
         }
     }
     
     private void startCheck() {
-        Bukkit.getScheduler().runTaskTimer(this, () -> {
-            Methods.updateAuction();
-        }, 20, 5 * 20);
+        Bukkit.getScheduler().runTaskTimer(this, Methods :: updateAuction, 20, 5 * 20);
     }
     
     private ArrayList<Material> getDamageableItems() {

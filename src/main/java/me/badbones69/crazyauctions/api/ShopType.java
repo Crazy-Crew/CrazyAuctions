@@ -4,7 +4,7 @@ public enum ShopType {
     
     SELL("Sell"), BID("Bid");
     
-    private String name;
+    private final String name;
     
     /**
      * @param name name of the Shop Type.
@@ -15,7 +15,7 @@ public enum ShopType {
     
     /**
      * @param name name of the Type you want.
-     * @return Returns the Type as a Enum.
+     * @return Returns the Type as an Enum.
      */
     public static ShopType getFromName(String name) {
         for (ShopType type : ShopType.values()) {
