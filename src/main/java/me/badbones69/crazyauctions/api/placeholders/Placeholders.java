@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Placeholders {
+    private static Placeholders instance;
     private final List<Placeholder> placeholderList = new ArrayList<>();
 
     private Placeholders() {
@@ -14,8 +15,6 @@ public class Placeholders {
             placeholderList.add(new PlaceholderAPI());
         }
     }
-
-    private static Placeholders instance;
 
     public static Placeholders getInstance() {
         if (instance == null) {
