@@ -4,6 +4,7 @@ main: me.badbones69.crazyauctions.Main
 website: https://www.spigotmc.org/resources/authors/badbones69.9719/
 version: ${version}${build.number}
 depend: [Vault]
+softdepend: [PlaceholderAPI]
 api-version: 1.13
 description: A plugin to auction off items globally.
 commands:
