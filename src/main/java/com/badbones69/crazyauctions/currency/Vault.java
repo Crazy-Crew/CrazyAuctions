@@ -1,4 +1,4 @@
-package me.badbones69.crazyauctions.currency;
+package com.badbones69.crazyauctions.currency;
 
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;

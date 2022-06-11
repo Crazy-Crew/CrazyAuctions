@@ -1,7 +1,7 @@
-package me.badbones69.crazyauctions.api;
+package com.badbones69.crazyauctions.api;
 
-import me.badbones69.crazyauctions.Methods;
-import me.badbones69.crazyauctions.api.FileManager.Files;
+import com.badbones69.crazyauctions.Methods;
+import com.badbones69.crazyauctions.api.FileManager.Files;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.Arrays;

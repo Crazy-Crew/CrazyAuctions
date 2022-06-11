@@ -1,6 +1,6 @@
-package me.badbones69.crazyauctions.api;
+package com.badbones69.crazyauctions.api;
 
-import me.badbones69.crazyauctions.api.FileManager.Files;
+import com.badbones69.crazyauctions.api.FileManager.Files;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;

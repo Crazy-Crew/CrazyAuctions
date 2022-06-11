@@ -1,13 +1,13 @@
-package me.badbones69.crazyauctions.controllers;
+package com.badbones69.crazyauctions.controllers;
 
-import me.badbones69.crazyauctions.Methods;
-import me.badbones69.crazyauctions.api.*;
-import me.badbones69.crazyauctions.api.FileManager.Files;
-import me.badbones69.crazyauctions.api.enums.CancelledReason;
-import me.badbones69.crazyauctions.api.events.AuctionBuyEvent;
-import me.badbones69.crazyauctions.api.events.AuctionCancelledEvent;
-import me.badbones69.crazyauctions.api.events.AuctionNewBidEvent;
-import me.badbones69.crazyauctions.currency.CurrencyManager;
+import com.badbones69.crazyauctions.Methods;
+import com.badbones69.crazyauctions.api.*;
+import com.badbones69.crazyauctions.api.FileManager.Files;
+import com.badbones69.crazyauctions.api.enums.CancelledReason;
+import com.badbones69.crazyauctions.api.events.AuctionBuyEvent;
+import com.badbones69.crazyauctions.api.events.AuctionCancelledEvent;
+import com.badbones69.crazyauctions.api.events.AuctionNewBidEvent;
+import com.badbones69.crazyauctions.currency.CurrencyManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;

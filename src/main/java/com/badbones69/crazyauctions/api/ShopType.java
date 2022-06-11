@@ -1,4 +1,4 @@
-package me.badbones69.crazyauctions.api;
+package com.badbones69.crazyauctions.api;
 
 public enum ShopType {
     

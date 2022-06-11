@@ -14,9 +14,10 @@ https://discord.com/invite/MCuz8JG/
  https://jenkins.badbones69.com/job/Crazy-Auctions/
  
 ## Nexus:
-https://nexus.badbones69.com/#browse/browse:maven-releases:me%2Fbadbones69%2Fcrazyauctions
+https://nexus.badbones69.com/#browse/browse:maven-releases:com%2Fbadbones69%2Fcrazyauctions
 
 ## Maven:
+
 ```xml
 <repository>
     <id>nexus</id>
@@ -24,7 +25,7 @@ https://nexus.badbones69.com/#browse/browse:maven-releases:me%2Fbadbones69%2Fcra
 </repository>
 
 <dependency>
-    <groupId>me.badbones69</groupId>
+    <groupId>com.badbones69</groupId>
     <artifactId>crazyauctions</artifactId>
     <version>{Latest Version}</version>
 </dependency>

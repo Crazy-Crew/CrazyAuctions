@@ -1,6 +1,6 @@
-package me.badbones69.crazyauctions.api.events;
+package com.badbones69.crazyauctions.api.events;
 
-import me.badbones69.crazyauctions.api.enums.CancelledReason;
+import com.badbones69.crazyauctions.api.enums.CancelledReason;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;

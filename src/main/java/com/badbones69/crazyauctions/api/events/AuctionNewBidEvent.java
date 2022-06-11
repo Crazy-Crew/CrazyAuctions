@@ -1,4 +1,4 @@
-package me.badbones69.crazyauctions.api.events;
+package com.badbones69.crazyauctions.api.events;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;

@@ -1,4 +1,4 @@
-package me.badbones69.crazyauctions.controllers;
+package com.badbones69.crazyauctions.controllers;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;

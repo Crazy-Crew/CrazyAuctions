@@ -1,12 +1,12 @@
-package me.badbones69.crazyauctions;
+package com.badbones69.crazyauctions;
 
-import me.badbones69.crazyauctions.api.FileManager;
-import me.badbones69.crazyauctions.api.FileManager.Files;
-import me.badbones69.crazyauctions.api.Messages;
-import me.badbones69.crazyauctions.api.Version;
-import me.badbones69.crazyauctions.api.events.AuctionExpireEvent;
-import me.badbones69.crazyauctions.api.events.AuctionWinBidEvent;
-import me.badbones69.crazyauctions.currency.CurrencyManager;
+import com.badbones69.crazyauctions.api.FileManager;
+import com.badbones69.crazyauctions.api.FileManager.Files;
+import com.badbones69.crazyauctions.api.Messages;
+import com.badbones69.crazyauctions.api.Version;
+import com.badbones69.crazyauctions.api.events.AuctionExpireEvent;
+import com.badbones69.crazyauctions.api.events.AuctionWinBidEvent;
+import com.badbones69.crazyauctions.currency.CurrencyManager;
 import org.bukkit.*;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;

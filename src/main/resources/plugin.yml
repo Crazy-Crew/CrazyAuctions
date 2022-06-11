@@ -1,6 +1,6 @@
 name: CrazyAuctions
 author: BadBones69
-main: me.badbones69.crazyauctions.Main
+main: com.badbones69.crazyauctions.Main
 website: https://www.spigotmc.org/resources/authors/badbones69.9719/
 version: ${version}${build.number}
 depend: [Vault]

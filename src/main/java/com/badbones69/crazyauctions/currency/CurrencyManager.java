@@ -1,6 +1,6 @@
-package me.badbones69.crazyauctions.currency;
+package com.badbones69.crazyauctions.currency;
 
-import me.badbones69.crazyauctions.api.FileManager.Files;
+import com.badbones69.crazyauctions.api.FileManager.Files;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
