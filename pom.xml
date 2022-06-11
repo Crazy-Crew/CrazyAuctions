@@ -17,15 +17,10 @@
 
     <distributionManagement>
         <repository>
-            <id>nexus</id>
-            <name>nexus releases</name>
-            <url>https://nexus.badbones69.com/repository/maven-releases/</url>
+            <id>crazycrew-repo-releases</id>
+            <name>CrazyCrew Team</name>
+            <url>https://repo.badbones69.com/releases</url>
         </repository>
-        <snapshotRepository>
-            <id>nexus</id>
-            <name>nexus snapshots</name>
-            <url>https://nexus.badbones69.com/repository/maven-snapshots/</url>
-        </snapshotRepository>
     </distributionManagement>
 
     <repositories>
