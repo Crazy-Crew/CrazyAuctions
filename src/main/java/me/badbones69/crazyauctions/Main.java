@@ -37,9 +37,9 @@ public class Main extends JavaPlugin implements Listener {
         Bukkit.getServer().getPluginManager().registerEvents(new GUI(), this);
         Methods.updateAuction();
         startCheck();
-        if (!Vault.setupEconomy()) {
-            saveDefaultConfig();
-        }
+        
+        if (!Vault.setupEconomy()) { saveDefaultConfig(); }
+        
         Messages.addMissingMessages();
         new Metrics(this, 4624); //Starts up bStats
     }
