@@ -6,7 +6,7 @@
 
     <groupId>me.badbones69</groupId>
     <artifactId>crazyauctions</artifactId>
-    <version>1.2.17-SNAPSHOT</version>
+    <version>1.2.18-SNAPSHOT</version>
     <name>CrazyAuctions</name>
 
     <properties>
