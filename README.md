@@ -19,7 +19,7 @@ Join us on [Discord](https://discord.badbones69.com)
 Downloads can be obtained from the [spigot page](https://www.spigotmc.org/resources/crazy-auctions.25219/) or the [Jenkins](https://jenkins.badbones69.com/view/Stable/job/Crazy-Auctions/).
 
 ## Plugin Data
-[![bStats Graph Data](https://bstats.org/signatures/bukkit/CrazyAuctions.svg)](https://bstats.org/signatures/bukkit/CrazyAuctions)
+[![bStats Graph Data](https://bstats.org/signatures/bukkit/CrazyAuctions.svg)](https://bstats.org/plugin/bukkit/CrazyAuctions/4624)
 
 ## API
 In Progress.
