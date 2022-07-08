@@ -1,6 +1,6 @@
 ## Crazy Auctions
 
-[![Join us on Discord](https://img.shields.io/discord/685683385313919172.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.badbones69.com)
+[![Join us on Discord](https://img.shields.io/discord/182615261403283459.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.badbones69.com)
 
 [![CrazyAuctions's Stargazers](https://img.shields.io/github/stars/Crazy-Crew/Crazy-Auctions?label=stars&logo=github)](https://github.com/Crazy-Crew/Crazy-Auctions/stargazers)
 [![CrazyAuctions's Forks](https://img.shields.io/github/forks/Crazy-Crew/Crazy-Auctions?label=forks&logo=github)](https://github.com/Crazy-Crew/Crazy-Auctions/network/members)
@@ -9,7 +9,7 @@
 CrazyAuctions is a simple auctions plugin where you can sell your items and bid on other items!
 
 ## Contact
-[![Join us on Discord](https://img.shields.io/discord/685683385313919172.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.badbones69.com)
+[![Join us on Discord](https://img.shields.io/discord/182615261403283459.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.badbones69.com)
 
 Join us on [Discord](https://discord.badbones69.com)
 
