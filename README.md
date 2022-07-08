@@ -1,33 +1,41 @@
-# Crazy Auctions - Issues tab has been disabled, A rewrite is pending.
-Source Code for Crazy Auctions
+## Crazy Auctions
 
-## Build Status:
+[![Join us on Discord](https://img.shields.io/discord/685683385313919172.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.badbones69.com)
+
+[![CrazyAuctions's Stargazers](https://img.shields.io/github/stars/Crazy-Crew/Crazy-Auctions?label=stars&logo=github)](https://github.com/Crazy-Crew/Crazy-Auctions/stargazers)
+[![CrazyAuctions's Forks](https://img.shields.io/github/forks/Crazy-Crew/Crazy-Auctions?label=forks&logo=github)](https://github.com/Crazy-Crew/Crazy-Auctions/network/members)
+[![CrazyAuctions's Watchers](https://img.shields.io/github/watchers/Crazy-Crew/Crazy-Auctions?label=watchers&logo=github)](https://github.com/Crazy-Crew/Crazy-Auctions/watchers)
+
+CrazyAuctions is a simple auctions plugin where you can sell your items and bid on other items!
+
+## Contact
+[![Join us on Discord](https://img.shields.io/discord/685683385313919172.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.badbones69.com)
+
+Join us on [Discord](https://discord.badbones69.com)
+
+## Downloads
 [![Build Status](https://jenkins.badbones69.com/view/Stable/job/Crazy-Auctions/badge/icon)](https://jenkins.badbones69.com/view/Stable/job/Crazy-Auctions/)
- 
-## Latest Version:
-[![Latest Version](https://img.shields.io/badge/Latest%20Version-1.2.12-blue)](https://github.com/badbones69/Crazy-Auctions/releases/latest)
 
-## Support:
-https://discord.com/invite/MCuz8JG/
+Downloads can be obtained from the [spigot page](https://www.spigotmc.org/resources/crazy-auctions.25219/) or the [Jenkins](https://jenkins.badbones69.com/view/Stable/job/Crazy-Auctions/).
 
-## Jenkins: 
-[https://jenkins.badbones69.com/job/Crazy-Auctions/](https://jenkins.badbones69.com/view/Stable/job/Crazy-Auctions/)
- 
-## Nexus:
-[https://nexus.badbones69.com/#browse/browse:maven-releases:com%2Fbadbones69%2Fcrazyauctions](https://repo.badbones69.com/#/releases/com/badbones69/crazyauctions/1.2.18-SNAPSHOT)
+## Plugin Data
+[![bStats Graph Data](https://bstats.org/signatures/bukkit/CrazyAuctions.svg)](https://bstats.org/signatures/bukkit/CrazyAuctions)
 
-## Maven:
+## API
+In Progress.
 
-```xml
-<repository>
-    <id>crazycrew-repo-releases</id>
-    <name>CrazyCrew Team</name>
-    <url>https://repo.badbones69.com/releases</url>
-</repository>
+### Dependency Information
 
-<dependency>
-    <groupId>com.badbones69</groupId>
-    <artifactId>crazyauctions</artifactId>
-    <version>{Latest Version}</version>
-</dependency>
-```
+#### Maven
+In Progress.
+
+#### Gradle
+In Progress.
+
+## Working with CrazyAuctions.
+
+#### Contributing
+Fork the project & open a pull request.
+
+#### Compiling
+Clone the project & run the shadowJar task.
