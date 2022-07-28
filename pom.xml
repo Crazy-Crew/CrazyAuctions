@@ -7,7 +7,7 @@
     <groupId>com.badbones69</groupId>
     <artifactId>crazyauctions</artifactId>
     <version>1.2.18-SNAPSHOT</version>
-    <name>CrazyAuctions</name>
+    <name>Crazy-Auctions</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
