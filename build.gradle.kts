@@ -43,6 +43,10 @@ dependencies {
     compileOnly(libs.paper)
 }
 
+java {
+    toolchain.languageVersion.set(JavaLanguageVersion.of(17))
+}
+
 tasks {
     shadowJar {
         if (buildNumber != null) {
@@ -60,8 +64,7 @@ tasks {
     }
 
     compileJava {
-        targetCompatibility = "8"
-        sourceCompatibility = "8"
+        options.release.set(17)
     }
 
     processResources {
