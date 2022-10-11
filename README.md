@@ -50,7 +50,7 @@
 
 ## Downloads
 #### Stable Builds
-https://modrinth.com/plugin/crazyauctions
+https://modrinth.com/plugin/crazyauctions ( Soon )
 
 #### Beta Builds
 https://ci.badbones69.com/view/Beta/job/CrazyAuctions-Beta/
