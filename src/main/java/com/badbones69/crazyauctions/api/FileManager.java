@@ -1,10 +1,8 @@
 package com.badbones69.crazyauctions.api;
 
 import com.badbones69.crazyauctions.CrazyAuctions;
-import com.badbones69.crazyauctions.utils.func.ServerProtocol;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -46,17 +44,6 @@ public class FileManager {
             
             if (!newFile.exists()) {
                 try {
-                    String fileLocation = file.getFileLocation();
-                    
-                    // Switch between 1.12.2- and 1.13+ config version.
-                    if (file == Files.CONFIG) {
-                        if (ServerProtocol.isOlder(ServerProtocol.v1_13_R2)) {
-                            fileLocation = "config1.12.2-Down.yml";
-                        } else {
-                            fileLocation = "config1.13-Up.yml";
-                        }
-                    }
-
                     File serverFile = new File(plugin.getDataFolder(), "/" + file.getFileLocation());
                     InputStream jarFile = getClass().getResourceAsStream("/" + file.getFileJar());
                     copyFile(jarFile, serverFile);

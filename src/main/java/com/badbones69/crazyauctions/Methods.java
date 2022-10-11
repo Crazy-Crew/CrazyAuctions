@@ -1,6 +1,5 @@
 package com.badbones69.crazyauctions;
 
-import com.badbones69.crazyauctions.api.CrazyManager;
 import com.badbones69.crazyauctions.api.FileManager.Files;
 import com.badbones69.crazyauctions.api.enums.Messages;
 import com.badbones69.crazyauctions.utils.ItemBuilder;
@@ -19,15 +18,13 @@ import java.util.regex.Pattern;
 public class Methods {
 
     private final CrazyAuctions plugin = CrazyAuctions.getPlugin();
-
-    private final CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
     
     public final Pattern HEX_PATTERN = Pattern.compile("#[a-fA-F0-9]{6}");
     
     public String color(String message) {
         if (ServerProtocol.isNewer(ServerProtocol.v1_15_R1)) {
             Matcher matcher = HEX_PATTERN.matcher(message);
-            StringBuffer buffer = new StringBuffer();
+            StringBuilder buffer = new StringBuilder();
 
             while (matcher.find()) {
                 matcher.appendReplacement(buffer, net.md_5.bungee.api.ChatColor.of(matcher.group()).toString());
@@ -65,19 +62,11 @@ public class Methods {
     }
 
     public ItemStack getItemInHand(Player player) {
-        if (ServerProtocol.isAtLeast(ServerProtocol.v1_12_R1)) {
-            return player.getInventory().getItemInMainHand();
-        } else {
-            return player.getItemInHand();
-        }
+        return player.getInventory().getItemInMainHand();
     }
 
     public void setItemInHand(Player player, ItemStack item) {
-        if (ServerProtocol.isAtLeast(ServerProtocol.v1_12_R1)) {
-            player.getInventory().setItemInMainHand(item);
-        } else {
-            player.setItemInHand(item);
-        }
+        player.getInventory().setItemInMainHand(item);
     }
     
     public Player getPlayer(String name) {

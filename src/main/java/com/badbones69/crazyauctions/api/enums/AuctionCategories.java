@@ -41,17 +41,10 @@ public enum AuctionCategories {
     private static ArrayList<Material> getArmor() {
         ArrayList<Material> ma = new ArrayList<>();
 
-        if (ServerProtocol.isNewer(ServerProtocol.v1_12_R1)) {
-            ma.add(Material.matchMaterial("GOLDEN_HELMET"));
-            ma.add(Material.matchMaterial("GOLDEN_CHESTPLATE"));
-            ma.add(Material.matchMaterial("GOLDEN_LEGGINGS"));
-            ma.add(Material.matchMaterial("GOLDEN_BOOTS"));
-        } else {
-            ma.add(Material.matchMaterial("GOLD_HELMET"));
-            ma.add(Material.matchMaterial("GOLD_CHESTPLATE"));
-            ma.add(Material.matchMaterial("GOLD_LEGGINGS"));
-            ma.add(Material.matchMaterial("GOLD_BOOTS"));
-        }
+        ma.add(Material.matchMaterial("GOLDEN_HELMET"));
+        ma.add(Material.matchMaterial("GOLDEN_CHESTPLATE"));
+        ma.add(Material.matchMaterial("GOLDEN_LEGGINGS"));
+        ma.add(Material.matchMaterial("GOLDEN_BOOTS"));
 
         ma.add(Material.DIAMOND_HELMET);
         ma.add(Material.DIAMOND_CHESTPLATE);
@@ -83,31 +76,17 @@ public enum AuctionCategories {
     private static ArrayList<Material> getTools() {
         ArrayList<Material> ma = new ArrayList<>();
 
-        if (ServerProtocol.isNewer(ServerProtocol.v1_12_R1)) {
-            ma.add(Material.matchMaterial("WOODEN_PICKAXE"));
-            ma.add(Material.matchMaterial("WOODEN_AXE"));
-            ma.add(Material.matchMaterial("WOODEN_SHOVEL"));
-            ma.add(Material.matchMaterial("WOODEN_HOE"));
-            ma.add(Material.matchMaterial("GOLDEN_PICKAXE"));
-            ma.add(Material.matchMaterial("GOLDEN_AXE"));
-            ma.add(Material.matchMaterial("GOLDEN_SHOVEL"));
-            ma.add(Material.matchMaterial("GOLDEN_HOE"));
-            ma.add(Material.matchMaterial("STONE_SHOVEL"));
-            ma.add(Material.matchMaterial("IRON_SHOVEL"));
-            ma.add(Material.matchMaterial("DIAMOND_SHOVEL"));
-        } else {
-            ma.add(Material.matchMaterial("WOOD_PICKAXE"));
-            ma.add(Material.matchMaterial("WOOD_AXE"));
-            ma.add(Material.matchMaterial("WOOD_SPADE"));
-            ma.add(Material.matchMaterial("WOOD_HOE"));
-            ma.add(Material.matchMaterial("GOLD_PICKAXE"));
-            ma.add(Material.matchMaterial("GOLD_AXE"));
-            ma.add(Material.matchMaterial("GOLD_SPADE"));
-            ma.add(Material.matchMaterial("GOLD_HOE"));
-            ma.add(Material.matchMaterial("STONE_SPADE"));
-            ma.add(Material.matchMaterial("IRON_SPADE"));
-            ma.add(Material.matchMaterial("DIAMOND_SPADE"));
-        }
+        ma.add(Material.matchMaterial("WOODEN_PICKAXE"));
+        ma.add(Material.matchMaterial("WOODEN_AXE"));
+        ma.add(Material.matchMaterial("WOODEN_SHOVEL"));
+        ma.add(Material.matchMaterial("WOODEN_HOE"));
+        ma.add(Material.matchMaterial("GOLDEN_PICKAXE"));
+        ma.add(Material.matchMaterial("GOLDEN_AXE"));
+        ma.add(Material.matchMaterial("GOLDEN_SHOVEL"));
+        ma.add(Material.matchMaterial("GOLDEN_HOE"));
+        ma.add(Material.matchMaterial("STONE_SHOVEL"));
+        ma.add(Material.matchMaterial("IRON_SHOVEL"));
+        ma.add(Material.matchMaterial("DIAMOND_SHOVEL"));
 
         ma.add(Material.STONE_PICKAXE);
         ma.add(Material.IRON_PICKAXE);
@@ -132,17 +111,10 @@ public enum AuctionCategories {
     private static ArrayList<Material> getWeapons() {
         ArrayList<Material> ma = new ArrayList<>();
 
-        if (ServerProtocol.isNewer(ServerProtocol.v1_12_R1)) {
-            ma.add(Material.matchMaterial("WOODEN_SWORD"));
-            ma.add(Material.matchMaterial("WOODEN_AXE"));
-            ma.add(Material.matchMaterial("GOLDEN_SWORD"));
-            ma.add(Material.matchMaterial("GOLDEN_AXE"));
-        } else {
-            ma.add(Material.matchMaterial("WOOD_SWORD"));
-            ma.add(Material.matchMaterial("WOOD_AXE"));
-            ma.add(Material.matchMaterial("GOLD_SWORD"));
-            ma.add(Material.matchMaterial("GOLD_AXE"));
-        }
+        ma.add(Material.matchMaterial("WOODEN_SWORD"));
+        ma.add(Material.matchMaterial("WOODEN_AXE"));
+        ma.add(Material.matchMaterial("GOLDEN_SWORD"));
+        ma.add(Material.matchMaterial("GOLDEN_AXE"));
 
         ma.add(Material.STONE_SWORD);
         ma.add(Material.IRON_SWORD);
@@ -185,17 +157,21 @@ public enum AuctionCategories {
     
     private static ArrayList<Material> getBlocks() {
         ArrayList<Material> ma = new ArrayList<>();
+
         for (Material m : Material.values()) {
             if (m.isBlock()) ma.add(m);
         }
+
         return ma;
     }
     
     private static ArrayList<Material> getOthers() {
         ArrayList<Material> ma = new ArrayList<>();
+
         for (Material m : Material.values()) {
             if (!(getArmor().contains(m) || getTools().contains(m) || getWeapons().contains(m) || getFood().contains(m) || getPotions().contains(m) || getBlocks().contains(m))) ma.add(m);
         }
+
         return ma;
     }
     
