@@ -1,11 +1,16 @@
-name: CrazyAuctions
-author: BadBones69
-main: com.badbones69.crazyauctions.Main
-website: https://www.spigotmc.org/resources/authors/badbones69.9719/
-version: ${version}${build.number}
+name: "CrazyCrates"
+main: "${group}.CrazyAuctions"
+
+authors: [BadBones69, RyderBelserion]
+
+version: ${version}
+api-version: "1.13"
+description: ${description}
+
 depend: [Vault]
-api-version: 1.13
-description: A plugin to auction off items globally.
+
+website: https://modrinth.com/plugin/crazyauctions
+
 commands:
   ca:
     description: Opens the Crazy Auctions GUI.
