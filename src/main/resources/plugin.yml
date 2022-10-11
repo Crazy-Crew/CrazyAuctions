@@ -1,4 +1,4 @@
-name: "CrazyCrates"
+name: "CrazyAuctions"
 main: "${group}.CrazyAuctions"
 
 authors: [BadBones69, RyderBelserion]
@@ -12,6 +12,5 @@ softdepend: [Vault]
 website: https://modrinth.com/plugin/crazyauctions
 
 commands:
-  ca:
-    description: Opens the Crazy Auctions GUI.
-    aliases: [crazyauction, crazyauctions, ah, hdv]
+  crazyauctions:
+    description: Opens the main menu for CrazyAuctions.
