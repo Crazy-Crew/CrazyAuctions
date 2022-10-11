@@ -310,13 +310,14 @@ public class FileManager {
     }
     
     public enum Files {
-        
-        //ENUM_NAME("FileName.yml", "FilePath.yml"),
+
+        // ENUM_NAME("fileName.yml", "fileLocation.yml"),
+        // ENUM_NAME("fileName.yml", "newFileLocation.yml", "oldFileLocation.yml"),
         CONFIG("config.yml", "config.yml"),
-        DATA("Data.yml", "Data.yml"),
-        MESSAGES("Messages.yml", "Messages.yml"),
-        TEST_FILE("Test-File.yml", "Test-File.yml");
-        
+        DATA("data.yml", "data.yml"),
+        MESSAGES("messages.yml", "messages.yml"),
+        TEST_FILE("test-file.yml", "test-file.yml");
+
         private final String fileName;
         private final String fileLocation;
         
