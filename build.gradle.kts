@@ -40,7 +40,7 @@ dependencies {
 
     compileOnly(libs.vault.api)
 
-    compileOnly(libs.spigot)
+    compileOnly(libs.paper)
 }
 
 tasks {

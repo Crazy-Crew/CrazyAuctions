@@ -1,7 +1,7 @@
 [versions]
 
-# Spigot Team
-spigot = "1.19.2-R0.1-SNAPSHOT"
+# Paper Team
+paper = "1.19.2-R0.1-SNAPSHOT"
 
 # Bukkit
 bukkit-bstats = "3.0.0"
@@ -16,8 +16,8 @@ reserve-api = "0.1.5.0"
 
 [libraries]
 
-# Spigot Team
-spigot = { module = "org.spigotmc:spigot-api", version.ref = "spigot" }
+# Paper Team
+paper = { module = "io.papermc.paper:paper-api", version.ref = "paper" }
 
 # Bukkit
 bukkit-bstats = { module = "org.bstats:bstats-bukkit", version.ref = "bukkit-bstats" }
