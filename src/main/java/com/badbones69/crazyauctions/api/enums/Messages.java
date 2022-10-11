@@ -1,6 +1,8 @@
-package com.badbones69.crazyauctions.api;
+package com.badbones69.crazyauctions.api.enums;
 
+import com.badbones69.crazyauctions.CrazyAuctions;
 import com.badbones69.crazyauctions.Methods;
+import com.badbones69.crazyauctions.api.FileManager;
 import com.badbones69.crazyauctions.api.FileManager.Files;
 import org.bukkit.configuration.file.FileConfiguration;
 
@@ -54,47 +56,54 @@ public enum Messages {
     "&9/Ah Expired/Collect - &eView and manage your cancelled and expired items.",
     "&9/Ah Listed - &eView and manage the items you are selling.",
     "&9/Ah Help - &eView this help menu."));
-    
-    private static final FileManager fileManager = FileManager.getInstance();
     private final String path;
     private String defaultMessage;
     private List<String> defaultListMessage;
+
+    private static final CrazyAuctions plugin = CrazyAuctions.getPlugin();
+
+    private static final Methods methods = plugin.getStarter().getMethods();
     
-    private Messages(String path, String defaultMessage) {
+    Messages(String path, String defaultMessage) {
         this.path = path;
         this.defaultMessage = defaultMessage;
     }
     
-    private Messages(String path, List<String> defaultListMessage) {
+    Messages(String path, List<String> defaultListMessage) {
         this.path = path;
         this.defaultListMessage = defaultListMessage;
     }
     
     public static String convertList(List<String> list) {
-        String message = "";
+        StringBuilder message = new StringBuilder();
+
         for (String m : list) {
-            message += Methods.color(m) + "\n";
+            message.append(methods.color(m)).append("\n");
         }
-        return message;
+
+        return message.toString();
     }
     
     public static String convertList(List<String> list, HashMap<String, String> placeholders) {
-        String message = "";
+        StringBuilder message = new StringBuilder();
         for (String m : list) {
-            message += Methods.color(m) + "\n";
+            message.append(methods.color(m)).append("\n");
         }
+
         for (String ph : placeholders.keySet()) {
-            message = Methods.color(message.replace(ph, placeholders.get(ph))).replace(ph, placeholders.get(ph).toLowerCase());
+            message = new StringBuilder(methods.color(message.toString().replace(ph, placeholders.get(ph))).replace(ph, placeholders.get(ph).toLowerCase()));
         }
-        return message;
+        return message.toString();
     }
     
     public static void addMissingMessages() {
         FileConfiguration messages = Files.MESSAGES.getFile();
         boolean saveFile = false;
+
         for (Messages message : values()) {
             if (!messages.contains("Messages." + message.getPath())) {
                 saveFile = true;
+
                 if (message.getDefaultMessage() != null) {
                     messages.set("Messages." + message.getPath(), message.getDefaultMessage());
                 } else {
@@ -102,23 +111,22 @@ public enum Messages {
                 }
             }
         }
-        if (saveFile) {
-            Files.MESSAGES.saveFile();
-        }
+
+        if (saveFile) Files.MESSAGES.saveFile();
     }
     
     public String getMessage() {
         if (isList()) {
             if (exists()) {
-                return Methods.color(convertList(Files.MESSAGES.getFile().getStringList("Messages." + path)));
+                return methods.color(convertList(Files.MESSAGES.getFile().getStringList("Messages." + path)));
             } else {
-                return Methods.color(convertList(getDefaultListMessage()));
+                return methods.color(convertList(getDefaultListMessage()));
             }
         } else {
             if (exists()) {
-                return Methods.getPrefix(Files.MESSAGES.getFile().getString("Messages." + path));
+                return methods.getPrefix(Files.MESSAGES.getFile().getString("Messages." + path));
             } else {
-                return Methods.getPrefix(getDefaultMessage());
+                return methods.getPrefix(getDefaultMessage());
             }
         }
     }
@@ -127,20 +135,18 @@ public enum Messages {
         String message;
         if (isList()) {
             if (exists()) {
-                message = Methods.color(convertList(Files.MESSAGES.getFile().getStringList("Messages." + path), placeholders));
+                message = methods.color(convertList(Files.MESSAGES.getFile().getStringList("Messages." + path), placeholders));
             } else {
-                message = Methods.color(convertList(getDefaultListMessage(), placeholders));
+                message = methods.color(convertList(getDefaultListMessage(), placeholders));
             }
         } else {
             if (exists()) {
-                message = Methods.getPrefix(Files.MESSAGES.getFile().getString("Messages." + path));
+                message = methods.getPrefix(Files.MESSAGES.getFile().getString("Messages." + path));
             } else {
-                message = Methods.getPrefix(getDefaultMessage());
+                message = methods.getPrefix(getDefaultMessage());
             }
             for (String ph : placeholders.keySet()) {
-                if (message.contains(ph)) {
-                    message = message.replace(ph, placeholders.get(ph)).replace(ph, placeholders.get(ph).toLowerCase());
-                }
+                if (message.contains(ph)) message = message.replace(ph, placeholders.get(ph)).replace(ph, placeholders.get(ph).toLowerCase());
             }
         }
         return message;
@@ -149,15 +155,15 @@ public enum Messages {
     public String getMessageNoPrefix() {
         if (isList()) {
             if (exists()) {
-                return Methods.color(convertList(Files.MESSAGES.getFile().getStringList("Messages." + path)));
+                return methods.color(convertList(Files.MESSAGES.getFile().getStringList("Messages." + path)));
             } else {
-                return Methods.color(convertList(getDefaultListMessage()));
+                return methods.color(convertList(getDefaultListMessage()));
             }
         } else {
             if (exists()) {
-                return Methods.color(Files.MESSAGES.getFile().getString("Messages." + path));
+                return methods.color(Files.MESSAGES.getFile().getString("Messages." + path));
             } else {
-                return Methods.color(getDefaultMessage());
+                return methods.color(getDefaultMessage());
             }
         }
     }
@@ -166,20 +172,18 @@ public enum Messages {
         String message;
         if (isList()) {
             if (exists()) {
-                message = Methods.color(convertList(Files.MESSAGES.getFile().getStringList("Messages." + path), placeholders));
+                message = methods.color(convertList(Files.MESSAGES.getFile().getStringList("Messages." + path), placeholders));
             } else {
-                message = Methods.color(convertList(getDefaultListMessage(), placeholders));
+                message = methods.color(convertList(getDefaultListMessage(), placeholders));
             }
         } else {
             if (exists()) {
-                message = Methods.color(Files.MESSAGES.getFile().getString("Messages." + path));
+                message = methods.color(Files.MESSAGES.getFile().getString("Messages." + path));
             } else {
-                message = Methods.color(getDefaultMessage());
+                message = methods.color(getDefaultMessage());
             }
             for (String ph : placeholders.keySet()) {
-                if (message.contains(ph)) {
-                    message = message.replace(ph, placeholders.get(ph)).replace(ph, placeholders.get(ph).toLowerCase());
-                }
+                if (message.contains(ph)) message = message.replace(ph, placeholders.get(ph)).replace(ph, placeholders.get(ph).toLowerCase());
             }
         }
         return message;
@@ -208,5 +212,4 @@ public enum Messages {
     private List<String> getDefaultListMessage() {
         return defaultListMessage;
     }
-    
 }

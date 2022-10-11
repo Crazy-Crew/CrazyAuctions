@@ -6,21 +6,18 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.ItemStack;
 
 /**
- *
  * @author BadBones69
  *
  * This event is fired when a bidding item's time has run out and so a player wins the item.
- *
  */
 public class AuctionWinBidEvent extends Event {
     
-    private static final HandlerList handlers = new HandlerList();
-    private Player player;
-    private long bid;
-    private ItemStack item;
+    private final HandlerList handlers = new HandlerList();
+    private final Player player;
+    private final long bid;
+    private final ItemStack item;
     
     /**
-     *
      * @param player The player who won the item.
      * @param item The item that was won.
      * @param bid The bid that was placed on the item.
@@ -29,10 +26,6 @@ public class AuctionWinBidEvent extends Event {
         this.player = player;
         this.item = item;
         this.bid = bid;
-    }
-    
-    public static HandlerList getHandlerList() {
-        return handlers;
     }
     
     public HandlerList getHandlers() {
@@ -50,5 +43,4 @@ public class AuctionWinBidEvent extends Event {
     public long getBid() {
         return bid;
     }
-    
 }

@@ -6,21 +6,18 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.ItemStack;
 
 /**
- *
  * @author BadBones69
  *
  * This event is fired when a player buys something from the selling auction house.
- *
  */
 public class AuctionBuyEvent extends Event {
     
-    private static final HandlerList handlers = new HandlerList();
-    private Player player;
-    private long price;
-    private ItemStack item;
+    private final HandlerList handlers = new HandlerList();
+    private final Player player;
+    private final long price;
+    private final ItemStack item;
     
     /**
-     *
      * @param player The player who bought the item.
      * @param item The item that was bought.
      * @param price The price of the item.
@@ -30,11 +27,7 @@ public class AuctionBuyEvent extends Event {
         this.item = item;
         this.price = price;
     }
-    
-    public static HandlerList getHandlerList() {
-        return handlers;
-    }
-    
+
     public HandlerList getHandlers() {
         return handlers;
     }
@@ -50,5 +43,4 @@ public class AuctionBuyEvent extends Event {
     public long getPrice() {
         return price;
     }
-    
 }

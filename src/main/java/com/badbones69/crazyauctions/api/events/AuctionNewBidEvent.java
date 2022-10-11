@@ -6,18 +6,16 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.ItemStack;
 
 /**
- *
  * This event is fired when a player places a new bid onto an item in the auction house.
  */
 public class AuctionNewBidEvent extends Event {
     
-    private static final HandlerList handlers = new HandlerList();
-    private Player player;
-    private long bid;
-    private ItemStack item;
+    private final HandlerList handlers = new HandlerList();
+    private final Player player;
+    private final long bid;
+    private final ItemStack item;
     
     /**
-     *
      * @param player The player who placed the bid.
      * @param item The item that was bid on.
      * @param bid The amount of money that was bid.
@@ -26,10 +24,6 @@ public class AuctionNewBidEvent extends Event {
         this.player = player;
         this.item = item;
         this.bid = bid;
-    }
-    
-    public static HandlerList getHandlerList() {
-        return handlers;
     }
     
     public HandlerList getHandlers() {
@@ -47,5 +41,4 @@ public class AuctionNewBidEvent extends Event {
     public long getBid() {
         return bid;
     }
-    
 }
