@@ -5,7 +5,7 @@ import org.bukkit.Material;
 import java.util.ArrayList;
 
 public enum AuctionCategories {
-    
+
     NONE("None", new ArrayList<>()),
     OTHER("Other", getOthers()),
     ARMOR("Armor", getArmor()),
@@ -14,10 +14,10 @@ public enum AuctionCategories {
     FOOD("Food", getFood()),
     POTIONS("Potions", getPotions()),
     BLOCKS("Blocks", getBlocks());
-    
+
     private final String name;
     private final ArrayList<Material> items;
-    
+
     /**
      * @param name Name of the Shop Type.
      */
@@ -25,7 +25,7 @@ public enum AuctionCategories {
         this.name = name;
         this.items = items;
     }
-    
+
     /**
      * @param name Name of the Type you want.
      * @return Returns the Type as an Enum.
@@ -37,31 +37,36 @@ public enum AuctionCategories {
 
         return null;
     }
-    
+
     private static ArrayList<Material> getArmor() {
         ArrayList<Material> ma = new ArrayList<>();
 
-        ma.add(Material.matchMaterial("GOLDEN_HELMET"));
-        ma.add(Material.matchMaterial("GOLDEN_CHESTPLATE"));
-        ma.add(Material.matchMaterial("GOLDEN_LEGGINGS"));
-        ma.add(Material.matchMaterial("GOLDEN_BOOTS"));
+        ma.add(Material.LEATHER_HELMET);
+        ma.add(Material.LEATHER_CHESTPLATE);
+        ma.add(Material.LEATHER_LEGGINGS);
+        ma.add(Material.LEATHER_BOOTS);
 
-        ma.add(Material.DIAMOND_HELMET);
-        ma.add(Material.DIAMOND_CHESTPLATE);
-        ma.add(Material.DIAMOND_LEGGINGS);
-        ma.add(Material.DIAMOND_BOOTS);
+        ma.add(Material.GOLDEN_HELMET);
+        ma.add(Material.GOLDEN_CHESTPLATE);
+        ma.add(Material.GOLDEN_LEGGINGS);
+        ma.add(Material.GOLDEN_BOOTS);
+
         ma.add(Material.CHAINMAIL_HELMET);
         ma.add(Material.CHAINMAIL_CHESTPLATE);
         ma.add(Material.CHAINMAIL_LEGGINGS);
         ma.add(Material.CHAINMAIL_BOOTS);
+
         ma.add(Material.IRON_HELMET);
         ma.add(Material.IRON_CHESTPLATE);
         ma.add(Material.IRON_LEGGINGS);
         ma.add(Material.IRON_BOOTS);
+
         ma.add(Material.DIAMOND_HELMET);
         ma.add(Material.DIAMOND_CHESTPLATE);
         ma.add(Material.DIAMOND_LEGGINGS);
         ma.add(Material.DIAMOND_BOOTS);
+
+        ma.add(Material.TURTLE_HELMET);
 
         if (ServerProtocol.isNewer(ServerProtocol.v1_15_R1)) {
             ma.add(Material.NETHERITE_HELMET);
@@ -72,31 +77,39 @@ public enum AuctionCategories {
 
         return ma;
     }
-    
+
     private static ArrayList<Material> getTools() {
         ArrayList<Material> ma = new ArrayList<>();
 
-        ma.add(Material.matchMaterial("WOODEN_PICKAXE"));
-        ma.add(Material.matchMaterial("WOODEN_AXE"));
-        ma.add(Material.matchMaterial("WOODEN_SHOVEL"));
-        ma.add(Material.matchMaterial("WOODEN_HOE"));
-        ma.add(Material.matchMaterial("GOLDEN_PICKAXE"));
-        ma.add(Material.matchMaterial("GOLDEN_AXE"));
-        ma.add(Material.matchMaterial("GOLDEN_SHOVEL"));
-        ma.add(Material.matchMaterial("GOLDEN_HOE"));
-        ma.add(Material.matchMaterial("STONE_SHOVEL"));
-        ma.add(Material.matchMaterial("IRON_SHOVEL"));
-        ma.add(Material.matchMaterial("DIAMOND_SHOVEL"));
+        ma.add(Material.WOODEN_PICKAXE);
+        ma.add(Material.WOODEN_AXE);
+        ma.add(Material.WOODEN_SHOVEL);
+        ma.add(Material.WOODEN_HOE);
 
         ma.add(Material.STONE_PICKAXE);
-        ma.add(Material.IRON_PICKAXE);
-        ma.add(Material.DIAMOND_PICKAXE);
         ma.add(Material.STONE_AXE);
-        ma.add(Material.IRON_AXE);
-        ma.add(Material.DIAMOND_AXE);
+        ma.add(Material.STONE_SHOVEL);
         ma.add(Material.STONE_HOE);
+
+        ma.add(Material.GOLDEN_PICKAXE);
+        ma.add(Material.GOLDEN_AXE);
+        ma.add(Material.GOLDEN_SHOVEL);
+        ma.add(Material.GOLDEN_HOE);
+
+        ma.add(Material.IRON_PICKAXE);
+        ma.add(Material.IRON_AXE);
+        ma.add(Material.IRON_SHOVEL);
         ma.add(Material.IRON_HOE);
+
+        ma.add(Material.DIAMOND_PICKAXE);
+        ma.add(Material.DIAMOND_AXE);
+        ma.add(Material.DIAMOND_SHOVEL);
         ma.add(Material.DIAMOND_HOE);
+
+        ma.add(Material.SHEARS);
+        ma.add(Material.FISHING_ROD);
+        ma.add(Material.FLINT_AND_STEEL);
+        ma.add(Material.SPYGLASS);
 
         if (ServerProtocol.isNewer(ServerProtocol.v1_15_R1)) {
             ma.add(Material.NETHERITE_PICKAXE);
@@ -107,22 +120,28 @@ public enum AuctionCategories {
 
         return ma;
     }
-    
+
     private static ArrayList<Material> getWeapons() {
         ArrayList<Material> ma = new ArrayList<>();
 
-        ma.add(Material.matchMaterial("WOODEN_SWORD"));
-        ma.add(Material.matchMaterial("WOODEN_AXE"));
-        ma.add(Material.matchMaterial("GOLDEN_SWORD"));
-        ma.add(Material.matchMaterial("GOLDEN_AXE"));
+        ma.add(Material.WOODEN_SWORD);
+        ma.add(Material.WOODEN_AXE);
 
         ma.add(Material.STONE_SWORD);
-        ma.add(Material.IRON_SWORD);
-        ma.add(Material.DIAMOND_SWORD);
         ma.add(Material.STONE_AXE);
+
+        ma.add(Material.GOLDEN_SWORD);
+        ma.add(Material.GOLDEN_AXE);
+
+        ma.add(Material.IRON_SWORD);
         ma.add(Material.IRON_AXE);
+
+        ma.add(Material.DIAMOND_SWORD);
         ma.add(Material.DIAMOND_AXE);
+
         ma.add(Material.BOW);
+        ma.add(Material.CROSSBOW);
+        ma.add(Material.TRIDENT);
 
         if (ServerProtocol.isNewer(ServerProtocol.v1_15_R1)) {
             ma.add(Material.NETHERITE_SWORD);
@@ -131,7 +150,7 @@ public enum AuctionCategories {
 
         return ma;
     }
-    
+
     private static ArrayList<Material> getFood() {
         ArrayList<Material> ma = new ArrayList<>();
 
@@ -143,7 +162,7 @@ public enum AuctionCategories {
 
         return ma;
     }
-    
+
     private static ArrayList<Material> getPotions() {
         ArrayList<Material> ma = new ArrayList<>();
         ma.add(Material.POTION);
@@ -154,7 +173,7 @@ public enum AuctionCategories {
 
         return ma;
     }
-    
+
     private static ArrayList<Material> getBlocks() {
         ArrayList<Material> ma = new ArrayList<>();
 
@@ -164,7 +183,7 @@ public enum AuctionCategories {
 
         return ma;
     }
-    
+
     private static ArrayList<Material> getOthers() {
         ArrayList<Material> ma = new ArrayList<>();
 
@@ -174,14 +193,14 @@ public enum AuctionCategories {
 
         return ma;
     }
-    
+
     /**
      * @return Returns the type name as a string.
      */
     public String getName() {
         return name;
     }
-    
+
     public ArrayList<Material> getItems() {
         return items;
     }
