@@ -1,50 +1,30 @@
 plugins {
-    java
+    kotlin("jvm") version "1.7.20"
 
     id("com.github.johnrengelman.shadow") version "7.1.2"
 }
 
 val buildNumber: String? = System.getenv("BUILD_NUMBER")
 
-val jenkinsVersion = "1.2.18-b$buildNumber"
+val jenkinsVersion = "0.0.1-b$buildNumber"
 
 group = "com.badbones69.crazyauctions"
-version = "1.2.18"
-description = "A simple auctions plugin where you can sell your items and bid on other items! "
+version = "0.0.1"
+description = "A simple auctions plugin where you can sell your items and bid on other items!"
 
 repositories {
+    mavenCentral()
+
     /**
      * Paper Team
      */
     maven("https://repo.papermc.io/repository/maven-public/")
-
-    /**
-     * NBT Team
-     */
-    maven("https://repo.codemc.org/repository/maven-public/")
-
-    /**
-     * Everything else we need.
-     */
-    maven("https://jitpack.io/")
-
-    mavenCentral()
 }
 
 dependencies {
-    implementation(libs.bukkit.bstats)
-
-    implementation(libs.nbt.api)
-
-    compileOnly(libs.reserve.api)
-
-    compileOnly(libs.vault.api)
+    implementation(kotlin("stdlib", "1.7.20"))
 
     compileOnly(libs.paper)
-}
-
-java {
-    toolchain.languageVersion.set(JavaLanguageVersion.of(17))
 }
 
 tasks {
@@ -55,26 +35,16 @@ tasks {
             archiveFileName.set("${rootProject.name}-[v${rootProject.version}].jar")
         }
 
-        listOf(
-            "de.tr7zw",
-            "org.bstats"
-        ).forEach {
-            relocate(it, "${rootProject.group}.plugin.lib.$it")
-        }
+        //listOf(
+        //    ""
+        //).onEach {
+        //    relocate(it, "${group}.libs.$it")
+        //}
     }
 
-    compileJava {
-        options.release.set(17)
-    }
-
-    processResources {
-        filesMatching("plugin.yml") {
-            expand(
-                "name" to rootProject.name,
-                "group" to rootProject.group,
-                "version" to rootProject.version,
-                "description" to rootProject.description
-            )
+    compileKotlin {
+        kotlinOptions {
+            jvmTarget = "17"
         }
     }
 }

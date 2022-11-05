@@ -10,9 +10,7 @@ bukkit-bstats = "3.0.0"
 placeholder-api = "2.11.2"
 
 # Misc Libraries
-nbt-api = "2.10.0"
 vault-api = "1.7"
-reserve-api = "0.1.5.0"
 
 [libraries]
 
@@ -24,7 +22,3 @@ bukkit-bstats = { module = "org.bstats:bstats-bukkit", version.ref = "bukkit-bst
 
 # Misc Libraries
 vault-api = { module = "com.github.MilkBowl:VaultAPI", version.ref = "vault-api" }
-
-nbt-api = { module = "de.tr7zw:nbt-data-api", version.ref = "nbt-api" }
-
-reserve-api = { module = "net.tnemc:Reserve", version.ref = "reserve-api" }
