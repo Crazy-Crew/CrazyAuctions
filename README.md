@@ -17,7 +17,7 @@
 <a href="/#"><img src="https://raw.githubusercontent.com/intergrav/devins-badges/v2/assets/cozy/supported/purpur_64h.png" height="50"></a>
 
   <p align="center">
-    A simple auctions plugin where you can sell your items and bid on other items! 
+    A simple auctions plugin where you can sell your items and bid on other items!
     <br />
     <a href="https://github.com/Crazy-Crew/CrazyAuctions/wiki"><strong>Explore the docs »</strong></a>
     <br />
@@ -75,7 +75,7 @@ A list of things necessary to make sure you can build CrazyAuctions properly.
 2. Open the repository using Intellij IDEA & wait until it finishes downloading/indexing.
 3. Run the shadowJar task.
    ```gradle
-   ./gradlew shadowJar
+   ./gradlew shadowJar or gradle shadowJar
    ```
 
 ## Roadmap
