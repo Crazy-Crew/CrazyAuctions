@@ -4,7 +4,7 @@ main: "${group}.CrazyAuctions"
 authors: [BadBones69, RyderBelserion]
 
 version: ${version}
-api-version: "1.13"
+api-version: "1.19"
 description: ${description}
 
 softdepend: [Vault]
