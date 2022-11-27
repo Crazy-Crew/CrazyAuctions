@@ -1,6 +1,6 @@
 <br />
 
-[![CrazyAuctions](https://raw.githubusercontent.com/RyderBelserion/Assets/main/crazycrew/banners/CrazyAuctions.png)](https://www.spigotmc.org/resources/crazy-crates.17599/)
+[![CrazyAuctions](https://github.com/RyderBelserion/Assets/blob/main/crazycrew/old/banners/CrazyAuctions.png?raw=true)](https://www.spigotmc.org/resources/crazy-crates.17599/)
 
 <div align="center">
 
