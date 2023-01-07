@@ -1,3 +1,14 @@
 rootProject.name = "CrazyAuctions"
 
-enableFeaturePreview("VERSION_CATALOGS")
+dependencyResolutionManagement {
+    includeBuild("build-logic")
+}
+
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        maven("https://papermc.io/repo/repository/maven-public/")
+    }
+}
+
+include("paper", "common")

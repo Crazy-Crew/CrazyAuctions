@@ -1,6 +1,6 @@
 <br />
 
-[![CrazyAuctions](https://github.com/RyderBelserion/Assets/blob/main/crazycrew/old/banners/CrazyAuctions.png?raw=true)](https://www.spigotmc.org/resources/crazy-crates.17599/)
+[![crazyauctions](https://raw.githubusercontent.com/RyderBelserion/Assets/main/crazycrew/old/banners/CrazyAuctions.png)](https://modrinth.com/plugin/crazyauctions)
 
 <div align="center">
 
@@ -12,12 +12,12 @@
 [![Contact][discord-shield]][discord-url]
 ![CodeFactor][codefactor-shield]
 
-<a href="/#"><img src="https://raw.githubusercontent.com/intergrav/devins-badges/v2/assets/cozy/unsupported/spigot_64h.png" height="50"></a>
-<a href="/#"><img src="https://raw.githubusercontent.com/intergrav/devins-badges/v2/assets/cozy/supported/paper_64h.png" height="50"></a>
-<a href="/#"><img src="https://raw.githubusercontent.com/intergrav/devins-badges/v2/assets/cozy/supported/purpur_64h.png" height="50"></a>
+![Spigot](https://cdn.jsdelivr.net/gh/intergrav/devins-badges/assets/compact/unsupported/spigot_vector.svg)
+![Paper](https://cdn.jsdelivr.net/gh/intergrav/devins-badges/assets/compact/supported/paper_vector.svg)
+![Purpur](https://cdn.jsdelivr.net/gh/intergrav/devins-badges/assets/compact/supported/purpur_vector.svg)
 
   <p align="center">
-    A simple auctions plugin where you can sell your items and bid on other items!
+    A crates plugin that offers quality crates with ease!
     <br />
     <a href="https://github.com/Crazy-Crew/CrazyAuctions/wiki"><strong>Explore the docs »</strong></a>
     <br />
@@ -49,11 +49,12 @@
 </details>
 
 ## Downloads
-#### Stable Builds
-https://modrinth.com/plugin/crazyauctions ( Soon )
+https://modrinth.com/plugin/CrazyAuctions
 
-#### Beta Builds
-https://ci.badbones69.com/view/Beta/job/CrazyAuctions-Beta/
+## Snapshot Builds
+### Get the latest changes before marked as release.
+All snapshot builds will be labeled with Beta on Modrinth.<br>
+> https://modrinth.com/plugin/CrazyAuctions/versions
 
 ## Getting Started
 
@@ -63,7 +64,7 @@ How to get started with contributing / maintaining your own version of CrazyAuct
 
 A list of things necessary to make sure you can build CrazyAuctions properly.
 * Intellij IDEA
-    * https://www.jetbrains.com/idea/download/
+    * > https://www.jetbrains.com/idea/download/
 * Gradle
 
 ### Installation
@@ -75,12 +76,14 @@ A list of things necessary to make sure you can build CrazyAuctions properly.
 2. Open the repository using Intellij IDEA & wait until it finishes downloading/indexing.
 3. Run the shadowJar task.
    ```gradle
-   ./gradlew shadowJar or gradle shadowJar
+   ./gradlew shadowJar
    ```
 
 ## Roadmap
 
-Check our public [trello board](https://trello.com/b/bzQ5TwXo) for our current plans, any bugs and general tracking of the project progress.
+~~Check our public [trello board](https://trello.com/b/bzQ5TwXo) for our current plans, any bugs and general tracking of the project progress.~~ We don't have one.
+
+Step #1) Have something actually working.
 
 ## Contributing
 
@@ -88,24 +91,24 @@ Check our public [trello board](https://trello.com/b/bzQ5TwXo) for our current p
 2. Create your Feature Branch (`git checkout -b feature/yourfeature`)
 3. Commit your Changes (`git commit -m 'your amazing feature.'`)
 4. Push to the Branch (`git push`)
-5. Open a Pull Request
+5. Open a Pull Request to add your feature/fix to the dev branch.
 
 ## License
 
 Distributed under the MIT License. See [`LICENSE`](/LICENSE) for more information.
 
-[discord-shield]: https://img.shields.io/discord/182615261403283459.svg?style=for-the-badge
+[discord-shield]: https://img.shields.io/discord/182615261403283459.svg?style=flat&logo=appveyor
 [discord-url]: https://discord.gg/crazycrew
 
-[contributors-shield]: https://img.shields.io/github/contributors/Crazy-Crew/CrazyAuctions.svg?style=for-the-badge
+[contributors-shield]: https://img.shields.io/github/contributors/Crazy-Crew/CrazyAuctions.svg?style=flat&logo=appveyor
 [contributors-url]: https://github.com/Crazy-Crew/CrazyAuctions/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/Crazy-Crew/CrazyAuctions.svg?style=for-the-badge
+[forks-shield]: https://img.shields.io/github/forks/Crazy-Crew/CrazyAuctions.svg?style=flat&logo=appveyor
 [forks-url]: https://github.com/Crazy-Crew/CrazyAuctions/network/members
-[stars-shield]: https://img.shields.io/github/stars/Crazy-Crew/CrazyAuctions.svg?style=for-the-badge
+[stars-shield]: https://img.shields.io/github/stars/Crazy-Crew/CrazyAuctions.svg?style=flat&logo=appveyor
 [stars-url]: https://github.com/Crazy-Crew/CrazyAuctions/stargazers
-[issues-shield]: https://img.shields.io/github/issues/Crazy-Crew/CrazyAuctions.svg?style=for-the-badge
+[issues-shield]: https://img.shields.io/github/issues/Crazy-Crew/CrazyAuctions.svg?style=flat&logo=appveyor
 [issues-url]: https://github.com/Crazy-Crew/CrazyAuctions/issues
-[license-shield]: https://img.shields.io/github/license/Crazy-Crew/CrazyAuctions.svg?style=for-the-badge
-[license-url]: https://github.com/Crazy-Crew/CrazyAuctions/blob/master/LICENSE.MD
+[license-shield]: https://img.shields.io/github/license/Crazy-Crew/CrazyAuctions.svg?style=flat&logo=appveyor
+[license-url]: https://github.com/Crazy-Crew/CrazyAuctions/blob/master/LICENSE
 
-[codefactor-shield]: https://img.shields.io/codefactor/grade/github/crazy-crew/CrazyAuctions/main?style=for-the-badge
+[codefactor-shield]: https://img.shields.io/codefactor/grade/github/crazy-crew/CrazyAuctions/main?style=flat&logo=appveyor

@@ -1,0 +1,9 @@
+prefix:
+  # Change how the prefix for commands will look!
+  command: '<gray>[<gradient:#da184d:#b8c9e6>CrazyAuctions</gradient>]</gray>'
+  # Change how the prefix for console will look!
+  console: '<gray>[<gradient:##da184d:#b8c9e6>CrazyAuctions</gradient>]</gray>'
+
+misc:
+  unknown-command: '<red>This command is not known.</red>'
+  config-reload: '<red>You have reloaded the plugin.</red>'
