@@ -91,7 +91,7 @@ Step #1) Have something actually working.
 2. Create your Feature Branch (`git checkout -b feature/yourfeature`)
 3. Commit your Changes (`git commit -m 'your amazing feature.'`)
 4. Push to the Branch (`git push`)
-5. Open a Pull Request to add your feature/fix to the dev branch.
+5. Open a Pull Request to add your feature/fix to the `main` branch.
 
 ## License
 
