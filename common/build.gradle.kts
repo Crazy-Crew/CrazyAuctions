@@ -1,5 +1,5 @@
 plugins {
-    id("crazyauctions-common")
+    id("crazyauctions.common-plugin")
 }
 
 dependencies {

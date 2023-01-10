@@ -1,5 +1,3 @@
-rootProject.name = "CrazyAuctions"
-
 dependencyResolutionManagement {
     includeBuild("build-logic")
 }

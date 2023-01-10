@@ -1,5 +1,5 @@
 plugins {
-    id("crazyauctions-paper")
+    id("crazyauctions.paper-plugin")
 
     id("com.modrinth.minotaur") version "2.6.0"
 
@@ -8,40 +8,36 @@ plugins {
     `maven-publish`
 }
 
-val buildVersion = "${project.version}-SNAPSHOT"
-val isSnapshot = true
+val isBeta: Boolean = extra["isBeta"].toString().toBoolean()
+
+fun getPluginVersion(): String {
+    return if (isBeta) "${project.version}-BETA" else project.version.toString()
+}
+
+fun getPluginVersionType(): String {
+    return if (isBeta) "beta" else "release"
+}
 
 tasks {
     shadowJar {
-        if (isSnapshot) {
-            archiveFileName.set("${rootProject.name}-${buildVersion}.jar")
-        } else {
-            archiveFileName.set("${rootProject.name}-${project.version}.jar")
-        }
+        archiveFileName.set("${project.name}-${getPluginVersion()}.jar")
 
         listOf(
             "org.bstats",
             "dev.triumphteam.cmd"
         ).forEach {
-            relocate(it, "${rootProject.group}.plugin.lib.$it")
+            relocate(it, "${project.group}.plugin.lib.$it")
         }
     }
 
     modrinth {
         token.set(System.getenv("MODRINTH_TOKEN"))
-        projectId.set("crazyauctions")
+        projectId.set(project.name.toLowerCase())
 
-        if (isSnapshot) {
-            versionName.set("${rootProject.name} $buildVersion")
-            versionNumber.set(buildVersion)
+        versionName.set("${project.name} ${getPluginVersion()}")
+        versionNumber.set(getPluginVersion())
 
-            versionType.set("beta")
-        } else {
-            versionName.set("${rootProject.name} ${project.version}")
-            versionNumber.set("${project.version}")
-
-            versionType.set("release")
-        }
+        versionType.set(getPluginVersionType())
 
         uploadFile.set(shadowJar.get())
 
@@ -62,17 +58,18 @@ tasks {
     processResources {
         filesMatching("plugin.yml") {
             expand(
-                "name" to rootProject.name,
+                "name" to project.name,
                 "group" to project.group,
-                "version" to if (isSnapshot) buildVersion else project.version,
-                "description" to project.description
+                "version" to getPluginVersion(),
+                "description" to project.description,
+                "website" to "https://modrinth.com/plugin/${project.name.toLowerCase()}"
             )
         }
     }
 }
 
 publishing {
-    val mavenExt: String = if (isSnapshot) "snapshots" else "releases"
+    val mavenExt: String = if (isBeta) "beta" else "releases"
 
     repositories {
         maven("https://repo.crazycrew.us/$mavenExt") {
@@ -87,9 +84,9 @@ publishing {
 
     publications {
         create<MavenPublication>("maven") {
-            groupId = "${extra["plugin_group"]}"
-            artifactId = rootProject.name.toLowerCase()
-            version = if (isSnapshot) buildVersion else "${project.version}"
+            groupId = "${project.group}"
+            artifactId = project.name.toLowerCase()
+            version = getPluginVersion()
             from(components["java"])
         }
     }

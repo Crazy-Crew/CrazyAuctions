@@ -1,10 +1,6 @@
 plugins {
-    id("crazyauctions-common")
+    id("crazyauctions.common-plugin")
 }
-
-project.version = "${extra["plugin_version"]}"
-project.group = "${extra["plugin_group"]}.CrazyAuctions"
-project.description = "Auction your items off in style!"
 
 repositories {
     /**
