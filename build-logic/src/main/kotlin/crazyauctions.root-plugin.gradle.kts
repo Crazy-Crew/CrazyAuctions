@@ -2,11 +2,19 @@ import task.ReleaseWebhook
 import task.WebhookExtension
 
 plugins {
-    `java-library`
+    id("crazyauctions.base-plugin")
 }
 
-java {
-    toolchain.languageVersion.set(JavaLanguageVersion.of(project.extra["java_version"].toString().toInt()))
+repositories {
+    maven("https://repo.triumphteam.dev/snapshots/")
+
+    maven("https://repo.crazycrew.us/plugins/")
+
+    maven("https://libraries.minecraft.net/")
+
+    maven("https://jitpack.io/")
+
+    mavenCentral()
 }
 
 tasks {
@@ -14,11 +22,7 @@ tasks {
     val webhookExtension = extensions.create("webhook", WebhookExtension::class)
 
     // Register the task
-    register<ReleaseWebhook>("releaseWebhook") {
+    register<ReleaseWebhook>("webhook") {
         extension = webhookExtension
-    }
-
-    compileJava {
-        options.release.set(project.extra["java_version"].toString().toInt())
     }
 }

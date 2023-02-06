@@ -1,3 +1,4 @@
+import task.WebhookExtension
 import java.awt.Color
 
 plugins {
@@ -6,47 +7,46 @@ plugins {
 
 val legacyUpdate = Color(255, 73, 110)
 val releaseUpdate = Color(27, 217, 106)
-val snapshotUpdate = Color(255, 163, 71)
+val betaUpdate = Color(255, 163, 71)
 
-val commitMessage: String? = System.getenv("COMMIT_MESSAGE")
-val isBeta: Boolean = extra["isBeta"].toString().toBoolean()
+val isBeta = settings.versions.projectBeta.get().toBoolean()
+val projectVersion = settings.versions.projectVersion.get()
+val projectName = settings.versions.projectName.get()
+val projectExt = settings.versions.projectExtension.get()
+
+val finalVersion = if (isBeta) "$projectVersion+Beta" else projectVersion
+
+val projectNameLowerCase = projectName.toLowerCase()
+
+val color = if (isBeta) betaUpdate else releaseUpdate
+val repo = if (isBeta) "beta" else "releases"
 
 webhook {
-    this.avatar("https://cdn.discordapp.com/avatars/209853986646261762/eefe3c03882cbb885d98107857d0b022.png")
+    this.avatar("https://en.gravatar.com/avatar/${WebhookExtension.Gravatar().md5Hex("no-reply@ryderbelserion.com")}.jpeg")
 
     this.username("Ryder Belserion")
 
-    //this.content("New version of ${rootProject.name} is ready! <@929463441159254066>")
-
-    this.content("New version of ${rootProject.name} is ready!")
+    this.content("New version of $projectName is ready! <@&929463441159254066>")
 
     this.embeds {
         this.embed {
-            if (isBeta) this.color(snapshotUpdate) else this.color(releaseUpdate)
+            this.color(color)
 
             this.fields {
                 this.field(
-                    "Version ${project.version}",
-                    "Download Link: https://modrinth.com/plugin/${rootProject.name.toLowerCase()}/version/${project.version}"
+                    "Version $finalVersion",
+                    "Download Link: https://modrinth.com/$projectExt/$projectNameLowerCase/version/$finalVersion"
                 )
 
-                if (isBeta) {
-                    if (commitMessage != null) this.field("Commit Message", commitMessage)
-
-                    this.field("Snapshots", "They will be hosted on the same page labeled as `Beta`")
-
-                    this.field(
-                        "API Update",
-                        "Version ${project.version} has been pushed to https://repo.crazycrew.us/#/snapshots/"
-                    )
-                }
-
-                if (!isBeta) this.field("API Update","Version ${project.version} has been pushed to https://repo.crazycrew.us/#/releases/")
+                this.field(
+                    "API Update",
+                    "Version $finalVersion has been pushed to https://repo.crazycrew.us/#/$repo"
+                )
             }
 
             this.author(
-                rootProject.name,
-                "https://modrinth.com/plugin/${rootProject.name.toLowerCase()}/versions",
+                projectName,
+                "https://modrinth.com/$projectExt/$projectNameLowerCase/versions",
                 "https://cdn-raw.modrinth.com/data/r3BBZyf3/4522ef0f83143c4803473d356160a3e877c2499c.png"
             )
         }
