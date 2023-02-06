@@ -1,6 +1,6 @@
 <br />
 
-[![crazyauctions](https://raw.githubusercontent.com/RyderBelserion/Assets/main/crazycrew/old/banners/CrazyAuctions.png)](https://modrinth.com/plugin/crazyauctions)
+[![CrazyAuctions]([![crazyauctions](https://raw.githubusercontent.com/RyderBelserion/Assets/main/crazycrew/new/crazyauctions/Banner.png)](https://modrinth.com/plugin/crazyauctions)
 
 <div align="center">
 
@@ -24,9 +24,9 @@
     <br />
     <a href="https://github.com/Crazy-Crew/CrazyAuctions/issues">Report Bug</a>
     ·
-    <a href="https://github.com/Crazy-Crew/CrazyAuctions/discussions/categories/feature-rquests">Request Feature</a>
+    <a href="https://github.com/orgs/Crazy-Crew/discussions/categories/features?discussions_q=label%3Acrazyauctions+category%3AFeatures">Request Feature</a>
     ·
-    <a href="https://github.com/Crazy-Crew/CrazyAuctions/discussions/categories/support">Get Support</a>
+    <a href="https://github.com/orgs/Crazy-Crew/discussions/categories/support?discussions_q=label%3Acrazyauctions+category%3ASupport">Get Support</a>
   </p>
 </div>
 
@@ -49,12 +49,12 @@
 </details>
 
 ## Downloads
-https://modrinth.com/plugin/CrazyAuctions
+> https://modrinth.com/plugin/crazyauctions
 
-## Snapshot Builds
+## Beta Builds
 ### Get the latest changes before marked as release.
-All snapshot builds will be labeled with Beta on Modrinth.<br>
-> https://modrinth.com/plugin/CrazyAuctions/versions
+All beta builds will be on Modrinth.<br>
+> https://modrinth.com/plugin/crazyauctions/versions
 
 ## Getting Started
 
@@ -81,9 +81,7 @@ A list of things necessary to make sure you can build CrazyAuctions properly.
 
 ## Roadmap
 
-~~Check our public [trello board](https://trello.com/b/bzQ5TwXo) for our current plans, any bugs and general tracking of the project progress.~~ We don't have one.
-
-Step #1) Have something actually working.
+Check our public [trello board](https://trello.com/b/CcPYmsBt) for our current plans, any bugs and general tracking of the project progress.
 
 ## Contributing
 
@@ -91,7 +89,7 @@ Step #1) Have something actually working.
 2. Create your Feature Branch (`git checkout -b feature/yourfeature`)
 3. Commit your Changes (`git commit -m 'your amazing feature.'`)
 4. Push to the Branch (`git push`)
-5. Open a Pull Request to add your feature/fix to the `main` branch.
+5. Open a Pull Request to the dev branch to add your feature/fix.
 
 ## License
 
