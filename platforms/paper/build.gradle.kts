@@ -31,6 +31,9 @@ dependencies {
 
     implementation(libs.ruby.paper)
     implementation(libs.ruby.api)
+
+    implementation(libs.triumph.gui)
+    implementation(libs.triumph.cmds)
 }
 
 val projectDescription = settings.versions.projectDescription.get()

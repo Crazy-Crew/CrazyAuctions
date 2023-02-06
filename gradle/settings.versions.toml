@@ -1,7 +1,7 @@
 [versions]
 
 # Project Settings
-projectVersion = "1.11.14.1"
+projectVersion = "1.2.18"
 
 projectGroup = "com.badbones69.crazyauctions"
 projectName = "CrazyAuctions"
