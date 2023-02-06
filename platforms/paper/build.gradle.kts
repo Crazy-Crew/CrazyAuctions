@@ -19,7 +19,7 @@ repositories {
         }
 
         filter {
-            includeGroup("net.dehya")
+            includeGroup("net.dehya.ruby")
         }
     }
 }
@@ -28,6 +28,9 @@ dependencies {
     //api(project(":crazyauctions-core"))
 
     compileOnly(libs.papermc)
+
+    implementation(libs.ruby.paper)
+    implementation(libs.ruby.api)
 }
 
 val projectDescription = settings.versions.projectDescription.get()
