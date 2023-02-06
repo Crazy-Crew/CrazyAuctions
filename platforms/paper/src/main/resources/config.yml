@@ -1,0 +1,8 @@
+# Discord: https://discord.gg/crazycrew
+# Github: https://github.com/Crazy-Crew
+#
+# Report Issues: https://github.com/Crazy-Crew/CrazyAuctions/issues
+# Request Features/Support: https://github.com/orgs/Crazy-Crew/discussions
+
+settings:
+  toggle-metrics: true # Whether metrics are sent to https://bstats.org or not.
