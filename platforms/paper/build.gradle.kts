@@ -34,6 +34,8 @@ dependencies {
 
     implementation(libs.triumph.gui)
     implementation(libs.triumph.cmds)
+
+    implementation(libs.vault.api)
 }
 
 val projectDescription = settings.versions.projectDescription.get()

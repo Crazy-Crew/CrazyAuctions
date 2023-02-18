@@ -17,12 +17,17 @@ license {
     include("**/*.java")
 }
 
+//java {
+//    toolchain.languageVersion.set(JavaLanguageVersion.of(project.properties["java_version"].toString()))
+//}
+
 java {
-    toolchain.languageVersion.set(JavaLanguageVersion.of(project.properties["java_version"].toString()))
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
 }
 
-tasks {
-    compileJava {
-        options.release.set(project.properties["java_version"].toString().toInt())
-    }
-}
+//tasks {
+//    compileJava {
+//        options.release.set(project.properties["java_version"].toString().toInt())
+//    }
+//}

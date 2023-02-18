@@ -1,0 +1,86 @@
+misc:
+  unknown-command: '&cThis command is not known.'
+  reload-plugin: '&7You have reloaded CrazyAuctions.'
+
+errors:
+  internal-error: '&cAn internal error has occurred. Please check the console for the full error.'
+
+player:
+  purchased-item: '&7You have bought an item for &a$%price%.'
+  won-bidding: '&7You have won a bid for &a$%price%. &7Use &c/ah collect &7to collect your winnings.'
+  item-sold: '&7Thank you for purchasing this item.'
+  requirements:
+    not-a-number: '&a%arg% &cis not a number.'
+    too-many-args: '&cYou put more arguments then I can handle.'
+    not-enough-args: '&cYou did not supply enough arguments.'
+    must-be-player: '&cYou must be a player to use this command.'
+    must-be-console-sender: '&cYou must be using console to use this command.'
+    must-have-item-in-hand: '&cYou must have an item in your hand.'
+  target-not-online: '&cThe player &6%player% &cis not online.'
+  target-same-player: '&cYou cannot use this command on yourself.'
+  no-permission: '&cYou do not have permission to use that command!'
+  inventory-not-empty: '&cInventory is not empty, Please make room in your inventory before buying/retrieving items.'
+
+admin:
+  force-cancelled: '&7You have force-cancelled the sale belonging to &c%player%.'
+  force-cancelled-player: '&cOne of the items you had was force cancelled by an admin.'
+
+auctions:
+  other:
+    player-bought-item: '&7%player% &chas bought your item for &a$%price%.'
+    player-won-your-bid: '&7%player% &chas won your item with a bid of &a$%price%.'
+
+  fixes:
+    book-not-allowed: '&cThat book is not able to be sold in the auctionhouse.'
+
+  items:
+    damaged-goods: '&cThat item is considered damaged goods and cannot be sold.'
+    blacklisted: '&cThat item is not allowed to be sold here.'
+    max-amount: '&cYou can''t list any more items in the auctionhouse.'
+    invalid-item: '&cThat item isn''t in the auctionhouse anymore.'
+    expired-item: '&cAn item in your auctionhouse has expired.'
+    cancelled-item: '&7You have cancelled an item that was in the auctionhouse, View &c/ah expired &7to view your items.'
+    returned-item: '&7Item has been returned.'
+
+  added-item-to-auction: '&7You have added an item to the auctionhouse for &a$%price%.'
+  economy:
+    money-required: '&cYou need &a$%money_needed% &cto purchase this.'
+    invalid-currency: '&cThat is not a currency, Valid Types: %currencies%'
+  bidding:
+    disabled: '&cThe ability to bid for items is disabled.'
+    successful: '&7You have bid &a$%bid% &7on that item.'
+    price:
+      low: '&cStarting bid price is too low, The minimum is &a$100.'
+      high: '&cStarting bid price is too high, The maximum is &a$1000000.'
+    bid-lower-than-current-bid: '&cThe bid you tried to place is lower than &a%current_bid%, &cPlease raise your bid!'
+  selling:
+    disabled: '&cThe ability to sell for items is disabled.'
+    price:
+      low: '&cSell price is too low, The minimum is &a$10.'
+      high: '&cSell price is too high, The maximum is &a$1000000.'
+  world-disabled: '&cAuctions are disabled in &a%world%.'
+
+command:
+  #ah:
+  #  msg: ''
+  #view:
+  #  msg: ''
+  #sell:
+  #  msg: ''
+  #expired:
+  #  msg: ''
+  #listed:
+  #  msg: ''
+  admin-help:
+    - ' &eCrazyAuctions Admin Help'
+    - ''
+    - '&8» &6/cc additem [crate] [prize] &7- &eAdd items in-game to a prize in a crate.'
+  player-help:
+    - ' &2CrazyAuctions Player Help'
+    - ''
+    - '&8» &6/ah &7- &eOpens the auctionhouse.'
+    - '&8» &6/ah view <player> &7- &eSee what a player is selling.'
+    - '&8» &6/ah sell/bid <price> [amount] &7- &eList the item you are holding on the crazy auction.'
+    - '&8» &6/ah expired/collect &7- &eView & manage your cancelled/expired items.'
+    - '&8» &6/ah listed &7- &eView/manage the items you are selling.'
+    - '&8» &6/ah help &7- &eView this help menu.'

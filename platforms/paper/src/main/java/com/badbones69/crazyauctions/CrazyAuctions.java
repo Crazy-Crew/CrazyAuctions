@@ -1,5 +1,7 @@
 package com.badbones69.crazyauctions;
 
+import com.badbones69.crazyauctions.api.economy.vault.VaultSupport;
+import com.badbones69.crazyauctions.api.enums.PluginSupport;
 import com.badbones69.crazyauctions.configs.Config;
 import net.dehya.ruby.PaperManager;
 import net.dehya.ruby.RubyCore;
@@ -12,7 +14,11 @@ public class CrazyAuctions extends JavaPlugin implements RubyCore {
 
     private static CrazyAuctions plugin;
 
-    private final PaperManager paperManager = new PaperManager(this, true);;
+    private final PaperManager paperManager = new PaperManager(this, true);
+
+    private final PluginSupport pluginSupport;
+
+    private final Starter starter;
 
     public CrazyAuctions() {
         super();
@@ -28,6 +34,12 @@ public class CrazyAuctions extends JavaPlugin implements RubyCore {
         }
 
         plugin = this;
+
+        this.pluginSupport = new PluginSupport();
+
+        this.starter = new Starter();
+
+        this.pluginSupport.loadCurrency();
     }
 
     @Override
@@ -56,5 +68,17 @@ public class CrazyAuctions extends JavaPlugin implements RubyCore {
 
     public PaperManager getPaperManager() {
         return this.paperManager;
+    }
+
+    public PluginSupport getPluginSupport() {
+        return this.pluginSupport;
+    }
+
+    public Starter getStarter() {
+        return this.starter;
+    }
+
+    public VaultSupport getVaultSupport() {
+        return this.starter.getVaultSupport();
     }
 }

@@ -1,8 +1,8 @@
-# Discord: https://discord.gg/crazycrew
-# Github: https://github.com/Crazy-Crew
-#
-# Report Issues: https://github.com/Crazy-Crew/CrazyAuctions/issues
-# Request Features/Support: https://github.com/orgs/Crazy-Crew/discussions
-
 settings:
-  toggle-metrics: true # Whether metrics are sent to https://bstats.org or not.
+  prefix: "&8[&bCrazyAuctions&8]: " # The prefix used in front of messages.
+
+  verbose-logging: false # Whether you want to have extra logging enabled... Currently does nothing!
+
+  update-checker: true # Whether you want to be notified when an update is published to Modrinth.
+  toggle-metrics: true # Whether you want your server statistics to be sent to https://bstats.org/ ( Requires a restart! )
+  config-version: 2 # DO NOT TOUCH THIS: We use this to identify if configs are outdated.
