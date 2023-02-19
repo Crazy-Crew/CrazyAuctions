@@ -5,24 +5,31 @@ import com.badbones69.crazyauctions.api.auctionhouse.interfaces.AuctionItem;
 import com.badbones69.crazyauctions.api.auctionhouse.objects.auctiontype.BiddingAuction;
 import com.badbones69.crazyauctions.api.auctionhouse.objects.auctiontype.SellingAuction;
 import com.badbones69.crazyauctions.api.events.AuctionAddEvent;
+import com.badbones69.crazyauctions.utils.ItemUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class AuctionHouse {
 
-    private final String name;
-    private final FileConfiguration auctionFile;
-    private final InventorySettings inventorySettings;
-    private final List<AuctionItem> auctionItems = new ArrayList<>();
+    private String name;
+    private FileConfiguration auctionFile;
+    private InventorySettings inventorySettings;
+    private List<AuctionItem> auctionItems = new ArrayList<>();
+    private List<AuctionCategory> auctionCategories = new ArrayList<>();
 
     public AuctionHouse(FileConfiguration file) {
         this.name = file.getString("auction-house.settings.name");
         this.auctionFile = file;
         this.inventorySettings = new InventorySettings(file);
+        //Loads the auction house listings into the auction house.
+        //TODO this needs to be moved to a seperated data file that doesnt hold all the auction house settings.
         for (String auctionID : file.getConfigurationSection("auction-house.item-on-auction").getKeys(false)) {
             String path = "auction-house.item-on-auction" + auctionID + ".";
             AuctionType auctionType = AuctionType.getTypeFromName(file.getString(path + "auction-type"));
@@ -42,6 +49,15 @@ public class AuctionHouse {
                 file.getItemStack(path + "selling-item")));
             }
         }
+        //Loads the category items into the auction house.
+        for (String category : file.getConfigurationSection("auction-house.categories").getKeys(false)) {
+            String path = "auction-house.categories." + category + ".";
+            auctionCategories.add(new AuctionCategory(
+            category,
+            file.getInt(path + "slot"),
+            ItemUtils.convertString(file.getString(path + "item")),
+            file.getStringList(path + "items").stream().map(Material :: matchMaterial).collect(Collectors.toList())));
+        }
     }
 
     public String getName() {
@@ -58,6 +74,10 @@ public class AuctionHouse {
 
     public List<AuctionItem> getAuctionItems() {
         return auctionItems;
+    }
+
+    public long getAuctionCount(AuctionType auctionType) {
+        return auctionItems.stream().filter(auctionItem -> auctionType == auctionItem.getAuctionType()).count();
     }
 
     public void addAuctionItem(AuctionItem auctionItem) {
