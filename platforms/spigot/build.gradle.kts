@@ -1,7 +1,7 @@
 @Suppress("DSL_SCOPE_VIOLATION")
 
 plugins {
-    id("crazyauctions.paper-plugin")
+    id("crazyauctions.spigot-plugin")
 
     alias(settings.plugins.minotaur)
     alias(settings.plugins.run.paper)
@@ -24,7 +24,7 @@ dependencies {
 
     compileOnly(libs.spigot)
 
-    implementation(libs.ruby.paper)
+    implementation(libs.ruby.spigot)
 
     implementation(libs.triumph.gui)
     implementation(libs.triumph.cmds)
@@ -94,7 +94,7 @@ tasks {
             )
         )
 
-        loaders.addAll(listOf("paper", "purpur"))
+        loaders.addAll(listOf("spigot", "paper", "purpur"))
 
         //<h3>The first release for CrazyAuctions on Modrinth! 🎉🎉🎉🎉🎉<h3><br> If we want a header.
         changelog.set(

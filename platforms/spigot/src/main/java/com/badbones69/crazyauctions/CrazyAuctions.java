@@ -3,9 +3,10 @@ package com.badbones69.crazyauctions;
 import com.badbones69.crazyauctions.api.economy.vault.VaultSupport;
 import com.badbones69.crazyauctions.api.enums.PluginSupport;
 import com.badbones69.crazyauctions.configs.Config;
-import net.dehya.ruby.PaperRuby;
 import net.dehya.ruby.RubyCore;
-import net.dehya.ruby.command.RubyCommand;
+import net.dehya.ruby.SpigotRuby;
+import net.dehya.ruby.command.cloud.RubyCommand;
+import net.dehya.ruby.files.SpigotFileManager;
 import net.dehya.ruby.player.RubyPlayerRegistry;
 import net.dehya.ruby.registry.senders.types.Console;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -19,7 +20,7 @@ public class CrazyAuctions extends JavaPlugin implements RubyCore {
 
     private static CrazyAuctions plugin;
 
-    private final PaperRuby paperRuby = new PaperRuby(this);
+    private final SpigotRuby spigotRuby = new SpigotRuby(this);
 
     private final PluginSupport pluginSupport;
 
@@ -62,9 +63,15 @@ public class CrazyAuctions extends JavaPlugin implements RubyCore {
         return getDataFolder().toPath();
     }
 
+    // ===================================================
+
+    /**
+     * These all can be null as we don't use them here.
+     */
+
     @Override
     public @NotNull Console getConsole() {
-        return this.paperRuby.getConsole();
+        return null;
     }
 
     @Override
@@ -76,28 +83,51 @@ public class CrazyAuctions extends JavaPlugin implements RubyCore {
     public @NotNull List<RubyCommand> getCommands() {
         return Collections.emptyList();
     }
+    // ===================================================
 
     @Override
     public @NotNull String getPrefix() {
         return Config.PREFIX;
     }
 
+    /**
+     * @return the plugin instance
+     */
     public static CrazyAuctions getPlugin() {
         return plugin;
     }
 
-    public PaperRuby getPaperManager() {
-        return this.paperRuby;
+    /**
+     * @return the spigot manager
+     */
+    public SpigotRuby getSpigotManager() {
+        return this.spigotRuby;
     }
 
+    /**
+     * @return the spigot file manager
+     */
+    public SpigotFileManager getSpigotFileManager() {
+        return this.spigotRuby.getSpigotFileManager();
+    }
+
+    /**
+     * @return the plugin support class
+     */
     public PluginSupport getPluginSupport() {
         return this.pluginSupport;
     }
 
+    /**
+     * @return the starter class
+     */
     public Starter getStarter() {
         return this.starter;
     }
 
+    /**
+     * @return vault support
+     */
     public VaultSupport getVaultSupport() {
         return this.starter.getVaultSupport();
     }

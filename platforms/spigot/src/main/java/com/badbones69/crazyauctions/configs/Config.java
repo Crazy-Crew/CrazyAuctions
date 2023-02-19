@@ -44,6 +44,6 @@ public class Config extends FileExtension {
     }
 
     public static void reload(CrazyAuctions plugin) {
-        plugin.getPaperManager().getPaperFileManager().addFile(new Config());
+        plugin.getSpigotFileManager().addFile(new Config());
     }
 }

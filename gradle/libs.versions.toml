@@ -15,7 +15,6 @@ ruby = "0.0.1.2"
 papermc = { module = "io.papermc.paper:paper-api", version.ref = "paper" }
 spigot = { module = "org.spigotmc:spigot-api", version.ref = "paper" }
 
-
 # Adventure
 adventure_api = { module = "net.kyori:adventure-api", version.ref = "adventure" }
 adventure_text = { module = "net.kyori:adventure-text-minimessage", version.ref = "adventure" }
@@ -23,6 +22,7 @@ adventure_text = { module = "net.kyori:adventure-text-minimessage", version.ref 
 # RubyCore
 ruby_api = { module = "net.dehya.ruby:ruby-core", version.ref = "ruby" }
 ruby_paper = { module = "net.dehya.ruby:ruby-paper", version.ref = "ruby" }
+ruby_spigot = { module = "net.dehya.ruby:ruby-spigot", version = "0.0.1.3" }
 
 # Configurations
 

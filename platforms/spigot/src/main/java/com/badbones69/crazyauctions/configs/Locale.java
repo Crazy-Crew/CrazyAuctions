@@ -23,8 +23,8 @@ public class Locale extends FileExtension {
     }
 
     public static void reload(CrazyAuctions plugin) {
-        plugin.getPaperManager().getPaperFileManager().extract("/locale", plugin.getDirectory());
+        plugin.getSpigotFileManager().extract("/locale", plugin.getDirectory());
 
-        plugin.getPaperManager().getPaperFileManager().addFile(new Locale(plugin.getDirectory()));
+        plugin.getSpigotFileManager().addFile(new Locale(plugin.getDirectory()));
     }
 }
