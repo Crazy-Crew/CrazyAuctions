@@ -1,3 +1,5 @@
+@file:Suppress("UnstableApiUsage")
+
 dependencyResolutionManagement {
     includeBuild("build-logic")
 
@@ -24,7 +26,7 @@ val lowerCase = rootProject.name.toLowerCase()
 include("core")
 project(":core").name = "$lowerCase-core"
 
-listOf("paper").forEach(::includePlatform)
+listOf("spigot").forEach(::includePlatform)
 
 fun includeProject(name: String) {
     include(name) {

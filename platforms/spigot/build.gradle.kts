@@ -13,21 +13,16 @@ repositories {
      */
     maven("https://repo.extendedclip.com/content/repositories/placeholderapi/")
 
-    exclusiveContent {
-        forRepository {
-            maven("https://repo.crazycrew.us/libraries")
-        }
-
-        filter {
-            includeGroup("net.dehya.ruby")
-        }
-    }
+    /**
+     * CrazyCrew Team
+     */
+    maven("https://repo.crazycrew.us/libraries")
 }
 
 dependencies {
-    //api(project(":crazyauctions-core"))
+    api(project(":crazyauctions-core"))
 
-    compileOnly(libs.papermc)
+    compileOnly(libs.spigot)
 
     implementation(libs.ruby.paper)
     implementation(libs.ruby.api)
@@ -35,7 +30,9 @@ dependencies {
     implementation(libs.triumph.gui)
     implementation(libs.triumph.cmds)
 
-    implementation(libs.vault.api)
+    implementation(libs.vault.api) {
+        exclude("org.bukkit", "bukkit")
+    }
 }
 
 val projectDescription = settings.versions.projectDescription.get()

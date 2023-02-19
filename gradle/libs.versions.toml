@@ -7,12 +7,14 @@ paper = "1.19.3-R0.1-SNAPSHOT"
 adventure = "4.12.0"
 
 # RubyCore
-ruby = "0.0.1"
+ruby = "0.0.1.1"
 
 [libraries]
 
 # Minecraft
 papermc = { module = "io.papermc.paper:paper-api", version.ref = "paper" }
+spigot = { module = "org.spigotmc:spigot-api", version.ref = "paper" }
+
 
 # Adventure
 adventure_api = { module = "net.kyori:adventure-api", version.ref = "adventure" }
