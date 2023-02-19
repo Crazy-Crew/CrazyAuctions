@@ -11,7 +11,7 @@ import net.dehya.ruby.files.FileManager;
 import org.simpleyaml.configuration.file.YamlFile;
 import java.io.IOException;
 
-@FileBuilder(isLogging = true, isAsync = true, isData = false, fileType = FileType.YAML)
+@FileBuilder(isLogging = true, isAsync = false, isData = false, fileType = FileType.YAML)
 public class Config extends FileExtension {
 
     @Key("settings.prefix")
