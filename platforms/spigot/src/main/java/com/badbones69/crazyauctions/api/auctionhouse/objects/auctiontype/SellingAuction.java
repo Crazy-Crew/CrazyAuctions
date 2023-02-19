@@ -1,4 +1,4 @@
-package com.badbones69.crazyauctions.api.auctionhouse.objects;
+package com.badbones69.crazyauctions.api.auctionhouse.objects.auctiontype;
 
 import com.badbones69.crazyauctions.api.auctionhouse.enums.AuctionType;
 import com.badbones69.crazyauctions.api.auctionhouse.interfaces.AuctionItem;
@@ -6,7 +6,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.UUID;
 
-public class BuyingAuction implements AuctionItem {
+public class SellingAuction implements AuctionItem {
 
     AuctionType auctionType = AuctionType.SELL;
     UUID seller;
@@ -14,7 +14,7 @@ public class BuyingAuction implements AuctionItem {
     long expireTime;
     ItemStack sellingItem;
 
-    public BuyingAuction(UUID seller, long price, long expireTime, ItemStack sellingItem) {
+    public SellingAuction(UUID seller, long price, long expireTime, ItemStack sellingItem) {
         this.seller = seller;
         this.price = price;
         this.expireTime = expireTime;
