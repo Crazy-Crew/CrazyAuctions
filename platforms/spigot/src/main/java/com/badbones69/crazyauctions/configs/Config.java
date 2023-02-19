@@ -9,17 +9,9 @@ import net.dehya.ruby.common.enums.FileType;
 import net.dehya.ruby.files.FileExtension;
 import net.dehya.ruby.files.FileManager;
 import org.simpleyaml.configuration.file.YamlFile;
-
 import java.io.IOException;
 
 @FileBuilder(isLogging = true, isAsync = true, isData = false, fileType = FileType.YAML)
-/*@Header("""
-            Discord: https://discord.gg/crazycrew
-            Github: https://github.com/Crazy-Crew
-            
-            Report Issues: https://github.com/Crazy-Crew/CrazyAuctions/issues
-            Request Features/Support: https://github.com/orgs/Crazy-Crew/discussions
-            """)*/
 public class Config extends FileExtension {
 
     @Key("settings.prefix")

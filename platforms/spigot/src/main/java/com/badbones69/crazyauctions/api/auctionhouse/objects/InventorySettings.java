@@ -4,8 +4,8 @@ import org.bukkit.configuration.file.FileConfiguration;
 
 public class InventorySettings {
 
-    private String title;
-    private AuctionButtons auctionButtons;
+    private final String title;
+    private final AuctionButtons auctionButtons;
 
     public InventorySettings(FileConfiguration file) {
         String path = "auction-house.settings.";
@@ -20,5 +20,4 @@ public class InventorySettings {
     public AuctionButtons getAuctionButtons() {
         return auctionButtons;
     }
-
 }

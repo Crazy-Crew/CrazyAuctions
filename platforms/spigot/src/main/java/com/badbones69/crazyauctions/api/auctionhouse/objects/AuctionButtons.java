@@ -6,18 +6,18 @@ import org.bukkit.configuration.file.FileConfiguration;
 
 public class AuctionButtons {
 
-    private ItemBuilder sellingItemsButton;
-    private ItemBuilder sellingInfoButton;
-    private ItemBuilder biddingInfoButton;
-    private ItemBuilder currentListingsInfoButton;
-    private ItemBuilder expiredItemsButton;
-    private ItemBuilder expiredInfoButton;
-    private ItemBuilder categoriesButton;
-    private ItemBuilder categoriesInfoButton;
-    private ItemBuilder nextPageButton;
-    private ItemBuilder refreshPageButton;
-    private ItemBuilder backPageButton;
-    private ItemBuilder switchModeButton;
+    private final ItemBuilder sellingItemsButton;
+    private final ItemBuilder sellingInfoButton;
+    private final ItemBuilder biddingInfoButton;
+    private final ItemBuilder currentListingsInfoButton;
+    private final ItemBuilder expiredItemsButton;
+    private final ItemBuilder expiredInfoButton;
+    private final ItemBuilder categoriesButton;
+    private final ItemBuilder categoriesInfoButton;
+    private final ItemBuilder nextPageButton;
+    private final ItemBuilder refreshPageButton;
+    private final ItemBuilder backPageButton;
+    private final ItemBuilder switchModeButton;
 
     public AuctionButtons(FileConfiguration file) {
         String path = "auction-house.settings.buttons.";
@@ -82,5 +82,4 @@ public class AuctionButtons {
     public ItemBuilder getSwitchModeButton() {
         return switchModeButton;
     }
-
 }

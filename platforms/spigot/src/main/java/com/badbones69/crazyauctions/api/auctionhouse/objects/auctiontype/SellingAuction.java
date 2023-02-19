@@ -45,5 +45,4 @@ public class SellingAuction implements AuctionItem {
     public ItemStack getSellingItem() {
         return sellingItem;
     }
-
 }

@@ -14,10 +14,10 @@ import java.util.UUID;
 
 public class AuctionHouse {
 
-    private String name;
-    private FileConfiguration auctionFile;
-    private InventorySettings inventorySettings;
-    private List<AuctionItem> auctionItems = new ArrayList<>();
+    private final String name;
+    private final FileConfiguration auctionFile;
+    private final InventorySettings inventorySettings;
+    private final List<AuctionItem> auctionItems = new ArrayList<>();
 
     public AuctionHouse(FileConfiguration file) {
         this.name = file.getString("auction-house.settings.name");
@@ -65,5 +65,4 @@ public class AuctionHouse {
         AuctionAddEvent event = new AuctionAddEvent(auctionItem.getSeller(), this, auctionItem);
         Bukkit.getServer().getPluginManager().callEvent(event);
     }
-
 }

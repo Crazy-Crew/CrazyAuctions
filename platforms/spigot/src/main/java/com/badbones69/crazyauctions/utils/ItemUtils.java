@@ -2,15 +2,8 @@ package com.badbones69.crazyauctions.utils;
 
 import com.badbones69.crazyauctions.api.enums.ServerVersion;
 import net.dehya.ruby.items.ItemBuilder;
-import org.bukkit.DyeColor;
 import org.bukkit.Material;
-import org.bukkit.block.banner.Pattern;
-import org.bukkit.block.banner.PatternType;
-import org.bukkit.enchantments.Enchantment;
-import org.bukkit.inventory.ItemFlag;
-
 import java.util.Arrays;
-import java.util.List;
 
 public class ItemUtils {
 
@@ -50,7 +43,7 @@ public class ItemUtils {
                         itemBuilder.setLore(Arrays.asList(value.split(",")));
                         break;
                     case "player":
-                        //itemBuilder.setp(value);
+                        itemBuilder.setTexture(value);
                         break;
                     case "unbreakable-item":
                         //if (value.isEmpty() || value.equalsIgnoreCase("true")) itemBuilder.setUnbreakable(true);
@@ -89,11 +82,10 @@ public class ItemUtils {
                 }
             }
         } catch (Exception e) {
-            itemBuilder.setMaterial(Material.RED_TERRACOTTA).setDisplayName("&c&lERROR").setLore(Arrays.asList("&cThere is an error", "&cFor : &c"));
+            ItemBuilder.setMaterial(Material.RED_TERRACOTTA).setDisplayName("&c&lERROR").setLore(Arrays.asList("&cThere is an error", "&cFor : &c"));
             e.printStackTrace();
         }
 
         return itemBuilder;
     }
-
 }
