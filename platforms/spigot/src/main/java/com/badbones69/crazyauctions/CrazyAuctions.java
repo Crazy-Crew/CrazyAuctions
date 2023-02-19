@@ -3,6 +3,8 @@ package com.badbones69.crazyauctions;
 import com.badbones69.crazyauctions.api.economy.vault.VaultSupport;
 import com.badbones69.crazyauctions.api.enums.PluginSupport;
 import com.badbones69.crazyauctions.configs.Config;
+import com.badbones69.crazyauctions.configs.Locale;
+import net.dehya.ruby.PaperRuby;
 import net.dehya.ruby.RubyCore;
 import net.dehya.ruby.SpigotRuby;
 import net.dehya.ruby.command.cloud.RubyCommand;
@@ -11,6 +13,7 @@ import net.dehya.ruby.player.RubyPlayerRegistry;
 import net.dehya.ruby.registry.senders.types.Console;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
+
 import java.lang.reflect.Field;
 import java.nio.file.Path;
 import java.util.Collections;
@@ -51,6 +54,7 @@ public class CrazyAuctions extends JavaPlugin implements RubyCore {
     @Override
     public void onEnable() {
         Config.reload(this);
+        Locale.reload(this);
     }
 
     @Override
@@ -131,4 +135,5 @@ public class CrazyAuctions extends JavaPlugin implements RubyCore {
     public VaultSupport getVaultSupport() {
         return this.starter.getVaultSupport();
     }
+
 }

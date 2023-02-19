@@ -1,9 +1,9 @@
-package com.badbones69.crazyauctions.api.enums.eco;
+package com.badbones69.crazyauctions.api.auctionhouse.enums;
 
 public enum AuctionType {
 
-    SELL_TYPE(""),
-    BID_TYPE("");
+    BID("Bid"),
+    SELL("Sell");
 
     private final String name;
 
@@ -22,4 +22,5 @@ public enum AuctionType {
     public String getName() {
         return this.name;
     }
+
 }

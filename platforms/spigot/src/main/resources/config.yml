@@ -6,3 +6,4 @@ settings:
   update-checker: true # Whether you want to be notified when an update is published to Modrinth.
   toggle-metrics: true # Whether you want your server statistics to be sent to https://bstats.org/ ( Requires a restart! )
   config-version: 1.0 # DO NOT TOUCH THIS: We use this to identify if configs are outdated.
+  storage-type: 'FLAT' #Choose what type of storage option for the data to use. FLAT/MYSQL/<TBD>

@@ -7,6 +7,10 @@ import net.dehya.ruby.common.annotations.yaml.Comment;
 import net.dehya.ruby.common.annotations.yaml.Key;
 import net.dehya.ruby.common.enums.FileType;
 import net.dehya.ruby.files.FileExtension;
+import net.dehya.ruby.files.FileManager;
+import org.simpleyaml.configuration.file.YamlFile;
+
+import java.io.IOException;
 
 @FileBuilder(isLogging = true, isAsync = true, isData = false, fileType = FileType.YAML)
 /*@Header("""
@@ -39,6 +43,10 @@ public class Config extends FileExtension {
     @Comment("DO NOT TOUCH THIS: We use this to identify if your configs are outdated.")
     public static double CONFIG_VERSION = 1.0;
 
+    @Key("settings.storage-type")
+    @Comment("Choose what type of storage option for the data to use. FLAT/MYSQL/<TBD>")
+    public static String STORAGE_TYPE = "FLAT";
+
     public Config() {
         super("config.yml");
     }
@@ -46,4 +54,15 @@ public class Config extends FileExtension {
     public static void reload(CrazyAuctions plugin) {
         plugin.getSpigotFileManager().addFile(new Config());
     }
+
+    public static YamlFile getConfiguration(FileManager fileManager) {
+        try {
+            return fileManager.getFileConfiguration(new Config());
+        } catch (IOException e) {
+            //Error Message goes here
+        }
+
+        return null;
+    }
+
 }
