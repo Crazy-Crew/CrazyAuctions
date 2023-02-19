@@ -1,6 +1,7 @@
 package com.badbones69.crazyauctions.utils.utilities.misc;
 
-import com.badbones69.crazyauctions.api.enums.ServerProtocol;
+import com.badbones69.crazyauctions.api.enums.ServerVersion;
+import com.badbones69.crazyauctions.configs.Config;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import java.util.List;
@@ -11,7 +12,7 @@ public class ColorUtils {
     private static final Pattern HEX_PATTERN = Pattern.compile("#[a-fA-F\\d]{6}");
 
     public static String color(String message) {
-        if (ServerProtocol.isNewer(ServerProtocol.v1_15_R1)) {
+        if (ServerVersion.isAtLeast(ServerVersion.v1_15)) {
             Matcher matcher = HEX_PATTERN.matcher(message);
             StringBuffer buffer = new StringBuffer();
 
@@ -83,8 +84,7 @@ public class ColorUtils {
     }
 
     public static String getPrefix(String string) {
-        return "Fuck Off";
-        //return color(Files.CONFIG.getFile().getString("Settings.Prefix") + string);
+        return Config.PREFIX;
     }
 
     public static String getPrefix() {
