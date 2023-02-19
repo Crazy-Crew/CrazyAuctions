@@ -50,6 +50,7 @@ public class AuctionHouse {
             }
         }
         //Loads the category items into the auction house.
+        //TODO Need to add the default categories like isPotion, isArmor, isFood, Ect...
         for (String category : file.getConfigurationSection("auction-house.categories").getKeys(false)) {
             String path = "auction-house.categories." + category + ".";
             auctionCategories.add(new AuctionCategory(
@@ -85,4 +86,5 @@ public class AuctionHouse {
         AuctionAddEvent event = new AuctionAddEvent(auctionItem.getSeller(), this, auctionItem);
         Bukkit.getServer().getPluginManager().callEvent(event);
     }
+
 }
