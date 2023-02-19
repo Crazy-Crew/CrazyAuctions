@@ -89,7 +89,7 @@ public class ItemUtils {
                 }
             }
         } catch (Exception e) {
-            itemBuilder.setMaterial(Material.RED_TERRACOTTA).setDisplayName("&c&lERROR").setLore(Arrays.asList("&cThere is an error", "&cFor : &c" + (placeHolder != null ? placeHolder : "")));
+            itemBuilder.setMaterial(Material.RED_TERRACOTTA).setDisplayName("&c&lERROR").setLore(Arrays.asList("&cThere is an error", "&cFor : &c"));
             e.printStackTrace();
         }
 
