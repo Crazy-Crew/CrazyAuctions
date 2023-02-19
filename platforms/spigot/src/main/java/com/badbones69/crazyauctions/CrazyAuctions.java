@@ -53,8 +53,8 @@ public class CrazyAuctions extends JavaPlugin implements RubyCore {
 
     @Override
     public void onEnable() {
-        Config.reload(this);
-        Locale.reload(this);
+        Config.reload();
+        Locale.reload();
 
         AuctionData.load();
 
@@ -76,7 +76,6 @@ public class CrazyAuctions extends JavaPlugin implements RubyCore {
     /**
      * These all can be null as we don't use them here.
      */
-
     @Override
     public @NotNull Console getConsole() {
         return null;

@@ -1,6 +1,7 @@
 package com.badbones69.crazyauctions.configs;
 
 import com.badbones69.crazyauctions.CrazyAuctions;
+import com.badbones69.crazyauctions.api.interfaces.Universal;
 import net.dehya.ruby.common.annotations.FileBuilder;
 import net.dehya.ruby.common.annotations.yaml.BlockType;
 import net.dehya.ruby.common.annotations.yaml.Comment;
@@ -12,7 +13,7 @@ import org.simpleyaml.configuration.file.YamlFile;
 import java.io.IOException;
 
 @FileBuilder(isLogging = true, isAsync = false, isData = false, fileType = FileType.YAML)
-public class Config extends FileExtension {
+public class Config extends FileExtension implements Universal {
 
     @Key("settings.prefix")
     @Comment("The prefix used in front of messages.")
@@ -35,15 +36,15 @@ public class Config extends FileExtension {
     @Comment("DO NOT TOUCH THIS: We use this to identify if your configs are outdated.")
     public static double CONFIG_VERSION = 1.0;
 
-    @Key("settings.storage-type")
-    @Comment("Choose what type of storage option for the data to use. FLAT/MYSQL/<TBD>")
-    public static String STORAGE_TYPE = "FLAT";
+    @Key("settings.data-storage.storage-method")
+    @Comment("The only available type at the moment is JSON")
+    public static String STORAGE_TYPE = "JSON";
 
     public Config() {
         super("config.yml");
     }
 
-    public static void reload(CrazyAuctions plugin) {
+    public static void reload() {
         plugin.getSpigotFileManager().addFile(new Config());
     }
 
@@ -51,10 +52,9 @@ public class Config extends FileExtension {
         try {
             return fileManager.getFileConfiguration(new Config());
         } catch (IOException e) {
-            //Error Message goes here
+            e.printStackTrace();
         }
 
         return null;
     }
-
 }
