@@ -1,6 +1,5 @@
 package com.badbones69.crazyauctions.commands;
 
-import com.badbones69.crazyauctions.CrazyAuctions;
 import com.badbones69.crazyauctions.configs.data.AuctionData;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -11,8 +10,6 @@ import java.util.UUID;
 
 public class AuctionCommand implements CommandExecutor {
 
-    private final CrazyAuctions plugin = CrazyAuctions.getPlugin();
-
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
 
@@ -20,7 +17,7 @@ public class AuctionCommand implements CommandExecutor {
 
         AuctionData.auctionData.putIfAbsent(player.getUniqueId(), UUID.randomUUID().toString());
 
-        AuctionData.save(this.plugin);
+        AuctionData.save();
 
         return false;
     }

@@ -56,14 +56,14 @@ public class CrazyAuctions extends JavaPlugin implements RubyCore {
         Config.reload(this);
         Locale.reload(this);
 
-        AuctionData.load(this);
+        AuctionData.load();
 
         getCommand("ah").setExecutor(new AuctionCommand());
     }
 
     @Override
     public void onDisable() {
-        AuctionData.save(this);
+        AuctionData.save();
     }
 
     @Override
