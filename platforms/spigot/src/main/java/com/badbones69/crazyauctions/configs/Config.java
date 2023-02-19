@@ -37,7 +37,7 @@ public class Config extends FileExtension {
 
     @Key("settings.config-version")
     @Comment("DO NOT TOUCH THIS: We use this to identify if your configs are outdated.")
-    public static int CONFIG_VERSION = 1;
+    public static double CONFIG_VERSION = 1.0;
 
     public Config() {
         super("config.yml");
