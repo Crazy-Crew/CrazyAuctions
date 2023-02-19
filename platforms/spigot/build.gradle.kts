@@ -20,7 +20,7 @@ repositories {
 }
 
 dependencies {
-    api(project(":crazyauctions-core"))
+//    api(project(":crazyauctions-core"))
 
     compileOnly(libs.spigot)
 
