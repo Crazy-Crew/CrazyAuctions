@@ -12,7 +12,7 @@
 [![Contact][discord-shield]][discord-url]
 ![CodeFactor][codefactor-shield]
 
-![Spigot](https://cdn.jsdelivr.net/gh/intergrav/devins-badges/assets/compact/unsupported/spigot_vector.svg)
+![Spigot](https://cdn.jsdelivr.net/gh/intergrav/devins-badges/assets/compact/supported/spigot_vector.svg)
 ![Paper](https://cdn.jsdelivr.net/gh/intergrav/devins-badges/assets/compact/supported/paper_vector.svg)
 ![Purpur](https://cdn.jsdelivr.net/gh/intergrav/devins-badges/assets/compact/supported/purpur_vector.svg)
 
@@ -24,9 +24,9 @@
     <br />
     <a href="https://github.com/Crazy-Crew/CrazyAuctions/issues">Report Bug</a>
     ·
-    <a href="https://github.com/orgs/Crazy-Crew/discussions/categories/features?discussions_q=label%3Acrazyauctions+category%3AFeatures">Request Feature</a>
+    <a href="https://github.com/Crazy-Crew/CrazyAuctions/discussions/categories/feature-requests">Request Feature</a>
     ·
-    <a href="https://github.com/orgs/Crazy-Crew/discussions/categories/support?discussions_q=label%3Acrazyauctions+category%3ASupport">Get Support</a>
+    <a href="https://discord.gg/crazycrew">Get Support</a>
   </p>
 </div>
 
@@ -48,13 +48,12 @@
   </ol>
 </details>
 
-## Downloads
-> https://modrinth.com/plugin/crazyauctions
+## Resource Page
 
-## Beta Builds
-### Get the latest changes before marked as release.
-All beta builds will be on Modrinth.<br>
-> https://modrinth.com/plugin/crazyauctions/versions
+### Beta Builds
+All beta builds will be on Modrinth marked as beta.<br>
+
+<a href="https://modrinth.com/plugin/crazyauctions">![Modrinth](https://raw.githubusercontent.com/intergrav/devins-badges/v3/assets/cozy/available/modrinth_64h.png)</a>
 
 ## Getting Started
 
