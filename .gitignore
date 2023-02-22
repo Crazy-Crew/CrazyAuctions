@@ -9,10 +9,3 @@ build-logic/build
 core/build
 
 platforms/spigot/build
-platforms/spigot/run/*
-
-!platforms/spigot/run/eula.txt
-!platforms/spigot/run/bukkit.yml
-!platforms/spigot/run/spigot.yml
-!platforms/spigot/run/server.properties
-!platforms/spigot/run/config
