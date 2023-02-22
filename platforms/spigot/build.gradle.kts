@@ -57,10 +57,6 @@ tasks {
         ).forEach { relocate(it, "$projectGroup.plugin.library.$it") }
     }
 
-    runServer {
-        minecraftVersion("1.19.3")
-    }
-
     modrinth {
         token.set(System.getenv("MODRINTH_TOKEN"))
         projectId.set(projectName.lowercase())
