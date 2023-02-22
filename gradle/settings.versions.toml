@@ -3,7 +3,7 @@
 # Project Settings
 projectVersion = "1.2.18"
 
-projectGroup = "com.badbones69.crazyauctions"
+projectGroup = "us.crazycrew.crazyauctions"
 projectName = "CrazyAuctions"
 projectDescription = "Auction off your items in style!"
 projectGithub = "https://github.com/Crazy-Crew/CrazyAuctions"
