@@ -15,6 +15,16 @@ import us.crazycrew.crazycore.paper.player.PaperPlayerRegistry;
 import java.io.File;
 import java.util.logging.LogManager;
 
+/**
+ * @author RyderBelserion
+ * @author BadBones69
+ *
+ * Created: 2/28/2023
+ * Time: 1:25 AM
+ * Last Edited: 2/28/2023 @ 3:13 AM
+ *
+ * Description: The starter class that thanks to paper is run directly at server startup and allows us to pass variables through the plugin class.
+ */
 @SuppressWarnings("UnstableApiUsage")
 public class Starter implements PluginBootstrap {
 

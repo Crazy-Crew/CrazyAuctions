@@ -8,6 +8,16 @@ import us.crazycrew.crazyauctions.data.UserCache;
 import java.nio.file.Path;
 import java.util.UUID;
 
+/**
+ * @author RyderBelserion
+ * @author BadBones69
+ *
+ * Created: 2/28/2023
+ * Time: 3:04 AM
+ * Last Edited: 2/28/2023 @ 3:11 AM
+ *
+ * Description: Handles player data for auctions.
+ */
 public class StorageManager implements Universal, UserCache {
 
     /**

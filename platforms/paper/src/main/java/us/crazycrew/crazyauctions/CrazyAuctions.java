@@ -9,6 +9,16 @@ import java.io.File;
 import java.nio.file.Path;
 import java.util.logging.Logger;
 
+/**
+ * @author RyderBelserion
+ * @author BadBones69
+ *
+ * Created: 2/28/2023
+ * Time: 1:25 AM
+ * Last Edited: 2/28/2023 @ 3:13 AM
+ *
+ * Description: The java plugin instance of our plugin where we handle post world startup tasks.
+ */
 public class CrazyAuctions extends JavaPlugin {
 
     private static CrazyAuctions plugin;

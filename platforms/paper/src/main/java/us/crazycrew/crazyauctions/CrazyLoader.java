@@ -8,6 +8,16 @@ import org.eclipse.aether.graph.Dependency;
 import org.eclipse.aether.repository.RemoteRepository;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * @author RyderBelserion
+ * @author BadBones69
+ *
+ * Created: 2/28/2023
+ * Time: 1:25 AM
+ * Last Edited: 2/28/2023 @ 3:13 AM
+ *
+ * Description: The class path resolver where we download dependencies at run-time
+ */
 @SuppressWarnings("UnstableApiUsage")
 public class CrazyLoader implements PluginLoader {
 

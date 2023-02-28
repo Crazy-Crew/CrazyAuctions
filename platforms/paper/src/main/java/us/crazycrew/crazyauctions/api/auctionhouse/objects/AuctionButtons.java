@@ -4,6 +4,16 @@ import us.crazycrew.crazyauctions.utils.ItemUtils;
 import org.bukkit.configuration.file.FileConfiguration;
 import us.crazycrew.crazycore.paper.items.ItemBuilder;
 
+/**
+ * @author RyderBelserion
+ * @author BadBones69
+ *
+ * Created: 2/19/2023
+ * Time: Unknown
+ * Last Edited: 2/28/2023 @ 3:04 AM
+ *
+ * Description: Creates the auction buttons
+ */
 public class AuctionButtons {
 
     private final ItemBuilder sellingItemsButton;

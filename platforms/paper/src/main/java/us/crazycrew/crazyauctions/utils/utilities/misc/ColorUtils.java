@@ -1,12 +1,21 @@
 package us.crazycrew.crazyauctions.utils.utilities.misc;
 
-import us.crazycrew.crazyauctions.api.enums.ServerVersion;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * @author RyderBelserion
+ * @author BadBones69
+ *
+ * Created: 2/18/2023
+ * Time: Unknown
+ * Last Edited: 2/28/2023 @ 3:04 AM
+ *
+ * Description: Color utilities.
+ */
 public class ColorUtils {
     private static final Pattern HEX_PATTERN = Pattern.compile("#[a-fA-F\\d]{6}");
 

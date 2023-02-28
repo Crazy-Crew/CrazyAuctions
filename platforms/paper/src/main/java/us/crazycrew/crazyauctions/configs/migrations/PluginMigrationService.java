@@ -8,6 +8,15 @@ import us.crazycrew.crazycore.CrazyCore;
 import us.crazycrew.crazycore.CrazyLogger;
 import java.nio.file.Path;
 
+/**
+ * @author RyderBelserion
+ * @author BadBones69
+ *
+ * Date: 2/28/2023
+ * Time: 1:26 AM
+ *
+ * Description: Migrate old values to new values.
+ */
 public class PluginMigrationService extends PlainMigrationService {
 
     @Override

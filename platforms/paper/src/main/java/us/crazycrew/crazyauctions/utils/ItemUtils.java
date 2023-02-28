@@ -1,10 +1,17 @@
 package us.crazycrew.crazyauctions.utils;
 
-import us.crazycrew.crazyauctions.api.enums.ServerVersion;
-import org.bukkit.Material;
 import us.crazycrew.crazycore.paper.items.ItemBuilder;
-import java.util.Arrays;
 
+/**
+ * @author RyderBelserion
+ * @author BadBones69
+ *
+ * Created: 2/18/2023
+ * Time: Unknown
+ * Last Edited: 2/28/2023 @ 3:04 AM
+ *
+ * Description: Item utilities.
+ */
 public class ItemUtils {
 
     /**

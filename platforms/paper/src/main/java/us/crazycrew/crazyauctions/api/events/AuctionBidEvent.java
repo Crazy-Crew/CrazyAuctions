@@ -9,11 +9,14 @@ import org.jetbrains.annotations.NotNull;
 import java.util.UUID;
 
 /**
+ * @author RyderBelserion
+ * @author BadBones69
  *
- * @author Ryder Belserion
+ * Created: 2/18/2023
+ * Time: Unknown
+ * Last Edited: 2/28/2023 @ 3:04 AM
  *
- * This event is fired when a player bids on an auction.
- *
+ * Description: This event is fired when a player bids on an auction.
  */
 public class AuctionBidEvent extends Event {
 

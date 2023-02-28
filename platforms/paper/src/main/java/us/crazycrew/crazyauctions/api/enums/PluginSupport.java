@@ -1,14 +1,22 @@
 package us.crazycrew.crazyauctions.api.enums;
 
 import us.crazycrew.crazyauctions.CrazyAuctions;
-import us.crazycrew.crazyauctions.api.economy.vault.VaultSupport;
 import us.crazycrew.crazyauctions.utils.utilities.misc.ColorUtils;
 import org.bukkit.plugin.Plugin;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * @author RyderBelserion
+ * @author BadBones69
+ *
+ * Created: 2/18/2023
+ * Time: Unknown
+ * Last Edited: 2/28/2023 @ 3:04 AM
+ *
+ * Description: Handles all our plugin support.
+ */
 public class PluginSupport {
 
     private final CrazyAuctions plugin = CrazyAuctions.getPlugin();

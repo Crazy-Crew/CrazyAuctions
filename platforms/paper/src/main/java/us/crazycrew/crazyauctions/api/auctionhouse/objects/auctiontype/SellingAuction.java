@@ -6,6 +6,16 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.UUID;
 
+/**
+ * @author RyderBelserion
+ * @author BadBones69
+ *
+ * Created: 2/19/2023
+ * Time: Unknown
+ * Last Edited: 2/28/2023 @ 3:04 AM
+ *
+ * Description: Creates the selling auction type
+ */
 public class SellingAuction implements AuctionItem {
 
     AuctionType auctionType = AuctionType.SELL;

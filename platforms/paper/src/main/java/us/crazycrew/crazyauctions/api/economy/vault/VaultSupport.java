@@ -4,6 +4,16 @@ import us.crazycrew.crazyauctions.CrazyAuctions;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
+/**
+ * @author RyderBelserion
+ * @author BadBones69
+ *
+ * Created: 2/18/2023
+ * Time: Unknown
+ * Last Edited: 2/28/2023 @ 3:04 AM
+ *
+ * Description: Vault support related code.
+ */
 public class VaultSupport {
 
     private final CrazyAuctions plugin = CrazyAuctions.getPlugin();

@@ -1,5 +1,15 @@
 package us.crazycrew.crazyauctions.utils.utilities.misc;
 
+/**
+ * @author RyderBelserion
+ * @author BadBones69
+ *
+ * Created: 2/18/2023
+ * Time: Unknown
+ * Last Edited: 2/28/2023 @ 3:04 AM
+ *
+ * Description: Number utilities.
+ */
 public class NumberUtils {
 
     public static boolean isInt(String value) {

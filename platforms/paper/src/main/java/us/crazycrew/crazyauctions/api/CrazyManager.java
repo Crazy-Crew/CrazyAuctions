@@ -9,5 +9,4 @@ public class CrazyManager {
     public void load() {
 
     }
-
 }

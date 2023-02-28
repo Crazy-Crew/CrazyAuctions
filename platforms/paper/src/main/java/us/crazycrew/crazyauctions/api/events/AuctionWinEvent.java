@@ -10,11 +10,14 @@ import org.jetbrains.annotations.NotNull;
 import java.util.UUID;
 
 /**
+ * @author RyderBelserion
+ * @author BadBones69
  *
- * @author Ryder Belserion
+ * Created: 2/18/2023
+ * Time: Unknown
+ * Last Edited: 2/28/2023 @ 3:04 AM
  *
- * This event is fired when an auction has a winner.
- *
+ * Description: This event is fired when an auction has a winner.
  */
 public class AuctionWinEvent extends Event {
 
