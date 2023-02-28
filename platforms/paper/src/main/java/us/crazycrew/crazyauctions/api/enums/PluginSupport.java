@@ -58,7 +58,7 @@ public class PluginSupport {
         for (SupportedPlugins supportedPlugin : SupportedPlugins.values()) {
             if (supportedPlugin.isPluginLoaded() && supportedPlugin.getLoadedPlugin().isEnabled()) {
                 switch (supportedPlugin) {
-                    case VAULT: this.plugin.getStarter().setVaultSupport(new VaultSupport()).init();
+                    //case VAULT: this.plugin.getStarter().setVaultSupport(new VaultSupport()).init();
                 }
 
                 return;
@@ -84,7 +84,7 @@ public class PluginSupport {
 
         private final CrazyAuctions plugin = CrazyAuctions.getPlugin();
 
-        private final PluginSupport pluginSupport = plugin.getPluginSupport();
+        //private final PluginSupport pluginSupport = plugin.getPluginSupport();
 
         public boolean isPluginLoaded() {
             return plugin.getServer().getPluginManager().getPlugin(pluginName) != null;
@@ -95,19 +95,21 @@ public class PluginSupport {
         }
 
         public boolean isCachedPluginLoaded() {
-            return pluginSupport.cachedPlugins.get(this);
+            return true;
+            //return pluginSupport.cachedPlugins.get(this);
         }
 
         public void addPlugin(boolean value) {
-            pluginSupport.cachedPlugins.put(this, value);
+            //pluginSupport.cachedPlugins.put(this, value);
         }
 
         public void removePlugin() {
-            pluginSupport.cachedPlugins.remove(this);
+            //pluginSupport.cachedPlugins.remove(this);
         }
 
         public boolean isPluginEnabled() {
-            return pluginSupport.cachedPlugins.get(this);
+            return true;
+            //return pluginSupport.cachedPlugins.get(this);
         }
     }
 }

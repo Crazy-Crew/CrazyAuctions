@@ -1,8 +1,7 @@
 package us.crazycrew.crazyauctions.api.auctionhouse.objects;
 
-import net.dehya.ruby.items.ItemBuilder;
 import org.bukkit.Material;
-
+import us.crazycrew.crazycore.paper.items.ItemBuilder;
 import java.util.List;
 
 public class AuctionCategory {
@@ -35,5 +34,4 @@ public class AuctionCategory {
     public List<Material> getCategoryItemList() {
         return categoryItemList;
     }
-
 }

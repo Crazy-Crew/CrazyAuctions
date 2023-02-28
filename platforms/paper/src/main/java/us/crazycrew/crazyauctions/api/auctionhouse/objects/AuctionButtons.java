@@ -1,8 +1,8 @@
 package us.crazycrew.crazyauctions.api.auctionhouse.objects;
 
 import us.crazycrew.crazyauctions.utils.ItemUtils;
-import net.dehya.ruby.items.ItemBuilder;
 import org.bukkit.configuration.file.FileConfiguration;
+import us.crazycrew.crazycore.paper.items.ItemBuilder;
 
 public class AuctionButtons {
 

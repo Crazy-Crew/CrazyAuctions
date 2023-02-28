@@ -9,7 +9,6 @@ import us.crazycrew.crazyauctions.utils.ItemUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -85,5 +84,4 @@ public class AuctionHouse {
         AuctionAddEvent event = new AuctionAddEvent(auctionItem.getSeller(), this, auctionItem);
         Bukkit.getServer().getPluginManager().callEvent(event);
     }
-
 }

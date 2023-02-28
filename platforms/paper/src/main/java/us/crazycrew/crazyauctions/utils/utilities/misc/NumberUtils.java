@@ -18,29 +18,39 @@ public class NumberUtils {
      * @return The roman numeral as a number.
      */
     public static int convertLevelInteger(String level) {
-        
         switch (level) {
-            case "I": return 1;
+            case "I" -> {
+                return 1;
+            }
+            case "II" -> {
+                return 2;
+            }
+            case "III" -> {
+                return 3;
+            }
+            case "IV" -> {
+                return 4;
+            }
+            case "V" -> {
+                return 5;
+            }
+            case "VI" -> {
+                return 6;
+            }
+            case "VII" -> {
+                return 7;
+            }
+            case "VIII" -> {
+                return 8;
+            }
+            case "IX" -> {
+                return 9;
+            }
+            case "X" -> {
+                return 10;
+            }
 
-            case "II": return 2;
-
-            case "III": return 3;
-
-            case "IV": return 4;
-
-            case "V": return 5;
-
-            case "VI": return 6;
-
-            case "VII": return 7;
-
-            case "VIII": return 8;
-
-            case "IX": return 9;
-
-            case "X": return 10;
-
-            default: {
+            default -> {
                 if (isInt(level)) {
                     return Integer.parseInt(level);
                 } else {

@@ -3,7 +3,6 @@ package us.crazycrew.crazyauctions.api.economy;
 import us.crazycrew.crazyauctions.CrazyAuctions;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
-
 import java.util.UUID;
 
 public class CurrencyAPI {
@@ -23,17 +22,11 @@ public class CurrencyAPI {
             Player player = plugin.getServer().getPlayer(uuid);
 
             switch (currency) {
-                case VAULT: {
-                    if (player != null) return (int) plugin.getVaultSupport().getVault().getBalance(player);
-                }
+                case VAULT: //if (player != null) return (int) plugin.getVaultSupport().getVault().getBalance(player);
 
-                case XP_LEVEL: {
-                    if (player != null) return player.getLevel();
-                }
+                case XP_LEVEL: if (player != null) return player.getLevel();
 
-                case XP_TOTAL: {
-                    if (player != null) return getTotalExperience(player);
-                }
+                case XP_TOTAL: if (player != null) return getTotalExperience(player);
             }
         } catch (Exception | NoClassDefFoundError ignored) {}
         return 0;
@@ -51,7 +44,7 @@ public class CurrencyAPI {
             Player player = plugin.getServer().getPlayer(uuid);
 
             switch (currency) {
-                case VAULT: if (player != null) plugin.getVaultSupport().getVault().withdrawPlayer(player, amount);
+                //case VAULT: if (player != null) plugin.getVaultSupport().getVault().withdrawPlayer(player, amount);
                 case XP_LEVEL: if (player != null) player.setLevel(player.getLevel() - amount);
                 case XP_TOTAL: if (player != null) takeTotalExperience(player, amount);
             }
@@ -70,7 +63,7 @@ public class CurrencyAPI {
             Player player = plugin.getServer().getPlayer(uuid);
 
             switch (currency) {
-                case VAULT: if (player != null) plugin.getVaultSupport().getVault().depositPlayer(player, amount);
+                //case VAULT: if (player != null) plugin.getVaultSupport().getVault().depositPlayer(player, amount);
                 case XP_LEVEL: if (player != null) player.setLevel(player.getLevel() + amount);
                 case XP_TOTAL: if (player != null) takeTotalExperience(player, -amount);
             }

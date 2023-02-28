@@ -1,8 +1,8 @@
 package us.crazycrew.crazyauctions.utils;
 
 import us.crazycrew.crazyauctions.api.enums.ServerVersion;
-import net.dehya.ruby.items.ItemBuilder;
 import org.bukkit.Material;
+import us.crazycrew.crazycore.paper.items.ItemBuilder;
 import java.util.Arrays;
 
 public class ItemUtils {
@@ -30,7 +30,7 @@ public class ItemUtils {
                         itemBuilder.setValue(value);
                         break;
                     case "name":
-                        itemBuilder.setDisplayName(value);
+                        //itemBuilder.setDisplayName(value);
                         break;
                     case "amount":
                         try {
@@ -40,7 +40,7 @@ public class ItemUtils {
                         }
                         break;
                     case "lore":
-                        itemBuilder.setLore(Arrays.asList(value.split(",")));
+                        //itemBuilder.setLore(Arrays.asList(value.split(",")));
                         break;
                     case "player":
                         itemBuilder.setTexture(value);
@@ -82,7 +82,7 @@ public class ItemUtils {
                 }
             }
         } catch (Exception e) {
-            ItemBuilder.setMaterial(Material.RED_TERRACOTTA).setDisplayName("&c&lERROR").setLore(Arrays.asList("&cThere is an error", "&cFor : &c"));
+            //ItemBuilder.setMaterial(Material.RED_TERRACOTTA).setDisplayName("&c&lERROR").setLore(Arrays.asList("&cThere is an error", "&cFor : &c"));
             e.printStackTrace();
         }
 

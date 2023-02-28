@@ -14,7 +14,7 @@ val projectVersion = settings.versions.projectVersion.get()
 val projectName = settings.versions.projectName.get()
 val projectExt = settings.versions.projectExtension.get()
 
-val finalVersion = if (isBeta) "$projectVersion+Beta" else projectVersion
+val finalVersion = if (isBeta) "$projectVersion+beta" else projectVersion
 
 val color = if (isBeta) betaUpdate else releaseUpdate
 val repo = if (isBeta) "beta" else "releases"
