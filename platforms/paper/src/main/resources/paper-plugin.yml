@@ -1,0 +1,38 @@
+name: ${name}
+main: ${group}.CrazyAuctions
+
+version: ${version}
+api-version: '1.19'
+description: ${description}
+
+bootstrapper: ${group}.Starter
+loader: ${group}.CrazyLoader
+
+dependencies:
+  - name: CMI
+    required: false
+    bootstrap: false
+  - name: HolographicDisplays
+    required: false
+    bootstrap: false
+  - name: DecentHolograms
+    required: false
+    bootstrap: false
+  - name: PlaceholderAPI
+    required: false
+    bootstrap: false
+  - name: Vault
+    required: false
+    bootstrap: false
+
+load-after:
+  - name: CMI
+    bootstrap: false
+  - name: HolographicDisplays
+    bootstrap: false
+  - name: DecentHolograms
+    bootstrap: false
+  - name: PlaceholderAPI
+    bootstrap: false
+  - name: Vault
+    bootstrap: false
