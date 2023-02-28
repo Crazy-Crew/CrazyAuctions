@@ -7,10 +7,6 @@ import java.util.Arrays;
 
 public class ItemUtils {
 
-    public static Material getMaterial(String newMaterial, String oldMaterial) {
-        return Material.matchMaterial(ServerVersion.isAtLeast(ServerVersion.v1_12) ? newMaterial : oldMaterial);
-    }
-
     /**
      * Converts a string to an ItemBuilder with a placeholder for errors.
      *
