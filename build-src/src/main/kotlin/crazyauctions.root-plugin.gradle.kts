@@ -2,11 +2,28 @@ import task.ReleaseWebhook
 import task.WebhookExtension
 
 plugins {
-    id("crazyauctions.base-plugin")
+    `java-library`
+
+    `maven-publish`
+
+    id("com.github.hierynomus.license")
+
+    id("com.github.johnrengelman.shadow")
+}
+
+license {
+    header = rootProject.file("LICENSE")
+    encoding = "UTF-8"
+
+    mapping("java", "JAVADOC_STYLE")
+
+    include("**/*.java")
 }
 
 repositories {
     maven("https://repo.triumphteam.dev/snapshots/")
+
+    maven("https://repo.crazycrew.us/libraries/")
 
     maven("https://repo.crazycrew.us/plugins/")
 

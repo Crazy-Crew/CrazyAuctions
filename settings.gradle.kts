@@ -1,7 +1,7 @@
 @file:Suppress("UnstableApiUsage")
 
 dependencyResolutionManagement {
-    includeBuild("build-logic")
+    includeBuild("build-src")
 
     versionCatalogs {
         create("settings") {
