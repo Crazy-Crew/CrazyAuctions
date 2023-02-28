@@ -6,7 +6,6 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import us.crazycrew.crazyauctions.api.interfaces.Universal;
 import us.crazycrew.crazyauctions.configs.data.PlayerData;
-import java.io.File;
 
 public class TestListener implements Listener, Universal {
 
@@ -17,8 +16,6 @@ public class TestListener implements Listener, Universal {
 
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
-        File playerData = PlayerData.getFile(plugin.getUsers(), event.getPlayer().getUniqueId()).toFile();
-
         PlayerData.save(event.getPlayer().getUniqueId());
     }
 }

@@ -2,6 +2,7 @@ package us.crazycrew.crazyauctions;
 
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
+import us.crazycrew.crazyauctions.configs.StorageManager;
 import us.crazycrew.crazycore.CrazyLogger;
 import us.crazycrew.crazycore.paper.PaperCore;
 import java.io.File;
@@ -15,6 +16,8 @@ public class CrazyAuctions extends JavaPlugin {
     private final PaperCore paperCore;
 
     private final File users;
+
+    private StorageManager storageManager;
 
     public CrazyAuctions(PaperCore paperCore) {
         this.paperCore = paperCore;
@@ -35,6 +38,8 @@ public class CrazyAuctions extends JavaPlugin {
     public void onEnable() {
         // Enable the player registry.
         getCrazyCore().createPlayerRegistry(this);
+
+        this.storageManager = new StorageManager();
     }
 
     @Override
@@ -51,6 +56,10 @@ public class CrazyAuctions extends JavaPlugin {
     }
 
     public Path getUsers() {
-        return users.toPath();
+        return this.users.toPath();
+    }
+
+    public StorageManager getStorageManager() {
+        return this.storageManager;
     }
 }
