@@ -40,13 +40,13 @@ val isBeta = settings.versions.projectBeta.get().toBoolean()
 
 val projectVersion = settings.versions.projectVersion.get()
 
-val finalVersion = if (isBeta) "$projectVersion+beta" else projectVersion
+val finalVersion = if (isBeta) "$projectVersion+Beta" else projectVersion
 
 val type = if (isBeta) "beta" else "release"
 
 tasks {
     shadowJar {
-        archiveFileName.set("${projectName}+${projectDir.name}+$finalVersion.jar")
+        archiveFileName.set("${projectName}+Paper+$finalVersion.jar")
 
         listOf(
             "org.bstats"

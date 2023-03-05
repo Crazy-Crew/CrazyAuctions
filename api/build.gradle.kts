@@ -6,7 +6,7 @@ val projectBeta = settings.versions.projectBeta.get().toBoolean()
 val projectVersion = settings.versions.projectVersion.get()
 val projectName = settings.versions.projectName.get()
 
-val finalVersion = if (projectBeta) "$projectVersion+beta" else projectVersion
+val finalVersion = if (projectBeta) "$projectVersion+Beta" else projectVersion
 
 project.version = finalVersion
 
@@ -22,6 +22,6 @@ dependencies {
 
 tasks {
     shadowJar {
-        archiveFileName.set("$projectName+api+$finalVersion.jar")
+        archiveFileName.set("$projectName+API+$finalVersion.jar")
     }
 }
