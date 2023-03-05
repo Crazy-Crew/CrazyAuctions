@@ -1,7 +1,11 @@
 package us.crazycrew.crazyauctions.configurations;
 
+import ch.jalu.configme.Comment;
 import ch.jalu.configme.SettingsHolder;
 import ch.jalu.configme.configurationdata.CommentsConfiguration;
+import ch.jalu.configme.properties.Property;
+
+import static ch.jalu.configme.properties.PropertyInitializer.newProperty;
 
 /**
  * @author RyderBelserion
@@ -40,4 +44,13 @@ public class ConfigSettings implements SettingsHolder {
 
         conf.setComment("settings", header);
     }
+
+    @Comment("Allow damage items to be auctioned off.")
+    public static final Property<Boolean> DAMAGED_ITEMS = newProperty("misc.allow-damaged-items", false);
+
+    @Comment("Whether or not to allow `ah sell` or not.")
+    public static final Property<Boolean> SELLING_MODULE = newProperty("modules.selling-module", true);
+
+    @Comment("Whether or not to allow `ah buy` or not.")
+    public static final Property<Boolean> BIDDING_MODULE = newProperty("modules.bidding-module", true);
 }
