@@ -1,4 +1,4 @@
-package us.crazycrew.crazyauctions.configs;
+package us.crazycrew.crazyauctions.configurations;
 
 import ch.jalu.configme.Comment;
 import ch.jalu.configme.SettingsHolder;
@@ -6,6 +6,16 @@ import ch.jalu.configme.configurationdata.CommentsConfiguration;
 import ch.jalu.configme.properties.Property;
 import static ch.jalu.configme.properties.PropertyInitializer.newProperty;
 
+/**
+ * @author RyderBelserion
+ * @author BadBones69
+ *
+ * Date: 2/28/2023
+ * Time: Unknown
+ * Last Edited: 3/4/2023 @ 10:23 PM
+ *
+ * Description: The plugin-settings.yml options.
+ */
 public class PluginSettings implements SettingsHolder {
 
     // Empty constructor required by SettingsHolder
@@ -17,12 +27,19 @@ public class PluginSettings implements SettingsHolder {
                 "Support: https://discord.gg/crazycrew",
                 "Github: https://github.com/Crazy-Crew",
                 "",
-                "Issues: https://github.com/Crazy-Crew/CrazyCrates/issues",
-                "Features: https://github.com/Crazy-Crew/CrazyCrates/discussions"
+                "Issues: https://github.com/Crazy-Crew/CrazyAuctions/issues",
+                "Features: https://github.com/Crazy-Crew/CrazyAuctions/discussions"
         };
 
         conf.setComment("settings", header);
     }
+
+    @Comment({
+            "Choose what prefix you want to use for the permission i.e crazyauctions.command.player.help",
+            "",
+            "Warning: any changes requires a restart!"
+    })
+    public static final Property<String> COMMAND_PERMISSION = newProperty("settings.permission", "crazyauctions");
 
     @Comment("The command prefix that is shown at the beginning of every message.")
     public static final Property<String> COMMAND_PREFIX = newProperty("settings.prefix.command", "<red>[</red><green>CrazyAuctions</green><red>]</green> ");
@@ -54,8 +71,9 @@ public class PluginSettings implements SettingsHolder {
 
     @Comment({
             "What command aliases do you want to use?",
-            "You can use as many as you would like, Separate each command using : and do not use any spaces!"
+            "You can use as many as you would like, Separate each command using : and do not use any spaces!",
+            "",
+            "Warning: any changes requires a restart!"
     })
-    public static final Property<String> PLUGIN_ALIASES = newProperty("settings.plugin-aliases", "crazyauctions:ca");
-
+    public static final Property<String> PLUGIN_ALIASES = newProperty("settings.plugin-aliases", "crazyauctions:auctions");
 }

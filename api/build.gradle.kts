@@ -15,12 +15,13 @@ dependencies {
     //compileOnly(libs.adventure.text)
 
     compileOnly(libs.config.me)
+    compileOnly(libs.yaml)
 
-    compileOnly(libs.crazycore)
+    compileOnly(libs.crazycore.api)
 }
 
 tasks {
     shadowJar {
-        archiveFileName.set("$projectName+core+$finalVersion.jar")
+        archiveFileName.set("$projectName+api+$finalVersion.jar")
     }
 }

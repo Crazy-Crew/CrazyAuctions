@@ -14,7 +14,7 @@ repositories {
 }
 
 dependencies {
-    api(project(":crazyauctions-core"))
+    api(project(":crazyauctions-api"))
 
     compileOnly(libs.paper)
 

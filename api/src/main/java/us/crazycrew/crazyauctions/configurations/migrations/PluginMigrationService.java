@@ -1,19 +1,21 @@
-package us.crazycrew.crazyauctions.configs.migrations;
+package us.crazycrew.crazyauctions.configurations.migrations;
 
 import ch.jalu.configme.configurationdata.ConfigurationData;
 import ch.jalu.configme.migration.PlainMigrationService;
 import ch.jalu.configme.resource.PropertyReader;
-import org.bukkit.configuration.file.YamlConfiguration;
+import org.simpleyaml.configuration.file.YamlConfiguration;
 import us.crazycrew.crazycore.CrazyCore;
 import us.crazycrew.crazycore.CrazyLogger;
+import java.io.IOException;
 import java.nio.file.Path;
 
 /**
  * @author RyderBelserion
  * @author BadBones69
  *
- * Date: 2/28/2023
- * Time: 1:26 AM
+ * Date: 3/1/2023
+ * Time: 12:41 PM
+ * Last Edited: 3/1/2023 @ 12:42 PM
  *
  * Description: Migrate old values to new values.
  */
@@ -21,15 +23,21 @@ public class PluginMigrationService extends PlainMigrationService {
 
     @Override
     protected boolean performMigrations(PropertyReader reader, ConfigurationData configurationData) {
-        return convert(reader, "example.test", "config.yml", true)
-                | convert(reader, "", "", true);
+        //return moveProperty(oldPrefix, newPrefix, reader, configurationData);
+        return false;
     }
 
     private boolean convert(PropertyReader reader, String oldValue, String newFile, boolean cascade) {
         if (reader.contains(oldValue)) {
             Path nFile = CrazyCore.api().getDirectory().resolve(newFile);
 
-            YamlConfiguration yamlNewFile = YamlConfiguration.loadConfiguration(nFile.toFile());
+            YamlConfiguration yamlNewFile = null;
+
+            try {
+                yamlNewFile = YamlConfiguration.loadConfiguration(nFile.toFile());
+            } catch (IOException exception) {
+                exception.printStackTrace();
+            }
 
             CrazyLogger.info("Starting the config migration process...");
             CrazyLogger.info("Found old config value (" + oldValue + ")");
@@ -42,6 +50,8 @@ public class PluginMigrationService extends PlainMigrationService {
                     exception.printStackTrace();
                 }
             }
+
+            if (yamlNewFile == null) return false;
 
             for (String child : reader.getChildKeys(oldValue)) {
                 if (cascade) {
