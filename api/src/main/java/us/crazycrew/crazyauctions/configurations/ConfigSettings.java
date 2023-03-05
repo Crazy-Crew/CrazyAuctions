@@ -42,7 +42,7 @@ public class ConfigSettings implements SettingsHolder {
                 ""
         };
 
-        conf.setComment("settings", header);
+        conf.setComment("misc", header);
     }
 
     @Comment("Allow damage items to be auctioned off.")

@@ -8,6 +8,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import us.crazycrew.crazyauctions.CrazyAuctions;
 import us.crazycrew.crazyauctions.configurations.ConfigSettings;
+import us.crazycrew.crazyauctions.configurations.LocaleSettings;
 import us.crazycrew.crazyauctions.configurations.PluginSettings;
 import us.crazycrew.crazyauctions.configurations.migrations.PluginMigrationService;
 import us.crazycrew.crazycore.CrazyLogger;
@@ -34,6 +35,7 @@ public class AuctionsStarter implements PluginBootstrap {
 
     private static SettingsManager pluginConfig;
     private static SettingsManager config;
+    private static SettingsManager locale;
 
     @Override
     public void bootstrap(@NotNull PluginProviderContext context) {
@@ -47,6 +49,11 @@ public class AuctionsStarter implements PluginBootstrap {
         config = SettingsManagerBuilder
                 .withYamlFile(new File(context.getDataDirectory().toFile(), "config.yml"))
                 .configurationData(ConfigSettings.class)
+                .create();
+
+        locale = SettingsManagerBuilder
+                .withYamlFile(new File(context.getDataDirectory().toFile() + "/locale/", pluginConfig.getProperty(PluginSettings.LOCALE_FILE)))
+                .configurationData(LocaleSettings.class)
                 .create();
     }
 
@@ -76,5 +83,9 @@ public class AuctionsStarter implements PluginBootstrap {
 
     public static SettingsManager getConfig() {
         return config;
+    }
+
+    public static SettingsManager getLocale() {
+        return locale;
     }
 }

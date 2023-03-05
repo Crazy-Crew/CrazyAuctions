@@ -2,6 +2,9 @@ package us.crazycrew.crazyauctions.utils.misc;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
+import us.crazycrew.crazyauctions.api.interfaces.Universal;
+import us.crazycrew.crazyauctions.configurations.PluginSettings;
+import us.crazycrew.crazyauctions.loader.AuctionsStarter;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -12,11 +15,12 @@ import java.util.regex.Pattern;
  *
  * Created: 2/18/2023
  * Time: Unknown
- * Last Edited: 2/28/2023 @ 3:04 AM
+ * Last Edited: 3/4/2023 @ 11:15 PM
  *
  * Description: Color utilities.
  */
-public class ColorUtils {
+public class ColorUtils implements Universal {
+
     private static final Pattern HEX_PATTERN = Pattern.compile("#[a-fA-F\\d]{6}");
 
     public static String color(String message) {
@@ -70,11 +74,7 @@ public class ColorUtils {
         return ChatColor.stripColor(msg);
     }
 
-    public static String getPrefix(String string) {
-        return "";
-    }
-
     public static String getPrefix() {
-        return getPrefix("");
+        return AuctionsStarter.getPluginConfig().getProperty(PluginSettings.COMMAND_PREFIX);
     }
 }
