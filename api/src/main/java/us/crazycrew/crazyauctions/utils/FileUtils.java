@@ -25,14 +25,14 @@ public class FileUtils {
     public static void extract(String input, Path output, boolean replace, boolean verbose) {
         URL directory = FileUtils.class.getResource(input);
 
-        if (directory == null) if (verbose) CrazyLogger.debug("<#E0115F>Could not find <#11e092>" + input + " <#E0115F>in the jar.");
+        if (directory == null) if (verbose) CrazyLogger.debug("Could not find " + input + " in the jar.");
 
         assert directory != null;
         if (!directory.getProtocol().equals("jar")) if (verbose) CrazyLogger.debug("Failed because the protocol does not equal .jar!");
 
         ZipFile jar;
         try {
-            if (verbose) CrazyLogger.debug("<#E0115F>Starting to extract files from <#11e092>" + input + " <#E0115F>directory in the jar.");
+            if (verbose) CrazyLogger.debug("Starting to extract files from <#11e092>" + input + " directory in the jar.");
 
             jar = ((JarURLConnection) directory.openConnection()).getJarFile();
         } catch (Exception e) {
@@ -55,7 +55,7 @@ public class FileUtils {
 
             if (entry.isDirectory()) {
                 if (exists) {
-                    if (verbose) CrazyLogger.debug("<#E0115F>File already exists.");
+                    if (verbose) CrazyLogger.debug("File already exists.");
 
                     return;
                 }
@@ -63,7 +63,7 @@ public class FileUtils {
                 try {
                     Files.createDirectories(outFile);
 
-                    if (verbose) CrazyLogger.debug("<#E0115F>Directories have been created.");
+                    if (verbose) CrazyLogger.debug("Directories have been created.");
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
