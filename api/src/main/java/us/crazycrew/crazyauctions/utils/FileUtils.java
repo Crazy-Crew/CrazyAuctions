@@ -22,18 +22,17 @@ public class FileUtils {
      * @param output the output wherever you use this.
      * @param replace if we should replace or not.
      */
-    public static void extract(String input, Path output, boolean replace) {
+    public static void extract(String input, Path output, boolean replace, boolean verbose) {
         URL directory = FileUtils.class.getResource(input);
 
-        if (directory == null) CrazyLogger.debug("<#E0115F>Could not find <#11e092>" + input + " <#E0115F>in the jar.");
+        if (directory == null) if (verbose) CrazyLogger.debug("<#E0115F>Could not find <#11e092>" + input + " <#E0115F>in the jar.");
 
         assert directory != null;
-        if (!directory.getProtocol().equals("jar"))
-            CrazyLogger.debug("<#E0115F>Failed because the protocol does not equal .jar!");
+        if (!directory.getProtocol().equals("jar")) if (verbose) CrazyLogger.debug("Failed because the protocol does not equal .jar!");
 
         ZipFile jar;
         try {
-            CrazyLogger.debug("<#E0115F>Starting to extract files from <#11e092>" + input + " <#E0115F>directory in the jar.");
+            if (verbose) CrazyLogger.debug("<#E0115F>Starting to extract files from <#11e092>" + input + " <#E0115F>directory in the jar.");
 
             jar = ((JarURLConnection) directory.openConnection()).getJarFile();
         } catch (Exception e) {
@@ -56,7 +55,7 @@ public class FileUtils {
 
             if (entry.isDirectory()) {
                 if (exists) {
-                    CrazyLogger.debug("<#E0115F>File already exists.");
+                    if (verbose) CrazyLogger.debug("<#E0115F>File already exists.");
 
                     return;
                 }
@@ -64,7 +63,7 @@ public class FileUtils {
                 try {
                     Files.createDirectories(outFile);
 
-                    CrazyLogger.debug("<#E0115F>Directories have been created.");
+                    if (verbose) CrazyLogger.debug("<#E0115F>Directories have been created.");
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

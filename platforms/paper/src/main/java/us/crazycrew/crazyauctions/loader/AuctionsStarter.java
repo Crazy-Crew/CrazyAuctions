@@ -11,6 +11,7 @@ import us.crazycrew.crazyauctions.configurations.ConfigSettings;
 import us.crazycrew.crazyauctions.configurations.LocaleSettings;
 import us.crazycrew.crazyauctions.configurations.PluginSettings;
 import us.crazycrew.crazyauctions.configurations.migrations.PluginMigrationService;
+import us.crazycrew.crazyauctions.utils.FileUtils;
 import us.crazycrew.crazycore.CrazyLogger;
 import us.crazycrew.crazycore.paper.PaperConsole;
 import us.crazycrew.crazycore.paper.PaperCore;
@@ -50,11 +51,6 @@ public class AuctionsStarter implements PluginBootstrap {
                 .withYamlFile(new File(context.getDataDirectory().toFile(), "config.yml"))
                 .configurationData(ConfigSettings.class)
                 .create();
-
-        locale = SettingsManagerBuilder
-                .withYamlFile(new File(context.getDataDirectory().toFile() + "/locale/", pluginConfig.getProperty(PluginSettings.LOCALE_FILE)))
-                .configurationData(LocaleSettings.class)
-                .create();
     }
 
     @Override
@@ -73,6 +69,13 @@ public class AuctionsStarter implements PluginBootstrap {
 
         // Add the logger manager.
         LogManager.getLogManager().addLogger(CrazyLogger.getLogger());
+
+        FileUtils.extract("/locale", context.getDataDirectory(), false, getPluginConfig().getProperty(PluginSettings.VERBOSE_LOGGING));
+
+        locale = SettingsManagerBuilder
+                .withYamlFile(new File(context.getDataDirectory().toFile() + "/locale/", pluginConfig.getProperty(PluginSettings.LOCALE_FILE)))
+                .configurationData(LocaleSettings.class)
+                .create();
 
         return new CrazyAuctions(this.paperCore);
     }

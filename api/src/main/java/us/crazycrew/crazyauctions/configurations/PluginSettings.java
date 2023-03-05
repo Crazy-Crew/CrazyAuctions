@@ -58,7 +58,7 @@ public class PluginSettings implements SettingsHolder {
             "Submit your finalized config using https://bin.bloom.host/ and send it to us in https://discord.gg/crazycrew",
             ""
     })
-    public static final Property<String> LOCALE_FILE = newProperty("settings.locale-file", "en-US");
+    public static final Property<String> LOCALE_FILE = newProperty("settings.locale-file", "en-US.yml");
 
     @Comment("Whether you want to have verbose logging enabled or not.")
     public static final Property<Boolean> VERBOSE_LOGGING = newProperty("settings.verbose-logging", true);
