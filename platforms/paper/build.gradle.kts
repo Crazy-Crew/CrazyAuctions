@@ -21,7 +21,7 @@ dependencies {
     compileOnly(libs.crazycore.paper)
 
     compileOnly(libs.triumph.gui)
-//    implementation(libs.triumph.cmds)
+    compileOnly(libs.triumph.cmds)
 
     compileOnly(libs.config.me)
 
