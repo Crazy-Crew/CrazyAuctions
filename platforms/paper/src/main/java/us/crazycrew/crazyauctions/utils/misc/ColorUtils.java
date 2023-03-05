@@ -1,4 +1,4 @@
-package us.crazycrew.crazyauctions.utils.utilities.misc;
+package us.crazycrew.crazyauctions.utils.misc;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Color;

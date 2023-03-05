@@ -1,4 +1,4 @@
-package us.crazycrew.crazyauctions.utils.utilities.misc;
+package us.crazycrew.crazyauctions.utils.misc;
 
 /**
  * @author RyderBelserion
