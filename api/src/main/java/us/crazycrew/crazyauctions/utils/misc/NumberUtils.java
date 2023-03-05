@@ -12,6 +12,13 @@ package us.crazycrew.crazyauctions.utils.misc;
  */
 public class NumberUtils {
 
+    /**
+     *
+     * Checks if a value is an integer.
+     *
+     * @param value string to parse
+     * @return true if yes otherwise false
+     */
     public static boolean isInt(String value) {
         try {
             Integer.parseInt(value);
