@@ -1,4 +1,4 @@
-package us.crazycrew.crazyauctions;
+package us.crazycrew.crazyauctions.loader;
 
 import ch.jalu.configme.SettingsManager;
 import ch.jalu.configme.SettingsManagerBuilder;
@@ -6,8 +6,10 @@ import io.papermc.paper.plugin.bootstrap.PluginBootstrap;
 import io.papermc.paper.plugin.bootstrap.PluginProviderContext;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
-import us.crazycrew.crazyauctions.configs.PluginSettings;
-import us.crazycrew.crazyauctions.configs.migrations.PluginMigrationService;
+import us.crazycrew.crazyauctions.CrazyAuctions;
+import us.crazycrew.crazyauctions.configurations.ConfigSettings;
+import us.crazycrew.crazyauctions.configurations.PluginSettings;
+import us.crazycrew.crazyauctions.configurations.migrations.PluginMigrationService;
 import us.crazycrew.crazycore.CrazyLogger;
 import us.crazycrew.crazycore.paper.PaperConsole;
 import us.crazycrew.crazycore.paper.PaperCore;
@@ -21,25 +23,31 @@ import java.util.logging.LogManager;
  *
  * Created: 2/28/2023
  * Time: 1:25 AM
- * Last Edited: 2/28/2023 @ 3:13 AM
+ * Last Edited: 3/4/2023 @ 10:23 PM
  *
  * Description: The starter class that thanks to paper is run directly at server startup and allows us to pass variables through the plugin class.
  */
 @SuppressWarnings("UnstableApiUsage")
-public class Starter implements PluginBootstrap {
+public class AuctionsStarter implements PluginBootstrap {
 
     private PaperCore paperCore;
 
-    private SettingsManager pluginConfig;
+    private static SettingsManager pluginConfig;
+    private static SettingsManager config;
 
     @Override
     public void bootstrap(@NotNull PluginProviderContext context) {
         this.paperCore = new PaperCore(context.getConfiguration().getName(), context.getDataDirectory());
 
-        this.pluginConfig = SettingsManagerBuilder
+        pluginConfig = SettingsManagerBuilder
                 .withYamlFile(new File(context.getDataDirectory().toFile(), "plugin-settings.yml"))
                 .configurationData(PluginSettings.class)
                 .migrationService(new PluginMigrationService()).create();
+
+        config = SettingsManagerBuilder
+                .withYamlFile(new File(context.getDataDirectory().toFile(), "config.yml"))
+                .configurationData(ConfigSettings.class)
+                .create();
     }
 
     @Override
@@ -62,7 +70,11 @@ public class Starter implements PluginBootstrap {
         return new CrazyAuctions(this.paperCore);
     }
 
-    public SettingsManager getPluginConfig() {
-        return this.pluginConfig;
+    public static SettingsManager getPluginConfig() {
+        return pluginConfig;
+    }
+
+    public static SettingsManager getConfig() {
+        return config;
     }
 }

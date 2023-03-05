@@ -5,8 +5,8 @@ version: ${version}
 api-version: '1.19'
 description: ${description}
 
-bootstrapper: ${group}.Starter
-loader: ${group}.CrazyLoader
+bootstrapper: ${group}.loader.AuctionsStarter
+loader: ${group}.loader.AuctionsLoader
 
 dependencies:
   - name: CMI
