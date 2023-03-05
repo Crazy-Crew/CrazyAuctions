@@ -37,6 +37,7 @@ public class AuctionsLoader implements PluginLoader {
 
         resolver.addRepository(new RemoteRepository.Builder("maven2", "default", "https://repo1.maven.org/maven2").build());
         resolver.addRepository(new RemoteRepository.Builder("crazycrew-libraries", "default", "https://repo.crazycrew.us/libraries").build());
+        resolver.addRepository(new RemoteRepository.Builder("triumphteam-snapshots", "default", "https://repo.triumphteam.dev/snapshots/").build());
         resolver.addRepository(new RemoteRepository.Builder("jitpack", "default", "https://jitpack.io").build());
 
         classpathBuilder.addLibrary(resolver);
