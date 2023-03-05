@@ -1,9 +1,9 @@
-package us.crazycrew.crazyauctions.configs;
+package us.crazycrew.crazyauctions.storage;
 
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import us.crazycrew.crazyauctions.api.interfaces.Universal;
-import us.crazycrew.crazyauctions.configs.data.PlayerData;
+import us.crazycrew.crazyauctions.storage.data.PlayerData;
 import us.crazycrew.crazyauctions.data.UserCache;
 import java.nio.file.Path;
 import java.util.UUID;

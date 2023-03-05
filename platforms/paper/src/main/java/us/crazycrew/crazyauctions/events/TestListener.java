@@ -5,7 +5,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import us.crazycrew.crazyauctions.api.interfaces.Universal;
-import us.crazycrew.crazyauctions.configs.data.PlayerData;
+import us.crazycrew.crazyauctions.storage.data.PlayerData;
 
 public class TestListener implements Listener, Universal {
 

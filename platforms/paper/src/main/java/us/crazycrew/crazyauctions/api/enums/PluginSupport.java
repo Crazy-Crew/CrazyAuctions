@@ -1,7 +1,7 @@
 package us.crazycrew.crazyauctions.api.enums;
 
 import us.crazycrew.crazyauctions.CrazyAuctions;
-import us.crazycrew.crazyauctions.utils.utilities.misc.ColorUtils;
+import us.crazycrew.crazyauctions.utils.misc.ColorUtils;
 import org.bukkit.plugin.Plugin;
 import java.util.HashMap;
 import java.util.List;

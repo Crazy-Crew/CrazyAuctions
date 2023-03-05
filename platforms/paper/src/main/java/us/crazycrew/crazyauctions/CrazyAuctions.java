@@ -2,7 +2,7 @@ package us.crazycrew.crazyauctions;
 
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
-import us.crazycrew.crazyauctions.configs.StorageManager;
+import us.crazycrew.crazyauctions.storage.StorageManager;
 import us.crazycrew.crazycore.CrazyLogger;
 import us.crazycrew.crazycore.paper.PaperCore;
 import java.io.File;

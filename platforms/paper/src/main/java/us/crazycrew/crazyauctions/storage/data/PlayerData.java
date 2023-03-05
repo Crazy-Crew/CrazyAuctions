@@ -1,4 +1,4 @@
-package us.crazycrew.crazyauctions.configs.data;
+package us.crazycrew.crazyauctions.storage.data;
 
 import com.google.gson.annotations.Expose;
 import us.crazycrew.crazyauctions.api.interfaces.Universal;

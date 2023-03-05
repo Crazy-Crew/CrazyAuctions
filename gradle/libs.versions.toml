@@ -20,14 +20,15 @@ adventure_api = { module = "net.kyori:adventure-api", version.ref = "adventure" 
 adventure_text = { module = "net.kyori:adventure-text-minimessage", version.ref = "adventure" }
 
 # CrazyCore
-crazycore-paper = { module = "us.crazycrew.crazycore:crazycore-paper", version.ref = "crazycore" }
-crazycore = { module = "us.crazycrew.crazycore:crazycore-core", version.ref = "crazycore" }
+crazycore_api = { module = "us.crazycrew.crazycore:crazycore-api", version.ref = "crazycore" }
+crazycore_paper = { module = "us.crazycrew.crazycore:crazycore-paper", version.ref = "crazycore" }
 
 # Triumph Team
 triumph_cmds = { module = "dev.triumphteam:triumph-cmd-bukkit", version = "2.0.0-SNAPSHOT" }
 triumph_gui = { module = "dev.triumphteam:triumph-gui", version = "3.1.2" }
 
 # Config
+yaml = { module = "me.carleslc.Simple-YAML:Simple-Yaml", version = "1.8.3" }
 config_me = { module = "ch.jalu:configme", version = "1.3.0" }
 
 # Misc
