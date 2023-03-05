@@ -1,7 +1,7 @@
-package us.crazycrew.crazyauctions.api.auctionhouse.objects.auctiontype;
+package us.crazycrew.crazyauctions.api.manager.objects.auctiontype;
 
-import us.crazycrew.crazyauctions.api.auctionhouse.enums.AuctionType;
-import us.crazycrew.crazyauctions.api.auctionhouse.interfaces.AuctionItem;
+import us.crazycrew.crazyauctions.api.manager.enums.AuctionType;
+import us.crazycrew.crazyauctions.api.manager.interfaces.AuctionItem;
 import org.bukkit.inventory.ItemStack;
 import java.util.UUID;
 

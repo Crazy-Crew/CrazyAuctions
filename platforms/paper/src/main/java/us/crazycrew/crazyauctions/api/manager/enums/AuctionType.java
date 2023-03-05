@@ -1,4 +1,4 @@
-package us.crazycrew.crazyauctions.api.auctionhouse.enums;
+package us.crazycrew.crazyauctions.api.manager.enums;
 
 /**
  * @author RyderBelserion

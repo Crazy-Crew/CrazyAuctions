@@ -1,4 +1,4 @@
-package us.crazycrew.crazyauctions.api.auctionhouse.objects;
+package us.crazycrew.crazyauctions.api.manager.objects;
 
 import us.crazycrew.crazyauctions.utils.ItemUtils;
 import org.bukkit.configuration.file.FileConfiguration;

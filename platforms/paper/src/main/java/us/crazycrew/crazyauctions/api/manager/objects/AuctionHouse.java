@@ -1,9 +1,9 @@
-package us.crazycrew.crazyauctions.api.auctionhouse.objects;
+package us.crazycrew.crazyauctions.api.manager.objects;
 
-import us.crazycrew.crazyauctions.api.auctionhouse.enums.AuctionType;
-import us.crazycrew.crazyauctions.api.auctionhouse.interfaces.AuctionItem;
-import us.crazycrew.crazyauctions.api.auctionhouse.objects.auctiontype.BiddingAuction;
-import us.crazycrew.crazyauctions.api.auctionhouse.objects.auctiontype.SellingAuction;
+import us.crazycrew.crazyauctions.api.manager.enums.AuctionType;
+import us.crazycrew.crazyauctions.api.manager.interfaces.AuctionItem;
+import us.crazycrew.crazyauctions.api.manager.objects.auctiontype.BiddingAuction;
+import us.crazycrew.crazyauctions.api.manager.objects.auctiontype.SellingAuction;
 import us.crazycrew.crazyauctions.api.events.AuctionAddEvent;
 import us.crazycrew.crazyauctions.utils.ItemUtils;
 import org.bukkit.Bukkit;

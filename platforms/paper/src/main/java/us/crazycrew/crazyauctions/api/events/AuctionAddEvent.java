@@ -1,7 +1,7 @@
 package us.crazycrew.crazyauctions.api.events;
 
-import us.crazycrew.crazyauctions.api.auctionhouse.interfaces.AuctionItem;
-import us.crazycrew.crazyauctions.api.auctionhouse.objects.AuctionHouse;
+import us.crazycrew.crazyauctions.api.manager.interfaces.AuctionItem;
+import us.crazycrew.crazyauctions.api.manager.objects.AuctionHouse;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
