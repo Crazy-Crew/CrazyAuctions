@@ -3,6 +3,7 @@ package com.badbones69.crazyauctions;
 import com.badbones69.crazyauctions.api.*;
 import com.badbones69.crazyauctions.api.FileManager.Files;
 import com.badbones69.crazyauctions.api.events.AuctionListEvent;
+import com.badbones69.crazyauctions.controllers.DupePatch;
 import com.badbones69.crazyauctions.controllers.GUI;
 import com.badbones69.crazyauctions.controllers.Metrics;
 import com.badbones69.crazyauctions.currency.Vault;
@@ -35,6 +36,7 @@ public class Main extends JavaPlugin implements Listener {
         crazyAuctions.loadCrazyAuctions();
         Bukkit.getServer().getPluginManager().registerEvents(this, this);
         Bukkit.getServer().getPluginManager().registerEvents(new GUI(), this);
+        Bukkit.getServer().getPluginManager().registerEvents(new DupePatch(), this);
         Methods.updateAuction();
         startCheck();
         
