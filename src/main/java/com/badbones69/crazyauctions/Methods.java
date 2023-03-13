@@ -1,6 +1,5 @@
 package com.badbones69.crazyauctions;
 
-import com.badbones69.crazyauctions.api.FileManager;
 import com.badbones69.crazyauctions.api.FileManager.Files;
 import com.badbones69.crazyauctions.api.Messages;
 import com.badbones69.crazyauctions.api.Version;
@@ -14,17 +13,12 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.plugin.Plugin;
-
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Methods {
-    
-    public static Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin("CrazyAuctions");
-    private static FileManager fileManager = FileManager.getInstance();
-    
+
     public final static Pattern HEX_PATTERN = Pattern.compile("#[a-fA-F0-9]{6}");
     
     public static String color(String message) {
