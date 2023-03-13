@@ -5,8 +5,8 @@ import com.badbones69.crazyauctions.api.FileManager.Files;
 import com.badbones69.crazyauctions.api.events.AuctionListEvent;
 import com.badbones69.crazyauctions.controllers.DupePatch;
 import com.badbones69.crazyauctions.controllers.GUI;
-import com.badbones69.crazyauctions.controllers.Metrics;
 import com.badbones69.crazyauctions.currency.Vault;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -458,13 +458,13 @@ public class Main extends JavaPlugin implements Listener {
     
     private boolean allowBook(ItemStack item) {
         if (item != null && item.hasItemMeta() && item.getItemMeta() instanceof BookMeta) {
-            System.out.println("[Crazy Auctions] Checking " + item.getType() + " for illegal unicode.");
+            Bukkit.getLogger().info("Checking " + item.getType() + " for illegal unicode.");
             try {
                 Files.TEST_FILE.getFile().set("Test", item);
                 Files.TEST_FILE.saveFile();
-                System.out.println("[Crazy Auctions] " + item.getType() + " has passed unicode checks.");
+                Bukkit.getLogger().info("" + item.getType() + " has passed unicode checks.");
             } catch (YAMLException e) {
-                System.out.println("[Crazy Auctions] " + item.getType() + " has failed unicode checks and has been denied.");
+                Bukkit.getLogger().info("" + item.getType() + " has failed unicode checks and has been denied.");
                 return false;
             }
             return ((BookMeta) item.getItemMeta()).getPages().stream().mapToInt(String :: length).sum() < 2000;
