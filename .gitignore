@@ -8,3 +8,5 @@ jars
 
 platforms/paper/.gradle
 platforms/paper/build
+
+build
