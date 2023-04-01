@@ -15,13 +15,6 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
- * @author RyderBelserion
- * @author BadBones69
- *
- * Created: 2/19/2023
- * Time: Unknown
- * Last Edited: 2/28/2023 @ 3:04 AM
- *
  * Description: Creates the main auction house menu
  */
 public class AuctionHouse {

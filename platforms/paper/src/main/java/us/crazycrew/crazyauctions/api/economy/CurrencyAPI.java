@@ -6,13 +6,6 @@ import org.bukkit.entity.Player;
 import java.util.UUID;
 
 /**
- * @author RyderBelserion
- * @author BadBones69
- *
- * Created: 2/18/2023
- * Time: Unknown
- * Last Edited: 2/28/2023 @ 3:04 AM
- *
  * Description: Defines what currency to use.
  */
 public class CurrencyAPI {

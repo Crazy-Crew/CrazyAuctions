@@ -4,13 +4,6 @@ import ch.jalu.configme.SettingsHolder;
 import ch.jalu.configme.configurationdata.CommentsConfiguration;
 
 /**
- * @author RyderBelserion
- * @author BadBones69
- *
- * Date: 3/4/2023
- * Time: Unknown
- * Last Edited: 3/4/2023 @ 10:23 PM
- *
  * Description: The locale file.
  */
 public class LocaleSettings implements SettingsHolder {

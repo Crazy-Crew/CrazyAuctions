@@ -10,13 +10,6 @@ import java.util.EnumSet;
 import java.util.HashMap;
 
 /**
- * @author RyderBelserion
- * @author BadBones69
- *
- * Date: 3/4/2023
- * Time: 10:22 PM
- * Last Edited: 3/4/2023 @ 10:22 PM
- *
  * Description: The permissions
  */
 public enum Permissions implements Universal {

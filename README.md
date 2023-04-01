@@ -16,7 +16,7 @@
 ![Purpur](https://cdn.jsdelivr.net/gh/intergrav/devins-badges/assets/compact/supported/purpur_vector.svg)
 
   <p align="center">
-    A crates plugin that offers quality crates with ease!
+    Auction off your items in style!
     <br />
     <a href="https://github.com/Crazy-Crew/CrazyAuctions/wiki"><strong>Explore the docs »</strong></a>
     <br />
@@ -25,7 +25,7 @@
     ·
     <a href="https://github.com/Crazy-Crew/CrazyAuctions/discussions/categories/feature-requests">Request Feature</a>
     ·
-    <a href="https://discord.gg/crazycrew">Get Support</a>
+    <a href="https://discord.gg/badbones-s-live-chat-182615261403283459">Get Support</a>
   </p>
 </div>
 

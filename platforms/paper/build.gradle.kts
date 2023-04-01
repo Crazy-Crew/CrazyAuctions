@@ -4,6 +4,7 @@ plugins {
     id("crazyauctions.paper-plugin")
 
     alias(settings.plugins.minotaur)
+    alias(settings.plugins.run.paper)
 }
 
 repositories {
@@ -15,8 +16,6 @@ repositories {
 
 dependencies {
     api(project(":crazyauctions-api"))
-
-    compileOnly(libs.paper)
 
     compileOnly(libs.crazycore.paper)
 
@@ -30,35 +29,32 @@ dependencies {
     }
 }
 
-val projectDescription = settings.versions.projectDescription.get()
-val projectGithub = settings.versions.projectGithub.get()
-val projectGroup = settings.versions.projectGroup.get()
-val projectName = settings.versions.projectName.get()
-val projectExt = settings.versions.projectExtension.get()
+val github = settings.versions.github.get()
+val extension = settings.versions.extension.get()
 
-val isBeta = settings.versions.projectBeta.get().toBoolean()
+val beta = settings.versions.beta.get().toBoolean()
 
-val projectVersion = settings.versions.projectVersion.get()
-
-val finalVersion = if (isBeta) "$projectVersion+Beta" else projectVersion
-
-val type = if (isBeta) "beta" else "release"
+val type = if (beta) "beta" else "release"
 
 tasks {
     shadowJar {
-        archiveFileName.set("${projectName}+Paper+$finalVersion.jar")
+        fun reloc(pkg: String) = relocate(pkg, "${rootProject.group}.dependency.$pkg")
 
-        listOf(
-            "org.bstats"
-        ).forEach { relocate(it, "$projectGroup.library.$it") }
+        reloc("de.tr7zw.changeme.nbtapi")
+        reloc("org.bstats")
+        reloc("dev.triumphteam.cmd")
+    }
+
+    runServer {
+        minecraftVersion("1.19.4")
     }
 
     modrinth {
         token.set(System.getenv("MODRINTH_TOKEN"))
-        projectId.set(projectName.lowercase())
+        projectId.set(rootProject.name.lowercase())
 
-        versionName.set("$projectName $finalVersion")
-        versionNumber.set(finalVersion)
+        versionName.set("${rootProject.name} ${rootProject.version}")
+        versionNumber.set(rootProject.version.toString())
 
         versionType.set(type)
 
@@ -66,17 +62,26 @@ tasks {
 
         autoAddDependsOn.set(true)
 
-        gameVersions.addAll(listOf("1.19, 1.19.1, 1.19.2, 1.19.3"))
+        gameVersions.addAll(
+            listOf(
+                "1.19",
+                "1.19.1",
+                "1.19.2",
+                "1.19.3",
+                "1.19.4"
+            )
+        )
 
         loaders.addAll(listOf("paper", "purpur"))
 
-        //<h3>The first release for CrazyAuctions on Modrinth! 🎉🎉🎉🎉🎉<h3><br> If we want a header.
+        //<h3>The first release for CrazyCrates on Modrinth! 🎉🎉🎉🎉🎉<h3><br> If we want a header.
         changelog.set(
             """
                 <h4>Changes:</h4>
-                 <p>N/A</p>
+                 <p>Added 1.19.4 support</p>
+                 <p>Removed 1.18.2 and below support</p>
                 <h4>Under the hood changes</h4>
-                 <p>N/A</p>
+                 <p>Simplified build script</p>
                 <h4>Bug Fixes:</h4>
                  <p>N/A</p>
             """.trimIndent()
@@ -84,12 +89,13 @@ tasks {
     }
 
     processResources {
-        filesMatching("paper-plugin.yml") {
+        filesMatching("plugin.yml") {
             expand(
-                "name" to projectName,
-                "group" to projectGroup,
-                "version" to finalVersion,
-                "description" to projectDescription
+                "name" to rootProject.name,
+                "group" to rootProject.group,
+                "version" to rootProject.version,
+                "description" to rootProject.description,
+                "website" to "https://modrinth.com/$extension/${rootProject.name.lowercase()}"
             )
         }
     }
@@ -97,24 +103,18 @@ tasks {
 
 publishing {
     repositories {
-        val repo = if (isBeta) "beta" else "releases"
+        val repo = if (beta) "beta" else "releases"
         maven("https://repo.crazycrew.us/$repo") {
             name = "crazycrew"
-            // Used for locally publishing.
-            // credentials(PasswordCredentials::class)
-
-            credentials {
-                username = System.getenv("REPOSITORY_USERNAME")
-                password = System.getenv("REPOSITORY_PASSWORD")
-            }
+            credentials(PasswordCredentials::class)
         }
     }
 
     publications {
         create<MavenPublication>("maven") {
-            groupId = projectGroup
-            artifactId = "${projectName.lowercase()}-${projectDir.name}"
-            version = finalVersion
+            groupId = rootProject.group.toString()
+            artifactId = "${rootProject.name.lowercase()}-api"
+            version = rootProject.version.toString()
 
             from(components["java"])
         }

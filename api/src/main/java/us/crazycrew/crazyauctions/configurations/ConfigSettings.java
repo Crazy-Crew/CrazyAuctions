@@ -8,13 +8,6 @@ import ch.jalu.configme.properties.Property;
 import static ch.jalu.configme.properties.PropertyInitializer.newProperty;
 
 /**
- * @author RyderBelserion
- * @author BadBones69
- *
- * Date: 3/4/2023
- * Time: 10:22 PM
- * Last Edited: 3/4/2023 @ 10:22 PM
- *
  * Description: The config.yml options.
  */
 public class ConfigSettings implements SettingsHolder {

@@ -7,13 +7,6 @@ import ch.jalu.configme.properties.Property;
 import static ch.jalu.configme.properties.PropertyInitializer.newProperty;
 
 /**
- * @author RyderBelserion
- * @author BadBones69
- *
- * Date: 2/28/2023
- * Time: Unknown
- * Last Edited: 3/4/2023 @ 10:23 PM
- *
  * Description: The plugin-settings.yml options.
  */
 public class PluginSettings implements SettingsHolder {

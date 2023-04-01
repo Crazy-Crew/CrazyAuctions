@@ -1,19 +1,23 @@
 [versions]
 
 # Minecraft
-paper = "1.19.3-R0.1-SNAPSHOT"
-
-# Adventure
-adventure = "4.12.0"
+paper = "1.19.4-R0.1-SNAPSHOT"
 
 # CrazyCore
-crazycore = "1.1.0.0"
+crazycore = "618b89a"
+
+# Adventure
+adventure = "4.13.0"
+
+ktor = "2.2.4"
+kotlin = "1.8.20-RC"
 
 [libraries]
 
 # Minecraft
-paper = { module = "io.papermc.paper:paper-api", version.ref = "paper" }
-spigot = { module = "org.spigotmc:spigot-api", version.ref = "paper" }
+papermc = { module = "io.papermc.paper:paper-api", version.ref = "paper" }
+paperlib = { module = "io.papermc:paperlib", version = "1.0.8-SNAPSHOT" }
+paperweight = { module = "io.papermc.paperweight:paperweight-userdev", version = "1.5.3" }
 
 # Adventure
 adventure_api = { module = "net.kyori:adventure-api", version.ref = "adventure" }
@@ -36,11 +40,25 @@ bstats_bukkit = { module = "org.bstats:bstats-bukkit", version = "3.0.0" }
 vault_api = { module = "com.github.MilkBowl:VaultAPI", version = "1.7" }
 
 # Holograms
-holographic_displays = { module = "me.filoghost.holographicdisplays:holographicdisplays-api", version = "3.0.0" }
-decent_holograms = { module = "com.github.decentsoftware-eu:decentholograms", version = "2.7.8" }
+holographic_displays = { module = "me.filoghost.holographicdisplays:holographicdisplays-api", version = "3.0.1" }
+decent_holograms = { module = "com.github.decentsoftware-eu:decentholograms", version = "2.8.1" }
 
-cmi_api = { module = "com.Zrips.CMI:CMI-API", version = "9.2.6.1" }
-cmi_lib = { module = "net.Zrips.CMILib:CMI-Lib", version = "1.2.4.1" }
+cmi_api = { module = "com.Zrips.CMI:CMI-API", version = "9.3.1.5" }
+cmi_lib = { module = "net.zrips.CMILib:cmi-lib-api", version = "1.2.5.3" }
 
 # Placeholders
 placeholder_api = { module = "me.clip:placeholderapi", version = "2.11.2" }
+
+# Kotlin
+ktor-core = { module = "io.ktor:ktor-client-core-jvm", version.ref = "ktor" }
+ktor-cio = { module = "io.ktor:ktor-client-cio-jvm", version.ref = "ktor" }
+ktor-content = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
+ktor-gson = { module = "io.ktor:ktor-serialization-gson", version.ref = "ktor" }
+
+kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+kotlin-serialization = { module = "org.jetbrains.kotlin:kotlin-serialization", version.ref = "kotlin"}
+kotlin-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version = "1.6.4" }
+
+shadow = { module = "com.github.johnrengelman:shadow", version = "8.1.0" }
+
+turtle = { module = "com.lordcodes.turtle:turtle", version = "0.8.0" }

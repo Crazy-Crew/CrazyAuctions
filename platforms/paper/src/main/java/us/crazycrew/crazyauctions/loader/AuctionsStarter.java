@@ -11,22 +11,12 @@ import us.crazycrew.crazyauctions.configurations.ConfigSettings;
 import us.crazycrew.crazyauctions.configurations.LocaleSettings;
 import us.crazycrew.crazyauctions.configurations.PluginSettings;
 import us.crazycrew.crazyauctions.configurations.migrations.PluginMigrationService;
-import us.crazycrew.crazyauctions.utils.FileUtils;
-import us.crazycrew.crazycore.CrazyLogger;
-import us.crazycrew.crazycore.paper.PaperConsole;
 import us.crazycrew.crazycore.paper.PaperCore;
-import us.crazycrew.crazycore.paper.player.PaperPlayerRegistry;
+import us.crazycrew.crazycore.utils.FileUtils;
+
 import java.io.File;
-import java.util.logging.LogManager;
 
 /**
- * @author RyderBelserion
- * @author BadBones69
- *
- * Created: 2/28/2023
- * Time: 1:25 AM
- * Last Edited: 3/4/2023 @ 10:23 PM
- *
  * Description: The starter class that thanks to paper is run directly at server startup and allows us to pass variables through the plugin class.
  */
 @SuppressWarnings("UnstableApiUsage")
@@ -40,7 +30,7 @@ public class AuctionsStarter implements PluginBootstrap {
 
     @Override
     public void bootstrap(@NotNull PluginProviderContext context) {
-        this.paperCore = new PaperCore(context.getConfiguration().getName(), context.getDataDirectory());
+        this.paperCore = new PaperCore(context.getDataDirectory());
 
         pluginConfig = SettingsManagerBuilder
                 .withYamlFile(new File(context.getDataDirectory().toFile(), "plugin-settings.yml"))
@@ -55,22 +45,7 @@ public class AuctionsStarter implements PluginBootstrap {
 
     @Override
     public @NotNull JavaPlugin createPlugin(@NotNull PluginProviderContext context) {
-        // Create the player registry.
-        this.paperCore.setPaperPlayerRegistry(new PaperPlayerRegistry());
-
-        // Create the console instance.
-        this.paperCore.setPaperConsole(new PaperConsole());
-
-        // Set the project prefix.
-        this.paperCore.setProjectPrefix(getPluginConfig().getProperty(PluginSettings.CONSOLE_PREFIX));
-
-        // Set the logger name and create it.
-        CrazyLogger.setName(this.paperCore.getProjectName());
-
-        // Add the logger manager.
-        LogManager.getLogManager().addLogger(CrazyLogger.getLogger());
-
-        FileUtils.extract("/locale", context.getDataDirectory(), false, getPluginConfig().getProperty(PluginSettings.VERBOSE_LOGGING));
+        FileUtils.extract("/locale", context.getDataDirectory(), false);
 
         locale = SettingsManagerBuilder
                 .withYamlFile(new File(context.getDataDirectory().toFile() + "/locale/", pluginConfig.getProperty(PluginSettings.LOCALE_FILE)))

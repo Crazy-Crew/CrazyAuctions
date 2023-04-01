@@ -10,13 +10,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * @author RyderBelserion
- * @author BadBones69
- *
- * Created: 2/18/2023
- * Time: Unknown
- * Last Edited: 3/4/2023 @ 11:15 PM
- *
  * Description: Color utilities.
  */
 public class ColorUtils implements Universal {

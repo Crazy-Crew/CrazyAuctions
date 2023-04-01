@@ -11,13 +11,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.UUID;
 
 /**
- * @author RyderBelserion
- * @author BadBones69
- *
- * Created: 2/18/2023
- * Time: Unknown
- * Last Edited: 2/28/2023 @ 3:04 AM
- *
  * Description: This event is fired when an item is added to an auction house.
  */
 public class AuctionAddEvent extends Event {
