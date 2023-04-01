@@ -1,11 +1,10 @@
 .gradle
 .idea
 
-build
+api/build
+api/.gradle
 
-build-logic/.gradle
-build-logic/build
+jars
 
-core/build
-
-platforms/spigot/build
+platforms/paper/.gradle
+platforms/paper/build
