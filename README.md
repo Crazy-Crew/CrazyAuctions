@@ -1,6 +1,6 @@
 <br />
 
-[![crazyauctions](https://git.crazycrew.us/ryderbelserion/Assets/raw/branch/main/crazycrew/webp/CrazyAuctionsBanner.webp)](https://modrinth.com/plugin/crazyauctions)
+[![crazyauctions]([https://git.crazycrew.us/ryderbelserion/Assets/raw/branch/main/crazycrew/webp/CrazyAuctionsBanner.webp](https://raw.githubusercontent.com/RyderBelserion/Assets/main/crazycrew/webp/CrazyAuctionsBanner.webp))](https://modrinth.com/plugin/crazyauctions)
 
 <div align="center">
 
