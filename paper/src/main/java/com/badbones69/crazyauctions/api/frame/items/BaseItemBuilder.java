@@ -49,7 +49,6 @@ import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-@SuppressWarnings("unchecked")
 public class BaseItemBuilder<Base extends BaseItemBuilder<Base>> {
 
     private final ItemUtils SKULL_CHECKER = new ItemUtils();

@@ -27,25 +27,17 @@ allprojects {
 
             if (this.name == "paper") {
                 dependencies {
-                    compileOnly("de.tr7zw", "item-nbt-api", "2.11.3")
                     compileOnly("org.bstats", "bstats-bukkit", "3.0.2")
 
-                    compileOnly("com.github.MilkBowl", "VaultAPI", "1.7")
+                    compileOnly("org.bstats", "bstats-bukkit", "3.0.2")
+
+                    compileOnly("com.github.MilkBowl", "VaultAPI", "1.7") {
+                        exclude("org.bukkit", "bukkit")
+                    }
                 }
             }
 
-            //if (this.name == "core") {
-            //    dependencies {
-            //compileOnly("net.kyori", "adventure-api", "4.12.0")
-            //compileOnly("net.kyori", "adventure-text-minimessage", "4.12.0")
-
-            //compileOnly("com.google.code.gson", "gson", "2.10.1")
-            //    }
-            //}
-
             dependencies {
-                //compileOnly("net.kyori", "adventure-platform-bukkit", "4.3.0")
-
                 compileOnly("ch.jalu", "configme", "1.3.1")
 
                 compileOnly("com.github.Carleslc.Simple-YAML", "Simple-Yaml", "1.8.4") {

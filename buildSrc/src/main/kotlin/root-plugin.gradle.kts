@@ -26,8 +26,4 @@ tasks {
         options.encoding = Charsets.UTF_8.name()
         options.release.set(17)
     }
-
-    processResources {
-        filteringCharset = "UTF-8"
-    }
 }
