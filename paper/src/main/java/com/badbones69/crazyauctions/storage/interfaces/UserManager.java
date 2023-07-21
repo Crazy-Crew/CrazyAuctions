@@ -13,13 +13,13 @@ public interface UserManager {
 
     void saveSingular(UUID uuid, boolean serverExit);
 
-    void save(UUID uuid, boolean serverExit);
+    void save(boolean serverExit);
 
     void convert(File file, UUID uuid, StorageType storageType);
 
     void addAuction(UUID uuid);
 
-    Path getFile(Path path, UUID uuid);
+    File getFile(Path path, UUID uuid);
 
     UserData getUser(UUID uuid);
 

@@ -2,7 +2,6 @@ package com.badbones69.crazyauctions.storage.types.file.yaml;
 
 import com.badbones69.crazyauctions.CrazyAuctions;
 import com.badbones69.crazyauctions.frame.storage.enums.StorageType;
-import com.badbones69.crazyauctions.frame.storage.types.file.yaml.keys.FilePath;
 import com.badbones69.crazyauctions.storage.interfaces.UserManager;
 import com.badbones69.crazyauctions.storage.objects.UserData;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -21,20 +20,20 @@ public class YamlUserManager extends YamlConfiguration implements UserManager {
 
     private final CrazyAuctions plugin = JavaPlugin.getPlugin(CrazyAuctions.class);
 
-    private final File file;
-
     private final ConcurrentHashMap<UUID, UserData> userData = new ConcurrentHashMap<>();
 
-    public YamlUserManager(Path path, UUID uuid) {
-        this.file = path.resolve(uuid + ".yml").toFile();
+    public YamlUserManager() {
+
     }
 
     @Override
     public void load(UUID uuid) {
         try {
-            if (!this.file.exists()) this.file.createNewFile();
+            File file = new File(this.plugin.getDataFolder() + "/users/" + uuid + ".yml");
 
-            load(this.file);
+            if (!file.exists()) file.createNewFile();
+
+            load(file);
         } catch (IOException | InvalidConfigurationException e) {
             e.printStackTrace();
         }
@@ -57,7 +56,10 @@ public class YamlUserManager extends YamlConfiguration implements UserManager {
 
     private void reload(UUID uuid, boolean serverExit) {
         try {
-            save(this.file);
+            File file = new File(this.plugin.getDataFolder() + "/users/" + uuid + ".yml");
+
+            save(file);
+
             if (!serverExit) load(uuid);
         } catch (IOException e) {
             e.printStackTrace();
@@ -65,7 +67,7 @@ public class YamlUserManager extends YamlConfiguration implements UserManager {
     }
 
     @Override
-    public void save(UUID uuid, boolean serverExit) {
+    public void save(boolean serverExit) {
         // If user data empty return.
         if (this.userData.isEmpty()) return;
 
@@ -74,7 +76,7 @@ public class YamlUserManager extends YamlConfiguration implements UserManager {
             //user.getKeys().forEach((crateMap, keys) -> set("users." + id + "." + crateMap, keys));
 
             // Save the file then load the changes back in.
-            reload(uuid, serverExit);
+            reload(id, serverExit);
         });
     }
 
@@ -89,8 +91,8 @@ public class YamlUserManager extends YamlConfiguration implements UserManager {
     }
 
     @Override
-    public Path getFile(Path path, UUID uuid) {
-        return path.resolve(uuid + ".yml");
+    public File getFile(Path path, UUID uuid) {
+        return new File(this.plugin.getDataFolder() + "/users/" + uuid + ".yml");
     }
 
     @Override

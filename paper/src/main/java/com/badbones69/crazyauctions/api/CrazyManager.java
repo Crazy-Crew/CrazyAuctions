@@ -1,27 +1,34 @@
 package com.badbones69.crazyauctions.api;
 
 import com.badbones69.crazyauctions.CrazyAuctions;
+import com.badbones69.crazyauctions.storage.types.StorageManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class CrazyManager {
 
     private final CrazyAuctions plugin = JavaPlugin.getPlugin(CrazyAuctions.class);
 
-    public void load() {
+    private StorageManager storageManager;
 
-        // Used for user data.
-        init();
-    }
+    public void load(boolean serverStart) {
+        if (serverStart) {
+            this.storageManager = new StorageManager();
 
-    public void reload(boolean serverStop) {
-
-        if (!serverStop) {
-            // Used for user data.
-            init();
+            this.storageManager.init();
         }
     }
 
-    private void init() {
+    public void reload() {
+        if (this.plugin.getApiManager() != null) this.plugin.getApiManager().reload();
 
+        if (this.storageManager.getUserManager() != null) this.storageManager.getUserManager().save(false);
+    }
+
+    public void stop() {
+
+    }
+
+    public StorageManager getStorageManager() {
+        return this.storageManager;
     }
 }
