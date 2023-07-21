@@ -9,5 +9,19 @@ public class CrazyManager {
 
     public void load() {
 
+        // Used for user data.
+        init();
+    }
+
+    public void reload(boolean serverStop) {
+
+        if (!serverStop) {
+            // Used for user data.
+            init();
+        }
+    }
+
+    private void init() {
+
     }
 }

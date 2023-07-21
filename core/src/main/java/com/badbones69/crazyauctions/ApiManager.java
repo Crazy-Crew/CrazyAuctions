@@ -20,7 +20,7 @@ public class ApiManager {
     private static SettingsManager config;
     private static SettingsManager pluginConfig;
 
-    public ApiManager load() {
+    public void load() {
         File pluginConfigFile = new File(this.path.toFile(), "plugin-config.yml");
 
         pluginConfig = SettingsManagerBuilder
@@ -49,11 +49,23 @@ public class ApiManager {
                 .configurationData(ConfigBuilder.buildConfig())
                 .create();
 
-        return this;
     }
 
     public void reload() {
+        // Reload configs.
+        pluginConfig.reload();
+        config.reload();
 
+        locale.reload();
+
+        File localeDir = new File(this.path.toFile(), "locale");
+        File localeFile = new File(localeDir, pluginConfig.getProperty(PluginConfig.LOCALE_FILE) + ".yml");
+
+        locale = SettingsManagerBuilder
+                .withYamlFile(localeFile)
+                .useDefaultMigrationService()
+                .configurationData(ConfigBuilder.buildLocale())
+                .create();
     }
 
     public static SettingsManager getPluginConfig() {
