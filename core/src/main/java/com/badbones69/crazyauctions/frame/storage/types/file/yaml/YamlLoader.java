@@ -5,7 +5,7 @@ import com.badbones69.crazyauctions.frame.storage.enums.StorageType;
 import com.badbones69.crazyauctions.frame.storage.types.file.FileLoader;
 import com.badbones69.crazyauctions.frame.storage.types.file.yaml.keys.Comment;
 import com.badbones69.crazyauctions.frame.storage.types.file.yaml.keys.Header;
-import com.badbones69.crazyauctions.frame.storage.types.file.yaml.keys.Path;
+import com.badbones69.crazyauctions.frame.storage.types.file.yaml.keys.FilePath;
 import org.jetbrains.annotations.NotNull;
 import org.simpleyaml.configuration.comments.CommentType;
 import org.simpleyaml.configuration.file.YamlFile;
@@ -54,12 +54,12 @@ public class YamlLoader implements FileLoader {
         for (Field field : this.getClass().getDeclaredFields()) {
             field.setAccessible(true);
 
-            Path path = field.getDeclaredAnnotation(Path.class);
+            FilePath filePath = field.getDeclaredAnnotation(FilePath.class);
             Comment comment = field.getDeclaredAnnotation(Comment.class);
 
-            if (path == null) return;
+            if (filePath == null) return;
 
-            Object pathValue = getValue(path.value(), comment.value());
+            Object pathValue = getValue(filePath.value(), comment.value());
 
             try {
                 field.set(this.fileExtension, pathValue instanceof String stringValue ? stringValue.translateEscapes() : pathValue);
@@ -67,7 +67,7 @@ public class YamlLoader implements FileLoader {
                 e.printStackTrace();
             }
 
-            setComments(path.value(), comment.value());
+            setComments(filePath.value(), comment.value());
         }
 
         Header header = this.fileExtension.getClass().getDeclaredAnnotation(Header.class);
