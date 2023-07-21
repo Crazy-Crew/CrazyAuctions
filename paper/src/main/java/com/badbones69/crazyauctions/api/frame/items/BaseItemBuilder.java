@@ -166,12 +166,8 @@ public class BaseItemBuilder<Base extends BaseItemBuilder<Base>> {
         this.itemMeta = itemStack.hasItemMeta() ? itemStack.getItemMeta() : Bukkit.getServer().getItemFactory().getItemMeta(material);
     }
 
-    private void setDisplayName(Component displayName) {
-        this.itemMeta.displayName(displayName);
-    }
-
-    public Base setDisplayName(Component displayName, boolean removeItalics) {
-        if (removeItalics) { this.itemMeta.displayName(displayName.decoration(TextDecoration.ITALIC, false)); } else setDisplayName(displayName);
+    public Base setDisplayName(Component displayName) {
+        this.itemMeta.displayName(displayName.decorationIfAbsent(TextDecoration.ITALIC, TextDecoration.State.FALSE));
         return (Base) this;
     }
 
