@@ -1,68 +1,67 @@
-import com.lordcodes.turtle.shellRun
-import task.WebhookExtension
-import java.awt.Color
-
 plugins {
-    id("crazyauctions.root-plugin")
+    id("root-plugin")
 }
 
-val releaseUpdate = Color(27, 217, 106)
-val betaUpdate = Color(255, 163, 71)
-val changeLogs = Color(37, 137, 204)
+defaultTasks("build")
 
-val beta = settings.versions.beta.get().toBoolean()
-val extension = settings.versions.extension.get()
+rootProject.group = "com.badbones69.crazyauctions"
+rootProject.description = "Auction off your items in style!"
+rootProject.version = "2.0.0-rc1"
 
-val color = if (beta) betaUpdate else releaseUpdate
-val repo = if (beta) "beta" else "releases"
+val combine by tasks.registering(Jar::class) {
+    dependsOn("build")
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 
-val url = if (beta) "https://ci.crazycrew.us/job/${rootProject.name}/" else "https://modrinth.com/$extension/${rootProject.name.lowercase()}/versions"
-val download = if (beta) "https://ci.crazycrew.us/job/${rootProject.name}/" else "https://modrinth.com/$extension/${rootProject.name.lowercase()}/version/${rootProject.version}"
-val msg = if (beta) "New version of ${rootProject.name} is ready!" else "New version of ${rootProject.name} is ready! <@&929463441159254066>"
+    from(files(subprojects.map {
+        it.layout.buildDirectory.file("libs/${rootProject.name}-${it.name}-${it.version}.jar").get()
+    }).filter { it.name != "MANIFEST.MF" }.map { if (it.isDirectory) it else zipTree(it) })
+}
 
-val hash = shellRun("git", listOf("rev-parse", "--short", "HEAD"))
+allprojects {
+    listOf(
+        ":core",
+        ":paper"
+    ).forEach {
+        project(it) {
+            apply(plugin = "java")
 
-rootProject.version = if (beta) hash else "1.11.14.3"
+            if (this.name == "paper") {
+                dependencies {
+                    compileOnly("de.tr7zw", "item-nbt-api", "2.11.3")
+                    compileOnly("org.bstats", "bstats-bukkit", "3.0.2")
 
-webhook {
-    this.avatar("https://en.gravatar.com/avatar/${WebhookExtension.Gravatar().md5Hex("no-reply@ryderbelserion.com")}.jpeg")
-
-    this.username("Ryder Belserion")
-
-    this.content(msg)
-
-    this.embeds {
-        this.embed {
-            this.color(color)
-
-            this.fields {
-                this.field(
-                    "Download: ",
-                    url
-                )
-
-                this.field(
-                    "API: ",
-                    "https://repo.crazycrew.us/#/$repo/${rootProject.group.toString().replace(".", "/")}/${rootProject.name.lowercase()}-api/${rootProject.version}"
-                )
+                    compileOnly("com.github.MilkBowl", "VaultAPI", "1.7")
+                }
             }
 
-            this.author(
-                "${rootProject.name} | Version ${rootProject.version}",
-                url,
-                "https://git.crazycrew.us/ryderbelserion/assets/raw/branch/main/crazycrew/png/${rootProject.name}Website.png"
-            )
+            //if (this.name == "core") {
+            //    dependencies {
+            //compileOnly("net.kyori", "adventure-api", "4.12.0")
+            //compileOnly("net.kyori", "adventure-text-minimessage", "4.12.0")
+
+            //compileOnly("com.google.code.gson", "gson", "2.10.1")
+            //    }
+            //}
+
+            dependencies {
+                compileOnly("net.kyori", "adventure-platform-bukkit", "4.3.0")
+
+                compileOnly("ch.jalu", "configme", "1.3.1")
+
+                compileOnly("com.github.Carleslc.Simple-YAML", "Simple-Yaml", "1.8.4") {
+                    exclude("org.yaml", "snakeyaml")
+                }
+            }
+        }
+    }
+}
+
+tasks {
+    assemble {
+        subprojects.forEach {
+            dependsOn(":${it.project.name}:build")
         }
 
-        this.embed {
-            this.color(changeLogs)
-
-            this.title("What changed?")
-
-            this.description("""
-                Changes:
-                » N/A
-            """.trimIndent())
-        }
+        finalizedBy(combine)
     }
 }

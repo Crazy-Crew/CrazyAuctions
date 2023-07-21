@@ -4,20 +4,16 @@ plugins {
 
 repositories {
     gradlePluginPortal()
+
+    maven("https://repo.crazycrew.us/first-party/")
 }
 
 dependencies {
-    implementation(libs.kotlin)
-    implementation(libs.shadow)
+    implementation("com.github.johnrengelman", "shadow", "8.1.1")
 
-    implementation(libs.paperweight)
+    implementation("io.papermc.paperweight", "paperweight-userdev", "1.5.5")
 
-    implementation(libs.ktor.core)
-    implementation(libs.ktor.cio)
-    implementation(libs.ktor.content)
-    implementation(libs.ktor.gson)
+    implementation("com.ryderbelserion.feather", "feather-plugin", "0.0.0.4");
 
-    implementation(libs.kotlin.coroutines)
-
-    implementation(libs.turtle)
+    implementation("com.modrinth.minotaur", "Minotaur", "2.8.0")
 }

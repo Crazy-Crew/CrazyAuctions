@@ -1,0 +1,73 @@
+misc:
+  unknown-command: '{prefix}&cThis command is not known.'
+  reload-plugin: '{prefix}&7You have reloaded CrazyAuctions.'
+
+errors:
+  internal-error: '{prefix}&cAn internal error has occurred. Please check the console for the full error.'
+
+player:
+  purchased-item: '{prefix}&7You have bought an item for &a${price}.'
+  won-bidding: '{prefix}&7You have won a bid for &a${price}. &7Use &c/ah collect &7to collect your winnings.'
+  item-sold: '{prefix}&7Thank you for purchasing this item.'
+  requirements:
+    not-a-number: '{prefix}&a{arg} &cis not a number.'
+    too-many-args: '{prefix}&cYou put more arguments then I can handle.'
+    not-enough-args: '{prefix}&cYou did not supply enough arguments.'
+    must-be-player: '{prefix}&cYou must be a player to use this command.'
+    must-be-console-sender: '{prefix}&cYou must be using console to use this command.'
+    must-have-item-in-hand: '{prefix}&cYou must have an item in your hand.'
+  target-not-online: '{prefix}&cThe player &6{player} &cis not online.'
+  target-same-player: '{prefix}&cYou cannot use this command on yourself.'
+  no-permission: '{prefix}&cYou do not have permission to use that command!'
+  inventory-not-empty: '{prefix}&cInventory is not empty, Please make room in your inventory before buying/retrieving items.'
+
+admin:
+  force-cancelled: '{prefix}&7You have force-cancelled the sale belonging to &c{player}.'
+  force-cancelled-player: '{prefix}&cOne of the items you had was force cancelled by an admin.'
+
+auctions:
+  other:
+    player-bought-item: '{prefix}&7{player} &chas bought your item for &a${price}.'
+    player-won-your-bid: '{prefix}&7{player} &chas won your item with a bid of &a${price}.'
+
+  fixes:
+    book-not-allowed: '{prefix}&cThat book is not able to be sold in the auctionhouse.'
+
+  items:
+    damaged-goods: '{prefix}&cThat item is considered damaged goods and cannot be sold.'
+    blacklisted: '{prefix}&cThat item is not allowed to be sold here.'
+    max-amount: '{prefix}&cYou can''t list any more items in the auctionhouse.'
+    invalid-item: '{prefix}&cThat item isn''t in the auctionhouse anymore.'
+    expired-item: '{prefix}&cAn item in your auctionhouse has expired.'
+    cancelled-item: '{prefix}&7You have cancelled an item that was in the auctionhouse, View &c/ah expired &7to view your items.'
+    returned-item: '{prefix}&7Item has been returned.'
+
+  added-item-to-auction: '{prefix}&7You have added an item to the auctionhouse for &a${price}.'
+  economy:
+    money-required: '{prefix}&cYou need &a${money_needed} &cto purchase this.'
+    invalid-currency: '{prefix}&cThat is not a currency, Valid Types: {currencies}'
+  bidding:
+    disabled: '{prefix}&cThe ability to bid for items is disabled.'
+    successful: '{prefix}&7You have bid &a${bid} &7on that item.'
+    price:
+      low: '{prefix}&cStarting bid price is too low, The minimum is &a$100.'
+      high: '{prefix}&cStarting bid price is too high, The maximum is &a$1000000.'
+    bid-lower-than-current-bid: '{prefix}&cThe bid you tried to place is lower than &a{current_bid}, &cPlease raise your bid!'
+  selling:
+    disabled: '{prefix}&cThe ability to sell for items is disabled.'
+    price:
+      low: '{prefix}&cSell price is too low, The minimum is &a$10.'
+      high: '{prefix}&cSell price is too high, The maximum is &a$1000000.'
+  world-disabled: '{prefix}&cAuctions are disabled in &a{world}.'
+
+command:
+  #ah:
+  #  msg: ''
+  #view:
+  #  msg: ''
+  #sell:
+  #  msg: ''
+  #expired:
+  #  msg: ''
+  #listed:
+  #  msg: ''

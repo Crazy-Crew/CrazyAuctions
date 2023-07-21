@@ -1,5 +1,3 @@
-# RalphAuctions, the code you forked is incomplete and is a part of a full re-write. You might as well start from scratch.
-
 <br />
 
 [![crazyauctions](https://raw.githubusercontent.com/RyderBelserion/Assets/main/crazycrew/webp/CrazyAuctionsBanner.webp)](https://modrinth.com/plugin/crazyauctions)
