@@ -1,23 +1,24 @@
 package com.badbones69.crazyauctions.api.manager.objects;
 
+import com.badbones69.crazyauctions.CrazyAuctions;
 import com.badbones69.crazyauctions.api.manager.enums.AuctionType;
 import com.badbones69.crazyauctions.api.manager.interfaces.AuctionItem;
 import com.badbones69.crazyauctions.api.manager.objects.auctiontype.BiddingAuction;
 import com.badbones69.crazyauctions.api.manager.objects.auctiontype.SellingAuction;
 import com.badbones69.crazyauctions.api.events.AuctionAddEvent;
-import com.badbones69.crazyauctions.utils.ItemUtils;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.plugin.java.JavaPlugin;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 /**
  * Description: Creates the main auction house menu
  */
 public class AuctionHouse {
+
+    private final CrazyAuctions plugin = JavaPlugin.getPlugin(CrazyAuctions.class);
 
     private String name;
     private FileConfiguration auctionFile;

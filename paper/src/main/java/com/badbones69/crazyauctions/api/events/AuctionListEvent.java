@@ -1,18 +1,20 @@
 package com.badbones69.crazyauctions.api.events;
 
-import org.bukkit.Bukkit;
+import com.badbones69.crazyauctions.CrazyAuctions;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
-
 import java.util.UUID;
 
 /**
  * Description: This event is fired when a player lists an item.
  */
 public class AuctionListEvent extends Event {
+
+    private final CrazyAuctions plugin = JavaPlugin.getPlugin(CrazyAuctions.class);
 
     private static final HandlerList handlerList = new HandlerList();
 
@@ -33,7 +35,7 @@ public class AuctionListEvent extends Event {
     public AuctionListEvent(UUID uuid, ItemStack item, long bidPrice) {
         this.uuid = uuid;
 
-        this.player = Bukkit.getPlayer(uuid);
+        this.player = this.plugin.getServer().getPlayer(uuid);
 
         this.item = item;
 

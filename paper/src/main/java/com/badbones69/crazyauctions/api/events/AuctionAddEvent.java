@@ -1,19 +1,21 @@
 package com.badbones69.crazyauctions.api.events;
 
+import com.badbones69.crazyauctions.CrazyAuctions;
 import com.badbones69.crazyauctions.api.manager.interfaces.AuctionItem;
 import com.badbones69.crazyauctions.api.manager.objects.AuctionHouse;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
-
 import java.util.UUID;
 
 /**
  * Description: This event is fired when an item is added to an auction house.
  */
 public class AuctionAddEvent extends Event {
+
+    private final CrazyAuctions plugin = JavaPlugin.getPlugin(CrazyAuctions.class);
 
     private static final HandlerList handlerList = new HandlerList();
 
@@ -31,7 +33,7 @@ public class AuctionAddEvent extends Event {
      */
     public AuctionAddEvent(UUID uuid, AuctionHouse auctionHouse, AuctionItem auctionItem) {
         this.uuid = uuid;
-        this.player = Bukkit.getPlayer(uuid);
+        this.player = this.plugin.getServer().getPlayer(uuid);
         this.auctionHouse = auctionHouse;
         this.auctionItem = auctionItem;
     }

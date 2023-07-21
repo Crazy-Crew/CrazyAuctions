@@ -1,13 +1,17 @@
 package com.badbones69.crazyauctions.api.manager.objects;
 
+import com.badbones69.crazyauctions.CrazyAuctions;
 import com.badbones69.crazyauctions.api.frame.items.ItemBuilder;
 import org.bukkit.Material;
+import org.bukkit.plugin.java.JavaPlugin;
 import java.util.List;
 
 /**
  * Description: Creates the auction categories
  */
 public class AuctionCategory {
+
+    private final CrazyAuctions plugin = JavaPlugin.getPlugin(CrazyAuctions.class);
 
     private String name;
     private int slot;

@@ -1,12 +1,12 @@
 package com.badbones69.crazyauctions.api.manager.objects;
 
-import com.badbones69.crazyauctions.utils.ItemUtils;
-import org.bukkit.configuration.file.FileConfiguration;
+import com.badbones69.crazyauctions.CrazyAuctions;
+import org.bukkit.plugin.java.JavaPlugin;
 
-/*
-
- */
 public class AuctionButtons {
+
+    private final CrazyAuctions plugin = JavaPlugin.getPlugin(CrazyAuctions.class);
+
     /*
     private final ItemBuilder sellingItemsButton;
     private final ItemBuilder sellingInfoButton;

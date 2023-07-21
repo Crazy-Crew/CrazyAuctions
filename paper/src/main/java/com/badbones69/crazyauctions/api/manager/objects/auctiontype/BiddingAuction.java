@@ -1,14 +1,18 @@
 package com.badbones69.crazyauctions.api.manager.objects.auctiontype;
 
+import com.badbones69.crazyauctions.CrazyAuctions;
 import com.badbones69.crazyauctions.api.manager.enums.AuctionType;
 import com.badbones69.crazyauctions.api.manager.interfaces.AuctionItem;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.java.JavaPlugin;
 import java.util.UUID;
 
 /**
  * Description: Creates the bidding auction type
  */
 public class BiddingAuction implements AuctionItem {
+
+    private final CrazyAuctions plugin = JavaPlugin.getPlugin(CrazyAuctions.class);
 
     AuctionType auctionType = AuctionType.BID;
     UUID seller;
