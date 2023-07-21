@@ -6,8 +6,14 @@ plugins {
     id("io.papermc.paperweight.userdev")
 }
 
+repositories {
+    maven("https://repo.papermc.io/repository/maven-public/")
+}
+
 dependencies {
-    paperweight.paperDevBundle("1.20-R0.1-SNAPSHOT")
+    compileOnly("io.papermc.paper:paper-api:1.20.1-R0.1-SNAPSHOT")
+
+    paperweight.paperDevBundle("1.20.1-R0.1-SNAPSHOT")
 }
 
 tasks {

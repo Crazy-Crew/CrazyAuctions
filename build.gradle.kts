@@ -44,7 +44,7 @@ allprojects {
             //}
 
             dependencies {
-                compileOnly("net.kyori", "adventure-platform-bukkit", "4.3.0")
+                //compileOnly("net.kyori", "adventure-platform-bukkit", "4.3.0")
 
                 compileOnly("ch.jalu", "configme", "1.3.1")
 

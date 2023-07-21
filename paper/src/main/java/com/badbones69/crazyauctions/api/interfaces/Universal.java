@@ -1,9 +1,10 @@
 package com.badbones69.crazyauctions.api.interfaces;
 
 import com.badbones69.crazyauctions.CrazyAuctions;
+import org.bukkit.plugin.java.JavaPlugin;
 
 public interface Universal {
 
-    CrazyAuctions plugin = CrazyAuctions.getPlugin();
+    CrazyAuctions plugin = JavaPlugin.getPlugin(CrazyAuctions.class);
 
 }
