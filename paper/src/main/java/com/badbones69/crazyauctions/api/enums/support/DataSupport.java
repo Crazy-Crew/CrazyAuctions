@@ -1,9 +1,10 @@
 package com.badbones69.crazyauctions.api.enums.support;
 
-/*
+import com.badbones69.crazyauctions.storage.interfaces.UserManager;
+import com.badbones69.crazyauctions.storage.types.file.yaml.YamlUserManager;
+
 public enum DataSupport {
 
-    //json(JsonUserManager.class),
     yaml(YamlUserManager.class);
 
     private final Class<? extends UserManager> classObject;
@@ -16,4 +17,3 @@ public enum DataSupport {
         return this.classObject;
     }
 }
- */
