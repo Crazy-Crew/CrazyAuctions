@@ -35,7 +35,7 @@ allprojects {
                         exclude("org.bukkit", "bukkit")
                     }
 
-                    compileOnly("me.lokka30", "treasury-api", "2.0.1-7417830-RELEASE")
+                    //compileOnly("me.lokka30", "treasury-api", "2.0.1-7417830-RELEASE")
                 }
             }
 
