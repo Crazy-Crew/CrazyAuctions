@@ -137,8 +137,8 @@ public class CommandContext implements CommandActor, CommandArgs {
     }
 
     @Override
-    public void setLabel(String alias) {
-        this.label = alias;
+    public void setLabel(String label) {
+        this.label = label;
     }
 
     @Override
