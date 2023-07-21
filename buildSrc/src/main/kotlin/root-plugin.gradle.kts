@@ -6,6 +6,10 @@ plugins {
 }
 
 repositories {
+    maven("https://repo.mrivanplays.com/repository/other-developers/")
+
+    maven("https://repo.mrivanplays.com/repository/maven-all/")
+
     maven("https://repo.codemc.io/repository/maven-public/")
 
     maven("https://repo.crazycrew.us/first-party/")

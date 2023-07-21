@@ -34,6 +34,8 @@ allprojects {
                     compileOnly("com.github.MilkBowl", "VaultAPI", "1.7") {
                         exclude("org.bukkit", "bukkit")
                     }
+
+                    compileOnly("me.lokka30", "treasury-api", "2.0.1-7417830-RELEASE")
                 }
             }
 
