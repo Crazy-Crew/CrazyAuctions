@@ -1,4 +1,4 @@
-package com.badbones69.crazyauctions.api.economy;
+package com.badbones69.crazyauctions.support.economy;
 
 /**
  * Description: This event is fired when an item is added to an auction house.

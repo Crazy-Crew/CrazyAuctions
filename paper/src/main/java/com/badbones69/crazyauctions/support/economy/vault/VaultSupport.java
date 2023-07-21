@@ -1,4 +1,4 @@
-package com.badbones69.crazyauctions.api.economy.vault;
+package com.badbones69.crazyauctions.support.economy.vault;
 
 import com.badbones69.crazyauctions.CrazyAuctions;
 import net.milkbowl.vault.economy.Economy;

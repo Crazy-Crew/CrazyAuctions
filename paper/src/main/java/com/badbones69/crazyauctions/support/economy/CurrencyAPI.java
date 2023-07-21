@@ -1,10 +1,9 @@
-package com.badbones69.crazyauctions.api.economy;
+package com.badbones69.crazyauctions.support.economy;
 
 import com.badbones69.crazyauctions.CrazyAuctions;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
-
 import java.util.UUID;
 
 /**
