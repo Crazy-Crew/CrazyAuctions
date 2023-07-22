@@ -29,6 +29,7 @@ public class CrazyAuctions extends JavaPlugin {
 
         getServer().getPluginManager().registerEvents(new DataListener(), this);
         getServer().getPluginManager().registerEvents(new AuctionInventoryClick(), this);
+
     }
 
     @Override
