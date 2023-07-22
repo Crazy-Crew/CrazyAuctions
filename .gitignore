@@ -14,3 +14,7 @@ build
 
 buildSrc/build
 buildSrc/.gradle
+
+.vscode/
+core/bin/
+paper/bin/
