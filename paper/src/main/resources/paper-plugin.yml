@@ -6,7 +6,6 @@ api-version: '${apiVersion}'
 description: '${description}'
 
 bootstrapper: '${group}.CrazyStarter'
-loader: '${group}.CrazyStarter'
 
 dependencies:
   server:

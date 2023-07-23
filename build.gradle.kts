@@ -27,22 +27,18 @@ allprojects {
 
             if (this.name == "paper") {
                 dependencies {
-                    compileOnly("org.bstats", "bstats-bukkit", "3.0.2")
-
-                    compileOnly("org.bstats", "bstats-bukkit", "3.0.2")
+                    implementation("org.bstats", "bstats-bukkit", "3.0.2")
 
                     compileOnly("com.github.MilkBowl", "VaultAPI", "1.7") {
                         exclude("org.bukkit", "bukkit")
                     }
-
-                    //compileOnly("me.lokka30", "treasury-api", "2.0.1-7417830-RELEASE")
                 }
             }
 
             dependencies {
-                compileOnly("ch.jalu", "configme", "1.3.1")
+                implementation("ch.jalu", "configme", "1.3.1")
 
-                compileOnly("com.github.Carleslc.Simple-YAML", "Simple-Yaml", "1.8.4") {
+                implementation("com.github.Carleslc.Simple-YAML", "Simple-Yaml", "1.8.4") {
                     exclude("org.yaml", "snakeyaml")
                 }
             }
