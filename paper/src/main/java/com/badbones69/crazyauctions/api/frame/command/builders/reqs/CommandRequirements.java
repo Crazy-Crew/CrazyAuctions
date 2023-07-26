@@ -1,4 +1,4 @@
-package com.badbones69.crazyauctions.api.frame.command.builders.requirements;
+package com.badbones69.crazyauctions.api.frame.command.builders.reqs;
 
 import com.badbones69.crazyauctions.api.frame.command.CommandContext;
 import com.badbones69.crazyauctions.frame.CrazyCore;

@@ -1,4 +1,4 @@
-package com.badbones69.crazyauctions.api.frame.command.builders.requirements;
+package com.badbones69.crazyauctions.api.frame.command.builders.reqs;
 
 import org.bukkit.permissions.Permission;
 
