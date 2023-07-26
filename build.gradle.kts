@@ -29,7 +29,7 @@ allprojects {
                 dependencies {
                     implementation("org.bstats", "bstats-bukkit", "3.0.2")
 
-                    compileOnly("com.github.MilkBowl", "VaultAPI", "1.7") {
+                    compileOnly("com.github.MilkBowl", "VaultAPI", "1.7.1") {
                         exclude("org.bukkit", "bukkit")
                     }
                 }

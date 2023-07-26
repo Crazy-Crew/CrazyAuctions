@@ -1,22 +1,16 @@
-dependencyResolutionManagement {
-    repositories.gradlePluginPortal()
-}
-
 pluginManagement {
     repositories {
-        gradlePluginPortal()
-        mavenCentral()
+        maven("https://maven.fabricmc.net/")
+
+        maven("https://maven.minecraftforge.net/")
 
         maven("https://repo.papermc.io/repository/maven-public/")
 
-        maven("https://repo.crazycrew.us/first-party/")
-        maven("https://repo.crazycrew.us/third-party/")
-
-        maven("https://maven.fabricmc.net/")
+        gradlePluginPortal()
+        mavenCentral()
     }
 }
 
 rootProject.name = "CrazyAuctions"
 
-include("core")
-include("paper")
+include("core", "paper")
