@@ -8,20 +8,23 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.ItemStack;
 
 /**
+ *
  * @author BadBones69
  *
  * This event is fired when a player's item is cancelled.
+ *
  */
 public class AuctionCancelledEvent extends Event {
     
-    private final HandlerList handlers = new HandlerList();
+    private static final HandlerList handlers = new HandlerList();
     private OfflinePlayer offlinePlayer;
     private Player onlinePlayer;
-    private final boolean isOnline;
-    private final ItemStack item;
-    private final CancelledReason reason;
+    private boolean isOnline;
+    private ItemStack item;
+    private CancelledReason reason;
     
     /**
+     *
      * @param offlinePlayer The player whose item is cancelled.
      * @param item The item that is cancelled.
      */
@@ -33,6 +36,7 @@ public class AuctionCancelledEvent extends Event {
     }
     
     /**
+     *
      * @param onlinePlayer The player whose item is cancelled.
      * @param item The item that is cancelled.
      */
@@ -41,6 +45,10 @@ public class AuctionCancelledEvent extends Event {
         this.item = item;
         this.isOnline = true;
         this.reason = reason;
+    }
+    
+    public static HandlerList getHandlerList() {
+        return handlers;
     }
     
     public HandlerList getHandlers() {
@@ -66,4 +74,5 @@ public class AuctionCancelledEvent extends Event {
     public CancelledReason getReason() {
         return reason;
     }
+    
 }

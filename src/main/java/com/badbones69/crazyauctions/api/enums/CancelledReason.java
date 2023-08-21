@@ -10,4 +10,5 @@ public enum CancelledReason {
      * Cancelled by the player them self.
      */
     PLAYER_FORCE_CANCEL()
+    
 }

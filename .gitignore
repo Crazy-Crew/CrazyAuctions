@@ -1,3 +1,14 @@
-.idea
-.gradle
-build
+
+\.idea/
+
+*.iml
+
+*.class
+
+target/classes/
+
+target/
+
+\.DS_Store
+
+dependency-reduced-pom.xml

@@ -1,111 +1,41 @@
-<br />
+## Crazy Auctions
 
-[![CrazyAuctions](https://raw.githubusercontent.com/RyderBelserion/Assets/main/crazycrew/banners/CrazyAuctions.png)](https://www.spigotmc.org/resources/crazy-crates.17599/)
+[![Join us on Discord](https://img.shields.io/discord/182615261403283459.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.badbones69.com)
 
-<div align="center">
+[![CrazyAuctions's Stargazers](https://img.shields.io/github/stars/Crazy-Crew/Crazy-Auctions?label=stars&logo=github)](https://github.com/Crazy-Crew/Crazy-Auctions/stargazers)
+[![CrazyAuctions's Forks](https://img.shields.io/github/forks/Crazy-Crew/Crazy-Auctions?label=forks&logo=github)](https://github.com/Crazy-Crew/Crazy-Auctions/network/members)
+[![CrazyAuctions's Watchers](https://img.shields.io/github/watchers/Crazy-Crew/Crazy-Auctions?label=watchers&logo=github)](https://github.com/Crazy-Crew/Crazy-Auctions/watchers)
 
-[![Contributors][contributors-shield]][contributors-url]
-[![Forks][forks-shield]][forks-url]
-[![Stargazers][stars-shield]][stars-url]
-[![Issues][issues-shield]][issues-url]
-[![GPU License][license-shield]][license-url]
-[![Contact][discord-shield]][discord-url]
-![CodeFactor][codefactor-shield]
+CrazyAuctions is a simple auctions plugin where you can sell your items and bid on other items!
 
-<a href="/#"><img src="https://raw.githubusercontent.com/intergrav/devins-badges/v2/assets/cozy/unsupported/spigot_64h.png" height="50"></a>
-<a href="/#"><img src="https://raw.githubusercontent.com/intergrav/devins-badges/v2/assets/cozy/supported/paper_64h.png" height="50"></a>
-<a href="/#"><img src="https://raw.githubusercontent.com/intergrav/devins-badges/v2/assets/cozy/supported/purpur_64h.png" height="50"></a>
+## Contact
+[![Join us on Discord](https://img.shields.io/discord/182615261403283459.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.badbones69.com)
 
-  <p align="center">
-    A simple auctions plugin where you can sell your items and bid on other items!
-    <br />
-    <a href="https://github.com/Crazy-Crew/CrazyAuctions/wiki"><strong>Explore the docs »</strong></a>
-    <br />
-    <br />
-    <a href="https://github.com/Crazy-Crew/CrazyAuctions/issues">Report Bug</a>
-    ·
-    <a href="https://github.com/Crazy-Crew/CrazyAuctions/discussions/categories/feature-rquests">Request Feature</a>
-    ·
-    <a href="https://github.com/Crazy-Crew/CrazyAuctions/discussions/categories/support">Get Support</a>
-  </p>
-</div>
-
-<!-- TABLE OF CONTENTS -->
-<details>
-  <summary>Table of Contents</summary>
-  <ol>
-    <li>
-      <a href="#getting-started">Getting Started</a>
-      <ul>
-        <li><a href="#prerequisites">Prerequisites</a></li>
-        <li><a href="#installation">Installation</a></li>
-      </ul>
-    </li>
-    <li><a href="#roadmap">Roadmap</a></li>
-    <li><a href="#contributing">Contributing</a></li>
-    <li><a href="#license">License</a></li>
-    <li><a href="#contact">Contact</a></li>
-  </ol>
-</details>
+Join us on [Discord](https://discord.badbones69.com)
 
 ## Downloads
-#### Stable Builds
-https://modrinth.com/plugin/crazyauctions ( Soon )
+[![Build Status](https://jenkins.badbones69.com/view/Stable/job/Crazy-Auctions/badge/icon)](https://jenkins.badbones69.com/view/Stable/job/Crazy-Auctions/)
 
-#### Beta Builds
-https://ci.badbones69.com/view/Beta/job/CrazyAuctions-Beta/
+Downloads can be obtained from the [spigot page](https://www.spigotmc.org/resources/crazy-auctions.25219/) or the [Jenkins](https://jenkins.badbones69.com/view/Stable/job/Crazy-Auctions/).
 
-## Getting Started
+## Plugin Data
+[![bStats Graph Data](https://bstats.org/signatures/bukkit/CrazyAuctions.svg)](https://bstats.org/plugin/bukkit/CrazyAuctions/4624)
 
-How to get started with contributing / maintaining your own version of CrazyAuctions!
+## API
+In Progress.
 
-### Prerequisites
+### Dependency Information
 
-A list of things necessary to make sure you can build CrazyAuctions properly.
-* Intellij IDEA
-    * https://www.jetbrains.com/idea/download/
-* Gradle
+#### Maven
+In Progress.
 
-### Installation
+#### Gradle
+In Progress.
 
-1. Clone the repo
-   ```sh
-   git clone https://github.com/Crazy-Crew/CrazyAuctions.git
-   ```
-2. Open the repository using Intellij IDEA & wait until it finishes downloading/indexing.
-3. Run the shadowJar task.
-   ```gradle
-   ./gradlew shadowJar or gradle shadowJar
-   ```
+## Working with CrazyAuctions.
 
-## Roadmap
+#### Contributing
+Fork the project & open a pull request.
 
-Check our public [trello board](https://trello.com/b/bzQ5TwXo) for our current plans, any bugs and general tracking of the project progress.
-
-## Contributing
-
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/yourfeature`)
-3. Commit your Changes (`git commit -m 'your amazing feature.'`)
-4. Push to the Branch (`git push`)
-5. Open a Pull Request
-
-## License
-
-Distributed under the MIT License. See [`LICENSE`](/LICENSE) for more information.
-
-[discord-shield]: https://img.shields.io/discord/182615261403283459.svg?style=for-the-badge
-[discord-url]: https://discord.gg/crazycrew
-
-[contributors-shield]: https://img.shields.io/github/contributors/Crazy-Crew/CrazyAuctions.svg?style=for-the-badge
-[contributors-url]: https://github.com/Crazy-Crew/CrazyAuctions/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/Crazy-Crew/CrazyAuctions.svg?style=for-the-badge
-[forks-url]: https://github.com/Crazy-Crew/CrazyAuctions/network/members
-[stars-shield]: https://img.shields.io/github/stars/Crazy-Crew/CrazyAuctions.svg?style=for-the-badge
-[stars-url]: https://github.com/Crazy-Crew/CrazyAuctions/stargazers
-[issues-shield]: https://img.shields.io/github/issues/Crazy-Crew/CrazyAuctions.svg?style=for-the-badge
-[issues-url]: https://github.com/Crazy-Crew/CrazyAuctions/issues
-[license-shield]: https://img.shields.io/github/license/Crazy-Crew/CrazyAuctions.svg?style=for-the-badge
-[license-url]: https://github.com/Crazy-Crew/CrazyAuctions/blob/master/LICENSE.MD
-
-[codefactor-shield]: https://img.shields.io/codefactor/grade/github/crazy-crew/CrazyAuctions/main?style=for-the-badge
+#### Compiling
+Clone the project & run the install task.

@@ -7,19 +7,22 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.ItemStack;
 
 /**
+ *
  * @author BadBones69
  *
  * This event is fired when a player item expires.
+ *
  */
 public class AuctionExpireEvent extends Event {
     
-    private final HandlerList handlers = new HandlerList();
+    private static final HandlerList handlers = new HandlerList();
     private OfflinePlayer offlinePlayer;
     private Player onlinePlayer;
-    private final boolean isOnline;
-    private final ItemStack item;
+    private boolean isOnline;
+    private ItemStack item;
     
     /**
+     *
      * @param offlinePlayer The player whose item is expiring.
      * @param item The item that is expiring.
      */
@@ -30,6 +33,7 @@ public class AuctionExpireEvent extends Event {
     }
     
     /**
+     *
      * @param onlinePlayer The player whose item is expiring.
      * @param item The item that is expiring.
      */
@@ -37,6 +41,10 @@ public class AuctionExpireEvent extends Event {
         this.onlinePlayer = onlinePlayer;
         this.item = item;
         this.isOnline = true;
+    }
+    
+    public static HandlerList getHandlerList() {
+        return handlers;
     }
     
     public HandlerList getHandlers() {
@@ -58,4 +66,5 @@ public class AuctionExpireEvent extends Event {
     public ItemStack getItem() {
         return item;
     }
+    
 }
