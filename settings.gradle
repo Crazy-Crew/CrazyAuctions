@@ -1,0 +1,14 @@
+pluginManagement {
+    repositories {
+
+        maven { url = 'https://repo.papermc.io/repository/maven-public/' }
+
+        gradlePluginPortal()
+        mavenCentral()
+    }
+}
+
+rootProject.name = 'CrazyAuctions'
+
+include 'common'
+include 'paper'

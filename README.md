@@ -1,8 +1,8 @@
 <br />
 
-[![crazyauctions](https://raw.githubusercontent.com/RyderBelserion/Assets/main/crazycrew/webp/CrazyAuctionsBanner.webp)](https://modrinth.com/plugin/crazyauctions)
-
 <div align="center">
+
+[![CrazyAuctions](https://raw.githubusercontent.com/RyderBelserion/Assets/main/crazycrew/webp/CrazyAuctionsBanner.webp)](https://modrinth.com/plugin/crazyauctions)
 
 [![Contributors][contributors-shield]][contributors-url]
 [![Forks][forks-shield]][forks-url]
@@ -16,14 +16,14 @@
 ![Purpur](https://cdn.jsdelivr.net/gh/intergrav/devins-badges/assets/compact/supported/purpur_vector.svg)
 
   <p align="center">
-    Auction off your items in style!
+    A crates plugin that offers quality crates with ease!
     <br />
-    <a href="https://github.com/Crazy-Crew/CrazyAuctions/wiki"><strong>Explore the docs »</strong></a>
+    <a href="https://docs.crazycrew.us/CrazyAuctions/home"><strong>Explore the docs »</strong></a>
     <br />
     <br />
     <a href="https://github.com/Crazy-Crew/CrazyAuctions/issues">Report Bug</a>
     ·
-    <a href="https://github.com/Crazy-Crew/CrazyAuctions/discussions/categories/feature-requests">Request Feature</a>
+    <a href="https://github.com/Crazy-Crew/CrazyAuctions/discussions/categories/features">Request Feature</a>
     ·
     <a href="https://discord.gg/badbones-s-live-chat-182615261403283459">Get Support</a>
   </p>
@@ -47,12 +47,8 @@
   </ol>
 </details>
 
-## Resource Page
-
-### Beta Builds
-All beta builds will be on Modrinth marked as beta.<br>
-
-<a href="https://modrinth.com/plugin/crazyauctions">![Modrinth](https://raw.githubusercontent.com/intergrav/devins-badges/v3/assets/cozy/available/modrinth_64h.png)</a>
+### Resource Page
+<a href="https://modrinth.com/plugin/crazyzuctions">![Modrinth](https://raw.githubusercontent.com/intergrav/devins-badges/v3/assets/compact/available/modrinth_46h.png)</a>
 
 ## Getting Started
 
@@ -72,14 +68,14 @@ A list of things necessary to make sure you can build CrazyAuctions properly.
    git clone https://github.com/Crazy-Crew/CrazyAuctions.git
    ```
 2. Open the repository using Intellij IDEA & wait until it finishes downloading/indexing.
-3. Run the shadowJar task.
+3. Run the assemble task.
    ```gradle
-   ./gradlew shadowJar
+   ./gradlew assemble
    ```
 
 ## Roadmap
 
-Check our public [trello board](https://trello.com/b/CcPYmsBt) for our current plans, any bugs and general tracking of the project progress.
+Check our public [trello board](https://trello.com/b/bzQ5TwXo) for our current plans, any bugs and general tracking of the project progress.
 
 ## Contributing
 
@@ -87,7 +83,7 @@ Check our public [trello board](https://trello.com/b/CcPYmsBt) for our current p
 2. Create your Feature Branch (`git checkout -b feature/yourfeature`)
 3. Commit your Changes (`git commit -m 'your amazing feature.'`)
 4. Push to the Branch (`git push`)
-5. Open a Pull Request to the dev branch to add your feature/fix.
+5. Open a Pull Request to the `main` branch to add your feature/fix.
 
 ## License
 
