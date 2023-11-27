@@ -83,6 +83,7 @@ String description = """
 # Please take backups and report any bugs you find!
 
 ## Breaking Changes:
+ * Only supports 1.20+
  * Permissions have changed, You can view the updated permissions @ https://github.com/Crazy-Crew/CrazyAuctions/blob/main/paper/src/main/resources/plugin.yml
 
 ## Changes:
