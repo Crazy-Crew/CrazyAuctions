@@ -84,12 +84,16 @@ String description = """
 
 ## Breaking Changes:
  * Only supports 1.20+
- * Permissions have changed, You can view the updated permissions @ https://github.com/Crazy-Crew/CrazyAuctions/blob/main/paper/src/main/resources/plugin.yml
+ * Permissions have changed, You can view the updated permissions @ https://docs.crazycrew.us/crazyauctions/info/commands/permissions
 
 ## Changes:
  * Re-organized and cleaned up a large portion of the code, Functionality shouldn't change
  * Added proper tab completion
  * Added proper permissions to plugin.yml
+ * The permission for /crazyauctions reload is now crazyauctions.reload
+
+## Fixes:
+ * Fixed a permission check for the /ah gui
 
 ## Optimizations:
  * Only use uuid for hashmap's / arrays as god intended.
