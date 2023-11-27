@@ -1,0 +1,49 @@
+name: '${name}'
+main: '${group}.${name}'
+
+authors: ${authors}
+
+version: '${version}'
+api-version: '${apiVersion}'
+description: '${description}'
+website: '${website}'
+
+depend: [Vault]
+
+commands:
+  crazyauctions:
+    description: Opens the Crazy Auctions GUI.
+    aliases: [crazyauction, ah, ca]
+
+permissions:
+  crazyauctions.access:
+    default: true
+
+  crazyauctions.test:
+    default: op
+
+  crazyauctions.view:
+    default: true
+
+  crazyauctions.reload:
+    default: op
+
+  crazyauctions.sell:
+    default: true
+
+  crazyauctions.bid:
+    default: true
+
+  crazyauctions.player.*:
+    default: false
+    children:
+      crazyauctions.bid: true
+      crazyauctions.sell: true
+      crazyauctions.access: true
+      crazyauctions.view: true
+
+  crazyauctions.admin:
+    default: op
+    children:
+      crazyauctions.test: true
+      crazyauctions.reload: true

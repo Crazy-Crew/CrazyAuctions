@@ -1,71 +1,64 @@
 plugins {
-    id 'java-library'
+    alias(libs.plugins.paperweight)
+    alias(libs.plugins.shadowjar)
+
+    alias(libs.plugins.runpaper)
 }
 
-defaultTasks 'build'
+project.group = "${rootProject.group}.paper"
+project.version = rootProject.version
 
-def combineJars = tasks.register("combineJars", org.gradle.jvm.tasks.Jar) {
-    mustRunAfter build
-
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-
-    from(files(subprojects.findAll { it.name != 'webmap' }.collect {
-        it.layout.buildDirectory.file("libs/${rootProject.name}-${it.name}-${it.version}.jar").get()
-    }).filter { it.name != 'MANIFEST.MF' }.collect { if (it.isDirectory()) it else zipTree(it) })
-
-    doLast {
-        File dir = new File(rootDir, "jars")
-
-        if (dir.exists()) dir.delete()
-
-        dir.mkdirs()
-
-        copy {
-            from(layout.buildDirectory.file("libs/${rootProject.name}-${rootProject.version}.jar"))
-            into(dir)
-        }
-    }
+base {
+    archivesName = "${rootProject.name}-${project.name}"
 }
 
-assemble {
-    subprojects.forEach { project -> dependsOn ":${project.name}:build" }
+dependencies {
+    implementation(libs.metrics)
 
-    finalizedBy combineJars
+    compileOnly(libs.vault)
+
+    paperweightDevelopmentBundle("io.papermc.paper:dev-bundle:$minecraftVersion-R0.1-SNAPSHOT")
 }
 
-subprojects {
-    apply plugin: 'java-library'
+tasks {
+    runServer {
+        jvmArgs("-Dnet.kyori.ansi.colorLevel=truecolor")
 
-    repositories {
-        maven { url = 'https://repo.crazycrew.us/releases' }
-
-        maven { url = 'https://jitpack.io' }
-
-        mavenCentral()
+        minecraftVersion(minecraftVersion)
     }
 
-    if (name == "paper") {
-        repositories {
-            maven { url = 'https://repo.extendedclip.com/content/repositories/placeholderapi/' }
+    assemble {
+        dependsOn(reobfJar)
+    }
+
+    shadowJar {
+        mergeServiceFiles()
+
+        exclude("META-INF/**")
+
+        List.of(
+                "org.bstats"
+        ).forEach {
+            relocate(it, "libs.$it")
         }
-    }
-
-    compileJava {
-        options.encoding = 'UTF-8'
-        options.release.set(17)
-    }
-
-    java {
-        toolchain {
-            languageVersion = JavaLanguageVersion.of(17)
-        }
-    }
-
-    javadoc {
-        options.encoding = 'UTF-8'
     }
 
     processResources {
-        filteringCharset = 'UTF-8'
+        Map<String, String> props = new HashMap<>()
+
+        props.put("name", rootProject.name)
+        props.put("version", "$rootProject.version")
+        props.put("group", "$project.group")
+        props.put("description", rootProject.description)
+
+        props.put("apiVersion", apiVersion)
+        props.put("authors", authors)
+        props.put("website", website)
+
+        inputs.properties(props)
+
+        filesMatching("plugin.yml") {
+            expand(props)
+        }
     }
 }

@@ -13,6 +13,10 @@ base {
 }
 
 dependencies {
+    implementation(libs.metrics)
+
+    compileOnly(libs.vault)
+
     paperweightDevelopmentBundle("io.papermc.paper:dev-bundle:$minecraftVersion-R0.1-SNAPSHOT")
 }
 
@@ -31,6 +35,12 @@ tasks {
         mergeServiceFiles()
 
         exclude("META-INF/**")
+
+        List.of(
+                "org.bstats"
+        ).forEach {
+            relocate(it, "libs.$it")
+        }
     }
 
     processResources {
@@ -47,7 +57,7 @@ tasks {
 
         inputs.properties(props)
 
-        filesMatching("paper-plugin.yml") {
+        filesMatching("plugin.yml") {
             expand(props)
         }
     }

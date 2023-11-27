@@ -1,20 +1,22 @@
+build
 .gradle
 .idea
 
-core/.gradle
-core/build
-
-fabric/.gradle
-fabric/build
-
-paper/.gradle
-paper/build
-
-build
-
-buildSrc/build
 buildSrc/.gradle
+buildSrc/build
 
-.vscode/
-core/bin/
-paper/bin/
+common/.gradle
+common/build
+
+jars
+
+paper/build
+paper/.gradle
+
+paper/run
+!paper/run/config
+!paper/run/spigot.yml
+!paper/run/bukkit.yml
+!paper/run/eula.txt
+!paper/run/server.properties
+!paper/run/plugins
