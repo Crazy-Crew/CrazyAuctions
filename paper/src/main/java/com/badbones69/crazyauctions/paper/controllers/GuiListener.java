@@ -727,7 +727,7 @@ public class GuiListener implements Listener {
                                             int ID = data.getInt("Items." + i + ".StoreID");
 
                                             if (id == ID) {
-                                                if (player.hasPermission("crazyAuctions.admin") || player.hasPermission("crazyauctions.force-end")) {
+                                                if (player.hasPermission("crazyauctions.admin") || player.hasPermission("crazyauctions.force-end")) {
                                                     if (e.getAction() == InventoryAction.MOVE_TO_OTHER_INVENTORY) {
                                                         int num = 1;
                                                         for (; data.contains("OutOfTime/Cancelled." + num); num++) ;

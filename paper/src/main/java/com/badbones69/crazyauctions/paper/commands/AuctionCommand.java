@@ -153,7 +153,7 @@ public class AuctionCommand implements CommandExecutor {
                 }
 
                 case "reload" -> {
-                    if (!Methods.hasPermission(sender, "admin")) {
+                    if (!Methods.hasPermission(sender, "reload")) {
                         sender.sendMessage(Messages.NO_PERMISSION.getMessage());
                         return true;
                     }
