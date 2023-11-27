@@ -9,9 +9,5 @@ pluginManagement {
 
 rootProject.name = "CrazyAuctions"
 
-listOf(
-    "paper",
-    "common"
-).forEach {
-    include(it)
-}
+include("common")
+include("paper")
