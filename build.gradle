@@ -82,27 +82,11 @@ String hangarType = isBeta ? "Beta" : "Release"
 String description = """
 # Please take backups and report any bugs you find!
 
-## Breaking Changes:
- * Only supports 1.20+
- * Permissions have changed, You can view the updated permissions @ https://docs.crazycrew.us/crazyauctions/info/commands/permissions
-
 ## Changes:
- * Re-organized and cleaned up a large portion of the code, Functionality shouldn't change
- * Added proper tab completion
- * Added proper permissions to plugin.yml
- * The permission for /crazyauctions reload is now crazyauctions.reload
+ * Add missing player names for the ah view <player> command
 
 ## Fixes:
- * Fixed a permission check for the /ah gui
-
-## Optimizations:
- * Only use uuid for hashmap's / arrays as god intended.
-
-## Warning:
- * Data is still stored only using name's which is terrible but at the moment it's annoying to remove, It will change in the next few versions after some more clean up is made.
-
-## Developers:
- * Do not rely on any methods in CrazyAuctions as an API, it will constantly be refactored and moved around until told otherwise.
+ * Fix tab complete order
 
 ## Other:
  * [Feature Requests](https://github.com/Crazy-Crew/${rootProject.name}/issues)
