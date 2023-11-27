@@ -2,7 +2,7 @@
 Contributions to the project are always welcome, Pull Requests do have some guidelines before being approved.
 
 ## You should always create the fork as a personal repository not in an organization.
-Any pull request made by a fork in an organization prevents modifications. Everyone has their own way of doing things and rather asking you to change that. A personal fork lets us change the things
+Any pull request made by a fork in an organization prevents modifications. Everyone has their own way of doing things and rather asking you to change that. A personal fork lets com change the things
 that we have a tick about. 
 
 If you do not use a personal fork, We have to manually merge your pull request which means it's marked as closed instead of merged.

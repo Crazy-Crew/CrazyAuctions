@@ -1,0 +1,151 @@
+import io.papermc.hangarpublishplugin.model.Platforms
+
+plugins {
+    alias(libs.plugins.hangar)
+    alias(libs.plugins.modrinth)
+
+    id 'java-library'
+}
+
+defaultTasks 'build'
+
+def combineJars = tasks.register("combineJars", org.gradle.jvm.tasks.Jar) {
+    mustRunAfter build
+
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+    from(files(subprojects.findAll { it.name != 'webmap' }.collect {
+        it.layout.buildDirectory.file("libs/${rootProject.name}-${it.name}-${it.version}.jar").get()
+    }).filter { it.name != 'MANIFEST.MF' }.collect { if (it.isDirectory()) it else zipTree(it) })
+
+    doLast {
+        File dir = new File(rootDir, "jars")
+
+        if (dir.exists()) dir.delete()
+
+        dir.mkdirs()
+
+        copy {
+            from(layout.buildDirectory.file("libs/${rootProject.name}-${rootProject.version}.jar"))
+            into(dir)
+        }
+    }
+}
+
+assemble {
+    subprojects.forEach { project -> dependsOn ":${project.name}:build" }
+
+    finalizedBy combineJars
+}
+
+subprojects {
+    apply plugin: 'java-library'
+
+    repositories {
+        maven { url = 'https://repo.crazycrew.us/releases' }
+
+        maven { url = 'https://jitpack.io' }
+
+        mavenCentral()
+    }
+
+    if (name == "paper") {
+        repositories {
+            maven { url = 'https://repo.extendedclip.com/content/repositories/placeholderapi/' }
+        }
+    }
+
+    compileJava {
+        options.encoding = 'UTF-8'
+        options.release.set(17)
+    }
+
+    java {
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(17)
+        }
+    }
+
+    javadoc {
+        options.encoding = 'UTF-8'
+    }
+
+    processResources {
+        filteringCharset = 'UTF-8'
+    }
+}
+
+boolean isBeta = true
+String modrinthType = isBeta ? "beta" : "release"
+String hangarType = isBeta ? "Beta" : "Release"
+
+String description = """
+# Please take backups and report any bugs you find!
+
+## Breaking Changes:
+ * Permissions have changed, You can view the updated permissions @ https://github.com/Crazy-Crew/CrazyAuctions/blob/main/paper/src/main/resources/plugin.yml
+
+## Changes:
+ * Re-organized and cleaned up a large portion of the code, Functionality shouldn't change
+ * Added proper tab completion
+ * Added proper permissions to plugin.yml
+
+## Optimizations:
+ * Only use uuid for hashmap's / arrays as god intended.
+
+## Warning:
+ * Data is still stored only using name's which is terrible but at the moment it's annoying to remove, It will change in the next few versions after some more clean up is made.
+
+## Developers:
+ * Do not rely on any methods in CrazyAuctions as an API, it will constantly be refactored and moved around until told otherwise.
+
+## Other:
+ * [Feature Requests](https://github.com/Crazy-Crew/${rootProject.name}/issues)
+ * [Bug Reports](https://github.com/Crazy-Crew/${rootProject.name}/issues)
+"""
+
+File file = layout.buildDirectory.file("libs/${rootProject.name}-${rootProject.version}.jar").get().asFile
+
+modrinth {
+    setAutoAddDependsOn(false)
+
+    token.set(System.getenv("modrinth_token"))
+
+    projectId.set(rootProject.name.toLowerCase())
+
+    versionName.set("${rootProject.name} ${rootProject.version}")
+
+    versionNumber.set("${rootProject.version}")
+
+    versionType.set(modrinthType)
+
+    uploadFile.set(file)
+
+    gameVersions.add(minecraftVersion)
+
+    changelog.set(description)
+
+    loaders.addAll("paper", "purpur")
+}
+
+hangarPublish {
+    publications.register("plugin") {
+        version.set("$rootProject.version")
+
+        id.set(rootProject.name)
+
+        channel.set(hangarType)
+
+        changelog.set(description)
+
+        apiKey.set(System.getenv("hangar_key"))
+
+        platforms {
+            register(Platforms.PAPER) {
+                jar.set(file)
+
+                platformVersions.set(["$minecraftVersion"])
+            }
+        }
+    }
+}

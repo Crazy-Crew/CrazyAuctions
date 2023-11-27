@@ -1,12 +1,49 @@
-name: CrazyAuctions
-author: BadBones69
-main: com.badbones69.crazyauctions.Main
-website: https://www.spigotmc.org/resources/authors/badbones69.9719/
-version: ${version}${build.number}
+name: '${name}'
+main: '${group}.${name}'
+
+authors: ${authors}
+
+version: '${version}'
+api-version: '${apiVersion}'
+description: '${description}'
+website: '${website}'
+
 depend: [Vault]
-api-version: 1.13
-description: A plugin to auction off items globally.
+
 commands:
-  ca:
+  crazyauctions:
     description: Opens the Crazy Auctions GUI.
-    aliases: [crazyauction, crazyauctions, ah, hdv]
+    aliases: [crazyauction, ah, ca]
+
+permissions:
+  crazyauctions.access:
+    default: true
+
+  crazyauctions.test:
+    default: op
+
+  crazyauctions.view:
+    default: true
+
+  crazyauctions.reload:
+    default: op
+
+  crazyauctions.sell:
+    default: true
+
+  crazyauctions.bid:
+    default: true
+
+  crazyauctions.player.*:
+    default: false
+    children:
+      crazyauctions.bid: true
+      crazyauctions.sell: true
+      crazyauctions.access: true
+      crazyauctions.view: true
+
+  crazyauctions.admin:
+    default: op
+    children:
+      crazyauctions.test: true
+      crazyauctions.reload: true

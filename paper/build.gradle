@@ -1,0 +1,64 @@
+plugins {
+    alias(libs.plugins.paperweight)
+    alias(libs.plugins.shadowjar)
+
+    alias(libs.plugins.runpaper)
+}
+
+project.group = "${rootProject.group}.paper"
+project.version = rootProject.version
+
+base {
+    archivesName = "${rootProject.name}-${project.name}"
+}
+
+dependencies {
+    implementation(libs.metrics)
+
+    compileOnly(libs.vault)
+
+    paperweightDevelopmentBundle("io.papermc.paper:dev-bundle:$minecraftVersion-R0.1-SNAPSHOT")
+}
+
+tasks {
+    runServer {
+        jvmArgs("-Dnet.kyori.ansi.colorLevel=truecolor")
+
+        minecraftVersion(minecraftVersion)
+    }
+
+    assemble {
+        dependsOn(reobfJar)
+    }
+
+    shadowJar {
+        mergeServiceFiles()
+
+        exclude("META-INF/**")
+
+        List.of(
+                "org.bstats"
+        ).forEach {
+            relocate(it, "libs.$it")
+        }
+    }
+
+    processResources {
+        Map<String, String> props = new HashMap<>()
+
+        props.put("name", rootProject.name)
+        props.put("version", "$rootProject.version")
+        props.put("group", "$project.group")
+        props.put("description", rootProject.description)
+
+        props.put("apiVersion", apiVersion)
+        props.put("authors", authors)
+        props.put("website", website)
+
+        inputs.properties(props)
+
+        filesMatching("plugin.yml") {
+            expand(props)
+        }
+    }
+}
