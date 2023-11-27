@@ -1,0 +1,8 @@
+name: '${name}'
+main: '${group}.CrazyAuctions'
+
+version: '${version}'
+api-version: '${apiVersion}'
+description: '${description}'
+
+bootstrapper: '${group}.CrazyStarter'
