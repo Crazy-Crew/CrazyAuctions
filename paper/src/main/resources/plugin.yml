@@ -8,7 +8,7 @@ api-version: '${apiVersion}'
 description: '${description}'
 website: '${website}'
 
-depend: [Vault]
+softdepend: [Vault]
 
 commands:
   crazyauctions:
