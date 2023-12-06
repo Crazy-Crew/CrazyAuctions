@@ -27,7 +27,8 @@ String type = isBeta ? "Beta" : "Release"
 
 String description = """
 ## Fixes:
- * Glow now works again.
+ * Fix not being able to buy items
+ * Fix an issue where it would scream about tasks needing to be run sync
 
 ## Other:
  * [Feature Requests](https://github.com/Crazy-Crew/${rootProject.name}/issues)
