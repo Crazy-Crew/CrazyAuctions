@@ -373,7 +373,7 @@ public class GuiListener implements Listener {
         }
 
         Inventory inv = plugin.getServer().createInventory(null, 27, Methods.color(config.getString("Settings.Bidding-On-Item")));
-        if (!bidding.containsKey(player)) bidding.put(player.getUniqueId(), 0);
+        if (!bidding.containsKey(player.getUniqueId())) bidding.put(player.getUniqueId(), 0);
 
         inv.setItem(9, Methods.makeItem("LIME_STAINED_GLASS_PANE", 1, "&a+1"));
         inv.setItem(10, Methods.makeItem("LIME_STAINED_GLASS_PANE", 1, "&a+10"));
@@ -717,7 +717,7 @@ public class GuiListener implements Listener {
                                 }
                             }
 
-                            if (List.containsKey(player)) {
+                            if (List.containsKey(player.getUniqueId())) {
                                 if (List.get(player.getUniqueId()).size() >= slot) {
                                     int id = List.get(player.getUniqueId()).get(slot);
                                     boolean T = false;
@@ -927,7 +927,7 @@ public class GuiListener implements Listener {
                                 }
                             }
 
-                            if (List.containsKey(player)) {
+                            if (List.containsKey(player.getUniqueId())) {
                                 if (List.get(player.getUniqueId()).size() >= slot) {
                                     int id = List.get(player.getUniqueId()).get(slot);
                                     boolean T = false;
@@ -1023,7 +1023,7 @@ public class GuiListener implements Listener {
                                 }
                             }
 
-                            if (List.containsKey(player)) {
+                            if (List.containsKey(player.getUniqueId())) {
                                 if (List.get(player.getUniqueId()).size() >= slot) {
                                     int id = List.get(player.getUniqueId()).get(slot);
                                     boolean T = false;
