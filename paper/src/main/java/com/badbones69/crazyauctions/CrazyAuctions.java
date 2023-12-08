@@ -5,6 +5,7 @@ import com.badbones69.crazyauctions.api.FileManager;
 import com.badbones69.crazyauctions.api.enums.Messages;
 import com.badbones69.crazyauctions.api.support.PluginSupport;
 import com.badbones69.crazyauctions.api.support.metrics.MetricsWrapper;
+import com.badbones69.crazyauctions.api.users.UserManager;
 import com.badbones69.crazyauctions.commands.AuctionCommand;
 import com.badbones69.crazyauctions.commands.AuctionTab;
 import com.badbones69.crazyauctions.controllers.GuiListener;
@@ -15,6 +16,8 @@ import org.bukkit.command.PluginCommand;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
+
+import java.io.File;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -30,12 +33,15 @@ public class CrazyAuctions extends JavaPlugin {
     private FileManager fileManager;
     private CrazyManager crazyManager;
 
+    private UserManager userManager;
+
     private VaultSupport support;
 
     private MetricsWrapper metrics;
 
     @Override
     public void onEnable() {
+        // Check for vault.
         if (!PluginSupport.VAULT.isPluginEnabled()) {
             getLogger().severe("Vault was not found so the plugin will now disable.");
 
@@ -44,6 +50,7 @@ public class CrazyAuctions extends JavaPlugin {
             return;
         }
 
+        // Create timer task.
         this.timer = new Timer();
 
         // Rename file if found.
@@ -59,33 +66,38 @@ public class CrazyAuctions extends JavaPlugin {
         this.userManager = new UserManager();
         this.crazyManager = new CrazyManager();
 
+        // Load file manager.
         this.fileManager.setup();
+
         // Migrate any old data.
         this.userManager.migrate();
 
+        // Load crazy manager.
         this.crazyManager.load();
 
+        // Register listeners.
         getServer().getPluginManager().registerEvents(new GuiListener(), this);
         getServer().getPluginManager().registerEvents(new MarcoListener(), this);
 
+        // Register commands.
         registerCommand(getCommand("crazyauctions"), new AuctionTab(), new AuctionCommand());
 
         // Run a task every 5 seconds to update auctions.
-        TimerTask task = new TimerTask() {
+        /*TimerTask task = new TimerTask() {
             @Override
             public void run() {
                 getServer().getScheduler().runTask(get(), Methods::updateAuction);
             }
         };
 
-        this.timer.scheduleAtFixedRate(task, 20L, 5000L);
+        this.timer.scheduleAtFixedRate(task, 20L, 5000L);*/
 
         // Add new messages.
         Messages.addMissingMessages();
 
         // Enable vault support if enabled.
         this.support = new VaultSupport();
-        support.loadVault();
+        this.support.loadVault();
 
         // Create bstats instance.
         this.metrics = new MetricsWrapper();
@@ -112,12 +124,19 @@ public class CrazyAuctions extends JavaPlugin {
         return this.timer;
     }
 
+    @NotNull
     public VaultSupport getSupport() {
         return this.support;
     }
 
+    @NotNull
     public MetricsWrapper getMetrics() {
         return this.metrics;
+    }
+
+    @NotNull
+    public UserManager getUserManager() {
+        return this.userManager;
     }
 
     @NotNull
