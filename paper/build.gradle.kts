@@ -12,7 +12,7 @@ plugins {
 }
 
 base {
-    archivesName = "${rootProject.name}"
+    archivesName = rootProject.name
 }
 
 val mcVersion = rootProject.properties["minecraftVersion"] as String
@@ -29,9 +29,8 @@ val isBeta: Boolean get() = rootProject.extra["isBeta"]?.toString()?.toBoolean()
 val type = if (isBeta) "Beta" else "Release"
 
 val description = """
-## Fixes:
- * Fix not being able to buy items
- * Fix an issue where it would scream about tasks needing to be run sync
+## Changes:
+ * data.yml has been renamed to users.yml
 
 ## Other:
  * [Feature Requests](https://github.com/Crazy-Crew/${rootProject.name}/issues)
