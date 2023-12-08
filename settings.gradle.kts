@@ -9,4 +9,5 @@ pluginManagement {
 
 rootProject.name = "CrazyAuctions"
 
+include("common")
 include("paper")
