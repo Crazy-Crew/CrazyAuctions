@@ -313,7 +313,7 @@ public class FileManager {
         CONFIG("config.yml", "config.yml"),
         MESSAGES("messages.yml", "messages.yml"),
         TEST_FILE("test-file.yml", "test-file.yml"),
-        DATA("data.yml", "data.yml");
+        DATA("users.yml", "users.yml");
 
         private final String fileName;
         private final String fileJar;

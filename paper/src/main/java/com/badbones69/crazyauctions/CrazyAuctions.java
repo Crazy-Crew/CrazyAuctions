@@ -46,10 +46,23 @@ public class CrazyAuctions extends JavaPlugin {
 
         this.timer = new Timer();
 
+        // Rename file if found.
+        File file = new File(getDataFolder(), "data.yml");
+
+        if (file.exists()) {
+            if (file.renameTo(new File(getDataFolder(), "users.yml"))) {
+                getLogger().info("Successfully converted data.yml to users.yml");
+            }
+        }
+
         this.fileManager = new FileManager();
+        this.userManager = new UserManager();
         this.crazyManager = new CrazyManager();
 
         this.fileManager.setup();
+        // Migrate any old data.
+        this.userManager.migrate();
+
         this.crazyManager.load();
 
         getServer().getPluginManager().registerEvents(new GuiListener(), this);
