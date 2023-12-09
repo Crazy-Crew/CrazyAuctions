@@ -25,7 +25,6 @@ public class AuctionTab implements TabCompleter {
                 completions.add("expired");
                 completions.add("listed");
             }
-            if (hasPermission(sender, "test")) completions.add("test");
             if (hasPermission(sender, "admin")) completions.add("reload");
             if (hasPermission(sender, "view")) completions.add("view");
             if (hasPermission(sender, "sell")) completions.add("sell");

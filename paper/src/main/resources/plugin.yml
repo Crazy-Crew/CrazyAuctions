@@ -19,9 +19,6 @@ permissions:
   crazyauctions.access:
     default: true
 
-  crazyauctions.test:
-    default: op
-
   crazyauctions.view:
     default: true
 
@@ -48,6 +45,5 @@ permissions:
   crazyauctions.admin:
     default: false
     children:
-      crazyauctions.test: true
       crazyauctions.reload: true
       crazyauctions.bypass: true

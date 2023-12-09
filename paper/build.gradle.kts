@@ -31,6 +31,7 @@ val type = if (isBeta) "Beta" else "Release"
 val description = """
 ## Changes:
  * data.yml has been renamed to users.yml
+ * Removed /ah test
 
 ## Other:
  * [Feature Requests](https://github.com/Crazy-Crew/${rootProject.name}/issues)
