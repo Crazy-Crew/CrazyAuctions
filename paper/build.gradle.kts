@@ -9,10 +9,12 @@ plugins {
     alias(libs.plugins.runpaper)
 
     alias(libs.plugins.hangar)
+
+    `maven-publish`
 }
 
 base {
-    archivesName = rootProject.name
+    archivesName.set(rootProject.name)
 }
 
 val mcVersion = rootProject.properties["minecraftVersion"] as String
@@ -99,6 +101,29 @@ tasks {
     // Assembles the plugin.
     assemble {
         dependsOn(reobfJar)
+    }
+
+    publishing {
+        repositories {
+            maven {
+                url = uri("https://repo.crazycrew.us/releases/")
+
+                credentials {
+                    this.username = System.getenv("GRADLE_USERNAME")
+                    this.password = System.getenv("GRADLE_PASSWORD")
+                }
+            }
+        }
+
+        publications {
+            create<MavenPublication>("maven") {
+                groupId = rootProject.group.toString()
+                artifactId = "${rootProject.name.lowercase()}-${project.name.lowercase()}-api"
+                version = rootProject.version.toString()
+
+                from(component)
+            }
+        }
     }
 
     shadowJar {
