@@ -1,0 +1,16 @@
+name: '${name}'
+main: '${group}.${name}'
+
+bootstrapper: '${group}.bootstrap.CrazyLoader'
+loader: '${group}.bootstrap.CrazyLibs'
+
+version: '${version}'
+api-version: '${apiVersion}'
+description: '${description}'
+
+dependencies:
+  server:
+    Vault:
+      load: BEFORE
+      required: false
+      join-classpath: true

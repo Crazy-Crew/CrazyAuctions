@@ -20,11 +20,13 @@ base {
 val mcVersion = rootProject.properties["minecraftVersion"] as String
 
 dependencies {
-    implementation(libs.cluster.paper)
+    api(project(":common"))
 
     implementation(libs.metrics)
 
-    implementation(libs.jorel)
+    compileOnly(libs.cluster.paper)
+
+    compileOnly(libs.jorel)
 
     compileOnly(libs.vault)
 
@@ -37,7 +39,6 @@ val type = if (isBeta) "Beta" else "Release"
 val description = """
 ## Changes:
  * data.yml has been renamed to users.yml
- * Removed /ah test
 
 ## Other:
  * [Feature Requests](https://github.com/Crazy-Crew/${rootProject.name}/issues)
@@ -136,7 +137,7 @@ tasks {
         exclude("META-INF/**")
 
         listOf(
-          "org.bstats", "dev.jorel.commandapi", "com.ryderbelserion.cluster"
+          "org.bstats"
         ).forEach {
             relocate(it, "libs.$it")
         }
@@ -155,7 +156,7 @@ tasks {
 
         inputs.properties(properties)
 
-        filesMatching("plugin.yml") {
+        filesMatching("paper-plugin.yml") {
             expand(properties)
         }
     }

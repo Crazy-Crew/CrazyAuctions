@@ -8,21 +8,15 @@ import java.io.File;
 
 public class AuctionsFactory {
 
-    private final File dataFolder;
-
-    public AuctionsFactory(File dataFolder) {
-        this.dataFolder = dataFolder;
-    }
-
     private SettingsManager config;
 
-    public void load() {
+    public void load(File dataFolder) {
         // Create yaml builder
         YamlFileResourceOptions builder = YamlFileResourceOptions.builder().indentationSize(2).build();
 
         // Create the config.yml
         this.config = SettingsManagerBuilder
-                .withYamlFile(new File(this.dataFolder, "config.yml"), builder)
+                .withYamlFile(new File(dataFolder, "config.yml"), builder)
                 .useDefaultMigrationService()
                 .configurationData(ConfigKeys.class)
                 .create();
@@ -31,5 +25,9 @@ public class AuctionsFactory {
     public void reload() {
         // Reload the config.yml
         this.config.reload();
+    }
+
+    public SettingsManager getConfig() {
+        return this.config;
     }
 }
