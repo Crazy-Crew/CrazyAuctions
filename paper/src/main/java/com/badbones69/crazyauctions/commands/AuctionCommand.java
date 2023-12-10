@@ -23,7 +23,7 @@ import org.jetbrains.annotations.NotNull;
 import org.yaml.snakeyaml.error.YAMLException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Random;
+import java.util.Objects;
 import java.util.logging.Level;
 
 public class AuctionCommand implements CommandExecutor {
@@ -35,9 +35,8 @@ public class AuctionCommand implements CommandExecutor {
     private final FileManager fileManager = this.plugin.getFileManager();
 
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, String commandLabel, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String commandLabel, String[] args) {
         FileConfiguration config = Files.CONFIG.getFile();
-        FileConfiguration data = Files.DATA.getFile();
 
         if (args.length == 0) {
             if (!(sender instanceof Player player)) {
@@ -290,50 +289,24 @@ public class AuctionCommand implements CommandExecutor {
                             return true;
                         }
 
-                        String seller = player.getName();
-                        int num = 1;
+                        Long auctionTime = args[0].equalsIgnoreCase("bid") ? Methods.convertToMill(Objects.requireNonNull(config.getString("Settings.Bid-Time"))) : Methods.convertToMill(Objects.requireNonNull(config.getString("Settings.Sell-Time")));
+                        Long fullTime = Methods.convertToMill(Objects.requireNonNull(config.getString("Settings.Full-Expire-Time")));
 
-                        Random random = new Random();
+                        ShopType type = args[0].equalsIgnoreCase("bid") ? ShopType.BID : ShopType.SELL;
 
-                        for (; data.contains("Items." + num); num++) ;
-                        data.set("Items." + num + ".Price", price);
-                        data.set("Items." + num + ".Seller", seller);
+                        item.setAmount(amount);
 
-                        if (args[0].equalsIgnoreCase("bid")) {
-                            data.set("Items." + num + ".Time-Till-Expire", Methods.convertToMill(config.getString("Settings.Bid-Time")));
-                        } else {
-                            data.set("Items." + num + ".Time-Till-Expire", Methods.convertToMill(config.getString("Settings.Sell-Time")));
-                        }
+                        this.plugin.getUserManager()
+                                .auction(
+                                        player,
+                                        item,
+                                        price,
+                                        auctionTime,
+                                        fullTime,
+                                        args[0].equalsIgnoreCase("bid")
+                                );
 
-                        data.set("Items." + num + ".Full-Time", Methods.convertToMill(config.getString("Settings.Full-Expire-Time")));
-                        int id = random.nextInt(999999);
-                        // Runs 3x to check for same ID.
-                        for (String i : data.getConfigurationSection("Items").getKeys(false))
-                            if (data.getInt("Items." + i + ".StoreID") == id) id = random.nextInt(Integer.MAX_VALUE);
-                        for (String i : data.getConfigurationSection("Items").getKeys(false))
-                            if (data.getInt("Items." + i + ".StoreID") == id) id = random.nextInt(Integer.MAX_VALUE);
-                        for (String i : data.getConfigurationSection("Items").getKeys(false))
-                            if (data.getInt("Items." + i + ".StoreID") == id) id = random.nextInt(Integer.MAX_VALUE);
-                        data.set("Items." + num + ".StoreID", id);
-                        ShopType type = ShopType.SELL;
-
-                        if (args[0].equalsIgnoreCase("bid")) {
-                            data.set("Items." + num + ".Biddable", true);
-                            type = ShopType.BID;
-                        } else {
-                            data.set("Items." + num + ".Biddable", false);
-                        }
-
-                        data.set("Items." + num + ".TopBidder", "None");
-
-                        ItemStack stack = item.clone();
-                        stack.setAmount(amount);
-
-                        data.set("Items." + num + ".Item", stack);
-
-                        Files.DATA.saveFile();
-
-                        this.plugin.getServer().getPluginManager().callEvent(new AuctionListEvent(player, type, stack, price));
+                        this.plugin.getServer().getPluginManager().callEvent(new AuctionListEvent(player, type, item, price));
 
                         HashMap<String, String> placeholders = new HashMap<>();
 

@@ -454,4 +454,26 @@ public class Methods {
 
         return String.valueOf(price);
     }
+
+    public static String getPrice(Player player, String id, boolean isActive) {
+        long price = 0L;
+
+        FileConfiguration users = Files.DATA.getFile();
+
+        UUID uuid = player.getUniqueId();
+
+        if (isActive) {
+            if (users.contains("expired-items." + uuid + "." + id + ".price")) {
+                price = users.getLong("expired-items." + uuid + "." + id + ".price");
+            }
+
+            return String.valueOf(price);
+        }
+
+        if (users.contains("active-items." + uuid + "." + id + ".price")) {
+            price = users.getLong("active-items." + uuid + "." + id + ".price");
+        }
+
+        return String.valueOf(price);
+    }
 }
