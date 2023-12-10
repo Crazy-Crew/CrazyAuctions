@@ -20,7 +20,11 @@ base {
 val mcVersion = rootProject.properties["minecraftVersion"] as String
 
 dependencies {
+    implementation(libs.cluster.paper)
+
     implementation(libs.metrics)
+
+    implementation(libs.jorel)
 
     compileOnly(libs.vault)
 
@@ -132,7 +136,7 @@ tasks {
         exclude("META-INF/**")
 
         listOf(
-                "org.bstats"
+          "org.bstats", "dev.jorel.commandapi", "com.ryderbelserion.cluster"
         ).forEach {
             relocate(it, "libs.$it")
         }

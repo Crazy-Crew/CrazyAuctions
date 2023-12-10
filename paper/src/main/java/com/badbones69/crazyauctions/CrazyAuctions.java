@@ -16,10 +16,8 @@ import org.bukkit.command.PluginCommand;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
-
 import java.io.File;
 import java.util.Timer;
-import java.util.TimerTask;
 
 public class CrazyAuctions extends JavaPlugin {
 
