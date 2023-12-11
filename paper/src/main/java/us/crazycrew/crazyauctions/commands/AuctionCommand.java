@@ -16,19 +16,19 @@ public class AuctionCommand {
     private final CrazyAuctions plugin = CrazyAuctions.get();
 
     @Default
-    public void auction(Player player) {
+    public static void auction(Player player) {
         // Open the main menu.
     }
 
     @Subcommand("help")
     @Permission("crazyauctions.help")
-    public void help(CommandSender sender) {
+    public static void help(CommandSender sender) {
         // Send the help message.
     }
 
     @Subcommand("reload")
     @Permission("crazyauctions.reload")
-    public void reload(CommandSender sender) {
+    public static void reload(CommandSender sender) {
         // Reload the plugin.
     }
 }
