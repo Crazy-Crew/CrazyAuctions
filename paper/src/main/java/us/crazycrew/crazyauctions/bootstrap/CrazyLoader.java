@@ -10,8 +10,6 @@ import us.crazycrew.crazyauctions.CrazyAuctions;
 
 public class CrazyLoader extends AuctionsFactory implements PluginBootstrap {
 
-    private AuctionsFactory factory;
-
     @Override
     public void bootstrap(@NotNull BootstrapContext context) {
         super.load(context.getDataDirectory().toFile());
