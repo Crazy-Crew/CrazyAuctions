@@ -104,4 +104,11 @@ public class ConfigKeys implements SettingsHolder {
 
     @Comment("How long should an item be claimable by the winner of the bid.")
     public static final Property<String> default_collect_time = newProperty("auctions.default-collect-time", "30d");
+
+    @Comment({
+            "The economy you wish to use for the plugin.",
+            "",
+            "Available Types: vault, xp_total, xp_levels"
+    })
+    public static final Property<String> economy_type = newProperty("auctions.economy", "vault");
 }
