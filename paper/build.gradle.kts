@@ -26,6 +26,10 @@ dependencies {
 
     compileOnly(libs.cluster.paper)
 
+    annotationProcessor(libs.annotations)
+
+    compileOnly(libs.annotations)
+
     compileOnly(libs.jorel)
 
     compileOnly(libs.vault)

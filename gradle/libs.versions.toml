@@ -35,3 +35,4 @@ decentholograms = { module = "com.github.decentsoftware-eu:decentholograms", ver
 placeholderapi = { module = "me.clip:placeholderapi", version = "2.11.4" }
 
 jorel = { module = "dev.jorel:commandapi-bukkit-shade", version = "9.2.0" }
+annotations = { module = "dev.jorel:commandapi-annotations", version = "9.2.0" }

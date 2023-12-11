@@ -19,6 +19,7 @@ public class CrazyLibs implements PluginLoader {
 
         // Commands
         resolver.addDependency(new Dependency(new DefaultArtifact("dev.jorel:commandapi-bukkit-shade:9.2.0"), null));
+        resolver.addDependency(new Dependency(new DefaultArtifact("dev.jorel:commandapi-annotations:9.2.0"), null));
 
         // Other
         //resolver.addDependency(new Dependency(new DefaultArtifact("com.ryderbelserion.cluster.api:cluster-api:4.1.2"), null));
