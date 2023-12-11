@@ -4,7 +4,6 @@ import ch.jalu.configme.Comment;
 import ch.jalu.configme.SettingsHolder;
 import ch.jalu.configme.configurationdata.CommentsConfiguration;
 import ch.jalu.configme.properties.Property;
-
 import static ch.jalu.configme.properties.PropertyInitializer.newProperty;
 
 public class ConfigKeys implements SettingsHolder {
@@ -43,6 +42,10 @@ public class ConfigKeys implements SettingsHolder {
         };
 
         conf.setComment("patches", patches);
+
+        conf.setComment("misc", "Settings that don't really belong anywhere.");
+
+        conf.setComment("auctions", "Settings related to default auction values.");
     }
 
     @Comment("Whether you want CrazyAuctions to shut up or not, This option is ignored by errors.")
