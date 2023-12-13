@@ -43,15 +43,18 @@ public class CommandManager {
         CommandAPI.onEnable();
 
         // Create default command.
-        CommandAPICommand command = new CommandAPICommand("ah")
+        CommandAPICommand command = new CommandAPICommand("crazyauctions")
+                .withAliases("ca", "ah")
                 .withPermission("crazyauctions.help")
                 .executes((sender, args) -> {
-                    if (!(sender instanceof Player player)) {
+                    CommandContext context = new CommandContext(sender, args);
+
+                    if (!context.isPlayer()) {
                         sender.sendMessage(AdvUtils.parse("<red>Must be a player."));
                         return;
                     }
 
-                    AuctionHouseMenu auctions = new AuctionHouseMenu(player, 54, AuctionsFactory.getAuctions().getProperty(AuctionKeys.inventory_name));
+                    AuctionHouseMenu auctions = new AuctionHouseMenu(context.getPlayer(), 54, AuctionsFactory.getAuctions().getProperty(AuctionKeys.inventory_name));
                     auctions.open();
                 });
 
