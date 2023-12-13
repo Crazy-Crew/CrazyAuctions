@@ -26,8 +26,6 @@ dependencies {
 
     implementation(libs.cluster5)
 
-    annotationProcessor(libs.commandAnnotations)
-
     implementation(libs.commandApi)
 
     compileOnly(libs.vault)
