@@ -15,8 +15,7 @@ import java.util.Map;
 
 public enum Messages {
 
-    plugin_reload(MessageKeys.plugin_reload),
-    help(MessageKeys.help, true);
+    plugin_reload(MessageKeys.plugin_reload);
 
     private Property<String> property;
 

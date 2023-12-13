@@ -36,6 +36,10 @@ public class CrazyAuctions extends JavaPlugin {
         this.factory.reload();
     }
 
+    public CommandManager getCommandManager() {
+        return this.commandManager;
+    }
+
     public AuctionsFactory getFactory() {
         return this.factory;
     }

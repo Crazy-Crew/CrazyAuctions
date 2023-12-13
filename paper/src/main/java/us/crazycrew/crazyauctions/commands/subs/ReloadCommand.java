@@ -2,8 +2,7 @@ package us.crazycrew.crazyauctions.commands.subs;
 
 import com.badbones69.crazyauctions.common.enums.Messages;
 import dev.jorel.commandapi.CommandAPICommand;
-import dev.jorel.commandapi.executors.CommandArguments;
-import org.bukkit.command.CommandSender;
+import us.crazycrew.crazyauctions.commands.engine.CommandContext;
 import us.crazycrew.crazyauctions.commands.engine.CommandEngine;
 import java.util.Collections;
 
@@ -14,9 +13,9 @@ public class ReloadCommand extends CommandEngine {
     }
 
     @Override
-    public void execute(CommandSender sender, CommandArguments args) {
+    public void execute(CommandContext context) {
         this.plugin.getFactory().reload();
 
-        Messages.plugin_reload.sendMessage(sender);
+        Messages.plugin_reload.sendMessage(context.getSender());
     }
 }

@@ -1,8 +1,6 @@
 package us.crazycrew.crazyauctions.commands.engine;
 
 import dev.jorel.commandapi.CommandAPICommand;
-import dev.jorel.commandapi.executors.CommandArguments;
-import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import us.crazycrew.crazyauctions.CrazyAuctions;
 import java.util.List;
@@ -12,7 +10,12 @@ public abstract class CommandEngine {
     @NotNull
     protected final CrazyAuctions plugin = CrazyAuctions.get();
 
+    // Root command.
     private final CommandAPICommand command;
+
+    // Sub command.
+    private CommandAPICommand subCommand;
+
     private final String label;
     private final String description;
     private final String permission;
@@ -26,12 +29,25 @@ public abstract class CommandEngine {
         this.permission = permission;
         this.aliases = aliases;
     }
-    public abstract void execute(CommandSender sender, CommandArguments args);
+
+    public abstract void execute(CommandContext context);
 
     public void registerSubCommand() {
-        CommandAPICommand subCommand = new CommandAPICommand(this.label).withShortDescription(this.description).withPermission(this.permission).executes(this::execute);
+        this.subCommand = new CommandAPICommand(this.label).withShortDescription(this.description).withUsage("/" + this.command.getName() + " " + this.label).withPermission(this.permission).executes((sender, args) -> {
+            CommandContext context = new CommandContext(sender, args);
 
-        this.command.withSubcommand(subCommand);
+            execute(context);
+        });
+
+        this.command.withSubcommand(this.subCommand);
+    }
+
+    public CommandAPICommand getCommand() {
+        return this.command;
+    }
+
+    public CommandAPICommand getSubCommand() {
+        return this.subCommand;
     }
 
     public String getLabel() {
@@ -40,6 +56,10 @@ public abstract class CommandEngine {
 
     public String getDescription() {
         return this.description;
+    }
+
+    public String getPermission() {
+        return permission;
     }
 
     public List<String> getAliases() {

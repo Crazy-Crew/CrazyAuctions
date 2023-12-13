@@ -9,14 +9,24 @@ import dev.jorel.commandapi.CommandAPICommand;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import us.crazycrew.crazyauctions.CrazyAuctions;
+import us.crazycrew.crazyauctions.commands.engine.CommandEngine;
 import us.crazycrew.crazyauctions.commands.subs.HelpCommand;
 import us.crazycrew.crazyauctions.commands.subs.ReloadCommand;
 import us.crazycrew.crazyauctions.menus.AuctionHouseMenu;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class CommandManager {
 
     @NotNull
     private final CrazyAuctions plugin = CrazyAuctions.get();
+
+    private final ConcurrentHashMap<String, CommandEngine> commands = new ConcurrentHashMap<>();
+
+    private final LinkedList<CommandEngine> classes = new LinkedList<>();
 
     public void load() {
         // Create command config.
@@ -45,10 +55,28 @@ public class CommandManager {
                 });
 
         // Bind subcommand to the object above.
-        new ReloadCommand(command).registerSubCommand();
-        new HelpCommand(command).registerSubCommand();
+        List.of(
+                new ReloadCommand(command),
+                new HelpCommand(command)
+        ).forEach(this::addCommand);
 
         // Register it all.
         command.register();
+    }
+
+    public void addCommand(CommandEngine command) {
+        this.commands.put(command.getLabel(), command);
+
+        this.classes.add(command);
+
+        command.registerSubCommand();
+    }
+
+    public Map<String, CommandEngine> getCommands() {
+        return Collections.unmodifiableMap(this.commands);
+    }
+
+    public List<CommandEngine> getClasses() {
+        return Collections.unmodifiableList(this.classes);
     }
 }

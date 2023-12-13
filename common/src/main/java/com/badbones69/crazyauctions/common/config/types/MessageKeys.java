@@ -3,8 +3,6 @@ package com.badbones69.crazyauctions.common.config.types;
 import ch.jalu.configme.SettingsHolder;
 import ch.jalu.configme.configurationdata.CommentsConfiguration;
 import ch.jalu.configme.properties.Property;
-import java.util.List;
-import static ch.jalu.configme.properties.PropertyInitializer.newListProperty;
 import static ch.jalu.configme.properties.PropertyInitializer.newProperty;
 
 public class MessageKeys implements SettingsHolder {
@@ -37,10 +35,17 @@ public class MessageKeys implements SettingsHolder {
 
     public static final Property<String> plugin_reload = newProperty("root.plugin-reload", "{prefix}You have just reloaded the configurations.");
 
-    public static final Property<List<String>> help = newListProperty("root.help", List.of(
-            " <dark_red>Crazy<blue>Auctions <reset>Help",
-            "",
-            "  <dark_gray>- <gold>/ah help</gold> -></dark_gray> <reset>Lists all commands for CrazyAuctions.",
-            "  <dark_gray>- <gold>/ah reload</gold> -></dark_gray> <reset>Reloads the plugin."
-    ));
+    public static final Property<String> page_header = newProperty("root.page.header", "<dark_gray>=========== <gold>CrazyAuctions {page}</gold> ===========");
+
+    public static final Property<String> page_format = newProperty("root.page.format", " <gold>{command} <dark_gray>» <reset>{description}");
+
+    public static final Property<String> page_footer = newProperty("root.page.footer", "<dark_gray>=========== <gold>CrazyAuctions {page}</gold> ===========");
+
+    public static final Property<String> hover_format = newProperty("root.page.hover", "<gray>Click me to copy <gold>{command}");
+
+    public static final Property<String> next_button = newProperty("root.page.next", "<green> >>>");
+
+    public static final Property<String> navigation_text = newProperty("root.page.text", "<gray>Click me to go to the <gold>{type}</gold> page");
+
+    public static final Property<String> back_button = newProperty("root.page.back", "<red> <<<");
 }
