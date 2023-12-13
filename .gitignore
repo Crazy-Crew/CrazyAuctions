@@ -2,9 +2,6 @@ build
 .gradle
 .idea
 
-buildSrc/.gradle
-buildSrc/build
-
 common/.gradle
 common/build
 

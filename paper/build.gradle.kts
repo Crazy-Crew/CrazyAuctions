@@ -22,15 +22,13 @@ val mcVersion = rootProject.properties["minecraftVersion"] as String
 dependencies {
     api(project(":common"))
 
-    implementation(libs.metrics)
+    implementation(libs.bstats)
 
-    compileOnly(libs.cluster.paper)
+    implementation(libs.cluster5)
 
-    annotationProcessor(libs.annotations)
+    annotationProcessor(libs.commandAnnotations)
 
-    compileOnly(libs.annotations)
-
-    compileOnly(libs.jorel)
+    implementation(libs.commandApi)
 
     compileOnly(libs.vault)
 
@@ -141,7 +139,7 @@ tasks {
         exclude("META-INF/**")
 
         listOf(
-          "org.bstats"
+          "org.bstats", "com.ryderbelserion.cluster", "dev.jorel.commandapi"
         ).forEach {
             relocate(it, "libs.$it")
         }
