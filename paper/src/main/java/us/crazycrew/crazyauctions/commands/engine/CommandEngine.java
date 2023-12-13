@@ -1,9 +1,10 @@
 package us.crazycrew.crazyauctions.commands.engine;
 
 import dev.jorel.commandapi.CommandAPICommand;
+import dev.jorel.commandapi.arguments.BooleanArgument;
+import dev.jorel.commandapi.arguments.IntegerArgument;
 import org.jetbrains.annotations.NotNull;
 import us.crazycrew.crazyauctions.CrazyAuctions;
-import java.util.List;
 
 public abstract class CommandEngine {
 
@@ -19,15 +20,13 @@ public abstract class CommandEngine {
     private final String label;
     private final String description;
     private final String permission;
-    private final List<String> aliases;
 
-    protected CommandEngine(CommandAPICommand command, String label, String description, String permission, List<String> aliases) {
+    protected CommandEngine(CommandAPICommand command, String label, String description, String permission) {
         this.command = command;
 
         this.label = label;
         this.description = description;
         this.permission = permission;
-        this.aliases = aliases;
     }
 
     public abstract void execute(CommandContext context);
@@ -60,9 +59,5 @@ public abstract class CommandEngine {
 
     public String getPermission() {
         return permission;
-    }
-
-    public List<String> getAliases() {
-        return this.aliases;
     }
 }
