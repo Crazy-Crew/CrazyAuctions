@@ -58,11 +58,14 @@ public class ConfigKeys implements SettingsHolder {
     })
     public static final Property<Boolean> toggle_metrics = newProperty("root.toggle_metrics", true);
 
+    @Comment("Pick which locale you want to use if your server is in another language. Changing this requires a server restart!")
+    public static final Property<String> locale_file = newProperty("root.locale", "en-US");
+
     @Comment("The prefix used in commands")
-    public static final Property<String> command_prefix = newProperty("root.command_prefix", "<gray>[<dark_red>Crazy<blue>Auctions<gray>]: <reset>");
+    public static final Property<String> command_prefix = newProperty("root.command_prefix", " <dark_gray>[<dark_red>Crazy<blue>Auctions<dark_gray>]: <reset>");
 
     @Comment("The prefix used in console")
-    public static final Property<String> console_prefix = newProperty("root.console_prefix", "<gray>[<dark_red>Crazy<blue>Auctions<gray>] <reset>");
+    public static final Property<String> console_prefix = newProperty("root.console_prefix", " <dark_gray>[<dark_red>Crazy<blue>Auctions<dark_gray>] <reset>");
 
     @Comment("If true, /ah sell <price> is enabled.")
     public static final Property<Boolean> selling_module = newProperty("modules.selling", true);
