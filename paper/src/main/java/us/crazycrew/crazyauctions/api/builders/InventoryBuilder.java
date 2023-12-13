@@ -1,6 +1,6 @@
 package us.crazycrew.crazyauctions.api.builders;
 
-import com.ryderbelserion.cluster.paper.utils.AdvUtils;
+import com.ryderbelserion.cluster.utils.AdvUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
@@ -27,6 +27,10 @@ public abstract class InventoryBuilder implements InventoryHolder {
     }
 
     public abstract InventoryBuilder build();
+
+    public void open() {
+        this.player.openInventory(getInventory());
+    }
 
     public void size(int size) {
         this.size = size;
