@@ -43,6 +43,8 @@ public class MessageKeys implements SettingsHolder {
 
     public static final Property<String> hover_format = newProperty("root.page.hover", "<gray>Click me to copy <gold>{command}");
 
+    public static final Property<String> invalid_page = newProperty("root.page.invalid", "{prefix}<gold>{page} <gray>is not a valid page.");
+
     public static final Property<String> next_button = newProperty("root.page.next", "<green> >>>");
 
     public static final Property<String> navigation_text = newProperty("root.page.text", "<gray>Click me to go to the <gold>{type}</gold> page");

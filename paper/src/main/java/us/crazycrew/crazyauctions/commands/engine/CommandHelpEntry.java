@@ -35,7 +35,7 @@ public class CommandHelpEntry {
         this.totalPages = this.totalResults / this.perPage;
 
         if (min >= this.totalResults) {
-            context.reply("Invalid page");
+            context.reply(AuctionsFactory.getMessages().getProperty(MessageKeys.invalid_page).replaceAll("\\{page}", String.valueOf(this.page)));
             return;
         }
 

@@ -6,7 +6,6 @@ import com.ryderbelserion.cluster.utils.AdvUtils;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIBukkitConfig;
 import dev.jorel.commandapi.CommandAPICommand;
-import dev.jorel.commandapi.arguments.IntegerArgument;
 import org.jetbrains.annotations.NotNull;
 import us.crazycrew.crazyauctions.CrazyAuctions;
 import us.crazycrew.crazyauctions.commands.engine.CommandContext;
