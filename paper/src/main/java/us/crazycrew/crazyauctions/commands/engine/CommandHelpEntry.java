@@ -2,14 +2,11 @@ package us.crazycrew.crazyauctions.commands.engine;
 
 import com.badbones69.crazyauctions.common.AuctionsFactory;
 import com.badbones69.crazyauctions.common.config.types.MessageKeys;
-import com.badbones69.crazyauctions.common.contexts.builder.ComponentBuilder;
+import com.ryderbelserion.cluster.api.builder.ComponentBuilder;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import org.jetbrains.annotations.NotNull;
 import us.crazycrew.crazyauctions.CrazyAuctions;
-
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 public class CommandHelpEntry {

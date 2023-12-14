@@ -1,7 +1,7 @@
 package us.crazycrew.crazyauctions.menus;
 
+import com.ryderbelserion.cluster.api.builders.InventoryBuilder;
 import org.bukkit.entity.Player;
-import us.crazycrew.crazyauctions.api.builders.InventoryBuilder;
 
 public class AuctionHouseMenu extends InventoryBuilder {
 

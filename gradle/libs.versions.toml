@@ -1,7 +1,7 @@
 [versions]
 configurate4 = "4.1.2"
 adventure4 = "4.14.0"
-cluster5 = "5.2"
+cluster5 = "6.0"
 
 [plugins]
 hangar = { id = "io.papermc.hangar-publish-plugin", version = "0.1.0" }
