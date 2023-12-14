@@ -15,7 +15,15 @@ import java.util.Map;
 
 public enum Messages {
 
-    plugin_reload(MessageKeys.plugin_reload);
+    plugin_reload(MessageKeys.plugin_reload),
+    page_header(MessageKeys.page_header),
+    page_format(MessageKeys.page_format),
+    page_footer(MessageKeys.page_footer),
+    hover_format(MessageKeys.hover_format),
+    invalid_page(MessageKeys.invalid_page),
+    next_button(MessageKeys.next_button),
+    navigation_text(MessageKeys.navigation_text),
+    back_button(MessageKeys.back_button);
 
     private Property<String> property;
 
@@ -92,6 +100,10 @@ public enum Messages {
         this.message = message;
 
         return this;
+    }
+
+    public String asString() {
+        return this.message;
     }
 
     public Component asComponent() {

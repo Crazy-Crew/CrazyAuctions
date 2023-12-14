@@ -2,11 +2,14 @@ package us.crazycrew.crazyauctions.commands.engine;
 
 import com.badbones69.crazyauctions.common.AuctionsFactory;
 import com.badbones69.crazyauctions.common.config.types.MessageKeys;
+import com.badbones69.crazyauctions.common.enums.Messages;
 import com.ryderbelserion.cluster.api.builder.ComponentBuilder;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import org.jetbrains.annotations.NotNull;
 import us.crazycrew.crazyauctions.CrazyAuctions;
+
+import java.util.HashMap;
 import java.util.Map;
 
 public class CommandHelpEntry {
@@ -35,17 +38,15 @@ public class CommandHelpEntry {
         this.totalPages = this.totalResults / this.perPage;
 
         if (min >= this.totalResults) {
-            context.reply(AuctionsFactory.getMessages().getProperty(MessageKeys.invalid_page).replaceAll("\\{page}", String.valueOf(this.page)));
+            Messages.invalid_page.getMessage("{page}", String.valueOf(this.page)).sendMessage(context.getSender());
             return;
         }
 
         Component footerComponent = null;
 
-        String header = AuctionsFactory.getMessages().getProperty(MessageKeys.page_header);
+        Messages.page_header.getMessage("{page}", String.valueOf(this.page)).sendMessage(context.getSender());
 
-        context.reply(header.replaceAll("\\{page}", String.valueOf(this.page)));
-
-        String footer = AuctionsFactory.getMessages().getProperty(MessageKeys.page_footer);
+        String footer = Messages.page_footer.getMessage().asString();
 
         for (int value = min; value < max && value < this.totalResults; value++) {
             if (this.totalResults - 1 < value) continue;
@@ -67,16 +68,19 @@ public class CommandHelpEntry {
 
             root.append(" ").append(label);
 
-            String format = AuctionsFactory.getMessages().getProperty(MessageKeys.page_format)
-                    .replaceAll("\\{command}", root.toString())
-                    .replaceAll("\\{description}", description);
+            HashMap<String, String> placeholders = new HashMap<>();
+
+            placeholders.put("{command}", root.toString());
+            placeholders.put("{description}", description);
+
+            String format = Messages.page_format.getMessage(placeholders).asString();
 
             if (context.isPlayer()) {
                 ComponentBuilder commandBuilder = new ComponentBuilder();
 
                 commandBuilder.setMessage(format);
 
-                String hoverFormat = AuctionsFactory.getMessages().getProperty(MessageKeys.hover_format);
+                String hoverFormat = Messages.hover_format.getMessage().asString();
 
                 commandBuilder.hover(hoverFormat.replaceAll("\\{command}", root.toString()))
                         .click(ClickEvent.Action.COPY_TO_CLIPBOARD, root.toString());
