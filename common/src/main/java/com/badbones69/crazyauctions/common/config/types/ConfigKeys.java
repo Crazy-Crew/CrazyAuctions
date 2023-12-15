@@ -67,17 +67,17 @@ public class ConfigKeys implements SettingsHolder {
     @Comment({
             "How the plugin should store data",
             "",
-            " - Your Options",
-            " | Remote Database Types - You need to supply connection information.",
-            "  |» MySQL *NOT IMPLEMENTED*",
-            "  |» MariaDB *NOT IMPLEMENTED*",
+            "- Your Options",
+            "| Remote Database Types - You need to supply connection information.",
+            " |» MySQL *NOT IMPLEMENTED*",
+            " |» MariaDB *NOT IMPLEMENTED*",
             "",
-            " | Local Database Types",
-            "  |» H2 *NOT IMPLEMENTED*",
-            "  |» SQLITE *DEFAULT",
+            "| Local Database Types",
+            " |» H2 *NOT IMPLEMENTED*",
+            " |» SQLITE *DEFAULT",
             "",
-            " | Text File Based Storage",
-            "  |» JSON (.json files) *NOT IMPLEMENTED*"
+            "| Text File Based Storage",
+            " |» JSON (.json files) *NOT IMPLEMENTED*"
     })
     public static final Property<StorageType> storage_type = newBeanProperty(StorageType.class, "root.database.storage-method", StorageType.SQLITE);
 
