@@ -29,7 +29,6 @@ configme = { module = "ch.jalu:configme", version = "1.4.1" }
 bstats = { module = "org.bstats:bstats-bukkit", version = "3.0.2" }
 
 commandApi = { module = "dev.jorel:commandapi-bukkit-shade", version = "9.3.0" }
-commandAnnotations = { module = "dev.jorel:commandapi-annotations", version = "9.3.0" }
 
 [bundles]
 adventure = ["adventure4", "minimessage4"]

@@ -4,6 +4,9 @@ import ch.jalu.configme.Comment;
 import ch.jalu.configme.SettingsHolder;
 import ch.jalu.configme.configurationdata.CommentsConfiguration;
 import ch.jalu.configme.properties.Property;
+import com.badbones69.crazyauctions.common.enums.StorageType;
+
+import static ch.jalu.configme.properties.PropertyInitializer.newBeanProperty;
 import static ch.jalu.configme.properties.PropertyInitializer.newProperty;
 
 public class ConfigKeys implements SettingsHolder {
@@ -60,6 +63,23 @@ public class ConfigKeys implements SettingsHolder {
 
     @Comment("Pick which locale you want to use if your server is in another language. Changing this requires a server restart!")
     public static final Property<String> locale_file = newProperty("root.locale", "en-US");
+
+    @Comment({
+            "How the plugin should store data",
+            "",
+            " - Your Options",
+            " | Remote Database Types - You need to supply connection information.",
+            "  |» MySQL *NOT IMPLEMENTED*",
+            "  |» MariaDB *NOT IMPLEMENTED*",
+            "",
+            " | Local Database Types",
+            "  |» H2 *NOT IMPLEMENTED*",
+            "  |» SQLITE *DEFAULT",
+            "",
+            " | Text File Based Storage",
+            "  |» JSON (.json files) *NOT IMPLEMENTED*"
+    })
+    public static final Property<StorageType> storage_type = newBeanProperty(StorageType.class, "root.database.storage-method", StorageType.SQLITE);
 
     @Comment("The prefix used in commands")
     public static final Property<String> command_prefix = newProperty("root.command_prefix", " <dark_gray>[<dark_red>Crazy<blue>Auctions<dark_gray>]: <reset>");

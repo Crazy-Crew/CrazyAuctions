@@ -2,6 +2,7 @@ package us.crazycrew.crazyauctions.commands;
 
 import com.badbones69.crazyauctions.common.AuctionsFactory;
 import com.badbones69.crazyauctions.common.config.types.AuctionKeys;
+import com.badbones69.crazyauctions.common.config.types.ConfigKeys;
 import com.ryderbelserion.cluster.utils.AdvUtils;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIBukkitConfig;
@@ -28,7 +29,7 @@ public class CommandManager {
     public void load() {
         // Create command config.
         CommandAPIBukkitConfig config = new CommandAPIBukkitConfig(this.plugin);
-        config.shouldHookPaperReload(true);
+        config.shouldHookPaperReload(true).silentLogs(!AuctionsFactory.getConfig().getProperty(ConfigKeys.verbose_logging));
 
         // Load command api.
         CommandAPI.onLoad(config);
