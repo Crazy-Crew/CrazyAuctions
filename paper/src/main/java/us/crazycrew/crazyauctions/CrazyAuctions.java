@@ -1,5 +1,7 @@
 package us.crazycrew.crazyauctions;
 
+import com.badbones69.crazyauctions.common.config.types.Config;
+import com.ryderbelserion.cluster.ClusterFactory;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import us.crazycrew.crazyauctions.api.PaperAbstractPlugin;
@@ -9,18 +11,19 @@ import us.crazycrew.crazyauctions.commands.CommandManager;
 
 public class CrazyAuctions extends JavaPlugin {
 
+    @NotNull
+    public static CrazyAuctions get() {
+        return JavaPlugin.getPlugin(CrazyAuctions.class);
+    }
+
     private final PaperAbstractPlugin plugin;
 
     public CrazyAuctions(PaperAbstractPlugin plugin) {
         this.plugin = plugin;
     }
 
-    @NotNull
-    public static CrazyAuctions get() {
-        return JavaPlugin.getPlugin(CrazyAuctions.class);
-    }
-
     private CommandManager commandManager;
+    private ClusterFactory cluster;
 
     @Override
     public void onLoad() {
@@ -33,8 +36,9 @@ public class CrazyAuctions extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        // Enable command manager.
-        this.commandManager.enable();
+        // Enable cluster factory.
+        this.cluster = new ClusterFactory(this, this.plugin.getConfig().getProperty(Config.verbose_logging));
+        this.cluster.enable();
 
         // Load storage factory.
         StorageFactory storageFactory = new StorageFactory();
@@ -44,14 +48,13 @@ public class CrazyAuctions extends JavaPlugin {
     @Override
     public void onDisable() {
         // Shutdown storage factory.
-        this.storage.shutdown();
+        if (this.storage != null) this.storage.shutdown();
+
+        // Shut down cluster factory.
+        if (this.cluster != null) this.cluster.disable();
     }
 
     public CommandManager getCommandManager() {
         return this.commandManager;
-    }
-
-    public Storage getStorage() {
-        return this.storage;
     }
 }
