@@ -1,18 +1,18 @@
 package us.crazycrew.crazyauctions;
 
-import com.badbones69.crazyauctions.common.AuctionsFactory;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
+import us.crazycrew.crazyauctions.api.PaperAbstractPlugin;
 import us.crazycrew.crazyauctions.api.database.Storage;
 import us.crazycrew.crazyauctions.api.database.StorageFactory;
 import us.crazycrew.crazyauctions.commands.CommandManager;
 
 public class CrazyAuctions extends JavaPlugin {
 
-    private final AuctionsFactory factory;
+    private final PaperAbstractPlugin plugin;
 
-    public CrazyAuctions(AuctionsFactory factory) {
-        this.factory = factory;
+    public CrazyAuctions(PaperAbstractPlugin plugin) {
+        this.plugin = plugin;
     }
 
     @NotNull
@@ -43,19 +43,12 @@ public class CrazyAuctions extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        // Reload the auction factory.
-        this.factory.reload();
-
         // Shutdown storage factory.
         this.storage.shutdown();
     }
 
     public CommandManager getCommandManager() {
         return this.commandManager;
-    }
-
-    public AuctionsFactory getFactory() {
-        return this.factory;
     }
 
     public Storage getStorage() {

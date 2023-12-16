@@ -1,7 +1,7 @@
 package com.badbones69.crazyauctions.common.enums;
 
 import ch.jalu.configme.properties.Property;
-import com.badbones69.crazyauctions.common.AuctionsFactory;
+import com.badbones69.crazyauctions.common.api.CrazyAuctionsPlugin;
 import com.badbones69.crazyauctions.common.config.types.Config;
 import com.badbones69.crazyauctions.common.config.types.Locale;
 import com.ryderbelserion.cluster.utils.AdvUtils;
@@ -59,11 +59,11 @@ public enum Messages {
     }
 
     private @NotNull List<String> getPropertyList(Property<List<String>> properties) {
-        return AuctionsFactory.getMessages().getProperty(properties);
+        return CrazyAuctionsPlugin.get().getLocale().getProperty(properties);
     }
 
     private @NotNull String getProperty(Property<String> property) {
-        return AuctionsFactory.getMessages().getProperty(property);
+        return CrazyAuctionsPlugin.get().getLocale().getProperty(property);
     }
 
     public String getString() {
@@ -107,7 +107,7 @@ public enum Messages {
     }
 
     public Component asComponent() {
-        return AdvUtils.parse(this.message.replaceAll("\\{prefix}", AuctionsFactory.getConfig().getProperty(Config.command_prefix)));
+        return AdvUtils.parse(this.message.replaceAll("\\{prefix}", CrazyAuctionsPlugin.get().getConfig().getProperty(Config.command_prefix)));
     }
 
     public void sendMessage(Audience audience) {

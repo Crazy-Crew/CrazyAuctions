@@ -1,4 +1,4 @@
-package com.badbones69.crazyauctions.common.enums;
+package com.badbones69.crazyauctions.common.enums.storage;
 
 import java.util.List;
 

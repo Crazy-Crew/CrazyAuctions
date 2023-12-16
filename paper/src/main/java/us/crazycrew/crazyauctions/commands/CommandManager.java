@@ -1,19 +1,12 @@
 package us.crazycrew.crazyauctions.commands;
 
-import com.badbones69.crazyauctions.common.AuctionsFactory;
-import com.badbones69.crazyauctions.common.config.types.AuctionKeys;
-import com.badbones69.crazyauctions.common.config.types.ConfigKeys;
-import com.ryderbelserion.cluster.utils.AdvUtils;
+import com.badbones69.crazyauctions.common.api.CrazyAuctionsPlugin;
+import com.badbones69.crazyauctions.common.config.types.Config;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIBukkitConfig;
-import dev.jorel.commandapi.CommandAPICommand;
 import org.jetbrains.annotations.NotNull;
 import us.crazycrew.crazyauctions.CrazyAuctions;
-import us.crazycrew.crazyauctions.commands.engine.CommandContext;
 import us.crazycrew.crazyauctions.commands.engine.CommandEngine;
-import us.crazycrew.crazyauctions.commands.subs.HelpCommand;
-import us.crazycrew.crazyauctions.commands.subs.ReloadCommand;
-import us.crazycrew.crazyauctions.menus.AuctionHouseMenu;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -29,7 +22,7 @@ public class CommandManager {
     public void load() {
         // Create command config.
         CommandAPIBukkitConfig config = new CommandAPIBukkitConfig(this.plugin);
-        config.shouldHookPaperReload(true).silentLogs(!AuctionsFactory.getConfig().getProperty(ConfigKeys.verbose_logging));
+        config.shouldHookPaperReload(true).silentLogs(!CrazyAuctionsPlugin.get().getConfig().getProperty(Config.verbose_logging));
 
         // Load command api.
         CommandAPI.onLoad(config);
@@ -40,7 +33,7 @@ public class CommandManager {
         CommandAPI.onEnable();
 
         // Create default command.
-        CommandAPICommand command = new CommandAPICommand("crazyauctions")
+        /*CommandAPICommand command = new CommandAPICommand("crazyauctions")
                 .withAliases("ca", "ah")
                 .withPermission("crazyauctions.help")
                 .executes((sender, args) -> {
@@ -51,7 +44,7 @@ public class CommandManager {
                         return;
                     }
 
-                    AuctionHouseMenu auctions = new AuctionHouseMenu(context.getPlayer(), 54, AuctionsFactory.getAuctions().getProperty(AuctionKeys.inventory_name));
+                    AuctionHouseMenu auctions = new AuctionHouseMenu(context.getPlayer(), 54, AuctionsFactory.getAuctions().getProperty(GuiConfig.inventory_name));
                     auctions.open();
                 });
 
@@ -62,7 +55,7 @@ public class CommandManager {
         ).forEach(this::addCommand);
 
         // Register it all.
-        command.register();
+        command.register();*/
     }
 
     public void addCommand(CommandEngine command) {

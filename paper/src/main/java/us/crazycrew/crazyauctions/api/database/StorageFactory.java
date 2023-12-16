@@ -1,8 +1,8 @@
 package us.crazycrew.crazyauctions.api.database;
 
-import com.badbones69.crazyauctions.common.AuctionsFactory;
-import com.badbones69.crazyauctions.common.config.types.ConfigKeys;
-import com.badbones69.crazyauctions.common.enums.StorageType;
+import com.badbones69.crazyauctions.common.api.CrazyAuctionsPlugin;
+import com.badbones69.crazyauctions.common.config.types.Config;
+import com.badbones69.crazyauctions.common.enums.storage.StorageType;
 import us.crazycrew.crazyauctions.CrazyAuctions;
 import us.crazycrew.crazyauctions.api.database.impl.StorageImpl;
 import us.crazycrew.crazyauctions.api.database.impl.sql.SqlStorage;
@@ -14,7 +14,7 @@ public class StorageFactory {
     public Storage getInstance() {
         Storage storage;
 
-        storage = new Storage(create(AuctionsFactory.getConfig().getProperty(ConfigKeys.storage_type)));
+        storage = new Storage(create(CrazyAuctionsPlugin.get().getConfig().getProperty(Config.storage_type)));
 
         storage.init();
 

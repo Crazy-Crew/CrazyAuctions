@@ -1,7 +1,8 @@
 package us.crazycrew.crazyauctions.commands.engine;
 
-import com.badbones69.crazyauctions.common.AuctionsFactory;
-import com.badbones69.crazyauctions.common.config.types.MessageKeys;
+import com.badbones69.crazyauctions.common.api.CrazyAuctionsPlugin;
+import com.badbones69.crazyauctions.common.config.ConfigFactory;
+import com.badbones69.crazyauctions.common.config.types.Locale;
 import com.badbones69.crazyauctions.common.enums.Messages;
 import com.ryderbelserion.cluster.api.builder.ComponentBuilder;
 import net.kyori.adventure.text.Component;
@@ -97,7 +98,7 @@ public class CommandHelpEntry {
 
                     builder.setMessage(footer.replaceAll("\\{page}", newPage));
 
-                    builder.getFancyComponentBuilder().hover(AuctionsFactory.getMessages().getProperty(MessageKeys.back_button), AuctionsFactory.getMessages().getProperty(MessageKeys.navigation_text).replaceAll("\\{type}", "back"));
+                    builder.getFancyComponentBuilder().hover(CrazyAuctionsPlugin.get().getLocale().getProperty(Locale.back_button), CrazyAuctionsPlugin.get().getLocale().getProperty(Locale.navigation_text).replaceAll("\\{type}", "back"));
 
                     builder.getFancyComponentBuilder().click(ClickEvent.Action.RUN_COMMAND, usage);
                 } else if (this.page < this.plugin.getCommandManager().getClasses().size()) {
@@ -108,7 +109,7 @@ public class CommandHelpEntry {
 
                     builder.setMessage(footer.replaceAll("\\{page}", newPage));
 
-                    builder.getFancyComponentBuilder().hover(AuctionsFactory.getMessages().getProperty(MessageKeys.next_button), AuctionsFactory.getMessages().getProperty(MessageKeys.navigation_text).replaceAll("\\{type}", "next"));
+                    builder.getFancyComponentBuilder().hover(CrazyAuctionsPlugin.get().getLocale().getProperty(Locale.next_button), CrazyAuctionsPlugin.get().getLocale().getProperty(Locale.navigation_text).replaceAll("\\{type}", "next"));
 
                     builder.getFancyComponentBuilder().click(ClickEvent.Action.RUN_COMMAND, usage);
                 }

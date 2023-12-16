@@ -1,7 +1,9 @@
 [versions]
 configurate4 = "4.1.2"
 adventure4 = "4.14.0"
-cluster5 = "6.0"
+cluster5 = "6.3"
+
+cloud1 = "1.8.4"
 
 [plugins]
 hangar = { id = "io.papermc.hangar-publish-plugin", version = "0.1.0" }
@@ -29,6 +31,12 @@ configme = { module = "ch.jalu:configme", version = "1.4.1" }
 bstats = { module = "org.bstats:bstats-bukkit", version = "3.0.2" }
 
 commandApi = { module = "dev.jorel:commandapi-bukkit-shade", version = "9.3.0" }
+
+cloud-core = { module = "cloud.commandframework:cloud-core", version.ref = "cloud1" }
+cloud-paper = { module = "cloud.commandframework:cloud-paper", version.ref = "cloud1" }
+cloud-fabric = { module = "cloud.commandframework:cloud-fabric", version.ref = "cloud1" }
+cloud-sponge = { module = "cloud.commandframework:cloud-sponge7", version.ref = "cloud1" }
+cloud-extras = { module = "cloud.commandframework:cloud-minecraft-extras", version.ref = "cloud1" }
 
 [bundles]
 adventure = ["adventure4", "minimessage4"]

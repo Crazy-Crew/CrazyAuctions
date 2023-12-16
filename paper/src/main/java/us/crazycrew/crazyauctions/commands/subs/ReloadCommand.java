@@ -13,7 +13,7 @@ public class ReloadCommand extends CommandEngine {
 
     @Override
     public void execute(CommandContext context) {
-        this.plugin.getFactory().reload();
+        //this.plugin.getFactory().reload();
 
         Messages.plugin_reload.sendMessage(context.getSender());
     }
