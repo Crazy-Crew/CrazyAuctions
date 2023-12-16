@@ -75,7 +75,7 @@ public class Config implements SettingsHolder {
             "| Text File Based Storage",
             " |» JSON (.json files) *NOT IMPLEMENTED*"
     })
-    public static final Property<StorageType> storage_type = newBeanProperty(StorageType.class, "root.database.storage-method", StorageType.SQLITE);
+    public static final Property<StorageType> storage_type = newBeanProperty(StorageType.class, "root.database.storage-method", StorageType.H2);
 
     @Comment("The prefix used in commands")
     public static final Property<String> command_prefix = newProperty("root.command_prefix", " <dark_gray>[<dark_red>Crazy<blue>Auctions<dark_gray>]: <reset>");

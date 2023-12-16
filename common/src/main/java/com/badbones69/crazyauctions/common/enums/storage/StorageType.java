@@ -4,7 +4,6 @@ import java.util.List;
 
 public enum StorageType {
 
-    SQLITE("SQLite", "sqlite"),
     H2("H2", "h2"),
     YAML("YAML", "yml"),
     MARIADB("MariaDB", "mariadb");
