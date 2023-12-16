@@ -2,8 +2,8 @@ package com.badbones69.crazyauctions.common.enums;
 
 import ch.jalu.configme.properties.Property;
 import com.badbones69.crazyauctions.common.AuctionsFactory;
-import com.badbones69.crazyauctions.common.config.types.ConfigKeys;
-import com.badbones69.crazyauctions.common.config.types.MessageKeys;
+import com.badbones69.crazyauctions.common.config.types.Config;
+import com.badbones69.crazyauctions.common.config.types.Locale;
 import com.ryderbelserion.cluster.utils.AdvUtils;
 import com.ryderbelserion.cluster.utils.StringUtils;
 import net.kyori.adventure.audience.Audience;
@@ -15,15 +15,15 @@ import java.util.Map;
 
 public enum Messages {
 
-    plugin_reload(MessageKeys.plugin_reload),
-    page_header(MessageKeys.page_header),
-    page_format(MessageKeys.page_format),
-    page_footer(MessageKeys.page_footer),
-    hover_format(MessageKeys.hover_format),
-    invalid_page(MessageKeys.invalid_page),
-    next_button(MessageKeys.next_button),
-    navigation_text(MessageKeys.navigation_text),
-    back_button(MessageKeys.back_button);
+    plugin_reload(Locale.plugin_reload),
+    page_header(Locale.page_header),
+    page_format(Locale.page_format),
+    page_footer(Locale.page_footer),
+    hover_format(Locale.hover_format),
+    invalid_page(Locale.invalid_page),
+    next_button(Locale.next_button),
+    navigation_text(Locale.navigation_text),
+    back_button(Locale.back_button);
 
     private Property<String> property;
 
@@ -107,7 +107,7 @@ public enum Messages {
     }
 
     public Component asComponent() {
-        return AdvUtils.parse(this.message.replaceAll("\\{prefix}", AuctionsFactory.getConfig().getProperty(ConfigKeys.command_prefix)));
+        return AdvUtils.parse(this.message.replaceAll("\\{prefix}", AuctionsFactory.getConfig().getProperty(Config.command_prefix)));
     }
 
     public void sendMessage(Audience audience) {

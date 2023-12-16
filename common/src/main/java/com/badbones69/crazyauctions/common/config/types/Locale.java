@@ -5,9 +5,9 @@ import ch.jalu.configme.configurationdata.CommentsConfiguration;
 import ch.jalu.configme.properties.Property;
 import static ch.jalu.configme.properties.PropertyInitializer.newProperty;
 
-public class MessageKeys implements SettingsHolder {
+public class Locale implements SettingsHolder {
 
-    protected MessageKeys() {}
+    protected Locale() {}
 
     @Override
     public void registerComments(CommentsConfiguration conf) {
@@ -50,4 +50,5 @@ public class MessageKeys implements SettingsHolder {
     public static final Property<String> navigation_text = newProperty("root.page.text", "<gray>Click me to go to the <gold>{type}</gold> page");
 
     public static final Property<String> back_button = newProperty("root.page.back", "<red> <<<");
+
 }

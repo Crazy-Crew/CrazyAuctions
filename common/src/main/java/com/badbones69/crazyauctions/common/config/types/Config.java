@@ -4,14 +4,13 @@ import ch.jalu.configme.Comment;
 import ch.jalu.configme.SettingsHolder;
 import ch.jalu.configme.configurationdata.CommentsConfiguration;
 import ch.jalu.configme.properties.Property;
-import com.badbones69.crazyauctions.common.enums.StorageType;
-
+import com.badbones69.crazyauctions.common.enums.storage.StorageType;
 import static ch.jalu.configme.properties.PropertyInitializer.newBeanProperty;
 import static ch.jalu.configme.properties.PropertyInitializer.newProperty;
 
-public class ConfigKeys implements SettingsHolder {
+public class Config implements SettingsHolder {
 
-    protected ConfigKeys() {}
+    protected Config() {}
 
     @Override
     public void registerComments(CommentsConfiguration conf) {
@@ -25,6 +24,7 @@ public class ConfigKeys implements SettingsHolder {
                 "List of all sounds: https://jd.papermc.io/paper/1.20/org/bukkit/Sound.html",
                 "List of all enchantments: https://jd.papermc.io/paper/1.20/org/bukkit/enchantments/Enchantment.html"
         };
+        conf.setComment("root", header);
 
         String[] modules = {
                 "A section related to modules that can be disabled or enabled.",
@@ -32,9 +32,6 @@ public class ConfigKeys implements SettingsHolder {
                 "Each module will be unregistered if the toggle is set to false",
                 "You simply need to run /crazyauctions reload"
         };
-
-        conf.setComment("root", header);
-
         conf.setComment("modules", modules);
 
         String[] patches = {
@@ -43,7 +40,6 @@ public class ConfigKeys implements SettingsHolder {
                 "",
                 "Patches will allow players to dupe or crash your server."
         };
-
         conf.setComment("patches", patches);
 
         conf.setComment("misc", "Settings that don't really belong anywhere.");
@@ -137,4 +133,5 @@ public class ConfigKeys implements SettingsHolder {
             "Available Types: vault, xp_total, xp_levels"
     })
     public static final Property<String> economy_type = newProperty("auctions.economy", "vault");
+
 }
