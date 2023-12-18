@@ -12,6 +12,9 @@ public abstract class CommandHandler {
     @NotNull
     public abstract CommandManager<Audience> getManager();
 
+    @NotNull
+    public abstract Command.Builder<Audience> getRoot();
+
     //TODO() Add exception handler.
     //TODO() Add register command method
     //TODO() Add a method to get the root command.
@@ -26,5 +29,9 @@ public abstract class CommandHandler {
 
                    //TODO() Add some type of wrapper to open gui's
                 });
+    }
+
+    protected void register() {
+
     }
 }
