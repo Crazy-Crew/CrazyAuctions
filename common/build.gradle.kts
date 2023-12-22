@@ -1,7 +1,11 @@
+plugins {
+    id("root-plugin")
+}
+
 dependencies {
     compileOnlyApi(libs.bundles.adventure)
 
-    compileOnly(libs.clusterApi5)
+    compileOnly(libs.cluster.api)
 
     implementation(libs.cloud.core)
 
