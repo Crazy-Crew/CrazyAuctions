@@ -28,7 +28,7 @@ minimessage4 = { module = "net.kyori:adventure-text-minimessage", version.ref = 
 cluster_paper = { module = "com.ryderbelserion.cluster:paper", version.ref = "cluster_version" }
 cluster_api = { module = "com.ryderbelserion.cluster:api", version.ref = "cluster_version" }
 
-configurate4-yaml = { module = "org.spongepowered:configurate-yaml", version.ref = "configurate4" }
+jorel_bukkit = { module = "dev.jorel:commandapi-bukkit-shade", version = "9.4.0-SNAPSHOT" }
 
 hikari = { module = "com.zaxxer:HikariCP", version = "5.1.0" }
 
@@ -38,7 +38,6 @@ configme = { module = "ch.jalu:configme", version = "1.4.1" }
 
 bstats = { module = "org.bstats:bstats-bukkit", version = "3.0.2" }
 
-commandApi = { module = "dev.jorel:commandapi-bukkit-shade", version = "9.3.0" }
 
 cloud-core = { module = "cloud.commandframework:cloud-core", version.ref = "cloud1" }
 cloud-paper = { module = "cloud.commandframework:cloud-paper", version.ref = "cloud1" }

@@ -22,7 +22,7 @@ public class CommandManager {
     public void load() {
         // Create command config.
         CommandAPIBukkitConfig config = new CommandAPIBukkitConfig(this.plugin);
-        config.shouldHookPaperReload(true).silentLogs(!CrazyAuctionsPlugin.get().getConfig().getProperty(Config.verbose_logging));
+        config.shouldHookPaperReload(true).silentLogs(!CrazyAuctionsPlugin.get().getConfig().getProperty(Config.verbose_logging)).setNamespace("crazycrates");
 
         // Load command api.
         CommandAPI.onLoad(config);
