@@ -7,6 +7,10 @@ val mcVersion = rootProject.properties["minecraftVersion"] as String
 dependencies {
     api(project(":common"))
 
+    implementation(libs.cluster.paper)
+
+    implementation(libs.jorel.bukkit)
+
     implementation(libs.bstats)
 
     compileOnly(fileTree("libs").include("*.jar"))
@@ -16,8 +20,6 @@ tasks {
     shadowJar {
         listOf(
             //"com.ryderbelserion.cluster.paper",
-            //"de.tr7zw.changeme.nbtapi",
-            //"dev.triumphteam.cmd",
             "org.bstats"
         ).forEach {
             relocate(it, "libs.$it")
