@@ -6,6 +6,7 @@ public enum StorageType {
 
     H2("H2", "h2"),
     YAML("YAML", "yml"),
+    SQLITE("SQLite", "sqlite"),
     MARIADB("MariaDB", "mariadb");
 
     private final String name;

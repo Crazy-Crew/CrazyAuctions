@@ -23,11 +23,11 @@ public class StorageFactory {
 
     private StorageImpl create(StorageType type) {
         switch (type) {
-            case H2 -> {
+            case SQLITE -> {
                 return new SqlStorage(new SqliteConnection(new File(CrazyAuctions.get().getDataFolder(), "users.db")));
             }
 
-            case MARIADB -> {
+            case MARIADB, H2 -> {
 
             }
 
