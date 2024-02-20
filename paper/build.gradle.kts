@@ -13,6 +13,8 @@ dependencies {
 
     implementation(libs.bstats)
 
+    compileOnly(libs.vault)
+
     compileOnly(fileTree("libs").include("*.jar"))
 }
 
