@@ -27,6 +27,8 @@ cluster_api = { module = "com.ryderbelserion.cluster:api", version.ref = "cluste
 
 jorel_bukkit = { module = "dev.jorel:commandapi-bukkit-shade", version = "9.4.0-SNAPSHOT" }
 
+triumph_cmds = { module = "dev.triumphteam:triumph-cmd-bukkit", version = "2.0.0-ALPHA-9" }
+
 config_me = { module = "ch.jalu:configme", version = "1.4.1" }
 
 hikari = { module = "com.zaxxer:HikariCP", version = "5.1.0" }

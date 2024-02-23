@@ -12,8 +12,10 @@ import dev.jorel.commandapi.CommandAPIBukkitConfig;
 import dev.jorel.commandapi.CommandAPICommand;
 import org.jetbrains.annotations.NotNull;
 import com.ryderbelserion.crazyauctions.CrazyAuctions;
-
-import java.util.*;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class CommandManager {
@@ -28,7 +30,7 @@ public class CommandManager {
     public void load() {
         // Create command config.
         CommandAPIBukkitConfig config = new CommandAPIBukkitConfig(this.plugin);
-        config.shouldHookPaperReload(true).silentLogs(CrazyAuctionsPlugin.get().getConfig().getProperty(Config.verbose_logging)).setNamespace("crazyauctions");
+        config.shouldHookPaperReload(true).silentLogs(CrazyAuctionsPlugin.get().getConfig().getProperty(Config.verbose_logging)).usePluginNamespace();
 
         // Load command api.
         CommandAPI.onLoad(config);
@@ -51,9 +53,6 @@ public class CommandManager {
                     }
 
                     sender.sendMessage("This is the base command.");
-
-                    /*AuctionHouseMenu auctions = new AuctionHouseMenu(context.getPlayer(), 54, AuctionsFactory.getAuctions().getProperty(GuiConfig.inventory_name));
-                    auctions.open();*/
                 });
 
         // Bind subcommand to the object above.

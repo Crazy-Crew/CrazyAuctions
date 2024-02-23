@@ -1,18 +1,22 @@
 package com.ryderbelserion.crazyauctions.commands.engine;
 
 import com.badbones69.crazyauctions.common.api.CrazyAuctionsPlugin;
+import com.badbones69.crazyauctions.common.api.interfaces.AbstractPlugin;
 import com.badbones69.crazyauctions.common.config.types.Locale;
 import com.badbones69.crazyauctions.common.enums.Messages;
 import com.ryderbelserion.cluster.api.builder.ComponentBuilder;
+import com.ryderbelserion.cluster.api.builder.FancyComponentBuilder;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import org.jetbrains.annotations.NotNull;
 import com.ryderbelserion.crazyauctions.CrazyAuctions;
-
 import java.util.HashMap;
 import java.util.Map;
 
 public class CommandHelpEntry {
+
+    @NotNull
+    private final AbstractPlugin instance = CrazyAuctionsPlugin.get();
 
     @NotNull
     private final CrazyAuctions plugin = CrazyAuctions.get();
@@ -88,6 +92,7 @@ public class CommandHelpEntry {
                 context.reply(commandBuilder.build());
 
                 ComponentBuilder builder = new ComponentBuilder();
+                FancyComponentBuilder fancy = builder.getFancyComponentBuilder();
 
                 if (this.page > 1) {
                     int number = this.page-1;
@@ -97,9 +102,8 @@ public class CommandHelpEntry {
 
                     builder.setMessage(footer.replaceAll("\\{page}", newPage));
 
-                    builder.getFancyComponentBuilder().hover(CrazyAuctionsPlugin.get().getLocale().getProperty(Locale.back_button), CrazyAuctionsPlugin.get().getLocale().getProperty(Locale.navigation_text).replaceAll("\\{type}", "back"));
-
-                    builder.getFancyComponentBuilder().click(ClickEvent.Action.RUN_COMMAND, usage);
+                    fancy.hover(CrazyAuctionsPlugin.get().getLocale().getProperty(Locale.back_button), this.instance.getLocale().getProperty(Locale.navigation_text).replaceAll("\\{type}", "back"));
+                    fancy.click(ClickEvent.Action.RUN_COMMAND, usage);
                 } else if (this.page < this.plugin.getCommandManager().getClasses().size()) {
                     int number = this.page+1;
 
@@ -108,9 +112,9 @@ public class CommandHelpEntry {
 
                     builder.setMessage(footer.replaceAll("\\{page}", newPage));
 
-                    builder.getFancyComponentBuilder().hover(CrazyAuctionsPlugin.get().getLocale().getProperty(Locale.next_button), CrazyAuctionsPlugin.get().getLocale().getProperty(Locale.navigation_text).replaceAll("\\{type}", "next"));
+                    fancy.hover(this.instance.getLocale().getProperty(Locale.next_button), this.instance.getLocale().getProperty(Locale.navigation_text).replaceAll("\\{type}", "next"));
 
-                    builder.getFancyComponentBuilder().click(ClickEvent.Action.RUN_COMMAND, usage);
+                    fancy.click(ClickEvent.Action.RUN_COMMAND, usage);
                 }
 
                 footerComponent = builder.build();
@@ -135,8 +139,8 @@ public class CommandHelpEntry {
     }
 
     public void setPage(int page, int perPage) {
-        this.setPerPage(perPage);
-        this.setPage(page);
+        setPerPage(perPage);
+        setPage(page);
     }
 
     public int getPage() {
