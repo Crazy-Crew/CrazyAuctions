@@ -44,6 +44,7 @@ public class CrazyAuctions extends JavaPlugin {
         StorageFactory storageFactory = new StorageFactory();
         this.storage = storageFactory.getInstance();
 
+        // Enable commands.
         this.commandManager.enable();
     }
 

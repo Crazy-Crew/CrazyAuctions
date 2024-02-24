@@ -59,7 +59,7 @@ public abstract class InventoryBuilder implements InventoryHolder {
         return this.player;
     }
 
-    public InventoryView getInventoryView() {
+    public InventoryView getView() {
         return getPlayer().getOpenInventory();
     }
 

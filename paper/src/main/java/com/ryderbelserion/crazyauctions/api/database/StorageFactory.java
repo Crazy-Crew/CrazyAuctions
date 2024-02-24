@@ -16,7 +16,6 @@ public class StorageFactory {
         Storage storage;
 
         storage = new Storage(create(CrazyAuctionsPlugin.get().getConfig().getProperty(Config.storage_type)));
-
         storage.init();
 
         return storage;
