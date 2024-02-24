@@ -1,21 +1,16 @@
 package com.ryderbelserion.crazyauctions.api.database;
 
-import com.badbones69.crazyauctions.common.api.CrazyAuctionsPlugin;
-import com.badbones69.crazyauctions.common.config.types.Config;
 import com.badbones69.crazyauctions.common.enums.storage.StorageType;
 import com.ryderbelserion.crazyauctions.api.database.impl.StorageImpl;
 import com.ryderbelserion.crazyauctions.api.database.impl.sql.file.types.SqliteConnection;
 import com.ryderbelserion.crazyauctions.CrazyAuctions;
 import com.ryderbelserion.crazyauctions.api.database.impl.sql.SqlStorage;
-
 import java.io.File;
 
 public class StorageFactory {
 
     public Storage getInstance() {
-        Storage storage;
-
-        storage = new Storage(create(CrazyAuctionsPlugin.get().getConfig().getProperty(Config.storage_type)));
+        Storage storage = new Storage(create(StorageType.SQLITE));
         storage.init();
 
         return storage;

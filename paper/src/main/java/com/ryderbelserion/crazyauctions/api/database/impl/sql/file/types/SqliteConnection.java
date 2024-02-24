@@ -1,7 +1,6 @@
 package com.ryderbelserion.crazyauctions.api.database.impl.sql.file.types;
 
 import com.ryderbelserion.crazyauctions.api.database.impl.sql.file.ConnectionImpl;
-
 import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
@@ -20,7 +19,7 @@ public class SqliteConnection extends ConnectionImpl {
     }
 
     @Override
-    public void init() {
+    public void start() {
         try {
             getFile().createNewFile();
         } catch (IOException exception) {
@@ -30,16 +29,6 @@ public class SqliteConnection extends ConnectionImpl {
 
     @Override
     protected Connection create() throws SQLException {
-        try {
-            Class.forName("org.sqlite.jdbc4.JDBC4Connection").getDeclaredConstructor().newInstance();
-
-            return DriverManager.getConnection("jdbc:sqlite:" + getFile());
-        } catch (ReflectiveOperationException exception) {
-            if (exception.getCause() instanceof SQLException) {
-                throw (SQLException) exception.getCause();
-            }
-
-            throw new RuntimeException(exception);
-        }
+        return DriverManager.getConnection("jdbc:sqlite:" + getFile());
     }
 }

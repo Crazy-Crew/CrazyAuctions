@@ -2,8 +2,8 @@ package com.ryderbelserion.crazyauctions.api.database.impl.sql;
 
 import com.ryderbelserion.crazyauctions.api.database.impl.StorageImpl;
 import com.ryderbelserion.crazyauctions.api.database.impl.sql.file.ConnectionImpl;
-
 import java.io.File;
+import java.sql.Connection;
 import java.sql.SQLException;
 
 public class SqlStorage implements StorageImpl {
@@ -12,6 +12,7 @@ public class SqlStorage implements StorageImpl {
 
     public SqlStorage(ConnectionImpl connection) {
         this.connection = connection;
+        this.connection.start();
     }
 
     @Override
@@ -20,9 +21,7 @@ public class SqlStorage implements StorageImpl {
     }
 
     @Override
-    public void init() {
-        this.connection.init();
-    }
+    public void start() {}
 
     @Override
     public void shutdown() throws SQLException {
@@ -32,5 +31,10 @@ public class SqlStorage implements StorageImpl {
     @Override
     public File getFile() {
         return this.connection.getFile();
+    }
+
+    @Override
+    public Connection getConnection() throws SQLException {
+        return this.connection.getConnection();
     }
 }
