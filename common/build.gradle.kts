@@ -7,7 +7,7 @@ dependencies {
 
     compileOnly(libs.cluster.api)
 
-    api(libs.config.me) {
+    api(libs.configme) {
         exclude(group = "org.yaml", module = "snakeyaml")
     }
 }

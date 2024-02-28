@@ -2,16 +2,16 @@ plugins {
     id("paper-plugin")
 }
 
-val mcVersion = rootProject.properties["minecraftVersion"] as String
+val mcVersion = providers.gradleProperty("mcVersion").get()
 
 dependencies {
     api(project(":common"))
 
     implementation(libs.cluster.paper)
 
-    implementation(libs.jorel.bukkit)
+    implementation(libs.commandapi)
 
-    implementation(libs.bstats)
+    implementation(libs.metrics)
 
     compileOnly(libs.vault)
 
@@ -21,7 +21,7 @@ dependencies {
 tasks {
     shadowJar {
         listOf(
-            //"com.ryderbelserion.cluster.paper",
+            "dev.triumphteam.cmd",
             "org.bstats"
         ).forEach {
             relocate(it, "libs.$it")
@@ -34,9 +34,9 @@ tasks {
             "version" to project.version,
             "group" to rootProject.group,
             "description" to rootProject.description,
-            "apiVersion" to rootProject.properties["apiVersion"],
-            "authors" to rootProject.properties["authors"],
-            "website" to rootProject.properties["website"]
+            "apiVersion" to providers.gradleProperty("apiVersion").get(),
+            "authors" to providers.gradleProperty("authors").get(),
+            "website" to providers.gradleProperty("website").get()
         )
 
         inputs.properties(properties)

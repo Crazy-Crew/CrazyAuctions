@@ -1,8 +1,4 @@
 [versions]
-adventure4 = "4.14.0"
-
-cluster_version = "6.3"
-
 shadow_version = "8.1.1"
 paperweight_version = "1.5.9"
 runpaper_version = "2.2.3"
@@ -19,30 +15,9 @@ runpaper = { id = "xyz.jpenilla.run-paper", version = "2.2.2" }
 shadowjar = { id = "com.github.johnrengelman.shadow", version = "8.1.1" }
 
 [libraries]
-adventure4 = { module = "net.kyori:adventure-api", version.ref = "adventure4" }
-minimessage4 = { module = "net.kyori:adventure-text-minimessage", version.ref = "adventure4" }
-
-cluster_paper = { module = "com.ryderbelserion.cluster:paper", version.ref = "cluster_version" }
-cluster_api = { module = "com.ryderbelserion.cluster:api", version.ref = "cluster_version" }
-
-jorel_bukkit = { module = "dev.jorel:commandapi-bukkit-shade", version = "9.4.0-SNAPSHOT" }
-
-triumph_cmds = { module = "dev.triumphteam:triumph-cmd-bukkit", version = "2.0.0-ALPHA-9" }
-
-config_me = { module = "ch.jalu:configme", version = "1.4.1" }
-
-hikari = { module = "com.zaxxer:HikariCP", version = "5.1.0" }
-
-vault = { module = "com.github.MilkBowl:VaultAPI", version = "1.7.1" }
-
-bstats = { module = "org.bstats:bstats-bukkit", version = "3.0.2" }
-
 paperweight = { module = "io.papermc.paperweight:paperweight-userdev", version.ref = "paperweight_version" }
 shadowjar = { module = "com.github.johnrengelman:shadow", version.ref = "shadow_version" }
 runpaper = { module = "xyz.jpenilla:run-task", version.ref = "runpaper_version" }
 
 hangar = { module = "io.papermc:hangar-publish-plugin", version.ref = "hangar_version" }
 modrinth = { module = "com.modrinth.minotaur:Minotaur", version.ref = "modrinth_version" }
-
-[bundles]
-adventure = ["adventure4", "minimessage4"]
