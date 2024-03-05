@@ -3,6 +3,8 @@ plugins {
 }
 
 dependencies {
+    implementation(project(":common"))
+
     implementation(libs.metrics)
 
     compileOnly(libs.vault) {
