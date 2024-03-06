@@ -1,5 +1,6 @@
 package com.ryderbelserion.crazyauctions;
 
+import com.ryderbelserion.cluster.ClusterPackage;
 import com.ryderbelserion.crazyauctions.platform.PaperServer;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -10,6 +11,8 @@ public class CrazyAuctionsPaper extends JavaPlugin {
     @Override
     public void onEnable() {
         this.crazyAuctions = new CrazyAuctions(new PaperServer());
+
+        new ClusterPackage(this, true);
     }
 
     @Override

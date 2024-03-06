@@ -17,6 +17,10 @@ public final class CrazyProvider {
     }
 
     static void register(final CrazyAuctions instance) {
+        if (get() != null) {
+            return;
+        }
+
         CrazyProvider.instance = instance;
     }
 
