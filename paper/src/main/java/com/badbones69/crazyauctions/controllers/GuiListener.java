@@ -23,6 +23,8 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -510,6 +512,16 @@ public class GuiListener implements Listener {
             }
         }
     }
+
+    private void playSoldSound(@NotNull Player player) {
+        FileConfiguration config = Files.CONFIG.getFile();
+        String sound = config.getString("Settings.Sold-Item-Sound", "");
+        if (sound.isEmpty()) return;
+
+        try {
+            player.playSound(player.getLocation(), Sound.valueOf(sound), 1, 1);
+        } catch (Exception ignored) {}
+    }
     
     @EventHandler
     public void onInvClose(InventoryCloseEvent e) {
@@ -889,6 +901,7 @@ public class GuiListener implements Listener {
                                     if (Methods.isOnline(seller) && Methods.getPlayer(seller) != null) {
                                         Player sell = Methods.getPlayer(seller);
                                         sell.sendMessage(Messages.PLAYER_BOUGHT_ITEM.getMessage(placeholders));
+                                        playSoldSound(sell);
                                     }
 
                                     player.getInventory().addItem(i);
