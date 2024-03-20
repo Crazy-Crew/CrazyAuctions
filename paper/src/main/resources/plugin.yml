@@ -1,5 +1,5 @@
 name: '${name}'
-main: '${group}.CrazyAuctionsPaper'
+main: '${group}.CrazyAuctions'
 
 authors: ${authors}
 
@@ -9,3 +9,7 @@ description: '${description}'
 website: '${website}'
 
 softdepend: [Vault]
+
+commands:
+  crazyauctions:
+    description: The base command for CrazyAuctions.

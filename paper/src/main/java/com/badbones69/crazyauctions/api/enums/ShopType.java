@@ -9,7 +9,7 @@ public enum ShopType {
     /**
      * @param name name of the Shop Type.
      */
-    private ShopType(String name) {
+    ShopType(String name) {
         this.name = name;
     }
     
@@ -23,6 +23,7 @@ public enum ShopType {
                 return type;
             }
         }
+
         return null;
     }
     

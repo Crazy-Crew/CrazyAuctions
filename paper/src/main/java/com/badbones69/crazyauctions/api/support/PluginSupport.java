@@ -1,6 +1,7 @@
 package com.badbones69.crazyauctions.api.support;
 
 import com.badbones69.crazyauctions.CrazyAuctions;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
 public enum PluginSupport {
@@ -15,8 +16,7 @@ public enum PluginSupport {
 
     private final String name;
 
-    @NotNull
-    private final CrazyAuctions plugin = CrazyAuctions.get();
+    private final @NotNull CrazyAuctions plugin = JavaPlugin.getPlugin(CrazyAuctions.class);
 
     PluginSupport(String name) {
         this.name = name;

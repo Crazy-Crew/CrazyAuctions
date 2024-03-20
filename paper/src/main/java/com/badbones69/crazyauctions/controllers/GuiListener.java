@@ -4,6 +4,7 @@ import com.badbones69.crazyauctions.CrazyAuctions;
 import com.badbones69.crazyauctions.Methods;
 import com.badbones69.crazyauctions.api.*;
 import com.badbones69.crazyauctions.api.FileManager.Files;
+import com.badbones69.crazyauctions.api.builders.ItemBuilder;
 import com.badbones69.crazyauctions.api.enums.Category;
 import com.badbones69.crazyauctions.api.enums.Reaons;
 import com.badbones69.crazyauctions.api.enums.Messages;
@@ -12,6 +13,7 @@ import com.badbones69.crazyauctions.api.events.AuctionBuyEvent;
 import com.badbones69.crazyauctions.api.events.AuctionCancelledEvent;
 import com.badbones69.crazyauctions.api.events.AuctionNewBidEvent;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -24,7 +26,6 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -72,15 +73,23 @@ public class GuiListener implements Listener {
                             for (String l : config.getStringList("Settings.GUISettings.Bidding")) {
                                 lore.add(l.replace("%TopBid%", Methods.getPrice(i, false)).replace("%topbid%", Methods.getPrice(i, false)).replace("%Seller%", seller).replace("%seller%", seller).replace("%TopBidder%", topbidder).replace("%topbidder%", topbidder).replace("%Time%", Methods.convertToTime(data.getLong("Items." + i + ".Time-Till-Expire"))).replace("%time%", Methods.convertToTime(data.getLong("Items." + i + ".Time-Till-Expire"))));
                             }
-                            items.add(Methods.addLore(data.getItemStack("Items." + i + ".Item").clone(), lore));
-                            ID.add(data.getInt("Items." + i + ".StoreID"));
+
+                            ItemBuilder itemBuilder = ItemBuilder.convertItemStack(data.getItemStack("Items." + i + ".Item"));
+
+                            lore.forEach(itemBuilder::addLore);
+
+                            ID.add(data.getInt("Items." + i + ".StoreID"));;
                         }
                     } else {
                         if (sell == ShopType.SELL) {
                             for (String l : config.getStringList("Settings.GUISettings.SellingItemLore")) {
                                 lore.add(l.replace("%Price%", String.format(Locale.ENGLISH, "%,d", Long.parseLong(Methods.getPrice(i, false)))).replace("%price%", String.format(Locale.ENGLISH, "%,d", Long.parseLong(Methods.getPrice(i, false)))).replace("%Seller%", data.getString("Items." + i + ".Seller")).replace("%seller%", data.getString("Items." + i + ".Seller")).replace("%Time%", Methods.convertToTime(data.getLong("Items." + i + ".Time-Till-Expire"))).replace("%time%", Methods.convertToTime(data.getLong("Items." + i + ".Time-Till-Expire"))));
                             }
-                            items.add(Methods.addLore(data.getItemStack("Items." + i + ".Item").clone(), lore));
+
+                            ItemBuilder itemBuilder = ItemBuilder.convertItemStack(data.getItemStack("Items." + i + ".Item"));
+
+                            lore.forEach(itemBuilder::addLore);
+
                             ID.add(data.getInt("Items." + i + ".StoreID"));
                         }
                     }
@@ -135,13 +144,16 @@ public class GuiListener implements Listener {
             int slot = config.getInt("Settings.GUISettings.OtherSettings." + o + ".Slot");
             String cName = Methods.color(config.getString("Settings.GUISettings.Category-Settings." + shopCategory.get(player.getUniqueId()).getName() + ".Name"));
 
+            ItemBuilder itemBuilder = new ItemBuilder().setMaterial(id).setName(name).setAmount(1);
+
             if (config.contains("Settings.GUISettings.OtherSettings." + o + ".Lore")) {
                 for (String l : config.getStringList("Settings.GUISettings.OtherSettings." + o + ".Lore")) {
                     lore.add(l.replace("%Category%", cName).replace("%category%", cName));
                 }
-                inv.setItem(slot - 1, Methods.makeItem(id, 1, name, lore));
+
+                inv.setItem(slot - 1, itemBuilder.setLore(lore).build());
             } else {
-                inv.setItem(slot - 1, Methods.makeItem(id, 1, name));
+                inv.setItem(slot - 1, itemBuilder.setLore(lore).build());
             }
         }
 
@@ -183,11 +195,14 @@ public class GuiListener implements Listener {
             String id = config.getString("Settings.GUISettings." + o + ".Item");
             String name = config.getString("Settings.GUISettings." + o + ".Name");
             int slot = config.getInt("Settings.GUISettings." + o + ".Slot");
+
+            ItemBuilder itemBuilder = new ItemBuilder().setMaterial(id).setName(name).setAmount(1);
+
             if (config.contains("Settings.GUISettings." + o + ".Lore")) {
-                inv.setItem(slot - 1, Methods.makeItem(id, 1, name, config.getStringList("Settings.GUISettings." + o + ".Lore")));
-            } else {
-                inv.setItem(slot - 1, Methods.makeItem(id, 1, name));
+                itemBuilder.setLore(config.getStringList("Settings.GUISettings." + o + ".Lore"));
             }
+
+            inv.setItem(slot - 1, itemBuilder.build());
         }
 
         shopType.put(player.getUniqueId(), shop);
@@ -217,11 +232,14 @@ public class GuiListener implements Listener {
             String id = config.getString("Settings.GUISettings.OtherSettings." + o + ".Item");
             String name = config.getString("Settings.GUISettings.OtherSettings." + o + ".Name");
             int slot = config.getInt("Settings.GUISettings.OtherSettings." + o + ".Slot");
+
+            ItemBuilder itemBuilder = new ItemBuilder().setMaterial(id).setName(name).setAmount(1);
+
             if (config.contains("Settings.GUISettings.OtherSettings." + o + ".Lore")) {
-                inv.setItem(slot - 1, Methods.makeItem(id, 1, name, config.getStringList("Settings.GUISettings.OtherSettings." + o + ".Lore")));
-            } else {
-                inv.setItem(slot - 1, Methods.makeItem(id, 1, name));
+                itemBuilder.setLore(config.getStringList("Settings.GUISettings.OtherSettings." + o + ".Lore"));
             }
+
+            inv.setItem(slot - 1, itemBuilder.build());
         }
 
         if (data.contains("Items")) {
@@ -231,7 +249,11 @@ public class GuiListener implements Listener {
                     for (String l : config.getStringList("Settings.GUISettings.CurrentLore")) {
                         lore.add(l.replace("%Price%", Methods.getPrice(i, false)).replace("%price%", Methods.getPrice(i, false)).replace("%Time%", Methods.convertToTime(data.getLong("Items." + i + ".Time-Till-Expire"))).replace("%time%", Methods.convertToTime(data.getLong("Items." + i + ".Time-Till-Expire"))));
                     }
-                    items.add(Methods.addLore(data.getItemStack("Items." + i + ".Item").clone(), lore));
+
+                    ItemBuilder itemBuilder = ItemBuilder.convertItemStack(data.getItemStack("Items." + i + ".Item"));
+
+                    lore.forEach(itemBuilder::addLore);
+
                     ID.add(data.getInt("Items." + i + ".StoreID"));
                 }
             }
@@ -262,7 +284,11 @@ public class GuiListener implements Listener {
                         for (String l : config.getStringList("Settings.GUISettings.Cancelled/ExpiredLore")) {
                             lore.add(l.replace("%Price%", Methods.getPrice(i, true)).replace("%price%", Methods.getPrice(i, true)).replace("%Time%", Methods.convertToTime(data.getLong("OutOfTime/Cancelled." + i + ".Full-Time"))).replace("%time%", Methods.convertToTime(data.getLong("OutOfTime/Cancelled." + i + ".Full-Time"))));
                         }
-                        items.add(Methods.addLore(data.getItemStack("OutOfTime/Cancelled." + i + ".Item").clone(), lore));
+
+                        ItemBuilder itemBuilder = ItemBuilder.convertItemStack(data.getItemStack("OutOfTime/Cancelled." + i + ".Item"));
+
+                        lore.forEach(itemBuilder::addLore);
+
                         ID.add(data.getInt("OutOfTime/Cancelled." + i + ".StoreID"));
                     }
                 }
@@ -291,11 +317,14 @@ public class GuiListener implements Listener {
             String id = config.getString("Settings.GUISettings.OtherSettings." + o + ".Item");
             String name = config.getString("Settings.GUISettings.OtherSettings." + o + ".Name");
             int slot = config.getInt("Settings.GUISettings.OtherSettings." + o + ".Slot");
+
+            ItemBuilder itemBuilder = new ItemBuilder().setMaterial(id).setName(name).setAmount(1);
+
             if (config.contains("Settings.GUISettings.OtherSettings." + o + ".Lore")) {
-                inv.setItem(slot - 1, Methods.makeItem(id, 1, name, config.getStringList("Settings.GUISettings.OtherSettings." + o + ".Lore")));
-            } else {
-                inv.setItem(slot - 1, Methods.makeItem(id, 1, name));
+                itemBuilder.setLore(config.getStringList("Settings.GUISettings.OtherSettings." + o + ".Lore"));
             }
+
+            inv.setItem(slot - 1, itemBuilder.build());
         }
 
         for (ItemStack item : Methods.getPage(items, page)) {
@@ -331,11 +360,13 @@ public class GuiListener implements Listener {
             String name = config.getString("Settings.GUISettings.OtherSettings." + o + ".Name");
             ItemStack item;
 
+            ItemBuilder itemBuilder = new ItemBuilder().setMaterial(id).setName(name).setAmount(1);
+
             if (config.contains("Settings.GUISettings.OtherSettings." + o + ".Lore")) {
-                item = Methods.makeItem(id, 1, name, config.getStringList("Settings.GUISettings.OtherSettings." + o + ".Lore"));
-            } else {
-                item = Methods.makeItem(id, 1, name);
+                itemBuilder.setLore(config.getStringList("Settings.GUISettings.OtherSettings." + o + ".Lore")).build();
             }
+
+            item = itemBuilder.build();
 
             if (o.equals("Confirm")) {
                 inv.setItem(0, item);
@@ -358,7 +389,12 @@ public class GuiListener implements Listener {
             lore.add(l.replace("%Price%", Methods.getPrice(ID, false)).replace("%price%", Methods.getPrice(ID, false)).replace("%Seller%", data.getString("Items." + ID + ".Seller")).replace("%seller%", data.getString("Items." + ID + ".Seller")).replace("%Time%", Methods.convertToTime(data.getLong("Items." + l + ".Time-Till-Expire"))).replace("%time%", Methods.convertToTime(data.getLong("Items." + l + ".Time-Till-Expire"))));
         }
 
-        inv.setItem(4, Methods.addLore(item.clone(), lore));
+        ItemBuilder itemBuilder = ItemBuilder.convertItemStack(item);
+
+        lore.forEach(itemBuilder::addLore);
+
+        inv.setItem(4, itemBuilder.build());
+
         IDs.put(player.getUniqueId(), ID);
         player.openInventory(inv);
     }
@@ -377,19 +413,21 @@ public class GuiListener implements Listener {
         Inventory inv = plugin.getServer().createInventory(null, 27, Methods.color(config.getString("Settings.Bidding-On-Item")));
         if (!bidding.containsKey(player.getUniqueId())) bidding.put(player.getUniqueId(), 0);
 
-        inv.setItem(9, Methods.makeItem("LIME_STAINED_GLASS_PANE", 1, "&a+1"));
-        inv.setItem(10, Methods.makeItem("LIME_STAINED_GLASS_PANE", 1, "&a+10"));
-        inv.setItem(11, Methods.makeItem("LIME_STAINED_GLASS_PANE", 1, "&a+100"));
-        inv.setItem(12, Methods.makeItem("LIME_STAINED_GLASS_PANE", 1, "&a+1000"));
-        inv.setItem(14, Methods.makeItem("RED_STAINED_GLASS_PANE", 1, "&c-1000"));
-        inv.setItem(15, Methods.makeItem("RED_STAINED_GLASS_PANE", 1, "&c-100"));
-        inv.setItem(16, Methods.makeItem("RED_STAINED_GLASS_PANE", 1, "&c-10"));
-        inv.setItem(17, Methods.makeItem("RED_STAINED_GLASS_PANE", 1, "&c-1"));
-
+        inv.setItem(9, new ItemBuilder().setMaterial(Material.LIME_STAINED_GLASS_PANE).setName("&a+1").setAmount(1).build());
+        inv.setItem(10, new ItemBuilder().setMaterial(Material.LIME_STAINED_GLASS_PANE).setName("&a+10").setAmount(1).build());
+        inv.setItem(11, new ItemBuilder().setMaterial(Material.LIME_STAINED_GLASS_PANE).setName("&a+100").setAmount(1).build());
+        inv.setItem(12, new ItemBuilder().setMaterial(Material.LIME_STAINED_GLASS_PANE).setName("&a+1000").setAmount(1).build());
+        inv.setItem(14, new ItemBuilder().setMaterial(Material.LIME_STAINED_GLASS_PANE).setName("&c-1000").setAmount(1).build());
+        inv.setItem(15, new ItemBuilder().setMaterial(Material.LIME_STAINED_GLASS_PANE).setName("&c-100").setAmount(1).build());
+        inv.setItem(16, new ItemBuilder().setMaterial(Material.LIME_STAINED_GLASS_PANE).setName("&c-10").setAmount(1).build());
+        inv.setItem(17, new ItemBuilder().setMaterial(Material.LIME_STAINED_GLASS_PANE).setName("&c-1").setAmount(1).build());
         inv.setItem(13, getBiddingGlass(player, ID));
-        inv.setItem(22, Methods.makeItem(config.getString("Settings.GUISettings.OtherSettings.Bid.Item"), 1, config.getString("Settings.GUISettings.OtherSettings.Bid.Name"), config.getStringList("Settings.GUISettings.OtherSettings.Bid.Lore")));
+
+        inv.setItem(22, new ItemBuilder().setMaterial(config.getString("Settings.GUISettings.OtherSettings.Bid.Item")).setAmount(1)
+                .setName("Settings.GUISettings.OtherSettings.Bid.Name").setLore(config.getStringList("Settings.GUISettings.OtherSettings.Bid.Lore")).build());
         
         inv.setItem(4, getBiddingItem(ID));
+
         player.openInventory(inv);
     }
     
@@ -421,7 +459,11 @@ public class GuiListener implements Listener {
                             lore.add(l.replace("%Price%", Methods.getPrice(i, false)).replace("%price%", Methods.getPrice(i, false)).replace("%Seller%", data.getString("Items." + i + ".Seller")).replace("%seller%", data.getString("Items." + i + ".Seller")).replace("%Time%", Methods.convertToTime(data.getLong("Items." + i + ".Time-Till-Expire"))).replace("%time%", Methods.convertToTime(data.getLong("Items." + i + ".Time-Till-Expire"))));
                         }
                     }
-                    items.add(Methods.addLore(data.getItemStack("Items." + i + ".Item").clone(), lore));
+
+                    ItemBuilder itemBuilder = ItemBuilder.convertItemStack(data.getItemStack("Items." + i + ".Item"));
+
+                    lore.forEach(itemBuilder::addLore);
+
                     ID.add(data.getInt("Items." + i + ".StoreID"));
                 }
             }
@@ -446,11 +488,13 @@ public class GuiListener implements Listener {
             String name = config.getString("Settings.GUISettings.OtherSettings." + o + ".Name");
             int slot = config.getInt("Settings.GUISettings.OtherSettings." + o + ".Slot");
 
+            ItemBuilder itemBuilder = new ItemBuilder().setMaterial(id).setName(name).setAmount(1);
+
             if (config.contains("Settings.GUISettings.OtherSettings." + o + ".Lore")) {
-                inv.setItem(slot - 1, Methods.makeItem(id, 1, name, config.getStringList("Settings.GUISettings.OtherSettings." + o + ".Lore")));
-            } else {
-                inv.setItem(slot - 1, Methods.makeItem(id, 1, name));
+                itemBuilder.setLore(config.getStringList("Settings.GUISettings.OtherSettings." + o + ".Lore"));
             }
+
+            inv.setItem(slot - 1, itemBuilder.build());
         }
 
         for (ItemStack item : Methods.getPage(items, page)) {
@@ -467,7 +511,8 @@ public class GuiListener implements Listener {
 
         String id = config.getString("Settings.GUISettings.OtherSettings.Bidding.Item");
         String name = config.getString("Settings.GUISettings.OtherSettings.Bidding.Name");
-        ItemStack item;
+
+        ItemBuilder itemBuilder = new ItemBuilder().setMaterial(id).setName(name).setAmount(1);
 
         int bid = bidding.get(player.getUniqueId());
 
@@ -476,12 +521,11 @@ public class GuiListener implements Listener {
             for (String l : config.getStringList("Settings.GUISettings.OtherSettings.Bidding.Lore")) {
                 lore.add(l.replace("%Bid%", bid + "").replace("%bid%", bid + "").replace("%TopBid%", Methods.getPrice(ID, false)).replace("%topbid%", Methods.getPrice(ID, false)));
             }
-            item = Methods.makeItem(id, 1, name, lore);
-        } else {
-            item = Methods.makeItem(id, 1, name);
+
+            itemBuilder.setLore(lore);
         }
 
-        return item;
+        return itemBuilder.build();
     }
     
     private static ItemStack getBiddingItem(String ID) {
@@ -496,7 +540,11 @@ public class GuiListener implements Listener {
             lore.add(l.replace("%TopBid%", Methods.getPrice(ID, false)).replace("%topbid%", Methods.getPrice(ID, false)).replace("%Seller%", seller).replace("%seller%", seller).replace("%TopBidder%", topbidder).replace("%topbidder%", topbidder).replace("%Time%", Methods.convertToTime(data.getLong("Items." + ID + ".Time-Till-Expire"))).replace("%time%", Methods.convertToTime(data.getLong("Items." + ID + ".Time-Till-Expire"))));
         }
 
-        return Methods.addLore(item.clone(), lore);
+        ItemBuilder itemBuilder = ItemBuilder.convertItemStack(item);
+
+        lore.forEach(itemBuilder::addLore);
+
+        return itemBuilder.build();
     }
     
     private static void playClick(Player player) {
@@ -769,17 +817,16 @@ public class GuiListener implements Listener {
                                                 final Runnable runnable = () -> inv.setItem(slot, item);
 
                                                 if (data.getString("Items." + i + ".Seller").equalsIgnoreCase(player.getName())) {
-                                                    String it = config.getString("Settings.GUISettings.OtherSettings.Your-Item.Item");
+                                                    String itemName = config.getString("Settings.GUISettings.OtherSettings.Your-Item.Item");
                                                     String name = config.getString("Settings.GUISettings.OtherSettings.Your-Item.Name");
-                                                    ItemStack I;
+
+                                                    ItemBuilder itemBuilder = new ItemBuilder().setMaterial(itemName).setName(name).setAmount(1);
 
                                                     if (config.contains("Settings.GUISettings.OtherSettings.Your-Item.Lore")) {
-                                                        I = Methods.makeItem(it, 1, name, config.getStringList("Settings.GUISettings.OtherSettings.Your-Item.Lore"));
-                                                    } else {
-                                                        I = Methods.makeItem(it, 1, name);
+                                                        itemBuilder.setLore(config.getStringList("Settings.GUISettings.OtherSettings.Your-Item.Lore"));
                                                     }
 
-                                                    inv.setItem(slot, I);
+                                                    inv.setItem(slot, itemBuilder.build());
                                                     playClick(player);
                                                     Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, runnable, 3 * 20);
                                                     return;
@@ -788,17 +835,16 @@ public class GuiListener implements Listener {
                                                 long cost = data.getLong("Items." + i + ".Price");
 
                                                 if (plugin.getSupport().getMoney(player) < cost) {
-                                                    String it = config.getString("Settings.GUISettings.OtherSettings.Cant-Afford.Item");
+                                                    String itemName = config.getString("Settings.GUISettings.OtherSettings.Cant-Afford.Item");
                                                     String name = config.getString("Settings.GUISettings.OtherSettings.Cant-Afford.Name");
-                                                    ItemStack I;
+
+                                                    ItemBuilder itemBuilder = new ItemBuilder().setMaterial(itemName).setName(name).setAmount(1);
 
                                                     if (config.contains("Settings.GUISettings.OtherSettings.Cant-Afford.Lore")) {
-                                                        I = Methods.makeItem(it, 1, name, config.getStringList("Settings.GUISettings.OtherSettings.Cant-Afford.Lore"));
-                                                    } else {
-                                                        I = Methods.makeItem(it, 1, name);
+                                                        itemBuilder.setLore(config.getStringList("Settings.GUISettings.OtherSettings.Cant-Afford.Lore"));
                                                     }
 
-                                                    inv.setItem(slot, I);
+                                                    inv.setItem(slot, itemBuilder.build());
                                                     playClick(player);
                                                     Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, runnable, 3 * 20);
                                                     return;
@@ -806,17 +852,16 @@ public class GuiListener implements Listener {
 
                                                 if (data.getBoolean("Items." + i + ".Biddable")) {
                                                     if (player.getName().equalsIgnoreCase(data.getString("Items." + i + ".TopBidder"))) {
-                                                        String it = config.getString("Settings.GUISettings.OtherSettings.Top-Bidder.Item");
+                                                        String itemName = config.getString("Settings.GUISettings.OtherSettings.Top-Bidder.Item");
                                                         String name = config.getString("Settings.GUISettings.OtherSettings.Top-Bidder.Name");
-                                                        ItemStack I;
+
+                                                        ItemBuilder itemBuilder = new ItemBuilder().setMaterial(itemName).setName(name).setAmount(1);
 
                                                         if (config.contains("Settings.GUISettings.OtherSettings.Top-Bidder.Lore")) {
-                                                            I = Methods.makeItem(it, 1, name, config.getStringList("Settings.GUISettings.OtherSettings.Top-Bidder.Lore"));
-                                                        } else {
-                                                            I = Methods.makeItem(it, 1, name);
+                                                            itemBuilder.setLore( config.getStringList("Settings.GUISettings.OtherSettings.Top-Bidder.Lore"));
                                                         }
 
-                                                        inv.setItem(slot, I);
+                                                        inv.setItem(slot, itemBuilder.build());
                                                         playClick(player);
                                                         Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, runnable, 3 * 20);
                                                         return;

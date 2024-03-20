@@ -346,11 +346,9 @@ public class AuctionCommand implements CommandExecutor {
                             }
                         }
 
-                        for (String id : config.getStringList("Settings.BlackList")) {
-                            if (item.getType() == Methods.makeItem(id, 1).getType()) {
-                                player.sendMessage(Messages.ITEM_BLACKLISTED.getMessage());
-                                return true;
-                            }
+                        if (config.getStringList("Settings.BlackList").contains(item.getType().getKey().getKey())) {
+                            player.sendMessage(Messages.ITEM_BLACKLISTED.getMessage());
+                            return true;
                         }
 
                         if (!config.getBoolean("Settings.Allow-Damaged-Items")) {
