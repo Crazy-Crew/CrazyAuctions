@@ -76,9 +76,7 @@ public class GuiListener implements Listener {
 
                             ItemBuilder itemBuilder = ItemBuilder.convertItemStack(data.getItemStack("Items." + i + ".Item"));
 
-                            if (itemBuilder.getUpdatedLore().isEmpty()) {
-                                lore.forEach(itemBuilder::addLore);
-                            }
+                            itemBuilder.setLore(lore);
 
                             items.add(itemBuilder.build());
 
