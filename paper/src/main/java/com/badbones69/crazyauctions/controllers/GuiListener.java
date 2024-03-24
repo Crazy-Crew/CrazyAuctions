@@ -78,7 +78,9 @@ public class GuiListener implements Listener {
 
                             lore.forEach(itemBuilder::addLore);
 
-                            ID.add(data.getInt("Items." + i + ".StoreID"));;
+                            items.add(itemBuilder.build());
+
+                            ID.add(data.getInt("Items." + i + ".StoreID"));
                         }
                     } else {
                         if (sell == ShopType.SELL) {
@@ -89,6 +91,8 @@ public class GuiListener implements Listener {
                             ItemBuilder itemBuilder = ItemBuilder.convertItemStack(data.getItemStack("Items." + i + ".Item"));
 
                             lore.forEach(itemBuilder::addLore);
+
+                            items.add(itemBuilder.build());
 
                             ID.add(data.getInt("Items." + i + ".StoreID"));
                         }
@@ -254,6 +258,8 @@ public class GuiListener implements Listener {
 
                     lore.forEach(itemBuilder::addLore);
 
+                    items.add(itemBuilder.build());
+
                     ID.add(data.getInt("Items." + i + ".StoreID"));
                 }
             }
@@ -288,6 +294,8 @@ public class GuiListener implements Listener {
                         ItemBuilder itemBuilder = ItemBuilder.convertItemStack(data.getItemStack("OutOfTime/Cancelled." + i + ".Item"));
 
                         lore.forEach(itemBuilder::addLore);
+
+                        items.add(itemBuilder.build());
 
                         ID.add(data.getInt("OutOfTime/Cancelled." + i + ".StoreID"));
                     }
@@ -463,6 +471,8 @@ public class GuiListener implements Listener {
                     ItemBuilder itemBuilder = ItemBuilder.convertItemStack(data.getItemStack("Items." + i + ".Item"));
 
                     lore.forEach(itemBuilder::addLore);
+
+                    items.add(itemBuilder.build());
 
                     ID.add(data.getInt("Items." + i + ".StoreID"));
                 }
