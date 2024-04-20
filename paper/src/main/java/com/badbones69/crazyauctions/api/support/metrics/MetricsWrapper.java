@@ -1,7 +1,6 @@
 package com.badbones69.crazyauctions.api.support.metrics;
 
 import com.badbones69.crazyauctions.CrazyAuctions;
-import org.bstats.bukkit.Metrics;
 import org.jetbrains.annotations.NotNull;
 
 public class MetricsWrapper {

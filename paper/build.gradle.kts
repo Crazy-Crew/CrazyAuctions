@@ -14,8 +14,6 @@ repositories {
 dependencies {
     paperweight.paperDevBundle(libs.versions.bundle)
 
-    implementation(libs.metrics)
-
     compileOnly(libs.placeholder.api)
 
     compileOnly(libs.oraxen.api)
@@ -51,7 +49,8 @@ tasks {
             //"com.ryderbelserion.cluster",
             //"dev.triumphteam.cmd",
             //"dev.triumphteam.gui",
-            "org.bstats"
+            //"org.bstats"
+            ""
         ).forEach {
             relocate(it, "libs.$it")
         }
