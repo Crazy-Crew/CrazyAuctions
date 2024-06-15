@@ -1104,6 +1104,12 @@ public class ItemBuilder {
         return new ItemBuilder(item).setAmount(item.getAmount()).setEnchantments(new HashMap<>(item.getEnchantments()));
     }
 
+    public static ItemBuilder convertItemStack(String item) {
+        ItemStack itemStack = Methods.fromBase64(item);
+
+        return new ItemBuilder(itemStack).setAmount(itemStack.getAmount()).setEnchantments(new HashMap<>(itemStack.getEnchantments()));
+    }
+
     public static ItemBuilder convertItemStack(ItemStack item, Player player) {
         return new ItemBuilder(item).setTarget(player).setAmount(item.getAmount()).setEnchantments(new HashMap<>(item.getEnchantments()));
     }

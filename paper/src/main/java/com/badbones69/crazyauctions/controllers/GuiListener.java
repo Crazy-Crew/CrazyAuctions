@@ -67,7 +67,7 @@ public class GuiListener implements Listener {
             for (String i : data.getConfigurationSection("Items").getKeys(false)) {
                 List<String> lore = new ArrayList<>();
 
-                ItemBuilder itemBuilder = ItemBuilder.convertItemStack(ItemStack.deserializeBytes(Base64.getDecoder().decode(data.getString("Items." + i + ".Item"))));
+                ItemBuilder itemBuilder = ItemBuilder.convertItemStack(data.getString("Items." + i + ".Item"));
 
                 if (itemBuilder != null && data.contains("Items." + i + ".Item") && (cat.getItems().contains(itemBuilder.getItemStack().getType()) || cat == Category.NONE)) {
                     if (data.getBoolean("Items." + i + ".Biddable")) {
@@ -254,7 +254,7 @@ public class GuiListener implements Listener {
                         lore.add(l.replace("%Price%", Methods.getPrice(i, false)).replace("%price%", Methods.getPrice(i, false)).replace("%Time%", Methods.convertToTime(data.getLong("Items." + i + ".Time-Till-Expire"))).replace("%time%", Methods.convertToTime(data.getLong("Items." + i + ".Time-Till-Expire"))));
                     }
 
-                    ItemBuilder itemBuilder = ItemBuilder.convertItemStack(ItemStack.deserializeBytes(Base64.getDecoder().decode(data.getString("Items." + i + ".Item"))));
+                    ItemBuilder itemBuilder = ItemBuilder.convertItemStack(data.getString("Items." + i + ".Item"));
 
                     itemBuilder.setLore(lore);
 
@@ -291,7 +291,7 @@ public class GuiListener implements Listener {
                             lore.add(l.replace("%Price%", Methods.getPrice(i, true)).replace("%price%", Methods.getPrice(i, true)).replace("%Time%", Methods.convertToTime(data.getLong("OutOfTime/Cancelled." + i + ".Full-Time"))).replace("%time%", Methods.convertToTime(data.getLong("OutOfTime/Cancelled." + i + ".Full-Time"))));
                         }
 
-                        ItemBuilder itemBuilder = ItemBuilder.convertItemStack(ItemStack.deserializeBytes(Base64.getDecoder().decode(data.getString("OutOfTime/Cancelled." + i + ".Item"))));
+                        ItemBuilder itemBuilder = ItemBuilder.convertItemStack(data.getString("OutOfTime/Cancelled." + i + ".Item"));
 
                         itemBuilder.setLore(lore);
 
@@ -391,13 +391,12 @@ public class GuiListener implements Listener {
             }
         }
 
-        ItemStack item = ItemStack.deserializeBytes(Base64.getDecoder().decode(data.getString("Items." + ID + ".Item")));
         List<String> lore = new ArrayList<>();
         for (String l : config.getStringList("Settings.GUISettings.SellingItemLore")) {
             lore.add(l.replace("%Price%", Methods.getPrice(ID, false)).replace("%price%", Methods.getPrice(ID, false)).replace("%Seller%", data.getString("Items." + ID + ".Seller")).replace("%seller%", data.getString("Items." + ID + ".Seller")).replace("%Time%", Methods.convertToTime(data.getLong("Items." + l + ".Time-Till-Expire"))).replace("%time%", Methods.convertToTime(data.getLong("Items." + l + ".Time-Till-Expire"))));
         }
 
-        ItemBuilder itemBuilder = ItemBuilder.convertItemStack(item);
+        ItemBuilder itemBuilder = ItemBuilder.convertItemStack(data.getString("Items." + ID + ".Item"));
 
         itemBuilder.setLore(lore);
 
@@ -468,7 +467,7 @@ public class GuiListener implements Listener {
                         }
                     }
 
-                    ItemBuilder itemBuilder = ItemBuilder.convertItemStack(ItemStack.deserializeBytes(Base64.getDecoder().decode(data.getString("Items." + ID + ".Item"))));
+                    ItemBuilder itemBuilder = ItemBuilder.convertItemStack(data.getString("Items." + ID + ".Item"));
 
                     itemBuilder.setLore(lore);
 
@@ -543,7 +542,7 @@ public class GuiListener implements Listener {
         FileConfiguration data = Files.DATA.getFile();
         String seller = data.getString("Items." + ID + ".Seller");
         String topbidder = data.getString("Items." + ID + ".TopBidder");
-        ItemStack item = ItemStack.deserializeBytes(Base64.getDecoder().decode(data.getString("Items." + ID + ".Item")));
+        ItemStack item = Methods.fromBase64(data.getString("Items." + ID + ".Item"));
         List<String> lore = new ArrayList<>();
 
         for (String l : config.getStringList("Settings.GUISettings.Bidding")) {
@@ -659,7 +658,8 @@ public class GuiListener implements Listener {
                                         return;
                                     }
 
-                                    Bukkit.getPluginManager().callEvent(new AuctionNewBidEvent(player, ItemStack.deserializeBytes(Base64.getDecoder().decode(data.getString("Items." + ID + ".Item"))), bid));
+
+                                    Bukkit.getPluginManager().callEvent(new AuctionNewBidEvent(player, Methods.fromBase64(data.getString("Items." + ID + ".Item")), bid));
                                     data.set("Items." + ID + ".Price", bid);
                                     data.set("Items." + ID + ".TopBidder", player.getName());
                                     HashMap<String, String> placeholders = new HashMap<>();
@@ -808,7 +808,7 @@ public class GuiListener implements Listener {
                                                             sellerPlayer.sendMessage(Messages.ADMIN_FORCE_CANCELLED_TO_PLAYER.getMessage());
                                                         }
 
-                                                        AuctionCancelledEvent event = new AuctionCancelledEvent((sellerPlayer != null ? sellerPlayer : Bukkit.getOfflinePlayer(seller)), ItemStack.deserializeBytes(Base64.getDecoder().decode(data.getString("Items." + ID + ".Item"))), Reaons.ADMIN_FORCE_CANCEL);
+                                                        AuctionCancelledEvent event = new AuctionCancelledEvent((sellerPlayer != null ? sellerPlayer : Bukkit.getOfflinePlayer(seller)), Methods.fromBase64(data.getString("Items." + ID + ".Item")), Reaons.ADMIN_FORCE_CANCEL);
                                                         Bukkit.getPluginManager().callEvent(event);
                                                         data.set("OutOfTime/Cancelled." + num + ".Seller", data.getString("Items." + i + ".Seller"));
                                                         data.set("OutOfTime/Cancelled." + num + ".Full-Time", data.getLong("Items." + i + ".Full-Time"));
@@ -942,7 +942,7 @@ public class GuiListener implements Listener {
                                         return;
                                     }
 
-                                    ItemStack i = ItemStack.deserializeBytes(Base64.getDecoder().decode(data.getString("Items." + ID + ".Item")));
+                                    ItemStack i = Methods.fromBase64(data.getString("Items." + ID + ".Item"));
 
                                     plugin.getServer().getPluginManager().callEvent(new AuctionBuyEvent(player, i, cost));
                                     plugin.getSupport().removeMoney(player, cost);
@@ -1005,7 +1005,7 @@ public class GuiListener implements Listener {
                                             int ID = data.getInt("Items." + i + ".StoreID");
                                             if (id == ID) {
                                                 player.sendMessage(Messages.CANCELLED_ITEM.getMessage());
-                                                AuctionCancelledEvent event = new AuctionCancelledEvent(player, ItemStack.deserializeBytes(Base64.getDecoder().decode(data.getString("Items." + i + ".Item"))), Reaons.PLAYER_FORCE_CANCEL);
+                                                AuctionCancelledEvent event = new AuctionCancelledEvent(player, Methods.fromBase64(data.getString("Items." + i + ".Item")), Reaons.PLAYER_FORCE_CANCEL);
                                                 Bukkit.getPluginManager().callEvent(event);
                                                 int num = 1;
                                                 for (; data.contains("OutOfTime/Cancelled." + num); num++) ;
@@ -1069,7 +1069,7 @@ public class GuiListener implements Listener {
                                                     player.sendMessage(Messages.INVENTORY_FULL.getMessage());
                                                     break;
                                                 } else {
-                                                    player.getInventory().addItem(ItemStack.deserializeBytes(Base64.getDecoder().decode(data.getString("OutOfTime/Cancelled." + i + ".Item"))));
+                                                    player.getInventory().addItem(Methods.fromBase64(data.getString("OutOfTime/Cancelled." + i + ".Item")));
                                                     data.set("OutOfTime/Cancelled." + i, null);
                                                 }
                                             }
@@ -1102,7 +1102,7 @@ public class GuiListener implements Listener {
                                             if (id == ID) {
                                                 if (!Methods.isInvFull(player)) {
                                                     player.sendMessage(Messages.GOT_ITEM_BACK.getMessage());
-                                                    player.getInventory().addItem(ItemStack.deserializeBytes(Base64.getDecoder().decode(data.getString("OutOfTime/Cancelled." + i + ".Item"))));
+                                                    player.getInventory().addItem(Methods.fromBase64(data.getString("OutOfTime/Cancelled." + i + ".Item")));
                                                     data.set("OutOfTime/Cancelled." + i, null);
                                                     Files.DATA.saveFile();
                                                     playClick(player);
