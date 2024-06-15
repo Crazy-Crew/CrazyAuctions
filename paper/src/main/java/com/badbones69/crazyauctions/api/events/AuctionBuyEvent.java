@@ -4,6 +4,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 /**
  *
@@ -36,7 +37,7 @@ public class AuctionBuyEvent extends Event {
         return handlers;
     }
     
-    public HandlerList getHandlers() {
+    public @NotNull HandlerList getHandlers() {
         return handlers;
     }
     
@@ -51,5 +52,4 @@ public class AuctionBuyEvent extends Event {
     public long getPrice() {
         return price;
     }
-    
 }

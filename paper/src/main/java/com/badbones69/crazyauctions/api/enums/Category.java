@@ -20,7 +20,7 @@ public enum Category {
     /**
      * @param name Name of the Shop Type.
      */
-    private Category(String name, ArrayList<Material> items) {
+    Category(String name, ArrayList<Material> items) {
         this.name = name;
         this.items = items;
     }

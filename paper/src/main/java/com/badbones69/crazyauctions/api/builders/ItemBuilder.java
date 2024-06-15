@@ -36,7 +36,6 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -1414,6 +1413,7 @@ public class ItemBuilder {
 
     private static Map<String, Color> createMap() {
         Map<String, Color> map = new HashMap<>();
+
         map.put("AQUA", Color.AQUA);
         map.put("BLACK", Color.BLACK);
         map.put("BLUE", Color.BLUE);
@@ -1431,12 +1431,14 @@ public class ItemBuilder {
         map.put("TEAL", Color.TEAL);
         map.put("WHITE", Color.WHITE);
         map.put("YELLOW", Color.YELLOW);
+
         return map;
     }
 
     public static Color getColor(String color) {
         if (color != null && !color.isBlank()) {
-            Color mappedColor = (Color)colors.get(color.toUpperCase());
+            Color mappedColor = colors.get(color.toUpperCase());
+
             if (mappedColor != null) {
                 return mappedColor;
             } else {

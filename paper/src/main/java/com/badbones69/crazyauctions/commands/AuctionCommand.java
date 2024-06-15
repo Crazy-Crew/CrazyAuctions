@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.Random;
+import java.util.UUID;
 import java.util.logging.Level;
 
 public class AuctionCommand implements CommandExecutor {
@@ -100,7 +101,7 @@ public class AuctionCommand implements CommandExecutor {
 
                     if (item != null && item.getType() != Material.AIR) {
                         // For testing as another player
-                        String seller = "Test-Account";
+                        String seller = UUID.randomUUID().toString();
 
                         for (int it = 1; it <= times; it++) {
                             int num = 1;
@@ -113,12 +114,12 @@ public class AuctionCommand implements CommandExecutor {
                             data.set("Items." + num + ".Seller", seller);
 
                             if (args[0].equalsIgnoreCase("bid")) {
-                                data.set("Items." + num + ".Time-Till-Expire", Methods.convertToMill(config.getString("Settings.Bid-Time")));
+                                data.set("Items." + num + ".Time-Till-Expire", Methods.convertToMill(config.getString("Settings.Bid-Time", "2m 30s")));
                             } else {
-                                data.set("Items." + num + ".Time-Till-Expire", Methods.convertToMill(config.getString("Settings.Sell-Time")));
+                                data.set("Items." + num + ".Time-Till-Expire", Methods.convertToMill(config.getString("Settings.Sell-Time", "2d")));
                             }
 
-                            data.set("Items." + num + ".Full-Time", Methods.convertToMill(config.getString("Settings.Full-Expire-Time")));
+                            data.set("Items." + num + ".Full-Time", Methods.convertToMill(config.getString("Settings.Full-Expire-Time", "10d")));
                             int id = random.nextInt(Integer.MAX_VALUE);
 
                             for (String i : data.getConfigurationSection("Items").getKeys(false))
@@ -271,21 +272,21 @@ public class AuctionCommand implements CommandExecutor {
                         long price = Long.parseLong(args[1]);
 
                         if (args[0].equalsIgnoreCase("bid")) {
-                            if (price < config.getLong("Settings.Minimum-Bid-Price")) {
+                            if (price < config.getLong("Settings.Minimum-Bid-Price", 100)) {
                                 player.sendMessage(Messages.BID_PRICE_TO_LOW.getMessage());
                                 return true;
                             }
 
-                            if (price > config.getLong("Settings.Max-Beginning-Bid-Price")) {
+                            if (price > config.getLong("Settings.Max-Beginning-Bid-Price", 1000000)) {
                                 player.sendMessage(Messages.BID_PRICE_TO_HIGH.getMessage());
                                 return true;
                             }
                         } else {
-                            if (price < config.getLong("Settings.Minimum-Sell-Price")) {
+                            if (price < config.getLong("Settings.Minimum-Sell-Price", 10)) {
                                 player.sendMessage(Messages.SELL_PRICE_TO_LOW.getMessage());
                                 return true;
                             }
-                            if (price > config.getLong("Settings.Max-Beginning-Sell-Price")) {
+                            if (price > config.getLong("Settings.Max-Beginning-Sell-Price", 1000000)) {
                                 player.sendMessage(Messages.SELL_PRICE_TO_HIGH.getMessage());
                                 return true;
                             }
@@ -352,7 +353,7 @@ public class AuctionCommand implements CommandExecutor {
                             return true;
                         }
 
-                        if (!config.getBoolean("Settings.Allow-Damaged-Items")) {
+                        if (!config.getBoolean("Settings.Allow-Damaged-Items", false)) {
                             for (Material i : getDamageableItems()) {
                                 if (item.getType() == i) {
                                     if (item.getDurability() > 0) {
@@ -368,7 +369,7 @@ public class AuctionCommand implements CommandExecutor {
                             return true;
                         }
 
-                        String seller = player.getName();
+                        String seller = player.getUniqueId().toString();
                         int num = 1;
 
                         Random random = new Random();
@@ -378,12 +379,12 @@ public class AuctionCommand implements CommandExecutor {
                         data.set("Items." + num + ".Seller", seller);
 
                         if (args[0].equalsIgnoreCase("bid")) {
-                            data.set("Items." + num + ".Time-Till-Expire", Methods.convertToMill(config.getString("Settings.Bid-Time")));
+                            data.set("Items." + num + ".Time-Till-Expire", Methods.convertToMill(config.getString("Settings.Bid-Time", "2m 30s")));
                         } else {
-                            data.set("Items." + num + ".Time-Till-Expire", Methods.convertToMill(config.getString("Settings.Sell-Time")));
+                            data.set("Items." + num + ".Time-Till-Expire", Methods.convertToMill(config.getString("Settings.Sell-Time", "2d")));
                         }
 
-                        data.set("Items." + num + ".Full-Time", Methods.convertToMill(config.getString("Settings.Full-Expire-Time")));
+                        data.set("Items." + num + ".Full-Time", Methods.convertToMill(config.getString("Settings.Full-Expire-Time", "10d")));
                         int id = random.nextInt(999999);
                         // Runs 3x to check for same ID.
                         for (String i : data.getConfigurationSection("Items").getKeys(false))

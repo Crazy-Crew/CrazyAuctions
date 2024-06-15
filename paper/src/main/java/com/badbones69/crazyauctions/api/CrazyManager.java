@@ -36,7 +36,7 @@ public class CrazyManager {
 
         if (data.contains("Items")) {
             for (String i : data.getConfigurationSection("Items").getKeys(false)) {
-                if (data.getString("Items." + i + ".Seller").equalsIgnoreCase(player.getName())) {
+                if (data.getString("Items." + i + ".Seller").equalsIgnoreCase(player.getUniqueId().toString())) {
                     if (data.getBoolean("Items." + i + ".Biddable")) {
                         if (type == ShopType.BID) {
                             items.add(data.getItemStack("Items." + i + ".Item").clone());

@@ -7,10 +7,8 @@ import com.badbones69.crazyauctions.api.events.AuctionWinBidEvent;
 import org.bukkit.*;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -74,13 +72,13 @@ public class Methods {
     
     public static Player getPlayer(String name) {
         try {
-            return Bukkit.getServer().getPlayer(name);
+            return Bukkit.getServer().getPlayer(UUID.fromString(name));
         } catch (Exception e) {
             return null;
         }
     }
 
-    public static OfflinePlayer getOfflinePlayer(String name) {
+    public static OfflinePlayer getOfflinePlayer(String name) { //todo () move off the thread.
         return Bukkit.getServer().getOfflinePlayer(name);
     }
 
@@ -102,6 +100,7 @@ public class Methods {
         }
 
         p.sendMessage(Messages.NOT_ONLINE.getMessage());
+
         return false;
     }
     
@@ -116,12 +115,7 @@ public class Methods {
     
     public static boolean hasPermission(CommandSender sender, String perm) {
         if (sender instanceof Player player) {
-            if (!player.hasPermission("crazyauctions." + perm)) {
-                player.sendMessage(Messages.NO_PERMISSION.getMessage());
-                return false;
-            }
-
-            return true;
+            return hasPermission(player, perm);
         }
 
         return true;
@@ -137,7 +131,7 @@ public class Methods {
             if (index < list.size()) items.add(list.get(index));
         }
 
-        for (; items.size() == 0; page--) {
+        for (; items.isEmpty(); page--) {
             if (page <= 0) break;
             index = page * max - max;
             endIndex = index >= list.size() ? list.size() - 1 : index + max;
@@ -160,7 +154,7 @@ public class Methods {
             if (index < list.size()) items.add(list.get(index));
         }
 
-        for (; items.size() == 0; page--) {
+        for (; items.isEmpty(); page--) {
             if (page <= 0) break;
             index = page * max - max;
             endIndex = index >= list.size() ? list.size() - 1 : index + max;

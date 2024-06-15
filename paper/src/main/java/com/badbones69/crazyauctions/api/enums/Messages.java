@@ -57,12 +57,12 @@ public enum Messages {
     private String defaultMessage;
     private List<String> defaultListMessage;
     
-    private Messages(String path, String defaultMessage) {
+    Messages(String path, String defaultMessage) {
         this.path = path;
         this.defaultMessage = defaultMessage;
     }
     
-    private Messages(String path, List<String> defaultListMessage) {
+    Messages(String path, List<String> defaultListMessage) {
         this.path = path;
         this.defaultListMessage = defaultListMessage;
     }
@@ -76,13 +76,12 @@ public enum Messages {
     }
     
     public static String convertList(List<String> list, HashMap<String, String> placeholders) {
-        String message = "";
-        for (String m : list) {
-            message += Methods.color(m) + "\n";
-        }
+        String message = convertList(list);
+
         for (String ph : placeholders.keySet()) {
             message = Methods.color(message.replace(ph, placeholders.get(ph))).replace(ph, placeholders.get(ph).toLowerCase());
         }
+
         return message;
     }
     
@@ -99,6 +98,7 @@ public enum Messages {
                 }
             }
         }
+
         if (saveFile) {
             Files.MESSAGES.saveFile();
         }
@@ -122,6 +122,7 @@ public enum Messages {
     
     public String getMessage(HashMap<String, String> placeholders) {
         String message;
+
         if (isList()) {
             if (exists()) {
                 message = Methods.color(convertList(Files.MESSAGES.getFile().getStringList("Messages." + path), placeholders));
@@ -134,12 +135,14 @@ public enum Messages {
             } else {
                 message = Methods.getPrefix(getDefaultMessage());
             }
+
             for (String ph : placeholders.keySet()) {
                 if (message.contains(ph)) {
                     message = message.replace(ph, placeholders.get(ph)).replace(ph, placeholders.get(ph).toLowerCase());
                 }
             }
         }
+
         return message;
     }
     
@@ -161,6 +164,7 @@ public enum Messages {
     
     public String getMessageNoPrefix(HashMap<String, String> placeholders) {
         String message;
+
         if (isList()) {
             if (exists()) {
                 message = Methods.color(convertList(Files.MESSAGES.getFile().getStringList("Messages." + path), placeholders));
@@ -173,12 +177,14 @@ public enum Messages {
             } else {
                 message = Methods.color(getDefaultMessage());
             }
+
             for (String ph : placeholders.keySet()) {
                 if (message.contains(ph)) {
                     message = message.replace(ph, placeholders.get(ph)).replace(ph, placeholders.get(ph).toLowerCase());
                 }
             }
         }
+
         return message;
     }
     
@@ -205,5 +211,4 @@ public enum Messages {
     private List<String> getDefaultListMessage() {
         return defaultListMessage;
     }
-    
 }
