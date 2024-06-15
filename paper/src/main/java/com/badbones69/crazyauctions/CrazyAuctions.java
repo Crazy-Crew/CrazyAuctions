@@ -13,8 +13,12 @@ import com.badbones69.crazyauctions.currency.VaultSupport;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.command.TabCompleter;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Base64;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -50,6 +54,33 @@ public class CrazyAuctions extends JavaPlugin {
         this.crazyManager = new CrazyManager();
 
         this.fileManager.setup();
+
+        FileConfiguration configuration = FileManager.Files.DATA.getFile();
+
+        if (configuration.contains("OutOfTime/Cancelled")) {
+            for (String key : configuration.getConfigurationSection("OutOfTime/Cancelled").getKeys(false)) {
+                final ItemStack itemStack = configuration.getItemStack("OutOfTime/Cancelled." + key + ".Item");
+
+                if (itemStack != null) {
+                    configuration.set("OutOfTime/Cancelled." + key + ".Item", Base64.getEncoder().encodeToString(itemStack.serializeAsBytes()));
+
+                    FileManager.Files.DATA.saveFile();
+                }
+            }
+        }
+
+        if (configuration.contains("Items")) {
+            for (String key : configuration.getConfigurationSection("Items").getKeys(false)) {
+                final ItemStack itemStack = configuration.getItemStack("Items." + key + ".Item");
+
+                if (itemStack != null) {
+                    configuration.set("Items." + key + ".Item", Base64.getEncoder().encodeToString(itemStack.serializeAsBytes()));
+
+                    FileManager.Files.DATA.saveFile();
+                }
+            }
+        }
+
         this.crazyManager.load();
 
         getServer().getPluginManager().registerEvents(new GuiListener(), this);

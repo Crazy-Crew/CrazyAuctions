@@ -5,7 +5,6 @@ import com.badbones69.crazyauctions.Methods;
 import com.badbones69.crazyauctions.api.support.PluginSupport;
 import com.badbones69.crazyauctions.api.support.SkullCreator;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import com.ryderbelserion.cluster.utils.DyeUtils;
 import io.th0rgal.oraxen.api.OraxenItems;
 import me.clip.placeholderapi.PlaceholderAPI;
 import net.minecraft.nbt.TagParser;
@@ -36,6 +35,8 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -48,7 +49,7 @@ import java.util.stream.Collectors;
 public class ItemBuilder {
 
     @NotNull
-    private final CrazyAuctions plugin = CrazyAuctions.get();
+    private static final CrazyAuctions plugin = CrazyAuctions.get();
 
     // Items
     private Material material = Material.STONE;
@@ -583,10 +584,10 @@ public class ItemBuilder {
             } else {
                 this.potionType = getPotionType(PotionEffectType.getByName(metaData)).getEffectType();
 
-                this.potionColor = DyeUtils.getColor(metaData);
-                this.armorColor = DyeUtils.getColor(metaData);
-                this.mapColor = DyeUtils.getColor(metaData);
-                this.fireworkColor = DyeUtils.getColor(metaData);
+                this.potionColor = getColor(metaData);
+                this.armorColor = getColor(metaData);
+                this.mapColor = getColor(metaData);
+                this.fireworkColor = getColor(metaData);
             }
         } else if (type.contains("#")) {
             String[] section = type.split("#");
@@ -1183,7 +1184,7 @@ public class ItemBuilder {
                         try {
                             for (PatternType pattern : PatternType.values()) {
                                 if (option.equalsIgnoreCase(pattern.name()) || value.equalsIgnoreCase(pattern.getIdentifier())) {
-                                    DyeColor color = DyeUtils.getDyeColor(value);
+                                    DyeColor color = getDyeColor(value);
                                     if (color != null) itemBuilder.addPattern(new Pattern(color, pattern));
                                     break;
                                 }
@@ -1385,7 +1386,7 @@ public class ItemBuilder {
             for (PatternType pattern : PatternType.values()) {
 
                 if (split[0].equalsIgnoreCase(pattern.name()) || split[0].equalsIgnoreCase(pattern.getIdentifier())) {
-                    DyeColor color = DyeUtils.getDyeColor(split[1]);
+                    DyeColor color = getDyeColor(split[1]);
 
                     if (color != null) addPattern(new Pattern(color, pattern));
 
@@ -1393,5 +1394,68 @@ public class ItemBuilder {
                 }
             }
         } catch (Exception ignored) {}
+    }
+
+    public static @Nullable DyeColor getDyeColor(@NotNull final String value) {
+        if (value.isEmpty()) return null;
+
+        Color color = getColor(value);
+
+        if (color == null) {
+            plugin.getLogger().severe(value + " is not a valid color.");
+
+            return null;
+        }
+
+        return DyeColor.getByColor(color);
+    }
+
+    private static final Map<String, Color> colors = createMap();
+
+    private static Map<String, Color> createMap() {
+        Map<String, Color> map = new HashMap<>();
+        map.put("AQUA", Color.AQUA);
+        map.put("BLACK", Color.BLACK);
+        map.put("BLUE", Color.BLUE);
+        map.put("FUCHSIA", Color.FUCHSIA);
+        map.put("GRAY", Color.GRAY);
+        map.put("GREEN", Color.GREEN);
+        map.put("LIME", Color.LIME);
+        map.put("MAROON", Color.MAROON);
+        map.put("NAVY", Color.NAVY);
+        map.put("OLIVE", Color.OLIVE);
+        map.put("ORANGE", Color.ORANGE);
+        map.put("PURPLE", Color.PURPLE);
+        map.put("RED", Color.RED);
+        map.put("SILVER", Color.SILVER);
+        map.put("TEAL", Color.TEAL);
+        map.put("WHITE", Color.WHITE);
+        map.put("YELLOW", Color.YELLOW);
+        return map;
+    }
+
+    public static Color getColor(String color) {
+        if (color != null && !color.isBlank()) {
+            Color mappedColor = (Color)colors.get(color.toUpperCase());
+            if (mappedColor != null) {
+                return mappedColor;
+            } else {
+                try {
+                    String[] rgb = color.split(",");
+                    if (rgb.length != 3) {
+                        return null;
+                    } else {
+                        int red = Integer.parseInt(rgb[0]);
+                        int green = Integer.parseInt(rgb[1]);
+                        int blue = Integer.parseInt(rgb[2]);
+                        return Color.fromRGB(red, green, blue);
+                    }
+                } catch (ArrayIndexOutOfBoundsException | NumberFormatException var6) {
+                    return null;
+                }
+            }
+        } else {
+            return null;
+        }
     }
 }

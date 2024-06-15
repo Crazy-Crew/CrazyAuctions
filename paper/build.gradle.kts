@@ -28,6 +28,13 @@ dependencies {
 tasks {
     assemble {
         dependsOn(reobfJar)
+
+        doLast {
+            copy {
+                from(reobfJar.get())
+                into(rootProject.projectDir.resolve("jars"))
+            }
+        }
     }
 
     runServer {
@@ -40,7 +47,7 @@ tasks {
 
             url("https://ci.lucko.me/job/TinyVault/lastSuccessfulBuild/artifact/build/libs/Vault.jar")
 
-            url("https://download.luckperms.net/1532/bukkit/loader/LuckPerms-Bukkit-5.4.119.jar")
+            url("https://download.luckperms.net/1544/bukkit/loader/LuckPerms-Bukkit-5.4.131.jar")
         }
 
         minecraftVersion("1.20.4")

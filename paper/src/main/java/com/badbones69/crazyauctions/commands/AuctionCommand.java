@@ -22,6 +22,7 @@ import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.jetbrains.annotations.NotNull;
 import org.yaml.snakeyaml.error.YAMLException;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.Random;
 import java.util.logging.Level;
@@ -131,7 +132,7 @@ public class AuctionCommand implements CommandExecutor {
                             ItemStack stack = item.clone();
                             stack.setAmount(amount);
 
-                            data.set("Items." + num + ".Item", stack);
+                            data.set("Items." + num + ".Item", Base64.getEncoder().encodeToString(stack.serializeAsBytes()));
                         }
 
                         Files.DATA.saveFile();
@@ -406,7 +407,7 @@ public class AuctionCommand implements CommandExecutor {
                         ItemStack stack = item.clone();
                         stack.setAmount(amount);
 
-                        data.set("Items." + num + ".Item", stack);
+                        data.set("Items." + num + ".Item", Base64.getEncoder().encodeToString(stack.serializeAsBytes()));
 
                         Files.DATA.saveFile();
 
