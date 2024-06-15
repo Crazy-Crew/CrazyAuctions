@@ -55,9 +55,6 @@ tasks {
 
     shadowJar {
         listOf(
-            //"com.ryderbelserion.cluster",
-            //"dev.triumphteam.cmd",
-            //"dev.triumphteam.gui",
             "org.bstats"
         ).forEach {
             relocate(it, "libs.$it")
