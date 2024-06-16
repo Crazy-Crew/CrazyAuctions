@@ -2,7 +2,7 @@ plugins {
     alias(libs.plugins.minotaur)
     alias(libs.plugins.hangar)
 
-    `root-plugin`
+    `java-plugin`
 }
 
 val buildNumber: String? = System.getenv("BUILD_NUMBER")
@@ -33,8 +33,7 @@ modrinth {
 
     gameVersions.set(listOf(libs.versions.minecraft.get()))
 
-    loaders.add("paper")
-    loaders.add("purpur")
+    loaders.addAll("paper", "purpur")
 
     autoAddDependsOn.set(false)
     detectLoaders.set(false)
