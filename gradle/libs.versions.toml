@@ -22,7 +22,7 @@ kyori = "4.17.0"
 vital = "1.5.9"
 
 # Paper
-paperweight="1.7.1"
+paperweight = "1.7.1"
 runPaper = "2.3.0"
 hangar = "0.1.2"
 

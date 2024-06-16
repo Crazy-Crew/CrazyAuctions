@@ -65,7 +65,7 @@ tasks {
             url("https://download.luckperms.net/1544/bukkit/loader/LuckPerms-Bukkit-5.4.131.jar")
         }
 
-        minecraftVersion("1.20.4")
+        minecraftVersion(libs.versions.minecraft.get())
     }
 
     assemble {
