@@ -133,7 +133,7 @@ public class AuctionCommand implements CommandExecutor {
                             ItemStack stack = item.clone();
                             stack.setAmount(amount);
 
-                            data.set("Items." + num + ".Item", Base64.getEncoder().encodeToString(stack.serializeAsBytes()));
+                            data.set("Items." + num + ".Item", Methods.toBase64(stack));
                         }
 
                         Files.DATA.saveFile();
@@ -408,7 +408,7 @@ public class AuctionCommand implements CommandExecutor {
                         ItemStack stack = item.clone();
                         stack.setAmount(amount);
 
-                        data.set("Items." + num + ".Item", Base64.getEncoder().encodeToString(stack.serializeAsBytes()));
+                        data.set("Items." + num + ".Item", Methods.toBase64(stack));
 
                         Files.DATA.saveFile();
 

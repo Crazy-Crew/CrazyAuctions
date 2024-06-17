@@ -1,14 +1,11 @@
+import com.ryderbelserion.feather.feather
+
 plugins {
+    id("com.ryderbelserion.feather-logic") version "0.0.1"
+
     `kotlin-dsl`
 }
 
-repositories {
-    gradlePluginPortal()
-    mavenCentral()
-}
-
 dependencies {
-    implementation(libs.paperweight.userdev)
-    implementation(libs.publishing.modrinth)
-    implementation(libs.publishing.hangar)
+    feather("0.0.1")
 }

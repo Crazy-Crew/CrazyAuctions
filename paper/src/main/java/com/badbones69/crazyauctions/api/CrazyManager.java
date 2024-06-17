@@ -1,5 +1,6 @@
 package com.badbones69.crazyauctions.api;
 
+import com.badbones69.crazyauctions.Methods;
 import com.badbones69.crazyauctions.api.FileManager.Files;
 import com.badbones69.crazyauctions.api.enums.ShopType;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -39,11 +40,11 @@ public class CrazyManager {
                 if (data.getString("Items." + i + ".Seller").equalsIgnoreCase(player.getUniqueId().toString())) {
                     if (data.getBoolean("Items." + i + ".Biddable")) {
                         if (type == ShopType.BID) {
-                            items.add(data.getItemStack("Items." + i + ".Item").clone());
+                            items.add(Methods.fromBase64(data.getString("Items." + i + ".Item")));
                         }
                     } else {
                         if (type == ShopType.SELL) {
-                            items.add(data.getItemStack("Items." + i + ".Item").clone());
+                            items.add(Methods.fromBase64(data.getString("Items." + i + ".Item")));
                         }
                     }
                 }

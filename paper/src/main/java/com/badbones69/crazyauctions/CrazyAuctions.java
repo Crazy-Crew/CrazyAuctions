@@ -4,7 +4,7 @@ import com.badbones69.crazyauctions.api.CrazyManager;
 import com.badbones69.crazyauctions.api.FileManager;
 import com.badbones69.crazyauctions.api.enums.Messages;
 import com.badbones69.crazyauctions.api.support.PluginSupport;
-import com.badbones69.crazyauctions.api.support.metrics.MetricsWrapper;
+import com.badbones69.crazyauctions.api.support.MetricsWrapper;
 import com.badbones69.crazyauctions.commands.AuctionCommand;
 import com.badbones69.crazyauctions.commands.AuctionTab;
 import com.badbones69.crazyauctions.controllers.GuiListener;
@@ -103,11 +103,10 @@ public class CrazyAuctions extends JavaPlugin {
 
         // Enable vault support if enabled.
         this.support = new VaultSupport();
-        support.loadVault();
+        this.support.loadVault();
 
         // Create bstats instance.
-        this.metrics = new MetricsWrapper();
-        this.metrics.start();
+        this.metrics = new MetricsWrapper(this, 4624);
     }
 
     private void registerCommand(PluginCommand pluginCommand, TabCompleter tabCompleter, CommandExecutor commandExecutor) {

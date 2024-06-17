@@ -1,38 +1,53 @@
 plugins {
+    alias(libs.plugins.paperweight)
+    alias(libs.plugins.shadowJar)
+    alias(libs.plugins.runPaper)
+
     `paper-plugin`
-
-    id("io.papermc.paperweight.userdev")
-
-    alias(libs.plugins.run.paper)
-    alias(libs.plugins.shadow)
 }
 
-repositories {
-    maven("https://repo.oraxen.com/releases/")
+base {
+    archivesName.set(rootProject.name)
 }
 
 dependencies {
-    paperweight.paperDevBundle(libs.versions.bundle)
+    paperweight.paperDevBundle(libs.versions.paper)
 
-    implementation(libs.metrics)
+    compileOnly(libs.placeholderapi)
 
-    compileOnly(libs.placeholder.api)
-
-    compileOnly(libs.oraxen.api)
+    compileOnly(libs.oraxen)
 
     compileOnly(libs.vault)
 
     compileOnly(fileTree("libs").include("*.jar"))
 }
 
-tasks {
-    assemble {
-        dependsOn(reobfJar)
+paperweight {
+    reobfArtifactConfiguration = io.papermc.paperweight.userdev.ReobfArtifactConfiguration.REOBF_PRODUCTION
+}
 
-        doLast {
-            copy {
-                from(reobfJar.get())
-                into(rootProject.projectDir.resolve("jars"))
+val component: SoftwareComponent = components["java"]
+
+tasks {
+    publishing {
+        repositories {
+            maven {
+                url = uri("https://repo.crazycrew.us/releases")
+
+                credentials {
+                    this.username = System.getenv("gradle_username")
+                    this.password = System.getenv("gradle_password")
+                }
+            }
+        }
+
+        publications {
+            create<MavenPublication>("maven") {
+                groupId = rootProject.group.toString()
+                artifactId = "${rootProject.name.lowercase()}-${project.name.lowercase()}-api"
+                version = rootProject.version.toString()
+
+                from(component)
             }
         }
     }
@@ -53,32 +68,33 @@ tasks {
         minecraftVersion("1.20.4")
     }
 
-    shadowJar {
-        listOf(
-            //"com.ryderbelserion.cluster",
-            //"dev.triumphteam.cmd",
-            //"dev.triumphteam.gui",
-            "org.bstats"
-        ).forEach {
-            relocate(it, "libs.$it")
+    assemble {
+        dependsOn(reobfJar)
+
+        doLast {
+            copy {
+                from(reobfJar.get())
+                into(rootProject.projectDir.resolve("jars"))
+            }
         }
     }
 
-    processResources {
-        val properties = hashMapOf(
-            "name" to rootProject.name,
-            "version" to project.version,
-            "group" to rootProject.group,
-            "description" to rootProject.description,
-            "apiVersion" to providers.gradleProperty("apiVersion").get(),
-            "authors" to providers.gradleProperty("authors").get(),
-            "website" to providers.gradleProperty("website").get()
-        )
+    shadowJar {
+        archiveBaseName.set(rootProject.name)
+        archiveClassifier.set("")
+    }
 
-        inputs.properties(properties)
+    processResources {
+        inputs.properties("name" to rootProject.name)
+        inputs.properties("version" to project.version)
+        inputs.properties("group" to project.group)
+        inputs.properties("description" to project.properties["description"])
+        inputs.properties("apiVersion" to libs.versions.minecraft.get())
+        inputs.properties("authors" to project.properties["authors"])
+        inputs.properties("website" to project.properties["website"])
 
         filesMatching("plugin.yml") {
-            expand(properties)
+            expand(inputs.properties)
         }
     }
 }

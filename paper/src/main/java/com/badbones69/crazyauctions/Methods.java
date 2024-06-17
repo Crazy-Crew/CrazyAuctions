@@ -9,6 +9,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -72,13 +74,21 @@ public class Methods {
     
     public static Player getPlayer(String name) {
         try {
-            return Bukkit.getServer().getPlayer(UUID.fromString(name));
+            return Bukkit.getServer().getPlayer(name);
         } catch (Exception e) {
             return null;
         }
     }
 
-    public static OfflinePlayer getOfflinePlayer(String name) { //todo () move off the thread.
+    public static String toBase64(final ItemStack itemStack) {
+        return Base64.getEncoder().encodeToString(itemStack.serializeAsBytes());
+    }
+
+    public static @NotNull ItemStack fromBase64(final String base64) {
+        return ItemStack.deserializeBytes(Base64.getDecoder().decode(base64));
+    }
+
+    public static OfflinePlayer getOfflinePlayer(String name) {
         return Bukkit.getServer().getOfflinePlayer(name);
     }
 
@@ -100,7 +110,6 @@ public class Methods {
         }
 
         p.sendMessage(Messages.NOT_ONLINE.getMessage());
-
         return false;
     }
     
@@ -115,7 +124,12 @@ public class Methods {
     
     public static boolean hasPermission(CommandSender sender, String perm) {
         if (sender instanceof Player player) {
-            return hasPermission(player, perm);
+            if (!player.hasPermission("crazyauctions." + perm)) {
+                player.sendMessage(Messages.NO_PERMISSION.getMessage());
+                return false;
+            }
+
+            return true;
         }
 
         return true;
@@ -131,7 +145,7 @@ public class Methods {
             if (index < list.size()) items.add(list.get(index));
         }
 
-        for (; items.isEmpty(); page--) {
+        for (; items.size() == 0; page--) {
             if (page <= 0) break;
             index = page * max - max;
             endIndex = index >= list.size() ? list.size() - 1 : index + max;
@@ -154,7 +168,7 @@ public class Methods {
             if (index < list.size()) items.add(list.get(index));
         }
 
-        for (; items.isEmpty(); page--) {
+        for (; items.size() == 0; page--) {
             if (page <= 0) break;
             index = page * max - max;
             endIndex = index >= list.size() ? list.size() - 1 : index + max;
@@ -256,7 +270,7 @@ public class Methods {
 
                         if (isOnline(winner) && getPlayer(winner) != null) {
                             Player player = getPlayer(winner);
-                            Bukkit.getPluginManager().callEvent(new AuctionWinBidEvent(player, data.getItemStack("Items." + i + ".Item"), price));
+                            Bukkit.getPluginManager().callEvent(new AuctionWinBidEvent(player, Methods.fromBase64(data.getString("Items." + i + ".Item")), price));
                             player.sendMessage(Messages.WIN_BIDDING.getMessage(placeholders));
                         }
 
@@ -268,7 +282,7 @@ public class Methods {
                         data.set("OutOfTime/Cancelled." + num + ".Seller", winner);
                         data.set("OutOfTime/Cancelled." + num + ".Full-Time", fullExpireTime.getTimeInMillis());
                         data.set("OutOfTime/Cancelled." + num + ".StoreID", data.getInt("Items." + i + ".StoreID"));
-                        data.set("OutOfTime/Cancelled." + num + ".Item", data.getItemStack("Items." + i + ".Item"));
+                        data.set("OutOfTime/Cancelled." + num + ".Item", data.getString("Items." + i + ".Item"));
                     } else {
                         String seller = data.getString("Items." + i + ".Seller");
                         Player player = getPlayer(seller);
@@ -277,12 +291,12 @@ public class Methods {
                             player.sendMessage(Messages.ITEM_HAS_EXPIRED.getMessage());
                         }
 
-                        AuctionExpireEvent event = new AuctionExpireEvent(player, data.getItemStack("Items." + i + ".Item"));
+                        AuctionExpireEvent event = new AuctionExpireEvent(player, Methods.fromBase64(data.getString("Items." + i + ".Item")));
                         Bukkit.getPluginManager().callEvent(event);
                         data.set("OutOfTime/Cancelled." + num + ".Seller", data.getString("Items." + i + ".Seller"));
                         data.set("OutOfTime/Cancelled." + num + ".Full-Time", fullExpireTime.getTimeInMillis());
                         data.set("OutOfTime/Cancelled." + num + ".StoreID", data.getInt("Items." + i + ".StoreID"));
-                        data.set("OutOfTime/Cancelled." + num + ".Item", data.getItemStack("Items." + i + ".Item"));
+                        data.set("OutOfTime/Cancelled." + num + ".Item", data.getString("Items." + i + ".Item"));
                     }
 
                     data.set("Items." + i, null);

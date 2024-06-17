@@ -1,14 +1,19 @@
+import com.ryderbelserion.feather.includeProject
+
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
-
-pluginManagement {
-    repositories {
-        maven("https://repo.papermc.io/repository/maven-public/")
-
-        gradlePluginPortal()
-        mavenCentral()
-    }
-}
 
 rootProject.name = "CrazyAuctions"
 
-include(":paper")
+pluginManagement {
+    repositories {
+        maven("https://repo.crazycrew.us/releases")
+
+        gradlePluginPortal()
+    }
+}
+
+plugins {
+    id("com.ryderbelserion.feather-settings") version "0.0.1"
+}
+
+listOf("paper").forEach(::includeProject)
