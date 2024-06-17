@@ -96,9 +96,11 @@ public class CrazyAuctions extends JavaPlugin {
                 if (uuid != null) {
                     OfflinePlayer player = Methods.getOfflinePlayer(uuid);
 
-                    configuration.set("Items." + key + ".Seller", player.getUniqueId().toString());
+                    if (!uuid.equals(player.getUniqueId().toString())) {
+                        configuration.set("Items." + key + ".Seller", player.getUniqueId().toString());
 
-                    FileManager.Files.DATA.saveFile();
+                        FileManager.Files.DATA.saveFile();
+                    }
                 }
 
                 final String bidder = configuration.getString("Items." + key + ".TopBidder");
@@ -106,9 +108,11 @@ public class CrazyAuctions extends JavaPlugin {
                 if (bidder != null && !bidder.equals("None")) {
                     OfflinePlayer player = Methods.getOfflinePlayer(bidder);
 
-                    configuration.set("Items." + key + ".TopBidder", player.getUniqueId().toString());
+                    if (!bidder.equals(player.getUniqueId().toString())) {
+                        configuration.set("Items." + key + ".TopBidder", player.getUniqueId().toString());
 
-                    FileManager.Files.DATA.saveFile();
+                        FileManager.Files.DATA.saveFile();
+                    }
                 }
             }
         }
