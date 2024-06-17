@@ -1,2 +1,5 @@
+### Changes:
+- Migrated `data.yml` to use uuids instead of player names. Existing data.yml should migrate to this format.
+
 ### Fixed:
-- Caught a few stragglers in the code not yet updated to the using the methods for the new item format.
+- Bid now button wasn't using the value from the `config.yml`

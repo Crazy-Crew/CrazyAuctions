@@ -10,10 +10,12 @@ import com.badbones69.crazyauctions.commands.AuctionTab;
 import com.badbones69.crazyauctions.controllers.GuiListener;
 import com.badbones69.crazyauctions.controllers.MarcoListener;
 import com.badbones69.crazyauctions.currency.VaultSupport;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
@@ -66,6 +68,16 @@ public class CrazyAuctions extends JavaPlugin {
 
                     FileManager.Files.DATA.saveFile();
                 }
+
+                final String uuid = configuration.getString("OutOfTime/Cancelled." + key + ".Seller");
+
+                if (uuid != null) {
+                    OfflinePlayer player = Methods.getOfflinePlayer(uuid);
+
+                    configuration.set("OutOfTime/Cancelled." + key + ".Seller", player.getUniqueId().toString());
+
+                    FileManager.Files.DATA.saveFile();
+                }
             }
         }
 
@@ -75,6 +87,26 @@ public class CrazyAuctions extends JavaPlugin {
 
                 if (itemStack != null) {
                     configuration.set("Items." + key + ".Item", Base64.getEncoder().encodeToString(itemStack.serializeAsBytes()));
+
+                    FileManager.Files.DATA.saveFile();
+                }
+
+                final String uuid = configuration.getString("Items." + key + ".Seller");
+
+                if (uuid != null) {
+                    OfflinePlayer player = Methods.getOfflinePlayer(uuid);
+
+                    configuration.set("Items." + key + ".Seller", player.getUniqueId().toString());
+
+                    FileManager.Files.DATA.saveFile();
+                }
+
+                final String bidder = configuration.getString("Items." + key + ".TopBidder");
+
+                if (bidder != null && !bidder.equals("None")) {
+                    OfflinePlayer player = Methods.getOfflinePlayer(bidder);
+
+                    configuration.set("Items." + key + ".TopBidder", player.getUniqueId().toString());
 
                     FileManager.Files.DATA.saveFile();
                 }
