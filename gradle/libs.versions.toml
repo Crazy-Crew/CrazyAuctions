@@ -1,7 +1,7 @@
 [versions]
 # Minecraft
-paper = "1.20.4-R0.1-SNAPSHOT"
-minecraft = "1.20.4"
+paper = "1.20.6-R0.1-SNAPSHOT"
+minecraft = "1.20.6"
 
 # Plugins
 itemsadder = "3.6.3-beta-14"

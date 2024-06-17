@@ -65,7 +65,7 @@ tasks {
             url("https://download.luckperms.net/1544/bukkit/loader/LuckPerms-Bukkit-5.4.131.jar")
         }
 
-        minecraftVersion("1.20.4")
+        minecraftVersion(libs.versions.minecraft.get())
     }
 
     assemble {
@@ -89,8 +89,7 @@ tasks {
         inputs.properties("version" to project.version)
         inputs.properties("group" to project.group)
         inputs.properties("description" to project.properties["description"])
-        //inputs.properties("apiVersion" to libs.versions.minecraft.get())
-        inputs.properties("apiVersion" to "1.20")
+        inputs.properties("apiVersion" to libs.versions.minecraft.get())
         inputs.properties("authors" to project.properties["authors"])
         inputs.properties("website" to project.properties["website"])
 
