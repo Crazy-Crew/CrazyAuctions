@@ -1,7 +1,7 @@
 [versions]
 # Minecraft
-paper = "1.21-R0.1-SNAPSHOT"
-minecraft = "1.21"
+paper = "1.20.6-R0.1-SNAPSHOT"
+minecraft = "1.20.6"
 
 # Plugins
 itemsadder = "3.6.3-beta-14"
@@ -22,7 +22,7 @@ kyori = "4.17.0"
 vital = "1.5.9"
 
 # Paper
-paperweight="1.7.1"
+paperweight = "1.7.1"
 runPaper = "2.3.0"
 hangar = "0.1.2"
 

@@ -71,10 +71,10 @@ public class Methods {
 
         return true;
     }
-    
+
     public static Player getPlayer(String name) {
         try {
-            return Bukkit.getServer().getPlayer(name);
+            return Bukkit.getServer().getPlayer(UUID.fromString(name));
         } catch (Exception e) {
             return null;
         }
@@ -89,7 +89,7 @@ public class Methods {
     }
 
     public static OfflinePlayer getOfflinePlayer(String name) {
-        return Bukkit.getServer().getOfflinePlayer(name);
+        return Bukkit.getServer().getOfflinePlayer(UUID.fromString(name));
     }
 
     public static boolean isOnline(String name) {
