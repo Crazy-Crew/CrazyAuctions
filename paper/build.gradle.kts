@@ -89,7 +89,8 @@ tasks {
         inputs.properties("version" to project.version)
         inputs.properties("group" to project.group)
         inputs.properties("description" to project.properties["description"])
-        inputs.properties("apiVersion" to libs.versions.minecraft.get())
+        //inputs.properties("apiVersion" to libs.versions.minecraft.get())
+        inputs.properties("apiVersion" to "1.20")
         inputs.properties("authors" to project.properties["authors"])
         inputs.properties("website" to project.properties["website"])
 
