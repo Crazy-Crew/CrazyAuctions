@@ -23,8 +23,8 @@ Settings:
     Macro-Dupe: true #Turn to false if you have an issue, but it should patch the bug.
   Sounds:
     Toggle: false #Disable the clicking sound.
-    Sound: 'CLICK' #Make sure if you use 1.8 or lower you use the 1.8 sound and 1.9 and up use 1.9 sounds. The default sound is 1.8.
-  Sold-Item-Sound: 'CLICK'
+    Sound: 'UI_BUTTON_CLICK' #Make sure if you use 1.8 or lower you use the 1.8 sound and 1.9 and up use 1.9 sounds. The default sound is 1.8.
+  Sold-Item-Sound: 'UI_BUTTON_CLICK'
     #Sounds are found here: https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Sound.html
   GUISettings: #Settings for things in the gui.
     SellingItemLore: #The lore on items that are being sold.

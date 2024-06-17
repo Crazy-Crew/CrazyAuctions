@@ -33,5 +33,4 @@ public enum ShopType {
     public String getName() {
         return name;
     }
-    
 }

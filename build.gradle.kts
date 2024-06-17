@@ -2,12 +2,12 @@ plugins {
     alias(libs.plugins.minotaur)
     alias(libs.plugins.hangar)
 
-    `root-plugin`
+    `java-plugin`
 }
 
 val buildNumber: String? = System.getenv("BUILD_NUMBER")
 
-rootProject.version = if (buildNumber != null) "1.4.2-$buildNumber" else "1.4.2"
+rootProject.version = if (buildNumber != null) "1.4.3-$buildNumber" else "1.4.3"
 
 val isSnapshot = false
 
@@ -33,8 +33,7 @@ modrinth {
 
     gameVersions.set(listOf(libs.versions.minecraft.get()))
 
-    loaders.add("paper")
-    loaders.add("purpur")
+    loaders.addAll("paper", "purpur")
 
     autoAddDependsOn.set(false)
     detectLoaders.set(false)

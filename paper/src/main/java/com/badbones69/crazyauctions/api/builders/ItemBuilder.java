@@ -4,15 +4,12 @@ import com.badbones69.crazyauctions.CrazyAuctions;
 import com.badbones69.crazyauctions.Methods;
 import com.badbones69.crazyauctions.api.support.PluginSupport;
 import com.badbones69.crazyauctions.api.support.SkullCreator;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import io.th0rgal.oraxen.api.OraxenItems;
 import me.clip.placeholderapi.PlaceholderAPI;
-import net.minecraft.nbt.TagParser;
 import org.bukkit.*;
 import org.bukkit.block.Banner;
 import org.bukkit.block.banner.Pattern;
 import org.bukkit.block.banner.PatternType;
-import org.bukkit.craftbukkit.v1_20_R3.inventory.CraftItemStack;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -36,7 +33,6 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -316,19 +312,6 @@ public class ItemBuilder {
         }
 
         if (this.itemStack.getType() != Material.AIR) {
-            // If item data is not empty. We ignore all other options and simply return.
-            if (!this.itemData.isEmpty()) {
-                net.minecraft.world.item.ItemStack nmsItem = CraftItemStack.asNMSCopy(getItemStack());
-
-                try {
-                    nmsItem.setTag(TagParser.parseTag(this.itemData));
-                } catch (CommandSyntaxException exception) {
-                    this.plugin.getLogger().log(Level.WARNING, "Failed to set nms tag.", exception);
-                }
-
-                return CraftItemStack.asBukkitCopy(nmsItem);
-            }
-
             getItemStack().setAmount(this.itemAmount);
 
             getItemStack().editMeta(itemMeta -> {
@@ -412,17 +395,14 @@ public class ItemBuilder {
                 itemMeta.setUnbreakable(this.isUnbreakable);
 
                 if (this.isGlowing) {
-                    if (!itemMeta.hasEnchants()) {
-                        itemMeta.addEnchant(Enchantment.LUCK, 1, false);
-                        itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-                    }
+                    itemMeta.setEnchantmentGlintOverride(true);
                 }
 
                 itemMeta.setDisplayName(getUpdatedName());
                 itemMeta.setLore(getUpdatedLore());
             });
         } else {
-            Logger logger = this.plugin.getLogger();
+            Logger logger = plugin.getLogger();
 
             logger.warning("Material cannot be of type AIR or null, If you see this.");
             logger.warning("in your console but do not have any invalid items. You can");
@@ -1239,27 +1219,27 @@ public class ItemBuilder {
         if (type != null) {
             if (type.equals(PotionEffectType.FIRE_RESISTANCE)) {
                 return PotionType.FIRE_RESISTANCE;
-            } else if (type.equals(PotionEffectType.HARM)) {
-                return PotionType.INSTANT_DAMAGE;
-            } else if (type.equals(PotionEffectType.HEAL)) {
-                return PotionType.INSTANT_HEAL;
+            } else if (type.equals(PotionEffectType.INSTANT_DAMAGE)) {
+                return PotionType.STRONG_HARMING;
+            } else if (type.equals(PotionEffectType.INSTANT_HEALTH)) {
+                return PotionType.HEALING;
             } else if (type.equals(PotionEffectType.INVISIBILITY)) {
                 return PotionType.INVISIBILITY;
-            } else if (type.equals(PotionEffectType.JUMP)) {
-                return PotionType.JUMP;
-            } else if (type.equals(PotionEffectType.getByName("LUCK"))) {
-                return PotionType.valueOf("LUCK");
+            } else if (type.equals(PotionEffectType.JUMP_BOOST)) {
+                return PotionType.LEAPING;
+            } else if (type.equals(PotionEffectType.LUCK)) {
+                return PotionType.LUCK;
             } else if (type.equals(PotionEffectType.NIGHT_VISION)) {
                 return PotionType.NIGHT_VISION;
             } else if (type.equals(PotionEffectType.POISON)) {
                 return PotionType.POISON;
             } else if (type.equals(PotionEffectType.REGENERATION)) {
-                return PotionType.REGEN;
-            } else if (type.equals(PotionEffectType.SLOW)) {
+                return PotionType.REGENERATION;
+            } else if (type.equals(PotionEffectType.SLOWNESS)) {
                 return PotionType.SLOWNESS;
             } else if (type.equals(PotionEffectType.SPEED)) {
-                return PotionType.SPEED;
-            } else if (type.equals(PotionEffectType.INCREASE_DAMAGE)) {
+                return PotionType.SWIFTNESS;
+            } else if (type.equals(PotionEffectType.STRENGTH)) {
                 return PotionType.STRENGTH;
             } else if (type.equals(PotionEffectType.WATER_BREATHING)) {
                 return PotionType.WATER_BREATHING;
@@ -1420,6 +1400,7 @@ public class ItemBuilder {
 
     private static Map<String, Color> createMap() {
         Map<String, Color> map = new HashMap<>();
+
         map.put("AQUA", Color.AQUA);
         map.put("BLACK", Color.BLACK);
         map.put("BLUE", Color.BLUE);
@@ -1437,12 +1418,14 @@ public class ItemBuilder {
         map.put("TEAL", Color.TEAL);
         map.put("WHITE", Color.WHITE);
         map.put("YELLOW", Color.YELLOW);
+
         return map;
     }
 
     public static Color getColor(String color) {
         if (color != null && !color.isBlank()) {
-            Color mappedColor = (Color)colors.get(color.toUpperCase());
+            Color mappedColor = colors.get(color.toUpperCase());
+
             if (mappedColor != null) {
                 return mappedColor;
             } else {
