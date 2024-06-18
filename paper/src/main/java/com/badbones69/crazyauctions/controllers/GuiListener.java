@@ -955,7 +955,7 @@ public class GuiListener implements Listener {
 
                                                 final Runnable runnable = () -> inv.setItem(slot, item);
 
-                                                if (data.getString("Items." + i + ".Seller").equalsIgnoreCase(player.getName())) {
+                                                if (data.getString("Items." + i + ".Seller").equalsIgnoreCase(player.getUniqueId().toString())) {
                                                     String itemName = config.getString("Settings.GUISettings.OtherSettings.Your-Item.Item");
                                                     String name = config.getString("Settings.GUISettings.OtherSettings.Your-Item.Name");
 
@@ -990,7 +990,7 @@ public class GuiListener implements Listener {
                                                 }
 
                                                 if (data.getBoolean("Items." + i + ".Biddable")) {
-                                                    if (player.getName().equalsIgnoreCase(data.getString("Items." + i + ".TopBidder"))) {
+                                                    if (player.getUniqueId().toString().equalsIgnoreCase(data.getString("Items." + i + ".TopBidder"))) {
                                                         String itemName = config.getString("Settings.GUISettings.OtherSettings.Top-Bidder.Item");
                                                         String name = config.getString("Settings.GUISettings.OtherSettings.Top-Bidder.Name");
 

@@ -1,2 +1,2 @@
-### Changes:
-- Only update the data.yml if the value is not a uuid
+### Fixed:
+- Caught a few places still using the player name for reading or writing to the data.yml which breaks the uuid checks.
