@@ -588,7 +588,7 @@ public class ItemBuilder {
 
             this.material = this.itemStack.getType();
         } else {
-            if (PluginSupport.ORAXEN.isPluginEnabled()) {
+            if (Support.oraxen.isEnabled()) {
                 io.th0rgal.oraxen.items.ItemBuilder oraxenItem = OraxenItems.getItemById(this.customMaterial);
 
                 if (oraxenItem != null) {

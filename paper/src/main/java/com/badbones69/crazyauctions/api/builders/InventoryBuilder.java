@@ -1,6 +1,7 @@
 package com.badbones69.crazyauctions.api.builders;
 
 import com.badbones69.crazyauctions.CrazyAuctions;
+import com.ryderbelserion.vital.paper.enums.Support;
 import com.ryderbelserion.vital.paper.util.AdvUtil;
 import me.clip.placeholderapi.PlaceholderAPI;
 import net.kyori.adventure.text.serializer.json.JSONComponentSerializer;
@@ -38,7 +39,7 @@ public abstract class InventoryBuilder implements InventoryHolder, Listener {
         this.title = title;
         this.size = size;
 
-        String inventoryTitle = PluginSupport.PLACEHOLDERAPI.isPluginEnabled() ? PlaceholderAPI.setPlaceholders(getPlayer(), this.title) : this.title;
+        String inventoryTitle = Support.placeholder_api.isEnabled() ? PlaceholderAPI.setPlaceholders(getPlayer(), this.title) : this.title;
 
         this.inventory = this.server.createInventory(this, this.size, AdvUtil.parse(inventoryTitle));
     }
@@ -49,7 +50,7 @@ public abstract class InventoryBuilder implements InventoryHolder, Listener {
         this.size = size;
         this.page = page;
 
-        String inventoryTitle = PluginSupport.PLACEHOLDERAPI.isPluginEnabled() ? PlaceholderAPI.setPlaceholders(getPlayer(), this.title) : this.title;
+        String inventoryTitle = Support.placeholder_api.isEnabled() ? PlaceholderAPI.setPlaceholders(getPlayer(), this.title) : this.title;
 
         this.inventory = this.server.createInventory(this, this.size, AdvUtil.parse(inventoryTitle));
     }
