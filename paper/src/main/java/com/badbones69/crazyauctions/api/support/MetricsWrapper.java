@@ -1,9 +1,9 @@
 package com.badbones69.crazyauctions.api.support;
 
 import com.badbones69.crazyauctions.CrazyAuctions;
-import com.badbones69.crazyauctions.api.CustomMetrics;
+import com.ryderbelserion.vital.paper.bStats;
 
-public class MetricsWrapper extends CustomMetrics {
+public class MetricsWrapper extends bStats {
 
     /**
      * Creates a new Metrics instance.
