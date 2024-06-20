@@ -1,11 +1,12 @@
 package com.badbones69.crazyauctions.api.events;
 
-import com.badbones69.crazyauctions.api.enums.Reaons;
+import com.badbones69.crazyauctions.api.enums.Reasons;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 /**
  *
@@ -20,7 +21,7 @@ public class AuctionCancelledEvent extends Event {
 
     private final boolean isOnline;
     private final ItemStack item;
-    private final Reaons reason;
+    private final Reasons reason;
 
     private OfflinePlayer offlinePlayer;
     private Player onlinePlayer;
@@ -30,7 +31,7 @@ public class AuctionCancelledEvent extends Event {
      * @param offlinePlayer The player whose item is cancelled.
      * @param item The item that is cancelled.
      */
-    public AuctionCancelledEvent(OfflinePlayer offlinePlayer, ItemStack item, Reaons reason) {
+    public AuctionCancelledEvent(OfflinePlayer offlinePlayer, ItemStack item, Reasons reason) {
         this.offlinePlayer = offlinePlayer;
         this.item = item;
         this.isOnline = false;
@@ -42,7 +43,7 @@ public class AuctionCancelledEvent extends Event {
      * @param onlinePlayer The player whose item is cancelled.
      * @param item The item that is cancelled.
      */
-    public AuctionCancelledEvent(Player onlinePlayer, ItemStack item, Reaons reason) {
+    public AuctionCancelledEvent(Player onlinePlayer, ItemStack item, Reasons reason) {
         this.onlinePlayer = onlinePlayer;
         this.item = item;
         this.isOnline = true;
@@ -53,7 +54,7 @@ public class AuctionCancelledEvent extends Event {
         return handlers;
     }
     
-    public HandlerList getHandlers() {
+    public @NotNull HandlerList getHandlers() {
         return handlers;
     }
     
@@ -73,8 +74,7 @@ public class AuctionCancelledEvent extends Event {
         return item;
     }
     
-    public Reaons getReason() {
+    public Reasons getReason() {
         return reason;
     }
-    
 }

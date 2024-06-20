@@ -1,6 +1,6 @@
 package com.badbones69.crazyauctions.api.enums;
 
-public enum Reaons {
+public enum Reasons {
     
     /**
      * Cancelled by an administrator.
