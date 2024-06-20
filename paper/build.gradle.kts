@@ -13,6 +13,8 @@ base {
 dependencies {
     paperweight.paperDevBundle(libs.versions.paper)
 
+    implementation(libs.vital.paper)
+
     compileOnly(libs.placeholderapi)
 
     compileOnly(libs.oraxen)
@@ -82,6 +84,12 @@ tasks {
     shadowJar {
         archiveBaseName.set(rootProject.name)
         archiveClassifier.set("")
+
+        listOf(
+            "com.ryderbelserion"
+        ).forEach {
+            relocate(it, "libs.$it")
+        }
     }
 
     processResources {
