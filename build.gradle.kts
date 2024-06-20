@@ -7,7 +7,7 @@ plugins {
 
 val buildNumber: String? = System.getenv("BUILD_NUMBER")
 
-rootProject.version = if (buildNumber != null) "1.4.5-$buildNumber" else "1.4.5"
+rootProject.version = if (buildNumber != null) "${libs.versions.minecraft.get()}-$buildNumber" else "1.5"
 
 val isSnapshot = false
 
