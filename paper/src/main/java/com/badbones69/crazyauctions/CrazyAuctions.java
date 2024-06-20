@@ -138,7 +138,7 @@ public class CrazyAuctions extends JavaPlugin {
         this.support.loadVault();
 
         // Create bstats instance.
-        this.metrics = new MetricsWrapper(this, 4624);
+        new MetricsWrapper(this, 4624);
     }
 
     private void registerCommand(PluginCommand pluginCommand, TabCompleter tabCompleter, CommandExecutor commandExecutor) {
