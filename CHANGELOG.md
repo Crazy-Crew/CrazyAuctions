@@ -1,2 +1,5 @@
-### Fixed:
-- Caught a few places still using the player name for reading or writing to the data.yml which breaks the uuid checks.
+### Added:
+- 1.21 support
+
+### Removed:
+- 1.20.6 support
