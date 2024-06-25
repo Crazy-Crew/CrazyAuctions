@@ -22,7 +22,6 @@ import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.jetbrains.annotations.NotNull;
 import org.yaml.snakeyaml.error.YAMLException;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.HashMap;
 import java.util.Random;
 import java.util.UUID;
@@ -37,13 +36,17 @@ public class AuctionCommand implements CommandExecutor {
     private final FileManager fileManager = this.plugin.getFileManager();
 
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, String commandLabel, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String commandLabel, String[] args) {
         FileConfiguration config = Files.CONFIG.getFile();
         FileConfiguration data = Files.DATA.getFile();
 
         if (args.length == 0) {
             if (!(sender instanceof Player player)) {
                 sender.sendMessage(Messages.PLAYERS_ONLY.getMessage());
+                return true;
+            }
+
+            if (!Methods.hasPermission(sender, "access")) {
                 return true;
             }
 
@@ -67,7 +70,6 @@ public class AuctionCommand implements CommandExecutor {
             switch (args[0].toLowerCase()) {
                 case "help" -> {
                     if (!Methods.hasPermission(sender, "access")) {
-                        sender.sendMessage(Messages.NO_PERMISSION.getMessage());
                         return true;
                     }
 
@@ -77,7 +79,6 @@ public class AuctionCommand implements CommandExecutor {
 
                 case "test" -> {
                     if (!Methods.hasPermission(sender, "test")) {
-                        sender.sendMessage(Messages.NO_PERMISSION.getMessage());
                         return true;
                     }
 
@@ -156,7 +157,6 @@ public class AuctionCommand implements CommandExecutor {
 
                 case "reload" -> {
                     if (!Methods.hasPermission(sender, "reload")) {
-                        sender.sendMessage(Messages.NO_PERMISSION.getMessage());
                         return true;
                     }
 
@@ -169,7 +169,6 @@ public class AuctionCommand implements CommandExecutor {
 
                 case "view" -> {
                     if (!Methods.hasPermission(sender, "view")) {
-                        sender.sendMessage(Messages.NO_PERMISSION.getMessage());
                         return true;
                     }
 
@@ -189,7 +188,6 @@ public class AuctionCommand implements CommandExecutor {
 
                 case "expired", "collect" -> {
                     if (!Methods.hasPermission(sender, "access")) {
-                        sender.sendMessage(Messages.NO_PERMISSION.getMessage());
                         return true;
                     }
 

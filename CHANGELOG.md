@@ -1,5 +1,5 @@
-### Added:
-- 1.21 support
+### Changes:
+- Added a permission check for crazyauctions.access on the command /crazyauctions
 
-### Removed:
-- 1.20.6 support
+### Fixed:
+- Sending double messages if they don't have the permission.
