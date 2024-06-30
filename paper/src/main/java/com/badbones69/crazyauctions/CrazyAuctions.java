@@ -128,7 +128,7 @@ public class CrazyAuctions extends JavaPlugin {
         TimerTask task = new TimerTask() {
             @Override
             public void run() {
-                getServer().getScheduler().runTask(get(), Methods::updateAuction);
+                getServer().getGlobalRegionScheduler().run(get(), t -> Methods.updateAuction());
             }
         };
 

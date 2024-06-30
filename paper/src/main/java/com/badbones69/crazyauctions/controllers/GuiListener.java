@@ -967,7 +967,7 @@ public class GuiListener implements Listener {
 
                                                     inv.setItem(slot, itemBuilder.build());
                                                     playClick(player);
-                                                    Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, runnable, 3 * 20);
+                                                    player.getScheduler().runDelayed(plugin, task -> runnable.run(), null, 3 * 20);
                                                     return;
                                                 }
 
@@ -985,7 +985,7 @@ public class GuiListener implements Listener {
 
                                                     inv.setItem(slot, itemBuilder.build());
                                                     playClick(player);
-                                                    Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, runnable, 3 * 20);
+                                                    player.getScheduler().runDelayed(plugin, task -> runnable.run(), null, 3 * 20);
                                                     return;
                                                 }
 
@@ -1002,7 +1002,7 @@ public class GuiListener implements Listener {
 
                                                         inv.setItem(slot, itemBuilder.build());
                                                         playClick(player);
-                                                        Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, runnable, 3 * 20);
+                                                        player.getScheduler().runDelayed(plugin, task -> runnable.run(), null, 3 * 20);
                                                         return;
                                                     }
 
