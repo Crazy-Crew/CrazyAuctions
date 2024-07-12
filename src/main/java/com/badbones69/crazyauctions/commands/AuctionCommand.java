@@ -307,6 +307,7 @@ public class AuctionCommand implements CommandExecutor {
                                     if (item instanceof Damageable damageable) {
                                         if (damageable.getDamage() > 0) {
                                             player.sendMessage(Messages.ITEM_DAMAGED.getMessage(sender));
+
                                             return true;
                                         }
                                     }
@@ -314,12 +315,14 @@ public class AuctionCommand implements CommandExecutor {
                             }
                         }
 
-                        if (!allowBook(item)) {
+                        /*if (!allowBook(item)) {
                             player.sendMessage(Messages.BOOK_NOT_ALLOWED.getMessage(sender));
+
                             return true;
-                        }
+                        }*/
 
                         String seller = player.getUniqueId().toString();
+
                         int num = 1;
 
                         for (; data.contains("Items." + num); num++) ;
@@ -451,7 +454,7 @@ public class AuctionCommand implements CommandExecutor {
         return ma;
     }
 
-    private boolean allowBook(ItemStack item) {
+    /*private boolean allowBook(ItemStack item) {
         if (item != null && item.hasItemMeta() && item.getItemMeta() instanceof BookMeta bookMeta) {
             this.plugin.getLogger().info("Checking " + item.getType() + " for illegal unicode.");
 
@@ -465,6 +468,7 @@ public class AuctionCommand implements CommandExecutor {
                 this.plugin.getLogger().info(item.getType() + " has passed unicode checks.");
             } catch (YAMLException exception) {
                 this.plugin.getLogger().log(Level.SEVERE, item.getType() + " has failed unicode checks and has been denied.", exception);
+
                 return false;
             }
 
@@ -472,5 +476,5 @@ public class AuctionCommand implements CommandExecutor {
         }
 
         return true;
-    }
+    }*/
 }
