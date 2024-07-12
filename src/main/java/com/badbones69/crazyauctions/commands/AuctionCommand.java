@@ -17,15 +17,13 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.jetbrains.annotations.NotNull;
-import org.yaml.snakeyaml.error.YAMLException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Random;
-import java.util.logging.Level;
+import java.util.Map;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class AuctionCommand implements CommandExecutor {
 
@@ -324,8 +322,6 @@ public class AuctionCommand implements CommandExecutor {
                         String seller = player.getUniqueId().toString();
                         int num = 1;
 
-                        Random random = new Random();
-
                         for (; data.contains("Items." + num); num++) ;
                         data.set("Items." + num + ".Price", price);
                         data.set("Items." + num + ".Seller", seller);
@@ -337,14 +333,16 @@ public class AuctionCommand implements CommandExecutor {
                         }
 
                         data.set("Items." + num + ".Full-Time", Methods.convertToMill(config.getString("Settings.Full-Expire-Time", "10d")));
-                        int id = random.nextInt(999999);
+                        int id = ThreadLocalRandom.current().nextInt(999999);
+
                         // Runs 3x to check for same ID.
                         for (String i : data.getConfigurationSection("Items").getKeys(false))
-                            if (data.getInt("Items." + i + ".StoreID") == id) id = random.nextInt(Integer.MAX_VALUE);
+                            if (data.getInt("Items." + i + ".StoreID") == id) id = ThreadLocalRandom.current().nextInt(Integer.MAX_VALUE);
                         for (String i : data.getConfigurationSection("Items").getKeys(false))
-                            if (data.getInt("Items." + i + ".StoreID") == id) id = random.nextInt(Integer.MAX_VALUE);
+                            if (data.getInt("Items." + i + ".StoreID") == id) id = ThreadLocalRandom.current().nextInt(Integer.MAX_VALUE);
                         for (String i : data.getConfigurationSection("Items").getKeys(false))
-                            if (data.getInt("Items." + i + ".StoreID") == id) id = random.nextInt(Integer.MAX_VALUE);
+                            if (data.getInt("Items." + i + ".StoreID") == id) id = ThreadLocalRandom.current().nextInt(Integer.MAX_VALUE);
+
                         data.set("Items." + num + ".StoreID", id);
                         ShopType type = ShopType.SELL;
 
