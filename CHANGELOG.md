@@ -1,5 +1,9 @@
 ### Changes:
-- Added a permission check for crazyauctions.access on the command /crazyauctions
+- Moved i/o operations off the main thread.
+- Improved performance with the bid command.
 
-### Fixed:
-- Sending double messages if they don't have the permission.
+### Added:
+- Folia Support
+
+### Removed:
+- Unicode checks for books, this might not be needed anymore due to recent Mojang/Paper changes, but I will add it back if an issue appears related to books.

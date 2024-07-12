@@ -1,5 +1,5 @@
 name: '${name}'
-main: '${group}.CrazyAuctions'
+main: '${group}.${name}'
 
 authors: ${authors}
 
