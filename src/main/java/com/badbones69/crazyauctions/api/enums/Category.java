@@ -35,6 +35,7 @@ public enum Category {
                 return type;
             }
         }
+
         return null;
     }
     
