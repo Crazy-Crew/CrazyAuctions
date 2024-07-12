@@ -55,18 +55,18 @@ public class AuctionExpireEvent extends Event {
     }
     
     public OfflinePlayer getOfflinePlayer() {
-        return offlinePlayer;
+        return this.offlinePlayer;
     }
     
     public Player getOnlinePlayer() {
-        return onlinePlayer;
+        return this.onlinePlayer;
     }
     
     public boolean isOnline() {
-        return isOnline;
+        return this.isOnline;
     }
     
     public ItemStack getItem() {
-        return item;
+        return this.item;
     }
 }

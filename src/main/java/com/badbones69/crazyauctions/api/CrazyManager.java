@@ -24,11 +24,11 @@ public class CrazyManager {
     }
     
     public boolean isSellingEnabled() {
-        return sellingEnabled;
+        return this.sellingEnabled;
     }
     
     public boolean isBiddingEnabled() {
-        return biddingEnabled;
+        return this.biddingEnabled;
     }
     
     public ArrayList<ItemStack> getItems(Player player, ShopType type) {

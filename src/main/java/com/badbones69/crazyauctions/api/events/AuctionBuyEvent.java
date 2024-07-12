@@ -42,14 +42,14 @@ public class AuctionBuyEvent extends Event {
     }
     
     public Player getPlayer() {
-        return player;
+        return this.player;
     }
     
     public ItemStack getItem() {
-        return item;
+        return this.item;
     }
     
     public long getPrice() {
-        return price;
+        return this.price;
     }
 }

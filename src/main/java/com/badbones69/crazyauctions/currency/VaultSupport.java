@@ -14,32 +14,32 @@ public class VaultSupport {
     private Economy vault = null;
 
     public Economy getVault() {
-        return vault;
+        return this.vault;
     }
 
     public void loadVault() {
         RegisteredServiceProvider<Economy> serviceProvider = this.plugin.getServer().getServicesManager().getRegistration(Economy.class);
 
-        if (serviceProvider != null) vault = serviceProvider.getProvider();
+        if (serviceProvider != null) this.vault = serviceProvider.getProvider();
     }
 
-    public Long getMoney(@NotNull Player player) {
-        return (long) vault.getBalance(player);
+    public long getMoney(@NotNull Player player) {
+        return (long) this.vault.getBalance(player);
     }
 
-    public void removeMoney(@NotNull Player player, Long amount) {
-        vault.withdrawPlayer(player, amount);
+    public void removeMoney(@NotNull Player player, long amount) {
+        this.vault.withdrawPlayer(player, amount);
     }
 
-    public void removeMoney(@NotNull OfflinePlayer player, Long amount) {
-        vault.withdrawPlayer(player, amount);
+    public void removeMoney(@NotNull OfflinePlayer player, long amount) {
+        this.vault.withdrawPlayer(player, amount);
     }
 
-    public void addMoney(Player player, Long amount) {
-        vault.depositPlayer(player, amount);
+    public void addMoney(Player player, long amount) {
+        this.vault.depositPlayer(player, amount);
     }
 
-    public void addMoney(OfflinePlayer player, Long amount) {
-        vault.depositPlayer(player, amount);
+    public void addMoney(OfflinePlayer player, long amount) {
+        this.vault.depositPlayer(player, amount);
     }
 }

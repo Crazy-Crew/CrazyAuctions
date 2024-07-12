@@ -69,7 +69,7 @@ public class Methods {
 
     public static Player getPlayer(String name) {
         try {
-            return Bukkit.getServer().getPlayer(UUID.fromString(name));
+            return plugin.getServer().getPlayer(UUID.fromString(name));
         } catch (Exception e) {
             return null;
         }
@@ -84,11 +84,11 @@ public class Methods {
     }
 
     public static OfflinePlayer getOfflinePlayer(String name) {
-        return Bukkit.getServer().getOfflinePlayer(UUID.fromString(name));
+        return plugin.getServer().getOfflinePlayer(UUID.fromString(name));
     }
 
     public static boolean isOnline(String name) {
-        for (Player player : Bukkit.getServer().getOnlinePlayers()) {
+        for (Player player : plugin.getServer().getOnlinePlayers()) {
             if (player.getName().equalsIgnoreCase(name)) {
                 return true;
             }
@@ -98,7 +98,7 @@ public class Methods {
     }
     
     public static boolean isOnline(String name, CommandSender p) {
-        for (Player player : Bukkit.getServer().getOnlinePlayers()) {
+        for (Player player : plugin.getServer().getOnlinePlayers()) {
             if (player.getName().equalsIgnoreCase(name)) {
                 return true;
             }
@@ -111,6 +111,7 @@ public class Methods {
     public static boolean hasPermission(Player player, String perm) {
         if (!player.hasPermission("crazyauctions." + perm)) {
             player.sendMessage(Messages.NO_PERMISSION.getMessage(player));
+
             return false;
         }
 
@@ -121,6 +122,7 @@ public class Methods {
         if (sender instanceof Player player) {
             if (!player.hasPermission("crazyauctions." + perm)) {
                 player.sendMessage(Messages.NO_PERMISSION.getMessage(player));
+
                 return false;
             }
 
@@ -132,10 +134,13 @@ public class Methods {
     
     public static List<ItemStack> getPage(List<ItemStack> list, Integer page) {
         List<ItemStack> items = new ArrayList<>();
+
         if (page <= 0) page = 1;
+
         int max = 45;
         int index = page * max - max;
         int endIndex = index >= list.size() ? list.size() - 1 : index + max;
+
         for (; index < endIndex; index++) {
             if (index < list.size()) items.add(list.get(index));
         }
@@ -154,7 +159,9 @@ public class Methods {
     
     public static List<Integer> getPageInts(List<Integer> list, Integer page) {
         List<Integer> items = new ArrayList<>();
+
         if (page <= 0) page = 1;
+
         int max = 45;
         int index = page * max - max;
         int endIndex = index >= list.size() ? list.size() - 1 : index + max;
@@ -163,10 +170,12 @@ public class Methods {
             if (index < list.size()) items.add(list.get(index));
         }
 
-        for (; items.size() == 0; page--) {
+        for (; items.isEmpty(); page--) {
             if (page <= 0) break;
+
             index = page * max - max;
             endIndex = index >= list.size() ? list.size() - 1 : index + max;
+
             for (; index < endIndex; index++) {
                 if (index < list.size()) items.add(list.get(index));
             }
@@ -178,23 +187,30 @@ public class Methods {
     public static int getMaxPage(List<ItemStack> list) {
         int maxPage = 1;
         int amount = list.size();
+
         for (; amount > 45; amount -= 45, maxPage++) ;
+
         return maxPage;
     }
     
     public static String convertToTime(long time) {
         Calendar C = Calendar.getInstance();
         Calendar cal = Calendar.getInstance();
+
         cal.setTimeInMillis(time);
+
         int total = ((int) (cal.getTimeInMillis() / 1000) - (int) (C.getTimeInMillis() / 1000));
         int D = 0;
         int H = 0;
         int M = 0;
         int S = 0;
+
         for (; total > 86400; total -= 86400, D++) ;
         for (; total > 3600; total -= 3600, H++) ;
         for (; total > 60; total -= 60, M++) ;
+
         S += total;
+
         return D + "d " + H + "h " + M + "m " + S + "s ";
     }
     
@@ -205,12 +221,15 @@ public class Methods {
             if (i.contains("D") || i.contains("d")) {
                 cal.add(Calendar.DATE, Integer.parseInt(i.replace("D", "").replace("d", "")));
             }
+
             if (i.contains("H") || i.contains("h")) {
                 cal.add(Calendar.HOUR, Integer.parseInt(i.replace("H", "").replace("h", "")));
             }
+
             if (i.contains("M") || i.contains("m")) {
                 cal.add(Calendar.MINUTE, Integer.parseInt(i.replace("M", "").replace("m", "")));
             }
+
             if (i.contains("S") || i.contains("s")) {
                 cal.add(Calendar.SECOND, Integer.parseInt(i.replace("S", "").replace("s", "")));
             }
@@ -225,16 +244,20 @@ public class Methods {
     
     public static void updateAuction() {
         FileConfiguration data = Files.data.getConfiguration();
+
         Calendar cal = Calendar.getInstance();
         Calendar expireTime = Calendar.getInstance();
         Calendar fullExpireTime = Calendar.getInstance();
+
         boolean shouldSave = false;
 
         if (data.contains("OutOfTime/Cancelled")) {
             for (String i : data.getConfigurationSection("OutOfTime/Cancelled").getKeys(false)) {
                 fullExpireTime.setTimeInMillis(data.getLong("OutOfTime/Cancelled." + i + ".Full-Time"));
+
                 if (cal.after(fullExpireTime)) {
                     data.set("OutOfTime/Cancelled." + i, null);
+
                     shouldSave = true;
                 }
             }
@@ -247,12 +270,13 @@ public class Methods {
 
                 if (cal.after(expireTime)) {
                     int num = 1;
+
                     for (; data.contains("OutOfTime/Cancelled." + num); num++) ;
 
                     if (data.getBoolean("Items." + i + ".Biddable") && !data.getString("Items." + i + ".TopBidder").equalsIgnoreCase("None") && plugin.getSupport().getMoney(getPlayer(data.getString("Items." + i + ".TopBidder"))) >= data.getInt("Items." + i + ".Price")) {
                         String winner = data.getString("Items." + i + ".TopBidder");
                         String seller = data.getString("Items." + i + ".Seller");
-                        Long price = data.getLong("Items." + i + ".Price");
+                        long price = data.getLong("Items." + i + ".Price");
 
                         plugin.getSupport().addMoney(getOfflinePlayer(seller), price);
                         plugin.getSupport().removeMoney(getOfflinePlayer(winner), price);
@@ -265,7 +289,9 @@ public class Methods {
 
                         if (isOnline(winner) && getPlayer(winner) != null) {
                             Player player = getPlayer(winner);
-                            Bukkit.getPluginManager().callEvent(new AuctionWinBidEvent(player, Methods.fromBase64(data.getString("Items." + i + ".Item")), price));
+
+                            plugin.getServer().getPluginManager().callEvent(new AuctionWinBidEvent(player, Methods.fromBase64(data.getString("Items." + i + ".Item")), price));
+
                             if (player != null) {
                                 player.sendMessage(Messages.WIN_BIDDING.getMessage(player, placeholders));
                             }
@@ -273,6 +299,7 @@ public class Methods {
 
                         if (isOnline(seller) && getPlayer(seller) != null) {
                             Player player = getPlayer(seller);
+
                             if (player != null) {
                                 player.sendMessage(Messages.SOMEONE_WON_PLAYERS_BID.getMessage(player, placeholders));
                             }
@@ -291,7 +318,8 @@ public class Methods {
                         }
 
                         AuctionExpireEvent event = new AuctionExpireEvent(player, Methods.fromBase64(data.getString("Items." + i + ".Item")));
-                        Bukkit.getPluginManager().callEvent(event);
+                        plugin.getServer().getPluginManager().callEvent(event);
+
                         data.set("OutOfTime/Cancelled." + num + ".Seller", data.getString("Items." + i + ".Seller"));
                         data.set("OutOfTime/Cancelled." + num + ".Full-Time", fullExpireTime.getTimeInMillis());
                         data.set("OutOfTime/Cancelled." + num + ".StoreID", data.getInt("Items." + i + ".StoreID"));
@@ -310,15 +338,13 @@ public class Methods {
     public static String getPrice(String ID, Boolean Expired) {
         long price = 0L;
 
-        if (Expired) {
-            FileConfiguration configuration = Files.data.getConfiguration();
+        FileConfiguration configuration = Files.data.getConfiguration();
 
+        if (Expired) {
             if (configuration.contains("OutOfTime/Cancelled." + ID + ".Price")) {
                 price = configuration.getLong("OutOfTime/Cancelled." + ID + ".Price");
             }
         } else {
-            FileConfiguration configuration = Files.data.getConfiguration();
-
             if (configuration.contains("Items." + ID + ".Price")) {
                 price = configuration.getLong("Items." + ID + ".Price");
             }

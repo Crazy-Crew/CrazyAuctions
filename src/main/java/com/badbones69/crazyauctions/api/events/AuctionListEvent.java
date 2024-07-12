@@ -45,18 +45,18 @@ public class AuctionListEvent extends Event {
     }
     
     public Player getPlayer() {
-        return player;
+        return this.player;
     }
     
     public ShopType getShopType() {
-        return shop;
+        return this.shop;
     }
     
     public ItemStack getItem() {
-        return item;
+        return this.item;
     }
     
     public long getPrice() {
-        return price;
+        return this.price;
     }
 }

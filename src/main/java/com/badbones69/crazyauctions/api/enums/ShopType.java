@@ -31,6 +31,6 @@ public enum ShopType {
      * @return Returns the type name as a string.
      */
     public String getName() {
-        return name;
+        return this.name;
     }
 }

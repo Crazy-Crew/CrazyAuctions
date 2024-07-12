@@ -41,14 +41,14 @@ public class AuctionWinBidEvent extends Event {
     }
     
     public Player getPlayer() {
-        return player;
+        return this.player;
     }
     
     public ItemStack getItem() {
-        return item;
+        return this.item;
     }
     
     public long getBid() {
-        return bid;
+        return this.bid;
     }
 }

@@ -41,6 +41,7 @@ public enum Category {
     
     private static ArrayList<Material> getArmor() {
         ArrayList<Material> ma = new ArrayList<>();
+
         ma.add(Material.GOLDEN_HELMET);
         ma.add(Material.GOLDEN_CHESTPLATE);
         ma.add(Material.GOLDEN_LEGGINGS);
@@ -71,6 +72,7 @@ public enum Category {
     
     private static ArrayList<Material> getTools() {
         ArrayList<Material> ma = new ArrayList<>();
+
         ma.add(Material.WOODEN_PICKAXE);
         ma.add(Material.WOODEN_AXE);
         ma.add(Material.WOODEN_SHOVEL);
@@ -95,11 +97,13 @@ public enum Category {
         ma.add(Material.NETHERITE_AXE);
         ma.add(Material.NETHERITE_HOE);
         ma.add(Material.NETHERITE_SHOVEL);
+
         return ma;
     }
     
     private static ArrayList<Material> getWeapons() {
         ArrayList<Material> ma = new ArrayList<>();
+
         ma.add(Material.GOLDEN_PICKAXE);
         ma.add(Material.GOLDEN_AXE);
         ma.add(Material.GOLDEN_SHOVEL);
@@ -113,44 +117,53 @@ public enum Category {
         ma.add(Material.BOW);
         ma.add(Material.NETHERITE_SWORD);
         ma.add(Material.NETHERITE_AXE);
+
         return ma;
     }
     
     private static ArrayList<Material> getFood() {
         ArrayList<Material> ma = new ArrayList<>();
+
         for (Material m : Material.values()) {
             if (m.isEdible()) {
                 if (m != Material.POTION) ma.add(m);
             }
         }
+
         return ma;
     }
     
     private static ArrayList<Material> getPotions() {
         ArrayList<Material> ma = new ArrayList<>();
+
         ma.add(Material.POTION);
         ma.add(Material.SPLASH_POTION);
         ma.add(Material.LINGERING_POTION);
+
         return ma;
     }
     
     private static ArrayList<Material> getBlocks() {
         ArrayList<Material> ma = new ArrayList<>();
+
         for (Material m : Material.values()) {
             if (m.isBlock()) {
                 ma.add(m);
             }
         }
+
         return ma;
     }
     
     private static ArrayList<Material> getOthers() {
         ArrayList<Material> ma = new ArrayList<>();
+
         for (Material m : Material.values()) {
             if (!(getArmor().contains(m) || getTools().contains(m) || getWeapons().contains(m) || getFood().contains(m) || getPotions().contains(m) || getBlocks().contains(m))) {
                 ma.add(m);
             }
         }
+
         return ma;
     }
     
@@ -158,10 +171,10 @@ public enum Category {
      * @return Returns the type name as a string.
      */
     public String getName() {
-        return name;
+        return this.name;
     }
     
     public ArrayList<Material> getItems() {
-        return items;
+        return this.items;
     }
 }
