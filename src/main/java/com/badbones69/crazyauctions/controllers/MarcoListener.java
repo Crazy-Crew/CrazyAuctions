@@ -1,6 +1,6 @@
 package com.badbones69.crazyauctions.controllers;
 
-import com.badbones69.crazyauctions.api.FileManager.Files;
+import com.badbones69.crazyauctions.api.enums.Files;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -13,7 +13,7 @@ public class MarcoListener implements Listener {
     public void onPreCommand(PlayerCommandPreprocessEvent event) {
         Player player = event.getPlayer();
 
-        boolean macro = Files.CONFIG.getFile().getBoolean("Settings.Patches.Macro-Dupe", true);
+        boolean macro = Files.config.getConfiguration().getBoolean("Settings.Patches.Macro-Dupe", true);
 
         if (!macro) return;
 

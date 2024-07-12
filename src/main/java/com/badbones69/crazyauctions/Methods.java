@@ -1,6 +1,6 @@
 package com.badbones69.crazyauctions;
 
-import com.badbones69.crazyauctions.api.FileManager.Files;
+import com.badbones69.crazyauctions.api.enums.Files;
 import com.badbones69.crazyauctions.api.enums.Messages;
 import com.badbones69.crazyauctions.api.events.AuctionExpireEvent;
 import com.badbones69.crazyauctions.api.events.AuctionWinBidEvent;
@@ -10,7 +10,6 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
-
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -33,11 +32,11 @@ public class Methods {
     }
     
     public static String getPrefix() {
-        return color(Files.CONFIG.getFile().getString("Settings.Prefix", ""));
+        return color(Files.config.getConfiguration().getString("Settings.Prefix", ""));
     }
     
     public static String getPrefix(String msg) {
-        return color(Files.CONFIG.getFile().getString("Settings.Prefix", "") + msg);
+        return color(Files.config.getConfiguration().getString("Settings.Prefix", "") + msg);
     }
     
     public static String removeColor(String msg) {
@@ -109,13 +108,13 @@ public class Methods {
             }
         }
 
-        p.sendMessage(Messages.NOT_ONLINE.getMessage());
+        p.sendMessage(Messages.NOT_ONLINE.getMessage(p));
         return false;
     }
     
     public static boolean hasPermission(Player player, String perm) {
         if (!player.hasPermission("crazyauctions." + perm)) {
-            player.sendMessage(Messages.NO_PERMISSION.getMessage());
+            player.sendMessage(Messages.NO_PERMISSION.getMessage(player));
             return false;
         }
 
@@ -125,7 +124,7 @@ public class Methods {
     public static boolean hasPermission(CommandSender sender, String perm) {
         if (sender instanceof Player player) {
             if (!player.hasPermission("crazyauctions." + perm)) {
-                player.sendMessage(Messages.NO_PERMISSION.getMessage());
+                player.sendMessage(Messages.NO_PERMISSION.getMessage(player));
                 return false;
             }
 
@@ -229,7 +228,7 @@ public class Methods {
     }
     
     public static void updateAuction() {
-        FileConfiguration data = Files.DATA.getFile();
+        FileConfiguration data = Files.data.getConfiguration();
         Calendar cal = Calendar.getInstance();
         Calendar expireTime = Calendar.getInstance();
         Calendar fullExpireTime = Calendar.getInstance();
@@ -271,12 +270,16 @@ public class Methods {
                         if (isOnline(winner) && getPlayer(winner) != null) {
                             Player player = getPlayer(winner);
                             Bukkit.getPluginManager().callEvent(new AuctionWinBidEvent(player, Methods.fromBase64(data.getString("Items." + i + ".Item")), price));
-                            player.sendMessage(Messages.WIN_BIDDING.getMessage(placeholders));
+                            if (player != null) {
+                                player.sendMessage(Messages.WIN_BIDDING.getMessage(player, placeholders));
+                            }
                         }
 
                         if (isOnline(seller) && getPlayer(seller) != null) {
                             Player player = getPlayer(seller);
-                            player.sendMessage(Messages.SOMEONE_WON_PLAYERS_BID.getMessage(placeholders));
+                            if (player != null) {
+                                player.sendMessage(Messages.SOMEONE_WON_PLAYERS_BID.getMessage(player, placeholders));
+                            }
                         }
 
                         data.set("OutOfTime/Cancelled." + num + ".Seller", winner);
@@ -287,8 +290,8 @@ public class Methods {
                         String seller = data.getString("Items." + i + ".Seller");
                         Player player = getPlayer(seller);
 
-                        if (isOnline(seller) && getPlayer(seller) != null) {
-                            player.sendMessage(Messages.ITEM_HAS_EXPIRED.getMessage());
+                        if (isOnline(seller) && player != null) {
+                            player.sendMessage(Messages.ITEM_HAS_EXPIRED.getMessage(player));
                         }
 
                         AuctionExpireEvent event = new AuctionExpireEvent(player, Methods.fromBase64(data.getString("Items." + i + ".Item")));
@@ -305,19 +308,23 @@ public class Methods {
             }
         }
 
-        if (shouldSave) Files.DATA.saveFile();
+        if (shouldSave) Files.data.save();
     }
     
     public static String getPrice(String ID, Boolean Expired) {
         long price = 0L;
 
         if (Expired) {
-            if (Files.DATA.getFile().contains("OutOfTime/Cancelled." + ID + ".Price")) {
-                price = Files.DATA.getFile().getLong("OutOfTime/Cancelled." + ID + ".Price");
+            FileConfiguration configuration = Files.data.getConfiguration();
+
+            if (configuration.contains("OutOfTime/Cancelled." + ID + ".Price")) {
+                price = configuration.getLong("OutOfTime/Cancelled." + ID + ".Price");
             }
         } else {
-            if (Files.DATA.getFile().contains("Items." + ID + ".Price")) {
-                price = Files.DATA.getFile().getLong("Items." + ID + ".Price");
+            FileConfiguration configuration = Files.data.getConfiguration();
+
+            if (configuration.contains("Items." + ID + ".Price")) {
+                price = configuration.getLong("Items." + ID + ".Price");
             }
         }
 

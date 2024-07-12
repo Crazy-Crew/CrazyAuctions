@@ -1,25 +1,23 @@
 package com.badbones69.crazyauctions;
 
 import com.badbones69.crazyauctions.api.CrazyManager;
-import com.badbones69.crazyauctions.api.FileManager;
+import com.badbones69.crazyauctions.api.enums.Files;
 import com.badbones69.crazyauctions.api.enums.Messages;
-import com.badbones69.crazyauctions.api.support.PluginSupport;
 import com.badbones69.crazyauctions.api.support.MetricsWrapper;
 import com.badbones69.crazyauctions.commands.AuctionCommand;
 import com.badbones69.crazyauctions.commands.AuctionTab;
 import com.badbones69.crazyauctions.controllers.GuiListener;
 import com.badbones69.crazyauctions.controllers.MarcoListener;
 import com.badbones69.crazyauctions.currency.VaultSupport;
+import com.ryderbelserion.vital.paper.files.config.FileManager;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
-
 import java.util.Base64;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -42,7 +40,7 @@ public class CrazyAuctions extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        if (!PluginSupport.VAULT.isPluginEnabled()) {
+        if (!getServer().getPluginManager().isPluginEnabled("Vault")) {
             getLogger().severe("Vault was not found so the plugin will now disable.");
 
             getServer().getPluginManager().disablePlugin(this);
@@ -55,9 +53,13 @@ public class CrazyAuctions extends JavaPlugin {
         this.fileManager = new FileManager();
         this.crazyManager = new CrazyManager();
 
-        this.fileManager.setup();
+        this.fileManager.addFile("config.yml")
+                .addFile("data.yml")
+                .addFile("messages.yml")
+                .addFile("test-file.yml")
+                .init();
 
-        FileConfiguration configuration = FileManager.Files.DATA.getFile();
+        FileConfiguration configuration = Files.data.getConfiguration();
 
         if (configuration.contains("OutOfTime/Cancelled")) {
             for (String key : configuration.getConfigurationSection("OutOfTime/Cancelled").getKeys(false)) {
@@ -66,7 +68,7 @@ public class CrazyAuctions extends JavaPlugin {
                 if (itemStack != null) {
                     configuration.set("OutOfTime/Cancelled." + key + ".Item", Base64.getEncoder().encodeToString(itemStack.serializeAsBytes()));
 
-                    FileManager.Files.DATA.saveFile();
+                    Files.data.save();
                 }
 
                 final String uuid = configuration.getString("OutOfTime/Cancelled." + key + ".Seller");
@@ -76,7 +78,7 @@ public class CrazyAuctions extends JavaPlugin {
 
                     configuration.set("OutOfTime/Cancelled." + key + ".Seller", player.getUniqueId().toString());
 
-                    FileManager.Files.DATA.saveFile();
+                    Files.data.save();
                 }
             }
         }
@@ -88,7 +90,7 @@ public class CrazyAuctions extends JavaPlugin {
                 if (itemStack != null) {
                     configuration.set("Items." + key + ".Item", Base64.getEncoder().encodeToString(itemStack.serializeAsBytes()));
 
-                    FileManager.Files.DATA.saveFile();
+                    Files.data.save();
                 }
 
                 final String uuid = configuration.getString("Items." + key + ".Seller");
@@ -99,7 +101,7 @@ public class CrazyAuctions extends JavaPlugin {
                     if (!uuid.equals(player.getUniqueId().toString())) {
                         configuration.set("Items." + key + ".Seller", player.getUniqueId().toString());
 
-                        FileManager.Files.DATA.saveFile();
+                        Files.data.save();
                     }
                 }
 
@@ -111,7 +113,7 @@ public class CrazyAuctions extends JavaPlugin {
                     if (!bidder.equals(player.getUniqueId().toString())) {
                         configuration.set("Items." + key + ".TopBidder", player.getUniqueId().toString());
 
-                        FileManager.Files.DATA.saveFile();
+                        Files.data.save();
                     }
                 }
             }
@@ -160,30 +162,15 @@ public class CrazyAuctions extends JavaPlugin {
         if (this.crazyManager != null) this.crazyManager.unload();
     }
 
-    @NotNull
-    public Timer getTimer() {
-        return this.timer;
-    }
-
-    public VaultSupport getSupport() {
+    public final VaultSupport getSupport() {
         return this.support;
     }
 
-    public MetricsWrapper getMetrics() {
-        return this.metrics;
-    }
-
-    @NotNull
-    public CrazyManager getCrazyManager() {
+    public final CrazyManager getCrazyManager() {
         return this.crazyManager;
     }
 
-    @NotNull
-    public FileManager getFileManager() {
+    public final FileManager getFileManager() {
         return this.fileManager;
-    }
-
-    public boolean isLogging() {
-        return true;
     }
 }

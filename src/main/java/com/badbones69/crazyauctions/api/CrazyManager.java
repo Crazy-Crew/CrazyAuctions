@@ -1,7 +1,7 @@
 package com.badbones69.crazyauctions.api;
 
 import com.badbones69.crazyauctions.Methods;
-import com.badbones69.crazyauctions.api.FileManager.Files;
+import com.badbones69.crazyauctions.api.enums.Files;
 import com.badbones69.crazyauctions.api.enums.ShopType;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -14,13 +14,13 @@ public class CrazyManager {
     private boolean biddingEnabled;
 
     public void load() {
-        this.sellingEnabled = Files.CONFIG.getFile().getBoolean("Settings.Feature-Toggle.Selling", true);
+        this.sellingEnabled = Files.config.getConfiguration().getBoolean("Settings.Feature-Toggle.Selling", true);
 
-        this.biddingEnabled = Files.CONFIG.getFile().getBoolean("Settings.Feature-Toggle.Bidding", true);
+        this.biddingEnabled = Files.config.getConfiguration().getBoolean("Settings.Feature-Toggle.Bidding", true);
     }
 
     public void unload() {
-        Files.DATA.saveFile();
+        Files.data.save();
     }
     
     public boolean isSellingEnabled() {
@@ -32,7 +32,7 @@ public class CrazyManager {
     }
     
     public ArrayList<ItemStack> getItems(Player player, ShopType type) {
-        FileConfiguration data = Files.DATA.getFile();
+        FileConfiguration data = Files.data.getConfiguration();
         ArrayList<ItemStack> items = new ArrayList<>();
 
         if (data.contains("Items")) {

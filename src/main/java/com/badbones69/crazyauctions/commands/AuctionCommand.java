@@ -3,13 +3,13 @@ package com.badbones69.crazyauctions.commands;
 import com.badbones69.crazyauctions.CrazyAuctions;
 import com.badbones69.crazyauctions.Methods;
 import com.badbones69.crazyauctions.api.CrazyManager;
-import com.badbones69.crazyauctions.api.FileManager;
-import com.badbones69.crazyauctions.api.FileManager.Files;
 import com.badbones69.crazyauctions.api.enums.Category;
+import com.badbones69.crazyauctions.api.enums.Files;
 import com.badbones69.crazyauctions.api.enums.Messages;
 import com.badbones69.crazyauctions.api.enums.ShopType;
 import com.badbones69.crazyauctions.api.events.AuctionListEvent;
 import com.badbones69.crazyauctions.controllers.GuiListener;
+import com.ryderbelserion.vital.paper.files.config.FileManager;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -18,13 +18,13 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
+import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.jetbrains.annotations.NotNull;
 import org.yaml.snakeyaml.error.YAMLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
-import java.util.UUID;
 import java.util.logging.Level;
 
 public class AuctionCommand implements CommandExecutor {
@@ -37,12 +37,12 @@ public class AuctionCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String commandLabel, String[] args) {
-        FileConfiguration config = Files.CONFIG.getFile();
-        FileConfiguration data = Files.DATA.getFile();
+        FileConfiguration config = Files.config.getConfiguration();
+        FileConfiguration data = Files.data.getConfiguration();
 
         if (args.length == 0) {
             if (!(sender instanceof Player player)) {
-                sender.sendMessage(Messages.PLAYERS_ONLY.getMessage());
+                sender.sendMessage(Messages.PLAYERS_ONLY.getMessage(sender));
                 return true;
             }
 
@@ -73,86 +73,8 @@ public class AuctionCommand implements CommandExecutor {
                         return true;
                     }
 
-                    sender.sendMessage(Messages.HELP.getMessage());
+                    sender.sendMessage(Messages.HELP.getMessage(sender));
                     return true;
-                }
-
-                case "test" -> {
-                    if (!Methods.hasPermission(sender, "test")) {
-                        return true;
-                    }
-
-                    int times = 1;
-
-                    if (args.length >= 2) {
-                        if (!Methods.isInt(args[1])) {
-                            HashMap<String, String> placeholders = new HashMap<>();
-                            placeholders.put("%Arg%", args[1]);
-                            placeholders.put("%arg%", args[1]);
-                            sender.sendMessage(Messages.NOT_A_NUMBER.getMessage(placeholders));
-                            return true;
-                        }
-
-                        times = Integer.parseInt(args[1]);
-                    }
-
-                    int price = 10;
-                    int amount = 1;
-                    ItemStack item = Methods.getItemInHand((Player) sender);
-
-                    if (item != null && item.getType() != Material.AIR) {
-                        // For testing as another player
-                        String seller = UUID.randomUUID().toString();
-
-                        for (int it = 1; it <= times; it++) {
-                            int num = 1;
-
-                            Random random = new Random();
-
-                            for (; data.contains("Items." + num); num++) ;
-
-                            data.set("Items." + num + ".Price", price);
-                            data.set("Items." + num + ".Seller", seller);
-
-                            if (args[0].equalsIgnoreCase("bid")) {
-                                data.set("Items." + num + ".Time-Till-Expire", Methods.convertToMill(config.getString("Settings.Bid-Time", "2m 30s")));
-                            } else {
-                                data.set("Items." + num + ".Time-Till-Expire", Methods.convertToMill(config.getString("Settings.Sell-Time", "2d")));
-                            }
-
-                            data.set("Items." + num + ".Full-Time", Methods.convertToMill(config.getString("Settings.Full-Expire-Time", "10d")));
-                            int id = random.nextInt(Integer.MAX_VALUE);
-
-                            for (String i : data.getConfigurationSection("Items").getKeys(false))
-                                if (data.getInt("Items." + i + ".StoreID") == id)
-                                    id = random.nextInt(Integer.MAX_VALUE);
-
-                            data.set("Items." + num + ".StoreID", id);
-                            data.set("Items." + num + ".Biddable", args[0].equalsIgnoreCase("Bid"));
-                            data.set("Items." + num + ".TopBidder", "None");
-
-                            ItemStack stack = item.clone();
-                            stack.setAmount(amount);
-
-                            data.set("Items." + num + ".Item", Methods.toBase64(stack));
-                        }
-
-                        Files.DATA.saveFile();
-
-                        HashMap<String, String> placeholders = new HashMap<>();
-                        placeholders.put("%Price%", String.valueOf(price));
-                        placeholders.put("%price%", String.valueOf(price));
-
-                        sender.sendMessage(Messages.ADDED_ITEM_TO_AUCTION.getMessage(placeholders));
-
-                        if (item.getAmount() <= 1 || (item.getAmount() - amount) <= 0) {
-                            Methods.setItemInHand((Player) sender, new ItemStack(Material.AIR));
-                        } else {
-                            item.setAmount(item.getAmount() - amount);
-                        }
-                    } else {
-                        sender.sendMessage(Messages.DOESNT_HAVE_ITEM_IN_HAND.getMessage());
-                    }
                 }
 
                 case "reload" -> {
@@ -160,10 +82,12 @@ public class AuctionCommand implements CommandExecutor {
                         return true;
                     }
 
-                    this.fileManager.setup();
+                    this.fileManager.reloadFiles();
+
+                    this.fileManager.init();
                     this.crazyManager.load();
 
-                    sender.sendMessage(Messages.RELOAD.getMessage());
+                    sender.sendMessage(Messages.RELOAD.getMessage(sender));
                     return true;
                 }
 
@@ -173,7 +97,7 @@ public class AuctionCommand implements CommandExecutor {
                     }
 
                     if (!(sender instanceof Player player)) {
-                        sender.sendMessage(Messages.PLAYERS_ONLY.getMessage());
+                        sender.sendMessage(Messages.PLAYERS_ONLY.getMessage(sender));
                         return true;
                     }
 
@@ -182,7 +106,7 @@ public class AuctionCommand implements CommandExecutor {
                         return true;
                     }
 
-                    sender.sendMessage(Messages.CRAZYAUCTIONS_VIEW.getMessage());
+                    sender.sendMessage(Messages.CRAZYAUCTIONS_VIEW.getMessage(sender));
                     return true;
                 }
 
@@ -192,7 +116,7 @@ public class AuctionCommand implements CommandExecutor {
                     }
 
                     if (!(sender instanceof Player player)) {
-                        sender.sendMessage(Messages.PLAYERS_ONLY.getMessage());
+                        sender.sendMessage(Messages.PLAYERS_ONLY.getMessage(sender));
                         return true;
                     }
 
@@ -204,7 +128,7 @@ public class AuctionCommand implements CommandExecutor {
                     if (!Methods.hasPermission(sender, "access")) return true;
 
                     if (!(sender instanceof Player player)) {
-                        sender.sendMessage(Messages.PLAYERS_ONLY.getMessage());
+                        sender.sendMessage(Messages.PLAYERS_ONLY.getMessage(sender));
                         return true;
                     }
 
@@ -214,14 +138,14 @@ public class AuctionCommand implements CommandExecutor {
 
                 case "sell", "bid" -> {
                     if (!(sender instanceof Player player)) {
-                        sender.sendMessage(Messages.PLAYERS_ONLY.getMessage());
+                        sender.sendMessage(Messages.PLAYERS_ONLY.getMessage(sender));
                         return true;
                     }
 
                     if (args.length >= 2) {
                         if (args[0].equalsIgnoreCase("sell")) {
                             if (!crazyManager.isSellingEnabled()) {
-                                player.sendMessage(Messages.SELLING_DISABLED.getMessage());
+                                player.sendMessage(Messages.SELLING_DISABLED.getMessage(sender));
                                 return true;
                             }
 
@@ -230,7 +154,7 @@ public class AuctionCommand implements CommandExecutor {
 
                         if (args[0].equalsIgnoreCase("bid")) {
                             if (!crazyManager.isBiddingEnabled()) {
-                                player.sendMessage(Messages.BIDDING_DISABLED.getMessage());
+                                player.sendMessage(Messages.BIDDING_DISABLED.getMessage(sender));
                                 return true;
                             }
 
@@ -245,7 +169,7 @@ public class AuctionCommand implements CommandExecutor {
                                 HashMap<String, String> placeholders = new HashMap<>();
                                 placeholders.put("%Arg%", args[2]);
                                 placeholders.put("%arg%", args[2]);
-                                player.sendMessage(Messages.NOT_A_NUMBER.getMessage(placeholders));
+                                player.sendMessage(Messages.NOT_A_NUMBER.getMessage(sender, placeholders));
                                 return true;
                             }
 
@@ -258,12 +182,12 @@ public class AuctionCommand implements CommandExecutor {
                             HashMap<String, String> placeholders = new HashMap<>();
                             placeholders.put("%Arg%", args[1]);
                             placeholders.put("%arg%", args[1]);
-                            player.sendMessage(Messages.NOT_A_NUMBER.getMessage(placeholders));
+                            player.sendMessage(Messages.NOT_A_NUMBER.getMessage(sender, placeholders));
                             return true;
                         }
 
                         if (Methods.getItemInHand(player).getType() == Material.AIR) {
-                            player.sendMessage(Messages.DOESNT_HAVE_ITEM_IN_HAND.getMessage());
+                            player.sendMessage(Messages.DOESNT_HAVE_ITEM_IN_HAND.getMessage(sender));
                             return false;
                         }
 
@@ -271,21 +195,21 @@ public class AuctionCommand implements CommandExecutor {
 
                         if (args[0].equalsIgnoreCase("bid")) {
                             if (price < config.getLong("Settings.Minimum-Bid-Price", 100)) {
-                                player.sendMessage(Messages.BID_PRICE_TO_LOW.getMessage());
+                                player.sendMessage(Messages.BID_PRICE_TO_LOW.getMessage(sender));
                                 return true;
                             }
 
                             if (price > config.getLong("Settings.Max-Beginning-Bid-Price", 1000000)) {
-                                player.sendMessage(Messages.BID_PRICE_TO_HIGH.getMessage());
+                                player.sendMessage(Messages.BID_PRICE_TO_HIGH.getMessage(sender));
                                 return true;
                             }
                         } else {
                             if (price < config.getLong("Settings.Minimum-Sell-Price", 10)) {
-                                player.sendMessage(Messages.SELL_PRICE_TO_LOW.getMessage());
+                                player.sendMessage(Messages.SELL_PRICE_TO_LOW.getMessage(sender));
                                 return true;
                             }
                             if (price > config.getLong("Settings.Max-Beginning-Sell-Price", 1000000)) {
-                                player.sendMessage(Messages.SELL_PRICE_TO_HIGH.getMessage());
+                                player.sendMessage(Messages.SELL_PRICE_TO_HIGH.getMessage(sender));
                                 return true;
                             }
                         }
@@ -333,37 +257,39 @@ public class AuctionCommand implements CommandExecutor {
 
                             if (args[0].equalsIgnoreCase("sell")) {
                                 if (crazyManager.getItems(player, ShopType.SELL).size() >= SellLimit) {
-                                    player.sendMessage(Messages.MAX_ITEMS.getMessage());
+                                    player.sendMessage(Messages.MAX_ITEMS.getMessage(sender));
                                     return true;
                                 }
                             }
 
                             if (args[0].equalsIgnoreCase("bid")) {
                                 if (crazyManager.getItems(player, ShopType.BID).size() >= BidLimit) {
-                                    player.sendMessage(Messages.MAX_ITEMS.getMessage());
+                                    player.sendMessage(Messages.MAX_ITEMS.getMessage(sender));
                                     return true;
                                 }
                             }
                         }
 
                         if (config.getStringList("Settings.BlackList").contains(item.getType().getKey().getKey())) {
-                            player.sendMessage(Messages.ITEM_BLACKLISTED.getMessage());
+                            player.sendMessage(Messages.ITEM_BLACKLISTED.getMessage(sender));
                             return true;
                         }
 
                         if (!config.getBoolean("Settings.Allow-Damaged-Items", false)) {
                             for (Material i : getDamageableItems()) {
                                 if (item.getType() == i) {
-                                    if (item.getDurability() > 0) {
-                                        player.sendMessage(Messages.ITEM_DAMAGED.getMessage());
-                                        return true;
+                                    if (item instanceof Damageable damageable) {
+                                        if (damageable.getDamage() > 0) {
+                                            player.sendMessage(Messages.ITEM_DAMAGED.getMessage(sender));
+                                            return true;
+                                        }
                                     }
                                 }
                             }
                         }
 
                         if (!allowBook(item)) {
-                            player.sendMessage(Messages.BOOK_NOT_ALLOWED.getMessage());
+                            player.sendMessage(Messages.BOOK_NOT_ALLOWED.getMessage(sender));
                             return true;
                         }
 
@@ -408,7 +334,7 @@ public class AuctionCommand implements CommandExecutor {
 
                         data.set("Items." + num + ".Item", Methods.toBase64(stack));
 
-                        Files.DATA.saveFile();
+                        Files.data.save();
 
                         this.plugin.getServer().getPluginManager().callEvent(new AuctionListEvent(player, type, stack, price));
 
@@ -416,7 +342,7 @@ public class AuctionCommand implements CommandExecutor {
 
                         placeholders.put("%Price%", String.valueOf(price));
                         placeholders.put("%price%", String.valueOf(price));
-                        player.sendMessage(Messages.ADDED_ITEM_TO_AUCTION.getMessage(placeholders));
+                        player.sendMessage(Messages.ADDED_ITEM_TO_AUCTION.getMessage(sender, placeholders));
 
                         if (item.getAmount() <= 1 || (item.getAmount() - amount) <= 0) {
                             Methods.setItemInHand(player, new ItemStack(Material.AIR));
@@ -427,7 +353,7 @@ public class AuctionCommand implements CommandExecutor {
                         return false;
                     }
 
-                    sender.sendMessage(Messages.CRAZYAUCTIONS_SELL_BID.getMessage());
+                    sender.sendMessage(Messages.CRAZYAUCTIONS_SELL_BID.getMessage(sender));
                 }
 
                 default -> {
@@ -501,12 +427,12 @@ public class AuctionCommand implements CommandExecutor {
         if (item != null && item.hasItemMeta() && item.getItemMeta() instanceof BookMeta bookMeta) {
             this.plugin.getLogger().info("Checking " + item.getType() + " for illegal unicode.");
 
-            FileConfiguration file = Files.TEST_FILE.getFile();
+            FileConfiguration file = Files.test_file.getConfiguration();
 
             try {
                 file.set("Test", item);
 
-                Files.TEST_FILE.saveFile();
+                Files.test_file.save();
 
                 this.plugin.getLogger().info(item.getType() + " has passed unicode checks.");
             } catch (YAMLException exception) {
