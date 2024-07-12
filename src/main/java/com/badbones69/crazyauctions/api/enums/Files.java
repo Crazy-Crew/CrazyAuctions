@@ -10,7 +10,7 @@ public enum Files {
 
     config("config.yml"),
     messages("messages.yml"),
-    test_file("test-file.yml"),
+    //test_file("test-file.yml"),
     data("data.yml");
 
     private final String fileName;

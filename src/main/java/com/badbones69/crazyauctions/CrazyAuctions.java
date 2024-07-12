@@ -56,7 +56,7 @@ public class CrazyAuctions extends JavaPlugin {
         this.fileManager.addFile("config.yml")
                 .addFile("data.yml")
                 .addFile("messages.yml")
-                .addFile("test-file.yml")
+                //.addFile("test-file.yml")
                 .init();
 
         FileConfiguration configuration = Files.data.getConfiguration();
