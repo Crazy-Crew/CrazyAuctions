@@ -10,6 +10,8 @@ website: '${website}'
 
 softdepend: [Vault]
 
+folia-supported: true
+
 commands:
   crazyauctions:
     description: Opens the Crazy Auctions GUI.

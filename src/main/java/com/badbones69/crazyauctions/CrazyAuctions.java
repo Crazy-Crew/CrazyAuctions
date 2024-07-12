@@ -10,6 +10,7 @@ import com.badbones69.crazyauctions.controllers.GuiListener;
 import com.badbones69.crazyauctions.controllers.MarcoListener;
 import com.badbones69.crazyauctions.currency.VaultSupport;
 import com.ryderbelserion.vital.paper.files.config.FileManager;
+import com.ryderbelserion.vital.paper.util.scheduler.FoliaRunnable;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.PluginCommand;
@@ -19,8 +20,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import java.util.Base64;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class CrazyAuctions extends JavaPlugin {
 
@@ -29,14 +28,10 @@ public class CrazyAuctions extends JavaPlugin {
         return JavaPlugin.getPlugin(CrazyAuctions.class);
     }
 
-    private Timer timer;
-
     private FileManager fileManager;
     private CrazyManager crazyManager;
 
     private VaultSupport support;
-
-    private MetricsWrapper metrics;
 
     @Override
     public void onEnable() {
@@ -47,8 +42,6 @@ public class CrazyAuctions extends JavaPlugin {
 
             return;
         }
-
-        this.timer = new Timer();
 
         this.fileManager = new FileManager();
         this.crazyManager = new CrazyManager();
@@ -126,25 +119,19 @@ public class CrazyAuctions extends JavaPlugin {
 
         registerCommand(getCommand("crazyauctions"), new AuctionTab(), new AuctionCommand());
 
-        // Run a task every 5 seconds to update auctions.
-        TimerTask task = new TimerTask() {
-            @Override
-            public void run() {
-                getServer().getScheduler().runTask(get(), Methods::updateAuction);
-            }
-        };
-
-        this.timer.scheduleAtFixedRate(task, 20L, 5000L);
-
-        // Add new messages.
-        Messages.addMissingMessages();
-
-        // Enable vault support if enabled.
         this.support = new VaultSupport();
         this.support.loadVault();
 
-        // Create bstats instance.
-        this.metrics = new MetricsWrapper(this, 4624);
+        new FoliaRunnable(getServer().getGlobalRegionScheduler()) {
+            @Override
+            public void run() {
+                Methods.updateAuction();
+            }
+        }.runAtFixedRate(this, 0L, 5000L);
+
+        Messages.addMissingMessages();
+
+        new MetricsWrapper(this, 4624);
     }
 
     private void registerCommand(PluginCommand pluginCommand, TabCompleter tabCompleter, CommandExecutor commandExecutor) {
@@ -157,8 +144,6 @@ public class CrazyAuctions extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        if (this.timer != null) this.timer.cancel();
-
         if (this.crazyManager != null) this.crazyManager.unload();
     }
 

@@ -12,6 +12,7 @@ import com.badbones69.crazyauctions.api.enums.ShopType;
 import com.badbones69.crazyauctions.api.events.AuctionBuyEvent;
 import com.badbones69.crazyauctions.api.events.AuctionCancelledEvent;
 import com.badbones69.crazyauctions.api.events.AuctionNewBidEvent;
+import com.ryderbelserion.vital.paper.util.scheduler.FoliaRunnable;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Sound;
@@ -1038,8 +1039,6 @@ public class GuiListener implements Listener {
                                                     }
                                                 }
 
-                                                final Runnable runnable = () -> inv.setItem(slot, item);
-
                                                 if (data.getString("Items." + i + ".Seller").equalsIgnoreCase(player.getUniqueId().toString())) {
                                                     String itemName = config.getString("Settings.GUISettings.OtherSettings.Your-Item.Item");
                                                     String name = config.getString("Settings.GUISettings.OtherSettings.Your-Item.Name");
@@ -1054,7 +1053,12 @@ public class GuiListener implements Listener {
 
                                                     playClick(player);
 
-                                                    plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, runnable, 3 * 20);
+                                                    new FoliaRunnable(plugin.getServer().getGlobalRegionScheduler()) {
+                                                        @Override
+                                                        public void run() {
+                                                            inv.setItem(slot, item);
+                                                        }
+                                                    }.runDelayed(plugin, 3 * 20);
 
                                                     return;
                                                 }
@@ -1074,7 +1078,12 @@ public class GuiListener implements Listener {
                                                     inv.setItem(slot, itemBuilder.build());
                                                     playClick(player);
 
-                                                    plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, runnable, 3 * 20);
+                                                    new FoliaRunnable(plugin.getServer().getGlobalRegionScheduler()) {
+                                                        @Override
+                                                        public void run() {
+                                                            inv.setItem(slot, item);
+                                                        }
+                                                    }.runDelayed(plugin, 3 * 20);
 
                                                     return;
                                                 }
@@ -1094,7 +1103,13 @@ public class GuiListener implements Listener {
 
                                                         playClick(player);
 
-                                                        plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, runnable, 3 * 20);
+                                                        new FoliaRunnable(plugin.getServer().getGlobalRegionScheduler()) {
+                                                            @Override
+                                                            public void run() {
+                                                                inv.setItem(slot, item);
+                                                            }
+                                                        }.runDelayed(plugin, 3 * 20);
+
                                                         return;
                                                     }
 
