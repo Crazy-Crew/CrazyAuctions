@@ -9,6 +9,7 @@ import com.badbones69.crazyauctions.commands.AuctionTab;
 import com.badbones69.crazyauctions.controllers.GuiListener;
 import com.badbones69.crazyauctions.controllers.MarcoListener;
 import com.badbones69.crazyauctions.currency.VaultSupport;
+import com.ryderbelserion.vital.paper.VitalPaper;
 import com.ryderbelserion.vital.paper.files.config.FileManager;
 import com.ryderbelserion.vital.paper.util.scheduler.FoliaRunnable;
 import org.bukkit.OfflinePlayer;
@@ -42,6 +43,8 @@ public class CrazyAuctions extends JavaPlugin {
 
             return;
         }
+
+        new VitalPaper(this).setLogging(false);
 
         this.fileManager = new FileManager();
         this.crazyManager = new CrazyManager();
