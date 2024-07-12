@@ -38,10 +38,6 @@ public class Methods {
     public static String getPrefix(String msg) {
         return color(Files.config.getConfiguration().getString("Settings.Prefix", "") + msg);
     }
-    
-    public static String removeColor(String msg) {
-        return ChatColor.stripColor(msg);
-    }
 
     public static ItemStack getItemInHand(Player player) {
         return player.getInventory().getItemInMainHand();
