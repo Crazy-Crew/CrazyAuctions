@@ -1,7 +1,3 @@
-import com.ryderbelserion.feather.includeProject
-
-enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
-
 rootProject.name = "CrazyAuctions"
 
 pluginManagement {
@@ -13,7 +9,5 @@ pluginManagement {
 }
 
 plugins {
-    id("com.ryderbelserion.feather-settings") version "0.0.1"
+    id("com.ryderbelserion.feather-settings") version "0.0.4"
 }
-
-listOf("paper").forEach(::includeProject)
