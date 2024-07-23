@@ -385,7 +385,7 @@ public class AuctionCommand implements CommandExecutor {
                 }
 
                 default -> {
-                    sender.sendMessage(Methods.getPrefix("&cPlease do /crazyauctions help for more information."));
+                    sender.sendMessage(Messages.HELP_MSG.getMessage(sender));
 
                     return true;
                 }
