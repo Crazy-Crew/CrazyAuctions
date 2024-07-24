@@ -1,5 +1,6 @@
 ### Fixed:
 - Issue with file manager not properly loading/reloading files.
+- Reload config files on /crazyauctions reload
 
 ### Added:
 - `Help-Msg` to the messages.yml

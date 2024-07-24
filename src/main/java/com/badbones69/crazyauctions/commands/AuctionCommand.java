@@ -83,6 +83,10 @@ public class AuctionCommand implements CommandExecutor {
                         return true;
                     }
 
+                    Files.config.reload();
+                    Files.data.reload();
+                    Files.messages.reload();
+
                     this.fileManager.reloadFiles().init();
 
                     this.crazyManager.load();
