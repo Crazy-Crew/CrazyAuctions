@@ -9,16 +9,12 @@ headdatabaseapi = "1.3.1"
 placeholderapi = "2.11.6"
 decentholograms = "2.8.8"
 fancyholograms = "2.2.0"
-worldguard = "7.0.10"
 oraxen = "1.171.0"
-nbtapi = "2.13.0"
 vault = "1.7.1"
 
 # Libraries
-triumph-cmd = "2.0.0-ALPHA-10"
-tirumph-gui = "3.1.7"
 jetbrains = "24.1.0"
-kyori = "4.17.0"
+vital = "2.6"
 vital = "2.0.1"
 
 # Paper
@@ -52,10 +48,6 @@ vault = { module = "com.github.MilkBowl:VaultAPI", version.ref = "vault" }
 itemsadder = { module = "com.github.LoneDev6:api-itemsadder", version.ref = "itemsadder" }
 oraxen = { module = "io.th0rgal:oraxen", version.ref = "oraxen" }
 
-# Libraries
-triumph-cmds = { module = "dev.triumphteam:triumph-cmd-bukkit", version.ref = "triumph-cmd" }
-triumph-gui = { module = "dev.triumphteam:triumph-gui", version.ref = "tirumph-gui" }
-
 jetbrains = { module = "org.jetbrains:annotations", version.ref = "jetbrains" }
 
 vital-paper = { module = "com.ryderbelserion.vital:paper", version.ref = "vital" }
@@ -63,4 +55,3 @@ vital-core = { module = "com.ryderbelserion.vital:core", version.ref = "vital" }
 
 [bundles]
 holograms = ["fancy-holograms", "decent-holograms"]
-triumph = ["triumph-cmds", "triumph-gui"]
