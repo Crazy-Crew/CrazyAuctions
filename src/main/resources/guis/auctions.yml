@@ -1,0 +1,52 @@
+gui:
+  # The gui related settings for /ca
+  # The name of the gui
+  name: "<red>Crazy <blue>Auctions"
+  # The buttons in the gui
+  buttons:
+    # The name of the cancelled / expired items button.
+    expired-item:
+      # The name of the item
+      name: "<gold>Expired Items"
+      # The material of the item
+      material: "poisonous_potato"
+      # The lore of the item
+      lore:
+        - "<green>Click here to view, and collect all"
+        - "<green>items that have expired."
+    # The name of the selling items button.
+    selling-item:
+      # The name of the item
+      name: "<gold>Items you are currently selling"
+      # The material of the item
+      material: "emerald"
+      # The lore of the item
+      lore:
+        - "<green>Click to view all the items you,"
+        - "<green>currently up for auction."
+    # The name of the bidding items button.
+    bidding-item:
+      # The name of the item
+      name: "<gold>Currently looking at items that can be bid on."
+      # The slot of the item, Set to -1 to disable.
+      slot: 53
+      # The material of the item
+      material: "magma_cream"
+      # The lore of the item
+      lore:
+        - ""
+        - ""
+        - ""
+    # The name of the bidding items button.
+    sold-item:
+      # The name of the item
+      name: "<gold>Currently looking at items being sold."
+      # The slot of the item, Set to -1 to disable.
+      slot: 53
+      # The material of the item
+      material: "magma_cream"
+      # The lore of the item
+      lore:
+        - ""
+        - ""
+        - ""
