@@ -6,6 +6,12 @@ buildSrc/.gradle
 buildSrc/build
 
 !run/eula.txt
+!run/bukkit.yml
+!run/server.properties
+!run/spigot.yml
+!run/plugins/LuckPerms.jar
+!run/plugins/Vault.jar
+!run/plugins/EssentialsX.jar
 run
 
 jars
