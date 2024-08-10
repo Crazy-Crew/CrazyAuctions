@@ -21,6 +21,8 @@ dependencies {
 
     implementation(libs.vital.paper)
 
+    implementation(libs.jalu)
+
     compileOnly(libs.placeholderapi)
 
     compileOnly(libs.oraxen)
@@ -59,7 +61,8 @@ tasks {
         archiveClassifier.set("")
 
         listOf(
-            "com.ryderbelserion"
+            "com.ryderbelserion.vital",
+            "ch.jalu"
         ).forEach {
             relocate(it, "libs.$it")
         }

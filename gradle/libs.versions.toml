@@ -14,6 +14,7 @@ vault = "1.7.1"
 
 # Libraries
 jetbrains = "24.1.0"
+jalu = "1.4.1"
 vital = "2.6"
 
 # Paper
@@ -51,6 +52,8 @@ jetbrains = { module = "org.jetbrains:annotations", version.ref = "jetbrains" }
 
 vital-paper = { module = "com.ryderbelserion.vital:paper", version.ref = "vital" }
 vital-core = { module = "com.ryderbelserion.vital:core", version.ref = "vital" }
+
+jalu = { module = "ch.jalu:configme", version.ref = "jalu" }
 
 [bundles]
 holograms = ["fancy-holograms", "decent-holograms"]
