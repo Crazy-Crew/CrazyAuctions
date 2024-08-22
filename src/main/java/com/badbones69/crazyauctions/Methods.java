@@ -11,6 +11,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -84,6 +85,14 @@ public class Methods {
     }
 
     public static OfflinePlayer getOfflinePlayer(String name) {
+        return getOfflinePlayer(name, true);
+    }
+
+    public static OfflinePlayer getOfflinePlayer(String name, boolean fetchUUID) {
+        if (!fetchUUID) {
+            return CompletableFuture.supplyAsync(() -> plugin.getServer().getOfflinePlayer(name)).join();
+        }
+
         return plugin.getServer().getOfflinePlayer(UUID.fromString(name));
     }
 

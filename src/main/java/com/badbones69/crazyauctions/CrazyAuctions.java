@@ -70,7 +70,7 @@ public class CrazyAuctions extends JavaPlugin {
                 final String uuid = configuration.getString("OutOfTime/Cancelled." + key + ".Seller");
 
                 if (uuid != null) {
-                    OfflinePlayer player = Methods.getOfflinePlayer(uuid);
+                    OfflinePlayer player = Methods.getOfflinePlayer(uuid, false);
 
                     configuration.set("OutOfTime/Cancelled." + key + ".Seller", player.getUniqueId().toString());
 
@@ -92,7 +92,7 @@ public class CrazyAuctions extends JavaPlugin {
                 final String uuid = configuration.getString("Items." + key + ".Seller");
 
                 if (uuid != null) {
-                    OfflinePlayer player = Methods.getOfflinePlayer(uuid);
+                    OfflinePlayer player = Methods.getOfflinePlayer(uuid, false);
 
                     if (!uuid.equals(player.getUniqueId().toString())) {
                         configuration.set("Items." + key + ".Seller", player.getUniqueId().toString());
@@ -104,7 +104,7 @@ public class CrazyAuctions extends JavaPlugin {
                 final String bidder = configuration.getString("Items." + key + ".TopBidder");
 
                 if (bidder != null && !bidder.equals("None")) {
-                    OfflinePlayer player = Methods.getOfflinePlayer(bidder);
+                    OfflinePlayer player = Methods.getOfflinePlayer(bidder, false);
 
                     if (!bidder.equals(player.getUniqueId().toString())) {
                         configuration.set("Items." + key + ".TopBidder", player.getUniqueId().toString());
