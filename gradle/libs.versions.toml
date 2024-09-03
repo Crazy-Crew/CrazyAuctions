@@ -15,10 +15,10 @@ minecraft = "1.21.1"
 paperweight = "1.7.2"
 runPaper = "2.3.0"
 minotaur = "2.+"
-hangar = "0.1.2"
 shadow = "8.3.0"
+hangar = "0.1.2"
 
-# Plugins
+# Bukkit Plugins
 itemsadder = "3.6.3-beta-14"
 headdatabaseapi = "1.3.1"
 placeholderapi = "2.11.6"
@@ -32,8 +32,6 @@ triumph-cmd = "2.0.0-ALPHA-10"
 jetbrains = "24.1.0"
 adventure = "4.17.0"
 vital = "2.0.1"
-
-# Modrinth
 
 [libraries]
 velocity = { module = "com.velocitypowered:velocity-api", version.ref = "velocity" }
