@@ -11,18 +11,18 @@
 
 <big>**Auction off your items in style!**</big>
 
-### **Quick Links**
+<big> **Quick Links**</big><br>
 [Request Features](https://github.com/Crazy-Crew/CrazyAuctions/issues)<br>
 [Documentation](https://docs.crazycrew.us/docs/category/crazyauctions)<br>
 [Developer API](https://docs.crazycrew.us/docs/plugins/crazyauctions/guides/api/intro)<br>
 [Report Bugs](https://github.com/Crazy-Crew/CrazyAuctions/issues)<br>
 [Trello Board](https://trello.com/b/B9exh23d/crazyauctions)
 
-### Supported Platforms
+<big> **Supported Platforms**</big><br>
 [![paper software](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/compact-minimal/supported/paper_vector.svg)](https://papermc.io/)
 [![purpur software](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/compact-minimal/supported/purpur_vector.svg)](https://purpurmc.org/)
 
-### **Initial Plugin Setup**
+<big> **Initial Plugin Setup**</big><br>
 CrazyAuctions as first install will come with a set of default files such as `config.yml`, `messages.yml`
 You can simply edit these files, and configure the looks and settings then do `/crazyauctions reload`<br>
 
