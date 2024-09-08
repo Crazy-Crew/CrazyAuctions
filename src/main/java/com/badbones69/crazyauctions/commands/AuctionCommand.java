@@ -4,7 +4,7 @@ import com.badbones69.crazyauctions.CrazyAuctions;
 import com.badbones69.crazyauctions.Methods;
 import com.badbones69.crazyauctions.api.CrazyManager;
 import com.badbones69.crazyauctions.api.enums.Category;
-import com.badbones69.crazyauctions.api.enums.Files;
+import com.badbones69.crazyauctions.api.enums.misc.Files;
 import com.badbones69.crazyauctions.api.enums.Messages;
 import com.badbones69.crazyauctions.api.enums.ShopType;
 import com.badbones69.crazyauctions.api.events.AuctionListEvent;
@@ -27,7 +27,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class AuctionCommand implements CommandExecutor {
 
-    private final CrazyAuctions plugin = CrazyAuctions.get();
+    private final CrazyAuctions plugin = CrazyAuctions.getPlugin();
 
     private final CrazyManager crazyManager = this.plugin.getCrazyManager();
 

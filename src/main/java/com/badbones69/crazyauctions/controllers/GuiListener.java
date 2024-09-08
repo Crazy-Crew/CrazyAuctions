@@ -5,7 +5,7 @@ import com.badbones69.crazyauctions.Methods;
 import com.badbones69.crazyauctions.api.*;
 import com.badbones69.crazyauctions.api.builders.ItemBuilder;
 import com.badbones69.crazyauctions.api.enums.Category;
-import com.badbones69.crazyauctions.api.enums.Files;
+import com.badbones69.crazyauctions.api.enums.misc.Files;
 import com.badbones69.crazyauctions.api.enums.Messages;
 import com.badbones69.crazyauctions.api.enums.Reasons;
 import com.badbones69.crazyauctions.api.enums.ShopType;
@@ -35,8 +35,9 @@ import java.util.Map;
 import java.util.UUID;
 
 public class GuiListener implements Listener {
-    
-    private static final CrazyAuctions plugin = CrazyAuctions.get();
+
+    @NotNull
+    private static final CrazyAuctions plugin = CrazyAuctions.getPlugin();
     private static final CrazyManager crazyManager = plugin.getCrazyManager();
     
     private static final Map<UUID, Integer> bidding = new HashMap<>();

@@ -23,7 +23,7 @@ import java.util.UUID;
  */
 public class SkullCreator {
 
-    private static final @NotNull CrazyAuctions plugin = JavaPlugin.getPlugin(CrazyAuctions.class);
+    private static @NotNull final CrazyAuctions plugin = CrazyAuctions.getPlugin();
     
     /**
      * Creates a player skull with a UUID. 1.13 only.

@@ -45,7 +45,7 @@ import java.util.stream.Collectors;
 public class ItemBuilder {
 
     @NotNull
-    private static final CrazyAuctions plugin = CrazyAuctions.get();
+    private static final CrazyAuctions plugin = CrazyAuctions.getPlugin();
 
     // Items
     private Material material = Material.STONE;

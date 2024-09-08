@@ -1,4 +1,4 @@
-package com.badbones69.crazyauctions.api.enums;
+package com.badbones69.crazyauctions.api.enums.misc;
 
 import com.badbones69.crazyauctions.CrazyAuctions;
 import com.ryderbelserion.vital.paper.files.config.FileManager;
@@ -16,7 +16,7 @@ public enum Files {
     private final String fileName;
     private final String strippedName;
 
-    private @NotNull final CrazyAuctions plugin = JavaPlugin.getPlugin(CrazyAuctions.class);
+    private @NotNull final CrazyAuctions plugin = CrazyAuctions.getPlugin();
 
     private @NotNull final FileManager fileManager = this.plugin.getFileManager();
 

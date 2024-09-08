@@ -1,6 +1,6 @@
 package com.badbones69.crazyauctions;
 
-import com.badbones69.crazyauctions.api.enums.Files;
+import com.badbones69.crazyauctions.api.enums.misc.Files;
 import com.badbones69.crazyauctions.api.enums.Messages;
 import com.badbones69.crazyauctions.api.events.AuctionExpireEvent;
 import com.badbones69.crazyauctions.api.events.AuctionWinBidEvent;
@@ -17,7 +17,7 @@ import java.util.regex.Pattern;
 
 public class Methods {
 
-    private final static CrazyAuctions plugin = CrazyAuctions.get();
+    private final static CrazyAuctions plugin = CrazyAuctions.getPlugin();
 
     private final static Pattern HEX_PATTERN = Pattern.compile("#[a-fA-F0-9]{6}");
     
