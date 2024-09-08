@@ -9,8 +9,8 @@ import com.badbones69.crazyauctions.commands.AuctionTab;
 import com.badbones69.crazyauctions.controllers.GuiListener;
 import com.badbones69.crazyauctions.controllers.MarcoListener;
 import com.badbones69.crazyauctions.currency.VaultSupport;
-import com.ryderbelserion.vital.paper.VitalPaper;
-import com.ryderbelserion.vital.paper.files.config.FileManager;
+import com.ryderbelserion.vital.paper.Vital;
+import com.ryderbelserion.vital.paper.api.files.FileManager;
 import com.ryderbelserion.vital.paper.util.scheduler.FoliaRunnable;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandExecutor;
@@ -20,15 +20,16 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
+
+import java.io.File;
 import java.util.Base64;
 
-public class CrazyAuctions extends JavaPlugin {
+public class CrazyAuctions extends Vital {
 
     public @NotNull static CrazyAuctions getPlugin() {
         return JavaPlugin.getPlugin(CrazyAuctions.class);
     }
 
-    private FileManager fileManager;
     private CrazyManager crazyManager;
 
     private VaultSupport support;
@@ -43,16 +44,12 @@ public class CrazyAuctions extends JavaPlugin {
             return;
         }
 
-        new VitalPaper(this).setLogging(false);
-
-        this.fileManager = new FileManager();
-        this.crazyManager = new CrazyManager();
-
-        this.fileManager.addFile("config.yml")
-                .addFile("data.yml")
-                .addFile("messages.yml")
-                //.addFile("test-file.yml")
+        getFileManager().addFile(new File(getDataFolder(), "config.yml"))
+                .addFile(new File(getDataFolder(), "data.yml"))
+                .addFile(new File(getDataFolder(), "messages.yml"))
                 .init();
+
+        this.crazyManager = new CrazyManager();
 
         FileConfiguration configuration = Files.data.getConfiguration();
 
@@ -155,9 +152,5 @@ public class CrazyAuctions extends JavaPlugin {
 
     public final CrazyManager getCrazyManager() {
         return this.crazyManager;
-    }
-
-    public final FileManager getFileManager() {
-        return this.fileManager;
     }
 }

@@ -1,10 +1,11 @@
 package com.badbones69.crazyauctions.api.enums.misc;
 
 import com.badbones69.crazyauctions.CrazyAuctions;
-import com.ryderbelserion.vital.paper.files.config.FileManager;
+import com.ryderbelserion.vital.paper.api.files.FileManager;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
+
+import java.io.File;
 
 public enum Files {
 
@@ -31,7 +32,7 @@ public enum Files {
     }
 
     public final YamlConfiguration getConfiguration() {
-        return this.fileManager.getFile(this.fileName);
+        return this.fileManager.getFile(this.fileName).getConfiguration();
     }
 
     public final String getStrippedName() {
@@ -42,11 +43,11 @@ public enum Files {
         return this.fileName;
     }
 
-    public void save() {
-        this.fileManager.saveFile(this.fileName);
+    public void reload() {
+        this.fileManager.addFile(new File(this.plugin.getDataFolder(), this.fileName));
     }
 
-    public void reload() {
-        this.fileManager.reloadFile(this.fileName);
+    public void save() {
+        this.fileManager.saveFile(this.fileName);
     }
 }

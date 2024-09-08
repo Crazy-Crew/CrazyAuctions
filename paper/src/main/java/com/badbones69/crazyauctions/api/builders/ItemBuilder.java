@@ -3,7 +3,7 @@ package com.badbones69.crazyauctions.api.builders;
 import com.badbones69.crazyauctions.CrazyAuctions;
 import com.badbones69.crazyauctions.Methods;
 import com.badbones69.crazyauctions.api.support.SkullCreator;
-import com.ryderbelserion.vital.paper.enums.Support;
+import com.ryderbelserion.vital.paper.api.enums.Support;
 import io.th0rgal.oraxen.api.OraxenItems;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.*;
