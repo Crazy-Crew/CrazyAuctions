@@ -32,14 +32,6 @@ tasks {
 
         defaultCharacterEncoding = Charsets.UTF_8.name()
 
-        downloadPlugins {
-            url("https://github.com/EssentialsX/Essentials/releases/download/2.20.1/EssentialsX-2.20.1.jar")
-
-            url("https://ci.lucko.me/job/TinyVault/lastSuccessfulBuild/artifact/build/libs/Vault.jar")
-
-            url("https://download.luckperms.net/1544/bukkit/loader/LuckPerms-Bukkit-5.4.131.jar")
-        }
-
         minecraftVersion(libs.versions.minecraft.get())
     }
 
