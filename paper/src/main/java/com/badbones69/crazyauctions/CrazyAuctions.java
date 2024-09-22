@@ -118,6 +118,12 @@ public class CrazyAuctions extends Vital {
 
         registerCommand(getCommand("crazyauctions"), new AuctionTab(), new AuctionCommand());
 
+        for (final Permissions permission : Permissions.values()) {
+            if (permission.shouldRegister()) {
+                permission.registerPermission();
+            }
+        }
+
         this.support = new VaultSupport();
         this.support.loadVault();
 
