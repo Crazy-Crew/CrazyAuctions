@@ -3,6 +3,7 @@ package com.badbones69.crazyauctions;
 import com.badbones69.crazyauctions.api.CrazyManager;
 import com.badbones69.crazyauctions.api.enums.misc.Files;
 import com.badbones69.crazyauctions.api.enums.Messages;
+import com.badbones69.crazyauctions.api.enums.other.Permissions;
 import com.badbones69.crazyauctions.api.support.MetricsWrapper;
 import com.badbones69.crazyauctions.commands.AuctionCommand;
 import com.badbones69.crazyauctions.commands.AuctionTab;
