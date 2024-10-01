@@ -298,7 +298,7 @@ public class AuctionCommand implements CommandExecutor {
                             }
                         }
 
-                        if (config.getStringList("Settings.BlackList").contains(item.getType().getKey().getKey())) {
+                        if (config.getStringList("Settings.BlackList").contains(item.getType().getKey().getKey().toUpperCase())) {
                             player.sendMessage(Messages.ITEM_BLACKLISTED.getMessage(sender));
 
                             return true;
