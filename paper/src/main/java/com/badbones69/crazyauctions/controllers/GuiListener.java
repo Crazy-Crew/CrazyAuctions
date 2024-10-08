@@ -142,6 +142,7 @@ public class GuiListener implements Listener {
         options.add("Cancelled/ExpiredItems");
         options.add("PreviousPage");
         options.add("Refesh");
+        options.add("Refresh");
         options.add("NextPage");
         options.add("Category1");
         options.add("Category2");
