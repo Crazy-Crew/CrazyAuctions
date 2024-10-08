@@ -1,29 +1,30 @@
 plugins {
-    alias(libs.plugins.paperweight)
     alias(libs.plugins.runPaper)
     alias(libs.plugins.shadow)
+}
 
-    `paper-plugin`
+repositories {
+    maven("https://repo.extendedclip.com/content/repositories/placeholderapi")
+
+    maven("https://repo.papermc.io/repository/maven-public")
+
+    maven("https://repo.triumphteam.dev/snapshots")
+
+    maven("https://repo.fancyplugins.de/releases")
+
+    maven("https://repo.oraxen.com/releases")
+
+    maven("https://maven.enginehub.org/repo")
 }
 
 dependencies {
-    paperweight.paperDevBundle(libs.versions.paper)
-
     implementation(libs.vital.paper) {
         exclude("org.yaml")
     }
 
-    compileOnly(libs.placeholderapi)
+    compileOnly(libs.bundles.shared)
 
-    compileOnly(libs.oraxen)
-
-    compileOnly(libs.vault)
-
-    compileOnly(fileTree("libs").include("*.jar"))
-}
-
-paperweight {
-    reobfArtifactConfiguration = io.papermc.paperweight.userdev.ReobfArtifactConfiguration.MOJANG_PRODUCTION
+    compileOnly(libs.paper)
 }
 
 tasks {
@@ -51,7 +52,7 @@ tasks {
         archiveClassifier.set("")
 
         listOf(
-            "com.ryderbelserion"
+            "com.ryderbelserion.vital"
         ).forEach {
             relocate(it, "libs.$it")
         }
