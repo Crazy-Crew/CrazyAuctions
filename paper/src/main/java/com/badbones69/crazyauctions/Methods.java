@@ -6,6 +6,7 @@ import com.badbones69.crazyauctions.api.events.AuctionExpireEvent;
 import com.badbones69.crazyauctions.api.events.AuctionWinBidEvent;
 import org.bukkit.*;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -342,6 +343,10 @@ public class Methods {
         }
 
         if (shouldSave) Files.data.save();
+    }
+
+    public static String getNewPrice(ConfigurationSection section, boolean expired) {
+        return section.getString("Price");
     }
     
     public static String getPrice(String ID, Boolean Expired) {
