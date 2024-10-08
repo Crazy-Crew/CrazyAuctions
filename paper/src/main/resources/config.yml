@@ -144,7 +144,7 @@ Settings:
         Slot: 49
         Name: '&6Previous Page'
         Lore: { }
-      Refesh: #The button for Refresh Page.
+      Refresh: #The button for Refresh Page.
         Item: 'SUNFLOWER'
         Toggle: true
         Slot: 50
