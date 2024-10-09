@@ -4,6 +4,7 @@ import com.badbones69.crazyauctions.api.CrazyManager;
 import com.badbones69.crazyauctions.api.enums.misc.Files;
 import com.badbones69.crazyauctions.api.enums.Messages;
 import com.badbones69.crazyauctions.api.enums.other.Permissions;
+import com.badbones69.crazyauctions.api.guis.types.AuctionsMenu;
 import com.badbones69.crazyauctions.api.support.MetricsWrapper;
 import com.badbones69.crazyauctions.commands.AuctionCommand;
 import com.badbones69.crazyauctions.commands.AuctionTab;
@@ -19,6 +20,7 @@ import org.bukkit.command.PluginCommand;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
@@ -114,8 +116,11 @@ public class CrazyAuctions extends Vital {
 
         this.crazyManager.load();
 
-        getServer().getPluginManager().registerEvents(new GuiListener(), this);
-        getServer().getPluginManager().registerEvents(new MarcoListener(), this);
+        final PluginManager manager = getServer().getPluginManager();
+
+        manager.registerEvents(new AuctionsMenu(), this); // register new menu
+        manager.registerEvents(new GuiListener(), this);
+        manager.registerEvents(new MarcoListener(), this);
 
         registerCommand(getCommand("crazyauctions"), new AuctionTab(), new AuctionCommand());
 
