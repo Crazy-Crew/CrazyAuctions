@@ -15,8 +15,8 @@ subprojects {
     apply(plugin = "maven-publish")
     apply(plugin = "java-library")
 
-    group = "com.badbones69.crazycrates"
-    description = "Create unlimited crates with multiple crate types to choose from!"
+    group = "com.badbones69.crazyauctions"
+    description = "Auction off items in style."
 
     repositories {
         maven("https://repo.codemc.io/repository/maven-public")

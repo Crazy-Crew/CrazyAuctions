@@ -58,9 +58,9 @@ public class AuctionCommand implements CommandExecutor {
                 }
             }
 
-            if (crazyManager.isSellingEnabled()) {
+            if (this.crazyManager.isSellingEnabled()) {
                 new AuctionsMenu(player, ShopType.SELL, Category.NONE, config.getString("Settings.GUIName", "N/A"), 54, 1).build();
-            } else if (crazyManager.isBiddingEnabled()) {
+            } else if (this.crazyManager.isBiddingEnabled()) {
                 new AuctionsMenu(player, ShopType.BID, Category.NONE, config.getString("Settings.GUIName", "N/A"), 54, 1).build();
             } else {
                 player.sendMessage(Methods.getPrefix() + Methods.color("&cThe bidding and selling options are both disabled. Please contact the admin about this."));
