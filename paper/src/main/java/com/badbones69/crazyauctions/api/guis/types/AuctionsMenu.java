@@ -7,11 +7,13 @@ import com.badbones69.crazyauctions.api.enums.Messages;
 import com.badbones69.crazyauctions.api.enums.Reasons;
 import com.badbones69.crazyauctions.api.enums.ShopType;
 import com.badbones69.crazyauctions.api.enums.misc.Files;
+import com.badbones69.crazyauctions.api.enums.misc.Keys;
 import com.badbones69.crazyauctions.api.events.AuctionCancelledEvent;
 import com.badbones69.crazyauctions.api.guis.Holder;
 import com.badbones69.crazyauctions.api.guis.HolderManager;
+import com.badbones69.crazyauctions.controllers.GuiListener;
 import com.ryderbelserion.vital.paper.util.scheduler.FoliaRunnable;
-import org.bukkit.ChatColor;
+import io.papermc.paper.persistence.PersistentDataContainerView;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -20,11 +22,14 @@ import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataType;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
+import static com.badbones69.crazyauctions.controllers.GuiListener.openCategories;
+import static com.badbones69.crazyauctions.controllers.GuiListener.openPlayersCurrentList;
+import static com.badbones69.crazyauctions.controllers.GuiListener.openPlayersExpiredList;
 
 @SuppressWarnings("FieldCanBeLocal")
 public class AuctionsMenu extends Holder {
@@ -120,9 +125,9 @@ public class AuctionsMenu extends Holder {
                     lore.add(line.replace("%Category%", cName).replace("%category%", cName));
                 }
 
-                this.inventory.setItem(slot - 1, itemBuilder.setLore(lore).build());
+                this.inventory.setItem(slot - 1, itemBuilder.setLore(lore).addString(key).build());
             } else {
-                this.inventory.setItem(slot - 1, itemBuilder.setLore(lore).build());
+                this.inventory.setItem(slot - 1, itemBuilder.setLore(lore).addString(key).build());
             }
         }
 
