@@ -107,7 +107,7 @@ public class AuctionsMenu extends Holder {
             final String name = this.config.getString("Settings.GUISettings.OtherSettings." + key + ".Name");
             final List<String> lore = new ArrayList<>();
             final int slot = this.config.getInt("Settings.GUISettings.OtherSettings." + key + ".Slot");
-            final String cName = Methods.color(this.config.getString("Settings.GUISettings.Category-Settings." + HolderManager.getShopCategory(this.player) + ".Name"));
+            final String cName = Methods.color(this.config.getString("Settings.GUISettings.Category-Settings." + HolderManager.getShopCategory(this.player).getName() + ".Name"));
 
             final ItemBuilder itemBuilder = new ItemBuilder().setMaterial(id).setName(name).setAmount(1);
 
