@@ -2,6 +2,7 @@ package com.badbones69.crazyauctions.api.builders;
 
 import com.badbones69.crazyauctions.CrazyAuctions;
 import com.badbones69.crazyauctions.Methods;
+import com.badbones69.crazyauctions.api.enums.misc.Keys;
 import com.badbones69.crazyauctions.api.support.SkullCreator;
 import com.ryderbelserion.vital.paper.api.enums.Support;
 import io.th0rgal.oraxen.api.OraxenItems;
@@ -26,6 +27,8 @@ import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.inventory.meta.trim.ArmorTrim;
 import org.bukkit.inventory.meta.trim.TrimMaterial;
 import org.bukkit.inventory.meta.trim.TrimPattern;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionEffect;
@@ -711,6 +714,18 @@ public class ItemBuilder {
                 this.displayLore.add(Methods.color(line));
             }
         }
+
+        return this;
+    }
+
+    public ItemBuilder addString(String name) {
+        if (name.isEmpty()) return this;
+
+        this.itemStack.editMeta(itemMeta -> {
+            PersistentDataContainer container = itemMeta.getPersistentDataContainer();
+
+            container.set(Keys.auction_button.getNamespacedKey(), PersistentDataType.STRING, name);
+        });
 
         return this;
     }
