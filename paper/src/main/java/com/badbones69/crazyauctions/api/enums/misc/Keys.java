@@ -8,7 +8,8 @@ import org.jetbrains.annotations.NotNull;
 @SuppressWarnings("rawtypes")
 public enum Keys {
 
-    auction_item("auction_item", PersistentDataType.BOOLEAN);
+    auction_item("auction_item", PersistentDataType.BOOLEAN),
+    auction_button("auction_button", PersistentDataType.STRING);
 
     private final CrazyAuctions plugin = CrazyAuctions.getPlugin();
 
