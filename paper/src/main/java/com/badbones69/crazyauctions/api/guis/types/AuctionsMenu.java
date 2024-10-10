@@ -162,101 +162,78 @@ public class AuctionsMenu extends Holder {
 
         if (itemStack == null) return;
 
-        if (!itemStack.hasItemMeta()) return;
+        final PersistentDataContainerView container = itemStack.getPersistentDataContainer();
 
-        final ItemMeta meta = itemStack.getItemMeta();
+        final Player player = (Player) event.getWhoClicked();
 
-        final String displayName = ChatColor.stripColor(meta.getDisplayName());
+        FileConfiguration config = Files.config.getConfiguration();
+        FileConfiguration data = Files.data.getConfiguration();
 
-        if (displayName.equals(config.getString("Settings.GUISettings.OtherSettings.NextPage.Name"))) {
-            click();
-        }
-
-        if (displayName.equals(config.getString("Settings.GUISettings.OtherSettings.PreviousPage.Name"))) {
-            //Methods.updateAuction();
-
-            //int page = Integer.parseInt(e.getView().getTitle().split("#")[1]);
-
-            //if (page == 1) page++;
-
-            //openShop(player, shopType.get(player.getUniqueId()), shopCategory.get(player.getUniqueId()), page - 1);
-
+        if (container.has(Keys.auction_button.getNamespacedKey())) {
             click();
 
-            return;
-        }
+            String type = container.getOrDefault(Keys.auction_button.getNamespacedKey(), PersistentDataType.STRING, "");
 
-        if (displayName.equals(config.getString("Settings.GUISettings.OtherSettings.Refesh.Name"))) {
-            //Methods.updateAuction();
+            switch (type) {
+                case "NextPage", "Your-Item", "Top-Bidder", "Cant-Afford" -> {
+                    return;
+                }
 
-            //int page = Integer.parseInt(e.getView().getTitle().split("#")[1]);
+                case "PreviousPage" -> {
+                    Methods.updateAuction();
 
-            //openShop(player, shopType.get(player.getUniqueId()), shopCategory.get(player.getUniqueId()), page);
+                    int page = Integer.parseInt(event.getView().getTitle().split("#")[1]);
 
-            click();
+                    if (page == 1) page++;
 
-            return;
-        }
+                    GuiListener.openShop(player, HolderManager.getShopType(player), HolderManager.getShopCategory(player), page - 1);
 
-        if (displayName.equals(config.getString("Settings.GUISettings.OtherSettings.Bidding/Selling.Selling.Name"))) {
-            //openShop(player, ShopType.BID, shopCategory.get(player.getUniqueId()), 1);
+                    return;
+                }
 
-            click();
+                case "Refesh", "Refresh" -> {
+                    Methods.updateAuction();
 
-            return;
-        }
+                    int page = Integer.parseInt(event.getView().getTitle().split("#")[1]);
 
-        if (displayName.equals(config.getString("Settings.GUISettings.OtherSettings.Bidding/Selling.Bidding.Name"))) {
-            //openShop(player, ShopType.SELL, shopCategory.get(player.getUniqueId()), 1);
+                    GuiListener.openShop(player, HolderManager.getShopType(player), HolderManager.getShopCategory(player), page);
 
-            click();
+                    return;
+                }
 
-            return;
-        }
+                case "Bidding/Selling.Selling" -> {
+                    GuiListener.openShop(player, ShopType.BID, HolderManager.getShopCategory(player), 1);
 
-        if (displayName.equals(config.getString("Settings.GUISettings.OtherSettings.Cancelled/ExpiredItems.Name"))) {
-            //openPlayersExpiredList(player, 1);
+                    return;
+                }
 
-            click();
+                case "Bidding/Selling.Bidding" -> {
+                    GuiListener.openShop(player, ShopType.SELL, HolderManager.getShopCategory(player), 1);
 
-            return;
-        }
+                    return;
+                }
 
-        if (displayName.equals(config.getString("Settings.GUISettings.OtherSettings.SellingItems.Name"))) {
-            //openPlayersCurrentList(player, 1);
+                case "Cancelled/ExpiredItems" -> {
+                    openPlayersExpiredList(player, 1);
 
-            click();
+                    return;
+                }
 
-            return;
-        }
+                case "SellingItems" -> {
+                    openPlayersCurrentList(player, 1);
 
-        if (displayName.equals(config.getString("Settings.GUISettings.OtherSettings.Category1.Name"))) {
-            //openCategories(player, shopType.get(player.getUniqueId()));
+                    return;
+                }
 
-            click();
+                case "Category1", "Category2" -> {
+                    openCategories(player, HolderManager.getShopType(player));
 
-            return;
-        }
-
-        if (displayName.equals(config.getString("Settings.GUISettings.OtherSettings.Category2.Name"))) {
-            //openCategories(player, shopType.get(player.getUniqueId()));
-
-            click();
-
-            return;
-        }
-
-        if (displayName.equals(config.getString("Settings.GUISettings.OtherSettings.Your-Item.Name"))) {
-            return;
-        }
-
-        if (displayName.equals(config.getString("Settings.GUISettings.OtherSettings.Cant-Afford.Name"))) {
-            return;
+                    return;
+                }
+            }
         }
 
         if (!HolderManager.containsPage(player)) return;
-            return;
-        }
 
         if (!data.contains("Items")) return;
 
