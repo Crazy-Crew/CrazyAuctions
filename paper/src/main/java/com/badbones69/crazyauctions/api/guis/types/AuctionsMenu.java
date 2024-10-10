@@ -97,6 +97,10 @@ public class AuctionsMenu extends Holder {
         }
 
         for (final String key : this.options) {
+            if (!this.config.contains("Settings.GUISettings.OtherSettings." + key)) {
+                continue;
+            }
+
             if (this.config.contains("Settings.GUISettings.OtherSettings." + key + ".Toggle")) {
                 if (!this.config.getBoolean("Settings.GUISettings.OtherSettings." + key + ".Toggle")) {
                     continue;
