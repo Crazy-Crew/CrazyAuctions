@@ -174,6 +174,8 @@ public class AuctionsMenu extends Holder {
 
             String type = container.getOrDefault(Keys.auction_button.getNamespacedKey(), PersistentDataType.STRING, "");
 
+            final String title = event.getView().getTitle();
+
             switch (type) {
                 case "NextPage", "Your-Item", "Top-Bidder", "Cant-Afford" -> {
                     return;
@@ -182,7 +184,7 @@ public class AuctionsMenu extends Holder {
                 case "PreviousPage" -> {
                     Methods.updateAuction();
 
-                    int page = Integer.parseInt(event.getView().getTitle().split("#")[1]);
+                    int page = Integer.parseInt(title.split("#")[1]);
 
                     if (page == 1) page++;
 
@@ -194,7 +196,7 @@ public class AuctionsMenu extends Holder {
                 case "Refesh", "Refresh" -> {
                     Methods.updateAuction();
 
-                    int page = Integer.parseInt(event.getView().getTitle().split("#")[1]);
+                    int page = Integer.parseInt(title.split("#")[1]);
 
                     GuiListener.openShop(player, HolderManager.getShopType(player), HolderManager.getShopCategory(player), page);
 
