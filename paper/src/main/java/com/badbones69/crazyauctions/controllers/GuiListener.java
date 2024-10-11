@@ -352,24 +352,26 @@ public class GuiListener implements Listener {
 
         if (!HolderManager.containsBidding(player)) HolderManager.addBidding(player, 0);
 
-        inv.setItem(9, new ItemBuilder().setMaterial(Material.LIME_STAINED_GLASS_PANE).setName("&a+1").setAmount(1).build());
-        inv.setItem(10, new ItemBuilder().setMaterial(Material.LIME_STAINED_GLASS_PANE).setName("&a+10").setAmount(1).build());
-        inv.setItem(11, new ItemBuilder().setMaterial(Material.LIME_STAINED_GLASS_PANE).setName("&a+100").setAmount(1).build());
-        inv.setItem(12, new ItemBuilder().setMaterial(Material.LIME_STAINED_GLASS_PANE).setName("&a+1000").setAmount(1).build());
-        inv.setItem(14, new ItemBuilder().setMaterial(Material.LIME_STAINED_GLASS_PANE).setName("&c-1000").setAmount(1).build());
-        inv.setItem(15, new ItemBuilder().setMaterial(Material.LIME_STAINED_GLASS_PANE).setName("&c-100").setAmount(1).build());
-        inv.setItem(16, new ItemBuilder().setMaterial(Material.LIME_STAINED_GLASS_PANE).setName("&c-10").setAmount(1).build());
-        inv.setItem(17, new ItemBuilder().setMaterial(Material.LIME_STAINED_GLASS_PANE).setName("&c-1").setAmount(1).build());
+        final ItemBuilder builder = new ItemBuilder().setMaterial(Material.LIME_STAINED_GLASS_PANE).setAmount(1);
+
+        inv.setItem(9, builder.setName("&a+1").build());
+        inv.setItem(10, builder.setName("&a+10").build());
+        inv.setItem(11, builder.setName("&a+100").build());
+        inv.setItem(12, builder.setName("&a+1000").build());
+        inv.setItem(14, builder.setName("&c-1000").build());
+        inv.setItem(15, builder.setName("&c-100").build());
+        inv.setItem(16, builder.setName("&c-10").build());
+        inv.setItem(17, builder.setName("&c-1").build());
         inv.setItem(13, getBiddingGlass(player, ID));
 
         inv.setItem(22, new ItemBuilder().setMaterial(config.getString("Settings.GUISettings.OtherSettings.Bid.Item")).setAmount(1)
                 .setName(config.getString("Settings.GUISettings.OtherSettings.Bid.Name")).setLore(config.getStringList("Settings.GUISettings.OtherSettings.Bid.Lore")).build());
-        
+
         inv.setItem(4, getBiddingItem(ID));
 
         player.openInventory(inv);
     }
-    
+
     public static void openViewer(Player player, String other, int page) {
         Methods.updateAuction();
 
