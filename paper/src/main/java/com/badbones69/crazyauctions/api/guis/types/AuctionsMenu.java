@@ -81,6 +81,10 @@ public class AuctionsMenu extends Holder {
 
         getItems(); // populates the lists
 
+        int maxPage = Methods.getMaxPage(this.items);
+
+        for (;this.page > maxPage; this.page--);
+
         HolderManager.addShopType(this.player, this.shopType);
 
         switch (this.shopType) {

@@ -60,6 +60,10 @@ public class CurrentMenu extends Holder {
 
         getItems();
 
+        int maxPage = Methods.getMaxPage(this.items);
+
+        for (;this.page > maxPage; this.page--);
+
         for (final String key : this.options) {
             if (!this.config.contains("Settings.GUISettings.OtherSettings." + key)) {
                 continue;
