@@ -24,7 +24,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,13 +36,13 @@ import java.util.Map;
 public class GuiListener implements Listener {
 
     private static final CrazyAuctions plugin = CrazyAuctions.getPlugin();
-    
+
     public static void openShop(Player player, ShopType shopType, Category category, int page) {
         FileConfiguration config = Files.config.getConfiguration();
 
         new AuctionsMenu(player, shopType, category, config.getString("Settings.GUIName", "N/A"), 54, page);
     }
-    
+
     public static void openCategories(Player player, ShopType shop) {
         Methods.updateAuction();
         FileConfiguration config = Files.config.getConfiguration();
@@ -83,7 +85,7 @@ public class GuiListener implements Listener {
         HolderManager.addShopType(player, shop);
         player.openInventory(inv);
     }
-    
+
     public static void openPlayersCurrentList(Player player, int page) {
         Methods.updateAuction();
 
@@ -159,7 +161,7 @@ public class GuiListener implements Listener {
 
         player.openInventory(inv);
     }
-    
+
     public static void openPlayersExpiredList(Player player, int page) {
         Methods.updateAuction();
 
@@ -244,7 +246,7 @@ public class GuiListener implements Listener {
 
         player.openInventory(inv);
     }
-    
+
     public static void openBuying(Player player, String ID) {
         Methods.updateAuction();
 
@@ -333,7 +335,7 @@ public class GuiListener implements Listener {
 
         player.openInventory(inv);
     }
-    
+
     public static void openBidding(Player player, String ID) {
         Methods.updateAuction();
 
@@ -486,7 +488,7 @@ public class GuiListener implements Listener {
 
         player.openInventory(inv);
     }
-    
+
     private static ItemStack getBiddingGlass(Player player, String ID) {
         FileConfiguration config = Files.config.getConfiguration();
 
@@ -516,7 +518,7 @@ public class GuiListener implements Listener {
 
         return itemBuilder.build();
     }
-    
+
     private static ItemStack getBiddingItem(String ID) {
         FileConfiguration config = Files.config.getConfiguration();
         FileConfiguration data = Files.data.getConfiguration();
@@ -573,7 +575,7 @@ public class GuiListener implements Listener {
             player.playSound(player.getLocation(), Sound.valueOf(sound), 1, 1);
         } catch (Exception ignored) {}
     }
-    
+
     @EventHandler
     public void onInvClose(InventoryCloseEvent e) {
         FileConfiguration config = Files.config.getConfiguration();
@@ -582,7 +584,7 @@ public class GuiListener implements Listener {
 
         if (e.getView().getTitle().contains(Methods.color(config.getString("Settings.Bidding-On-Item")))) HolderManager.removeBidding(player);
     }
-    
+
     @EventHandler
     public void onInvClick(InventoryClickEvent e) {
         FileConfiguration config = Files.config.getConfiguration();
