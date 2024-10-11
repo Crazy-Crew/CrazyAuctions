@@ -8,16 +8,15 @@ import com.badbones69.crazyauctions.api.guis.types.AuctionsMenu;
 import com.badbones69.crazyauctions.api.guis.types.CategoriesMenu;
 import com.badbones69.crazyauctions.api.guis.types.CurrentMenu;
 import com.badbones69.crazyauctions.api.guis.types.ExpiredMenu;
+import com.badbones69.crazyauctions.api.guis.types.transactions.BidMenu;
 import com.badbones69.crazyauctions.api.guis.types.transactions.BuyingMenu;
 import com.badbones69.crazyauctions.api.support.MetricsWrapper;
 import com.badbones69.crazyauctions.commands.AuctionCommand;
 import com.badbones69.crazyauctions.commands.AuctionTab;
-import com.badbones69.crazyauctions.controllers.GuiListener;
 import com.badbones69.crazyauctions.controllers.MarcoListener;
 import com.badbones69.crazyauctions.controllers.MiscListener;
 import com.badbones69.crazyauctions.currency.VaultSupport;
 import com.ryderbelserion.vital.paper.Vital;
-import com.ryderbelserion.vital.paper.api.files.FileManager;
 import com.ryderbelserion.vital.paper.util.scheduler.FoliaRunnable;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandExecutor;
@@ -128,8 +127,8 @@ public class CrazyAuctions extends Vital {
         manager.registerEvents(new CurrentMenu(), this); // register current listings menu
         manager.registerEvents(new ExpiredMenu(), this); // register expired menu
         manager.registerEvents(new BuyingMenu(), this); // register buying menu
+        manager.registerEvents(new BidMenu(), this); // register bid menu
 
-        manager.registerEvents(new GuiListener(), this);
         manager.registerEvents(new MiscListener(), this);
         manager.registerEvents(new MarcoListener(), this);
 
