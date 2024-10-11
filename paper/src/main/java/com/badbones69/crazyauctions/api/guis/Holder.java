@@ -50,6 +50,10 @@ public abstract class Holder implements InventoryHolder, Listener {
         this(player, shopType, title, size, 1);
     }
 
+    public Holder(final Player player, final String title, final int size, final int page) {
+        this(player, null, title, size, page);
+    }
+
     public Holder() {}
 
     public abstract Holder build();

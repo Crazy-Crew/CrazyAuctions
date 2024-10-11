@@ -6,14 +6,13 @@ import com.badbones69.crazyauctions.api.builders.ItemBuilder;
 import com.badbones69.crazyauctions.api.enums.Category;
 import com.badbones69.crazyauctions.api.enums.misc.Files;
 import com.badbones69.crazyauctions.api.enums.Messages;
-import com.badbones69.crazyauctions.api.enums.Reasons;
 import com.badbones69.crazyauctions.api.enums.ShopType;
 import com.badbones69.crazyauctions.api.events.AuctionBuyEvent;
-import com.badbones69.crazyauctions.api.events.AuctionCancelledEvent;
 import com.badbones69.crazyauctions.api.events.AuctionNewBidEvent;
 import com.badbones69.crazyauctions.api.guis.HolderManager;
 import com.badbones69.crazyauctions.api.guis.types.AuctionsMenu;
 import com.badbones69.crazyauctions.api.guis.types.CategoriesMenu;
+import com.badbones69.crazyauctions.api.guis.types.CurrentMenu;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Sound;
@@ -51,79 +50,9 @@ public class GuiListener implements Listener {
     }
 
     public static void openPlayersCurrentList(Player player, int page) {
-        Methods.updateAuction();
-
         FileConfiguration config = Files.config.getConfiguration();
-        FileConfiguration data = Files.data.getConfiguration();
 
-        List<ItemStack> items = new ArrayList<>();
-        List<Integer> ID = new ArrayList<>();
-
-        Inventory inv = plugin.getServer().createInventory(null, 54, Methods.color(config.getString("Settings.Players-Current-Items")));
-
-        List<String> options = new ArrayList<>();
-
-        options.add("Back");
-        options.add("WhatIsThis.CurrentItems");
-
-        for (String o : options) {
-            if (config.contains("Settings.GUISettings.OtherSettings." + o + ".Toggle")) {
-                if (!config.getBoolean("Settings.GUISettings.OtherSettings." + o + ".Toggle")) {
-                    continue;
-                }
-            }
-
-            String id = config.getString("Settings.GUISettings.OtherSettings." + o + ".Item");
-            String name = config.getString("Settings.GUISettings.OtherSettings." + o + ".Name");
-            int slot = config.getInt("Settings.GUISettings.OtherSettings." + o + ".Slot");
-
-            ItemBuilder itemBuilder = new ItemBuilder().setMaterial(id).setName(name).setAmount(1);
-
-            if (config.contains("Settings.GUISettings.OtherSettings." + o + ".Lore")) {
-                itemBuilder.setLore(config.getStringList("Settings.GUISettings.OtherSettings." + o + ".Lore"));
-            }
-
-            inv.setItem(slot - 1, itemBuilder.build());
-        }
-
-        if (data.contains("Items")) {
-            for (String i : data.getConfigurationSection("Items").getKeys(false)) {
-                if (data.getString("Items." + i + ".Seller").equalsIgnoreCase(player.getUniqueId().toString())) {
-                    ItemBuilder itemBuilder = ItemBuilder.convertItemStack(data.getString("Items." + i + ".Item"));
-
-                    List<String> lore = new ArrayList<>(itemBuilder.getUpdatedLore());
-
-                    lore.add(" ");
-
-                    String price = Methods.getPrice(i, false);
-                    String time = Methods.convertToTime(data.getLong("Items." + i + ".Time-Till-Expire"));
-
-                    for (String l : config.getStringList("Settings.GUISettings.CurrentLore")) {
-                        lore.add(l.replace("%Price%", price)
-                                .replace("%price%", price)
-                                .replace("%Time%", time)
-                                .replace("%time%", time));
-                    }
-
-                    itemBuilder.setLore(lore);
-
-                    items.add(itemBuilder.build());
-
-                    ID.add(data.getInt("Items." + i + ".StoreID"));
-                }
-            }
-        }
-
-        for (ItemStack item : Methods.getPage(items, page)) {
-            int slot = inv.firstEmpty();
-            inv.setItem(slot, item);
-        }
-
-        List<Integer> Id = new ArrayList<>(Methods.getPageInts(ID, page));
-
-        HolderManager.addPages(player, Id);
-
-        player.openInventory(inv);
+        new CurrentMenu(player, config.getString("Settings.Players-Current-Items", "N/A"), 54, page);
     }
 
     public static void openPlayersExpiredList(Player player, int page) {
@@ -751,70 +680,6 @@ public class GuiListener implements Listener {
                 playClick(player);
 
                 return;
-            }
-        }
-
-        if (strippedTitle.contains(Methods.strip(config.getString("Settings.Players-Current-Items")))) {
-            e.setCancelled(true);
-
-            int slot = e.getRawSlot();
-
-            if (slot > inv.getSize()) return;
-
-            if (strippedDisplayName.equalsIgnoreCase(Methods.strip(config.getString("Settings.GUISettings.OtherSettings.Back.Name")))) {
-                openShop(player, HolderManager.getShopType(player), HolderManager.getShopCategory(player), 1);
-
-                playClick(player);
-
-                return;
-            }
-
-            if (HolderManager.containsPage(player)) {
-                final List<Integer> pages = HolderManager.getPages(player);
-
-                if (pages.size() >= slot) {
-                    int id = pages.get(slot);
-                    boolean T = false;
-                    if (data.contains("Items")) {
-                        for (String i : data.getConfigurationSection("Items").getKeys(false)) {
-                            int ID = data.getInt("Items." + i + ".StoreID");
-                            if (id == ID) {
-                                player.sendMessage(Messages.CANCELLED_ITEM.getMessage(player));
-
-                                AuctionCancelledEvent event = new AuctionCancelledEvent(player, Methods.fromBase64(data.getString("Items." + i + ".Item")), Reasons.PLAYER_FORCE_CANCEL);
-                                plugin.getServer().getPluginManager().callEvent(event);
-
-                                int num = 1;
-                                for (; data.contains("OutOfTime/Cancelled." + num); num++) ;
-
-                                data.set("OutOfTime/Cancelled." + num + ".Seller", data.getString("Items." + i + ".Seller"));
-                                data.set("OutOfTime/Cancelled." + num + ".Full-Time", data.getLong("Items." + i + ".Full-Time"));
-                                data.set("OutOfTime/Cancelled." + num + ".StoreID", data.getInt("Items." + i + ".StoreID"));
-                                data.set("OutOfTime/Cancelled." + num + ".Item", data.getString("Items." + i + ".Item"));
-
-                                data.set("Items." + i, null);
-
-                                Files.data.save();
-
-                                playClick(player);
-
-                                openPlayersCurrentList(player, 1);
-
-                                return;
-                            }
-                        }
-                    }
-
-                    if (!T) {
-                        playClick(player);
-
-                        openShop(player, HolderManager.getShopType(player), HolderManager.getShopCategory(player), 1);
-
-                        player.sendMessage(Messages.ITEM_DOESNT_EXIST.getMessage(player));
-
-                        return;
-                    }
-                }
             }
         }
 
