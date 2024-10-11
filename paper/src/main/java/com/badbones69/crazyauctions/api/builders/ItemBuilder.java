@@ -1100,9 +1100,7 @@ public class ItemBuilder {
     }
 
     public static ItemBuilder convertItemStack(String item) {
-        ItemStack itemStack = Methods.fromBase64(item);
-
-        return new ItemBuilder(itemStack).setAmount(itemStack.getAmount()).setEnchantments(new HashMap<>(itemStack.getEnchantments()));
+        return new ItemBuilder(Methods.fromBase64(item));
     }
 
     public static ItemBuilder convertItemStack(ItemStack item, Player player) {
