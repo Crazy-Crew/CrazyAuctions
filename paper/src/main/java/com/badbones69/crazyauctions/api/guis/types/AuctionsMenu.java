@@ -44,7 +44,7 @@ public class AuctionsMenu extends Holder {
     private Category category;
 
     public AuctionsMenu(final Player player, final ShopType shopType, final Category category, final String title, final int size, final int page) {
-        super(player, shopType, title, size, page);
+        super(player, shopType, title + " #" + page, size, page);
 
         this.items = new ArrayList<>();
         this.options = new ArrayList<>();
@@ -59,7 +59,17 @@ public class AuctionsMenu extends Holder {
             Files.data.save();
         }
 
-        HolderManager.addShopCategory(player, this.category = category);
+        if (category != null) {
+            HolderManager.addShopCategory(player, this.category = category);
+        }
+    }
+
+    private String target;
+
+    public AuctionsMenu(final Player player, final String target, final String title, final int size, final int page) {
+        this(player, null, null, title, size, page);
+
+        this.target = target;
     }
 
     public AuctionsMenu() {}
@@ -68,16 +78,20 @@ public class AuctionsMenu extends Holder {
     public final Holder build() {
         Methods.updateAuction();
 
-        this.options.addAll(List.of(
-                "SellingItems",
-                "Cancelled/ExpiredItems",
-                "PreviousPage",
-                "Refresh",
-                "Refesh",
-                "NextPage",
-                "Category1",
-                "Category2"
-        ));
+        if (this.target != null) {
+            this.options.add("WhatIsThis.Viewing");
+        } else {
+            this.options.addAll(List.of(
+                    "SellingItems",
+                    "Cancelled/ExpiredItems",
+                    "PreviousPage",
+                    "Refresh",
+                    "Refesh",
+                    "NextPage",
+                    "Category1",
+                    "Category2"
+            ));
+        }
 
         getItems(); // populates the lists
 
@@ -174,65 +188,67 @@ public class AuctionsMenu extends Holder {
         if (container.has(Keys.auction_button.getNamespacedKey())) {
             click();
 
-            String type = container.getOrDefault(Keys.auction_button.getNamespacedKey(), PersistentDataType.STRING, "Refresh");
+            String type = container.getOrDefault(Keys.auction_button.getNamespacedKey(), PersistentDataType.STRING, this.target == null ? "Refresh" : "");
 
             final String title = event.getView().getTitle();
 
-            switch (type) {
-                case "NextPage", "Your-Item", "Top-Bidder", "Cant-Afford" -> {
-                    return;
-                }
+            if (this.target == null && !type.isEmpty()) {
+                switch (type) {
+                    case "NextPage", "Your-Item", "Top-Bidder", "Cant-Afford" -> {
+                        return;
+                    }
 
-                case "PreviousPage" -> {
-                    Methods.updateAuction();
+                    case "PreviousPage" -> {
+                        Methods.updateAuction();
 
-                    int page = Integer.parseInt(title.split("#")[1]);
+                        int page = Integer.parseInt(title.split("#")[1]);
 
-                    if (page == 1) page++;
+                        if (page == 1) page++;
 
-                    GuiListener.openShop(player, HolderManager.getShopType(player), HolderManager.getShopCategory(player), page - 1);
+                        GuiListener.openShop(player, HolderManager.getShopType(player), HolderManager.getShopCategory(player), page - 1);
 
-                    return;
-                }
+                        return;
+                    }
 
-                case "Refesh", "Refresh" -> {
-                    Methods.updateAuction();
+                    case "Refesh", "Refresh" -> {
+                        Methods.updateAuction();
 
-                    int page = Integer.parseInt(title.split("#")[1]);
+                        int page = Integer.parseInt(title.split("#")[1]);
 
-                    GuiListener.openShop(player, HolderManager.getShopType(player), HolderManager.getShopCategory(player), page);
+                        GuiListener.openShop(player, HolderManager.getShopType(player), HolderManager.getShopCategory(player), page);
 
-                    return;
-                }
+                        return;
+                    }
 
-                case "Bidding/Selling.Selling" -> {
-                    GuiListener.openShop(player, ShopType.BID, HolderManager.getShopCategory(player), 1);
+                    case "Bidding/Selling.Selling" -> {
+                        GuiListener.openShop(player, ShopType.BID, HolderManager.getShopCategory(player), 1);
 
-                    return;
-                }
+                        return;
+                    }
 
-                case "Bidding/Selling.Bidding" -> {
-                    GuiListener.openShop(player, ShopType.SELL, HolderManager.getShopCategory(player), 1);
+                    case "Bidding/Selling.Bidding" -> {
+                        GuiListener.openShop(player, ShopType.SELL, HolderManager.getShopCategory(player), 1);
 
-                    return;
-                }
+                        return;
+                    }
 
-                case "Cancelled/ExpiredItems" -> {
-                    openPlayersExpiredList(player, 1);
+                    case "Cancelled/ExpiredItems" -> {
+                        openPlayersExpiredList(player, 1);
 
-                    return;
-                }
+                        return;
+                    }
 
-                case "SellingItems" -> {
-                    openPlayersCurrentList(player, 1);
+                    case "SellingItems" -> {
+                        openPlayersCurrentList(player, 1);
 
-                    return;
-                }
+                        return;
+                    }
 
-                case "Category1", "Category2" -> {
-                    openCategories(player, HolderManager.getShopType(player));
+                    case "Category1", "Category2" -> {
+                        openCategories(player, HolderManager.getShopType(player));
 
-                    return;
+                        return;
+                    }
                 }
             }
         }
@@ -394,67 +410,75 @@ public class AuctionsMenu extends Holder {
 
             if (auction == null) continue;
 
-            final String item = auction.getString("Item", "");
-
-            if (item.isEmpty()) continue;
-
-            final ItemBuilder itemBuilder = ItemBuilder.convertItemStack(item);
-
-            if (this.category != Category.NONE && !this.category.getItems().contains(itemBuilder.getMaterial())) continue;
-
             final String seller = auction.getString("Seller", "");
 
             if (seller.isEmpty()) continue;
 
-            final long price = auction.getLong("Price");
+            if (this.target != null && !this.target.isEmpty() && seller.equalsIgnoreCase(this.target)) {
+                fetch(auction, seller);
 
-            final String priceFormat = String.format(Locale.ENGLISH, "%,d", price);
-
-            final OfflinePlayer player = Methods.getOfflinePlayer(seller);
-
-            final String time = Methods.convertToTime(auction.getLong("Time-Till-Expire"));
-
-            final List<String> lore = new ArrayList<>(itemBuilder.getUpdatedLore());
-
-            lore.add(" ");
-
-            if (this.shopType == ShopType.BID && auction.getBoolean("Biddable")) {
-                final String bidder = auction.getString("TopBidder", "None");
-
-                final OfflinePlayer top_bidder = bidder.equalsIgnoreCase("None") ? null : Methods.getOfflinePlayer(bidder);
-
-                for (final String line : this.config.getStringList("Settings.GUISettings.Bidding")) {
-                    String newLine = line.replace("%TopBid%", priceFormat).replace("%topbid%", priceFormat);
-
-                    final String targetName = player.getName() == null ? "N/A" : player.getName();
-
-                    newLine = line.replace("%Seller%", targetName).replace("%seller%", targetName);
-
-                    final String bidderName = top_bidder == null ? "N/A" : top_bidder.getName() == null ? "N/A" : top_bidder.getName();
-
-                    newLine = line.replace("%TopBidder%", bidderName).replace("%topbid%", bidderName);
-
-                    lore.add(newLine.replace("%Time%", time).replace("%time%", time).replace("%price%", priceFormat).replace("%Price%", priceFormat));
-                }
+                return;
             }
 
-            if (this.shopType == ShopType.SELL) {
-                for (final String line : this.config.getStringList("Settings.GUISettings.SellingItemLore")) {
-                    String newLine = line.replace("%TopBid%", priceFormat).replace("%topbid%", priceFormat);
-
-                    final String targetName = player.getName() == null ? "N/A" : player.getName();
-
-                    newLine = line.replace("%Seller%", targetName).replace("%seller%", targetName);
-
-                    lore.add(newLine.replace("%Time%", time).replace("%time%", time).replace("%price%", priceFormat).replace("%Price%", priceFormat));
-                }
-            }
-
-            itemBuilder.setLore(lore);
-
-            this.items.add(itemBuilder.build());
-
-            this.ids.add(auction.getInt("StoreID"));
+            fetch(auction, seller);
         }
+    }
+
+    private void fetch(final ConfigurationSection auction, final String seller) {
+        final String item = auction.getString("Item", "");
+
+        if (item.isEmpty()) return;
+
+        final ItemBuilder itemBuilder = ItemBuilder.convertItemStack(item);
+
+        if (this.category != Category.NONE && !this.category.getItems().contains(itemBuilder.getMaterial())) return;
+
+        final long price = auction.getLong("Price");
+
+        final String priceFormat = String.format(Locale.ENGLISH, "%,d", price);
+
+        final OfflinePlayer player = Methods.getOfflinePlayer(seller);
+
+        final String time = Methods.convertToTime(auction.getLong("Time-Till-Expire"));
+
+        final List<String> lore = new ArrayList<>(itemBuilder.getUpdatedLore());
+
+        lore.add(" ");
+
+        if (this.shopType != null && this.shopType == ShopType.BID && auction.getBoolean("Biddable") || auction.getBoolean("Biddable")) {
+            final String bidder = auction.getString("TopBidder", "None");
+
+            final OfflinePlayer top_bidder = bidder.equalsIgnoreCase("None") ? null : Methods.getOfflinePlayer(bidder);
+
+            for (final String line : this.config.getStringList("Settings.GUISettings.Bidding")) {
+                String newLine = line.replace("%TopBid%", priceFormat).replace("%topbid%", priceFormat);
+
+                final String targetName = player.getName() == null ? "N/A" : player.getName();
+
+                newLine = line.replace("%Seller%", targetName).replace("%seller%", targetName);
+
+                final String bidderName = top_bidder == null ? "N/A" : top_bidder.getName() == null ? "N/A" : top_bidder.getName();
+
+                newLine = line.replace("%TopBidder%", bidderName).replace("%topbid%", bidderName);
+
+                lore.add(newLine.replace("%Time%", time).replace("%time%", time));
+            }
+        } else {
+            for (final String line : this.config.getStringList("Settings.GUISettings.SellingItemLore")) {
+                String newLine = line.replace("%TopBid%", priceFormat).replace("%topbid%", priceFormat);
+
+                final String targetName = player.getName() == null ? "N/A" : player.getName();
+
+                newLine = line.replace("%Seller%", targetName).replace("%seller%", targetName);
+
+                lore.add(newLine.replace("%Time%", time).replace("%time%", time).replace("%price%", priceFormat).replace("%Price%", priceFormat));
+            }
+        }
+
+        itemBuilder.setLore(lore);
+
+        this.items.add(itemBuilder.build());
+
+        this.ids.add(auction.getInt("StoreID"));
     }
 }

@@ -7,7 +7,6 @@ import com.badbones69.crazyauctions.api.enums.Category;
 import com.badbones69.crazyauctions.api.enums.misc.Files;
 import com.badbones69.crazyauctions.api.enums.Messages;
 import com.badbones69.crazyauctions.api.enums.ShopType;
-import com.badbones69.crazyauctions.api.events.AuctionBuyEvent;
 import com.badbones69.crazyauctions.api.events.AuctionNewBidEvent;
 import com.badbones69.crazyauctions.api.guis.HolderManager;
 import com.badbones69.crazyauctions.api.guis.types.AuctionsMenu;
@@ -24,12 +23,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -108,118 +105,9 @@ public class GuiListener implements Listener {
     }
 
     public static void openViewer(Player player, String other, int page) {
-        Methods.updateAuction();
-
         FileConfiguration config = Files.config.getConfiguration();
-        FileConfiguration data = Files.data.getConfiguration();
 
-        List<ItemStack> items = new ArrayList<>();
-        List<Integer> ID = new ArrayList<>();
-
-        if (!data.contains("Items")) {
-            data.set("Items.Clear", null);
-
-            Files.data.save();
-        }
-
-        if (data.contains("Items")) {
-            for (String i : data.getConfigurationSection("Items").getKeys(false)) {
-                if (data.getString("Items." + i + ".Seller").equalsIgnoreCase(other)) {
-                    ItemBuilder itemBuilder = ItemBuilder.convertItemStack(data.getString("Items." + ID + ".Item"));
-
-                    List<String> lore = new ArrayList<>(itemBuilder.getUpdatedLore());
-
-                    lore.add(" ");
-
-                    String price = Methods.getPrice(i, false);
-                    String time = Methods.convertToTime(data.getLong("Items." + i + ".Time-Till-Expire"));
-
-                    OfflinePlayer target = null;
-
-                    String id = data.getString("Items." + i + ".Seller");
-
-                    if (id != null) {
-                        target = Methods.getOfflinePlayer(id);
-                    }
-
-                    OfflinePlayer bidder = null;
-
-                    String bid = data.getString("Items." + i + ".TopBidder");
-
-                    if (id != null) {
-                        bidder = Methods.getOfflinePlayer(bid);
-                    }
-
-                    if (data.getBoolean("Items." + i + ".Biddable")) {
-                        for (String l : config.getStringList("Settings.GUISettings.Bidding")) {
-                            lore.add(l.replace("%TopBid%", price)
-                                    .replace("%topbid%", price)
-                                    .replace("%Seller%", target != null ? target.getName() : "N/A")
-                                    .replace("%seller%", target != null ? target.getName() : "N/A")
-                                    .replace("%TopBidder%", bidder != null ? bidder.getName() : "N/A")
-                                    .replace("%topbidder%", bidder != null ? bidder.getName() : "N/A")
-                                    .replace("%Time%", time)
-                                    .replace("%time%", time));
-                        }
-                    } else {
-                        for (String l : config.getStringList("Settings.GUISettings.SellingItemLore")) {
-                            lore.add(l.replace("%Price%", price)
-                                    .replace("%price%", price)
-                                    .replace("%Seller%", target != null ? target.getName() : "N/A")
-                                    .replace("%seller%", target != null ? target.getName() : "N/A")
-                                    .replace("%Time%", time)
-                                    .replace("%time%", time));
-                        }
-                    }
-
-                    itemBuilder.setLore(lore);
-
-                    items.add(itemBuilder.build());
-
-                    ID.add(data.getInt("Items." + i + ".StoreID"));
-                }
-            }
-        }
-
-        int maxPage = Methods.getMaxPage(items);
-
-        for (; page > maxPage; page--);
-
-        Inventory inv = plugin.getServer().createInventory(null, 54, Methods.color(config.getString("Settings.GUIName") + " #" + page));
-
-        List<String> options = new ArrayList<>();
-
-        options.add("WhatIsThis.Viewing");
-
-        for (String o : options) {
-            if (config.contains("Settings.GUISettings.OtherSettings." + o + ".Toggle")) {
-                if (!config.getBoolean("Settings.GUISettings.OtherSettings." + o + ".Toggle")) {
-                    continue;
-                }
-            }
-
-            String id = config.getString("Settings.GUISettings.OtherSettings." + o + ".Item");
-            String name = config.getString("Settings.GUISettings.OtherSettings." + o + ".Name");
-            int slot = config.getInt("Settings.GUISettings.OtherSettings." + o + ".Slot");
-
-            ItemBuilder itemBuilder = new ItemBuilder().setMaterial(id).setName(name).setAmount(1);
-
-            if (config.contains("Settings.GUISettings.OtherSettings." + o + ".Lore")) {
-                itemBuilder.setLore(config.getStringList("Settings.GUISettings.OtherSettings." + o + ".Lore"));
-            }
-
-            inv.setItem(slot - 1, itemBuilder.build());
-        }
-
-        for (ItemStack item : Methods.getPage(items, page)) {
-            int slot = inv.firstEmpty();
-
-            inv.setItem(slot, item);
-        }
-
-        HolderManager.addPages(player, Methods.getPageInts(ID, page));
-
-        player.openInventory(inv);
+        new AuctionsMenu(player, other, config.getString("Settings.GUIName") + " #" + page, 54, page).build();
     }
 
     private static ItemStack getBiddingGlass(Player player, String ID) {
