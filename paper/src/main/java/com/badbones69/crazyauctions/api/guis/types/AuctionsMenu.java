@@ -170,7 +170,7 @@ public class AuctionsMenu extends Holder {
         if (container.has(Keys.auction_button.getNamespacedKey())) {
             click();
 
-            String type = container.getOrDefault(Keys.auction_button.getNamespacedKey(), PersistentDataType.STRING, "");
+            String type = container.getOrDefault(Keys.auction_button.getNamespacedKey(), PersistentDataType.STRING, "Refresh");
 
             final String title = event.getView().getTitle();
 
