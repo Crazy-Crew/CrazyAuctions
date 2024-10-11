@@ -7,6 +7,7 @@ import com.badbones69.crazyauctions.api.enums.other.Permissions;
 import com.badbones69.crazyauctions.api.guis.types.AuctionsMenu;
 import com.badbones69.crazyauctions.api.guis.types.CategoriesMenu;
 import com.badbones69.crazyauctions.api.guis.types.CurrentMenu;
+import com.badbones69.crazyauctions.api.guis.types.ExpiredMenu;
 import com.badbones69.crazyauctions.api.support.MetricsWrapper;
 import com.badbones69.crazyauctions.commands.AuctionCommand;
 import com.badbones69.crazyauctions.commands.AuctionTab;
@@ -122,7 +123,8 @@ public class CrazyAuctions extends Vital {
 
         manager.registerEvents(new AuctionsMenu(), this); // register main menu
         manager.registerEvents(new CategoriesMenu(), this); // register categories menu
-        manager.registerEvents(new CurrentMenu(), this);
+        manager.registerEvents(new CurrentMenu(), this); // register current listings menu
+        manager.registerEvents(new ExpiredMenu(), this); // register expired menu
 
         manager.registerEvents(new GuiListener(), this);
         manager.registerEvents(new MarcoListener(), this);
