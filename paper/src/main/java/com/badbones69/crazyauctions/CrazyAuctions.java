@@ -13,6 +13,7 @@ import com.badbones69.crazyauctions.commands.AuctionCommand;
 import com.badbones69.crazyauctions.commands.AuctionTab;
 import com.badbones69.crazyauctions.controllers.GuiListener;
 import com.badbones69.crazyauctions.controllers.MarcoListener;
+import com.badbones69.crazyauctions.controllers.MiscListener;
 import com.badbones69.crazyauctions.currency.VaultSupport;
 import com.ryderbelserion.vital.paper.Vital;
 import com.ryderbelserion.vital.paper.api.files.FileManager;
@@ -127,6 +128,7 @@ public class CrazyAuctions extends Vital {
         manager.registerEvents(new ExpiredMenu(), this); // register expired menu
 
         manager.registerEvents(new GuiListener(), this);
+        manager.registerEvents(new MiscListener(), this);
         manager.registerEvents(new MarcoListener(), this);
 
         registerCommand(getCommand("crazyauctions"), new AuctionTab(), new AuctionCommand());

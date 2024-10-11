@@ -392,15 +392,6 @@ public class GuiListener implements Listener {
     }
 
     @EventHandler
-    public void onInvClose(InventoryCloseEvent e) {
-        FileConfiguration config = Files.config.getConfiguration();
-
-        Player player = (Player) e.getPlayer();
-
-        if (e.getView().getTitle().contains(Methods.strip(config.getString("Settings.Bidding-On-Item")))) HolderManager.removeBidding(player);
-    }
-
-    @EventHandler
     public void onInvClick(InventoryClickEvent e) {
         FileConfiguration config = Files.config.getConfiguration();
         FileConfiguration data = Files.data.getConfiguration();
