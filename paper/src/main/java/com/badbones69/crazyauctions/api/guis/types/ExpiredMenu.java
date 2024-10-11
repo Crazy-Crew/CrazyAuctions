@@ -133,29 +133,29 @@ public class ExpiredMenu extends Holder {
             return;
         }
 
+        final String title = event.getView().getTitle();
+
         switch (type) {
             case "Back" -> {
-                //playClick(player);
+                click();
 
-                //openShop(player, HolderManager.getShopType(player), HolderManager.getShopCategory(player), 1);
+                GuiManager.openShop(player, HolderManager.getShopType(player), HolderManager.getShopCategory(player), 1);
             }
 
             case "PreviousPage" -> {
-                //Methods.updateAuction();
+                int page = Integer.parseInt(title.split("#")[1]);
 
-                //int page = Integer.parseInt(title.split("#")[1]);
+                if (page == 1) page++;
 
-                //if (page == 1) page++;
+                click();
 
-                //playClick(player);
-
-                //openPlayersExpiredList(player, (page - 1));
+                GuiManager.openPlayersExpiredList(player, (page - 1));
             }
 
             case "Return" -> {
-                /*Methods.updateAuction();
-
                 int page = Integer.parseInt(title.split("#")[1]);
+
+                FileConfiguration data = Files.data.getConfiguration();
 
                 if (data.contains("OutOfTime/Cancelled")) {
                     for (String i : data.getConfigurationSection("OutOfTime/Cancelled").getKeys(false)) {
@@ -177,19 +177,17 @@ public class ExpiredMenu extends Holder {
 
                 Files.data.save();
 
-                playClick(player);
+                click();
 
-                openPlayersExpiredList(player, page);*/
+                GuiManager.openPlayersExpiredList(player, page);
             }
 
             case "NextPage" -> {
-                /*Methods.updateAuction();
-
                 int page = Integer.parseInt(title.split("#")[1]);
 
-                playClick(player);
+                click();
 
-                openPlayersExpiredList(player, (page + 1));*/
+                GuiManager.openPlayersExpiredList(player, (page + 1));
             }
 
             default -> click();
