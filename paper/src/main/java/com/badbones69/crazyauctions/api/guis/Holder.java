@@ -46,6 +46,10 @@ public abstract class Holder implements InventoryHolder, Listener {
         this.inventory = this.server.createInventory(this, this.size, Methods.color(inventoryTitle));
     }
 
+    public Holder(final Player player, final ShopType shopType, final String title, final int size) {
+        this(player, shopType, title, size, 1);
+    }
+
     public Holder() {}
 
     public abstract Holder build();

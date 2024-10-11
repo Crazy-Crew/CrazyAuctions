@@ -13,6 +13,7 @@ import com.badbones69.crazyauctions.api.events.AuctionCancelledEvent;
 import com.badbones69.crazyauctions.api.events.AuctionNewBidEvent;
 import com.badbones69.crazyauctions.api.guis.HolderManager;
 import com.badbones69.crazyauctions.api.guis.types.AuctionsMenu;
+import com.badbones69.crazyauctions.api.guis.types.CategoriesMenu;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Sound;
@@ -43,47 +44,10 @@ public class GuiListener implements Listener {
         new AuctionsMenu(player, shopType, category, config.getString("Settings.GUIName", "N/A"), 54, page);
     }
 
-    public static void openCategories(Player player, ShopType shop) {
-        Methods.updateAuction();
+    public static void openCategories(Player player, ShopType shopType) {
         FileConfiguration config = Files.config.getConfiguration();
 
-        Inventory inv = plugin.getServer().createInventory(null, 54, Methods.color(config.getString("Settings.Categories")));
-
-        List<String> options = new ArrayList<>();
-
-        options.add("OtherSettings.Back");
-        options.add("OtherSettings.WhatIsThis.Categories");
-        options.add("Category-Settings.Armor");
-        options.add("Category-Settings.Weapons");
-        options.add("Category-Settings.Tools");
-        options.add("Category-Settings.Food");
-        options.add("Category-Settings.Potions");
-        options.add("Category-Settings.Blocks");
-        options.add("Category-Settings.Other");
-        options.add("Category-Settings.None");
-
-        for (String o : options) {
-            if (config.contains("Settings.GUISettings." + o + ".Toggle")) {
-                if (!config.getBoolean("Settings.GUISettings." + o + ".Toggle")) {
-                    continue;
-                }
-            }
-
-            String id = config.getString("Settings.GUISettings." + o + ".Item");
-            String name = config.getString("Settings.GUISettings." + o + ".Name");
-            int slot = config.getInt("Settings.GUISettings." + o + ".Slot");
-
-            ItemBuilder itemBuilder = new ItemBuilder().setMaterial(id).setName(name).setAmount(1);
-
-            if (config.contains("Settings.GUISettings." + o + ".Lore")) {
-                itemBuilder.setLore(config.getStringList("Settings.GUISettings." + o + ".Lore"));
-            }
-
-            inv.setItem(slot - 1, itemBuilder.build());
-        }
-
-        HolderManager.addShopType(player, shop);
-        player.openInventory(inv);
+        new CategoriesMenu(player, shopType, config.getString("Settings.Categories", "N/A"), 54).build();
     }
 
     public static void openPlayersCurrentList(Player player, int page) {
@@ -614,33 +578,6 @@ public class GuiListener implements Listener {
         final String strippedTitle = Methods.strip(title);
 
         final String strippedDisplayName = Methods.strip(displayName);
-
-        if (strippedTitle.contains(Methods.strip(config.getString("Settings.Categories")))) {
-
-            e.setCancelled(true);
-
-            int slot = e.getRawSlot();
-
-            if (slot > inv.getSize()) return;
-
-            for (Category cat : Category.values()) {
-                if (strippedDisplayName.equalsIgnoreCase(Methods.strip(config.getString("Settings.GUISettings.Category-Settings." + cat.getName() + ".Name")))) {
-                    openShop(player, HolderManager.getShopType(player), cat, 1);
-
-                    playClick(player);
-
-                    return;
-                }
-
-                if (strippedDisplayName.equalsIgnoreCase(Methods.strip(config.getString("Settings.GUISettings.OtherSettings.Back.Name")))) {
-                    openShop(player, HolderManager.getShopType(player), HolderManager.getShopCategory(player), 1);
-
-                    playClick(player);
-
-                    return;
-                }
-            }
-        }
 
         if (strippedTitle.contains(Methods.strip(config.getString("Settings.Bidding-On-Item")))) {
             e.setCancelled(true);
