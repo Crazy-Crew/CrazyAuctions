@@ -1,9 +1,7 @@
 package com.badbones69.crazyauctions.controllers;
 
-import com.badbones69.crazyauctions.Methods;
-import com.badbones69.crazyauctions.api.enums.misc.Files;
 import com.badbones69.crazyauctions.api.guis.HolderManager;
-import org.bukkit.configuration.file.FileConfiguration;
+import com.badbones69.crazyauctions.api.guis.types.transactions.BidMenu;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -13,10 +11,8 @@ public class MiscListener implements Listener {
 
     @EventHandler
     public void onInvClose(InventoryCloseEvent event) {
-        FileConfiguration config = Files.config.getConfiguration();
-
         Player player = (Player) event.getPlayer();
 
-        if (event.getView().getTitle().contains(Methods.strip(config.getString("Settings.Bidding-On-Item")))) HolderManager.removeBidding(player);
+        if (event.getInventory().getHolder(false) instanceof BidMenu) HolderManager.removeBidding(player);
     }
 }
