@@ -396,7 +396,7 @@ public class AuctionsMenu extends Holder {
 
             final ItemBuilder itemBuilder = ItemBuilder.convertItemStack(item);
 
-            if (itemBuilder == null) continue;
+            if (this.category != Category.NONE && !this.category.getItems().contains(itemBuilder.getMaterial())) continue;
 
             if (!this.category.getItems().contains(itemBuilder.getMaterial())) continue;
 
