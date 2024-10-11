@@ -582,7 +582,7 @@ public class GuiListener implements Listener {
 
         Player player = (Player) e.getPlayer();
 
-        if (e.getView().getTitle().contains(Methods.color(config.getString("Settings.Bidding-On-Item")))) HolderManager.removeBidding(player);
+        if (e.getView().getTitle().contains(Methods.strip(config.getString("Settings.Bidding-On-Item")))) HolderManager.removeBidding(player);
     }
 
     @EventHandler
@@ -611,7 +611,11 @@ public class GuiListener implements Listener {
 
         final String displayName = itemMeta.getDisplayName();
 
-        if (title.contains(Methods.color(config.getString("Settings.Categories")))) {
+        final String strippedTitle = Methods.strip(title);
+
+        final String strippedDisplayName = Methods.strip(displayName);
+
+        if (strippedTitle.contains(Methods.strip(config.getString("Settings.Categories")))) {
 
             e.setCancelled(true);
 
@@ -620,7 +624,7 @@ public class GuiListener implements Listener {
             if (slot > inv.getSize()) return;
 
             for (Category cat : Category.values()) {
-                if (displayName.equals(Methods.color(config.getString("Settings.GUISettings.Category-Settings." + cat.getName() + ".Name")))) {
+                if (strippedDisplayName.equalsIgnoreCase(Methods.strip(config.getString("Settings.GUISettings.Category-Settings." + cat.getName() + ".Name")))) {
                     openShop(player, HolderManager.getShopType(player), cat, 1);
 
                     playClick(player);
@@ -628,7 +632,7 @@ public class GuiListener implements Listener {
                     return;
                 }
 
-                if (displayName.equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.Back.Name")))) {
+                if (strippedDisplayName.equalsIgnoreCase(Methods.strip(config.getString("Settings.GUISettings.OtherSettings.Back.Name")))) {
                     openShop(player, HolderManager.getShopType(player), HolderManager.getShopCategory(player), 1);
 
                     playClick(player);
@@ -638,13 +642,13 @@ public class GuiListener implements Listener {
             }
         }
 
-        if (title.contains(Methods.color(config.getString("Settings.Bidding-On-Item")))) {
+        if (strippedTitle.contains(Methods.strip(config.getString("Settings.Bidding-On-Item")))) {
             e.setCancelled(true);
             int slot = e.getRawSlot();
 
             if (slot > inv.getSize()) return;
 
-            if (displayName.equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.Bid.Name")))) {
+            if (strippedDisplayName.equalsIgnoreCase(Methods.strip(config.getString("Settings.GUISettings.OtherSettings.Bid.Name")))) {
                 String ID = HolderManager.getBidId(player);
                 int bid = HolderManager.getBidding(player);
                 String topBidder = data.getString("Items." + ID + ".TopBidder");
@@ -686,7 +690,7 @@ public class GuiListener implements Listener {
 
                 HolderManager.addBidding(player, 0);
                 player.closeInventory();
-                //playClick(player);
+                playClick(player);
                 return;
             }
 
@@ -701,7 +705,7 @@ public class GuiListener implements Listener {
             priceEdits.put("&c-1000", -1000);
 
             for (String price : priceEdits.keySet()) {
-                if (item.getItemMeta().getDisplayName().equals(Methods.color(price))) {
+                if (strippedDisplayName.equals(Methods.strip(price))) {
                     try {
                         HolderManager.addBidding(player, HolderManager.getBidding(player) + priceEdits.get(price));
 
@@ -723,13 +727,13 @@ public class GuiListener implements Listener {
             }
         }
 
-        if (title.contains(Methods.color(config.getString("Settings.Buying-Item")))) {
+        if (strippedTitle.contains(Methods.strip(config.getString("Settings.Buying-Item")))) {
             e.setCancelled(true);
             int slot = e.getRawSlot();
 
             if (slot > inv.getSize()) return;
 
-            if (displayName.equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.Confirm.Name")))) {
+            if (strippedDisplayName.equalsIgnoreCase(Methods.strip(config.getString("Settings.GUISettings.OtherSettings.Confirm.Name")))) {
                 String ID = HolderManager.getId(player);
                 long cost = data.getLong("Items." + ID + ".Price");
                 String seller = data.getString("Items." + ID + ".Seller");
@@ -804,7 +808,7 @@ public class GuiListener implements Listener {
                 return;
             }
 
-            if (displayName.equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.Cancel.Name")))) {
+            if (strippedDisplayName.equalsIgnoreCase(Methods.strip(config.getString("Settings.GUISettings.OtherSettings.Cancel.Name")))) {
                 openShop(player, HolderManager.getShopType(player), HolderManager.getShopCategory(player), 1);
 
                 playClick(player);
@@ -813,14 +817,14 @@ public class GuiListener implements Listener {
             }
         }
 
-        if (title.contains(Methods.color(config.getString("Settings.Players-Current-Items")))) {
+        if (strippedTitle.contains(Methods.strip(config.getString("Settings.Players-Current-Items")))) {
             e.setCancelled(true);
 
             int slot = e.getRawSlot();
 
             if (slot > inv.getSize()) return;
 
-            if (displayName.equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.Back.Name")))) {
+            if (strippedDisplayName.equalsIgnoreCase(Methods.strip(config.getString("Settings.GUISettings.OtherSettings.Back.Name")))) {
                 openShop(player, HolderManager.getShopType(player), HolderManager.getShopCategory(player), 1);
 
                 playClick(player);
@@ -877,14 +881,14 @@ public class GuiListener implements Listener {
             }
         }
 
-        if (title.contains(Methods.color(config.getString("Settings.Cancelled/Expired-Items")))) {
+        if (strippedTitle.contains(Methods.strip(config.getString("Settings.Cancelled/Expired-Items")))) {
             e.setCancelled(true);
 
             final int slot = e.getRawSlot();
 
             if (slot > inv.getSize()) return;
 
-            if (displayName.equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.Back.Name")))) {
+            if (strippedDisplayName.equalsIgnoreCase(Methods.strip(config.getString("Settings.GUISettings.OtherSettings.Back.Name")))) {
                 Methods.updateAuction();
 
                 playClick(player);
@@ -894,7 +898,7 @@ public class GuiListener implements Listener {
                 return;
             }
 
-            if (displayName.equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.PreviousPage.Name")))) {
+            if (strippedDisplayName.equalsIgnoreCase(Methods.strip(config.getString("Settings.GUISettings.OtherSettings.PreviousPage.Name")))) {
                 Methods.updateAuction();
 
                 int page = Integer.parseInt(title.split("#")[1]);
@@ -908,7 +912,7 @@ public class GuiListener implements Listener {
                 return;
             }
 
-            if (displayName.equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.Return.Name")))) {
+            if (strippedDisplayName.equalsIgnoreCase(Methods.strip(config.getString("Settings.GUISettings.OtherSettings.Return.Name")))) {
                 Methods.updateAuction();
 
                 int page = Integer.parseInt(title.split("#")[1]);
@@ -940,7 +944,7 @@ public class GuiListener implements Listener {
                 return;
             }
 
-            if (displayName.equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.NextPage.Name")))) {
+            if (strippedDisplayName.equalsIgnoreCase(Methods.strip(config.getString("Settings.GUISettings.OtherSettings.NextPage.Name")))) {
                 Methods.updateAuction();
 
                 int page = Integer.parseInt(title.split("#")[1]);
