@@ -31,7 +31,7 @@ import static com.badbones69.crazyauctions.controllers.GuiListener.openCategorie
 import static com.badbones69.crazyauctions.controllers.GuiListener.openPlayersCurrentList;
 import static com.badbones69.crazyauctions.controllers.GuiListener.openPlayersExpiredList;
 
-@SuppressWarnings("FieldCanBeLocal")
+@SuppressWarnings({"FieldCanBeLocal", "UnusedAssignment"})
 public class AuctionsMenu extends Holder {
 
     private List<ItemStack> items;
@@ -398,21 +398,17 @@ public class AuctionsMenu extends Holder {
 
             if (this.category != Category.NONE && !this.category.getItems().contains(itemBuilder.getMaterial())) continue;
 
-            if (!this.category.getItems().contains(itemBuilder.getMaterial())) continue;
-
             final String seller = auction.getString("Seller", "");
 
             if (seller.isEmpty()) continue;
 
-            final String price = section.getString("Price", "");
+            final long price = auction.getLong("Price");
 
-            if (price.isEmpty()) continue;
-
-            final String priceFormat = String.format(Locale.ENGLISH, "%,d", Long.parseLong(price));
+            final String priceFormat = String.format(Locale.ENGLISH, "%,d", price);
 
             final OfflinePlayer player = Methods.getOfflinePlayer(seller);
 
-            final String time = Methods.convertToTime(section.getLong("Time-Till-Expire"));
+            final String time = Methods.convertToTime(auction.getLong("Time-Till-Expire"));
 
             final List<String> lore = new ArrayList<>(itemBuilder.getUpdatedLore());
 
