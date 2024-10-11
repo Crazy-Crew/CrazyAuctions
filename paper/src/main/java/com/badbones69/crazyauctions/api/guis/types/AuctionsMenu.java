@@ -434,7 +434,7 @@ public class AuctionsMenu extends Holder {
 
                     newLine = line.replace("%TopBidder%", bidderName).replace("%topbid%", bidderName);
 
-                    lore.add(newLine.replace("%Time%", time).replace("%time%", time));
+                    lore.add(newLine.replace("%Time%", time).replace("%time%", time).replace("%price%", priceFormat).replace("%Price%", priceFormat));
                 }
             }
 
@@ -446,7 +446,7 @@ public class AuctionsMenu extends Holder {
 
                     newLine = line.replace("%Seller%", targetName).replace("%seller%", targetName);
 
-                    lore.add(newLine.replace("%Time%", time).replace("%time%", time));
+                    lore.add(newLine.replace("%Time%", time).replace("%time%", time).replace("%price%", priceFormat).replace("%Price%", priceFormat));
                 }
             }
 
