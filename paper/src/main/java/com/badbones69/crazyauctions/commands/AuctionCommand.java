@@ -9,7 +9,7 @@ import com.badbones69.crazyauctions.api.enums.Messages;
 import com.badbones69.crazyauctions.api.enums.ShopType;
 import com.badbones69.crazyauctions.api.events.AuctionListEvent;
 import com.badbones69.crazyauctions.api.guis.types.AuctionsMenu;
-import com.badbones69.crazyauctions.controllers.GuiListener;
+import com.badbones69.crazyauctions.api.GuiManager;
 import com.ryderbelserion.vital.paper.api.files.FileManager;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -52,7 +52,7 @@ public class AuctionCommand implements CommandExecutor {
 
             if (config.contains("Settings.Category-Page-Opens-First")) {
                 if (config.getBoolean("Settings.Category-Page-Opens-First")) {
-                    GuiListener.openCategories(player, ShopType.SELL);
+                    GuiManager.openCategories(player, ShopType.SELL);
 
                     return true;
                 }
@@ -109,7 +109,7 @@ public class AuctionCommand implements CommandExecutor {
                     }
 
                     if (args.length >= 2) {
-                        GuiListener.openViewer(player, args[1], 1);
+                        GuiManager.openViewer(player, args[1], 1);
 
                         return true;
                     }
@@ -130,7 +130,7 @@ public class AuctionCommand implements CommandExecutor {
                         return true;
                     }
 
-                    GuiListener.openPlayersExpiredList(player, 1);
+                    GuiManager.openPlayersExpiredList(player, 1);
 
                     return true;
                 }
@@ -144,7 +144,7 @@ public class AuctionCommand implements CommandExecutor {
                         return true;
                     }
 
-                    GuiListener.openPlayersCurrentList(player, 1);
+                    GuiManager.openPlayersCurrentList(player, 1);
 
                     return true;
                 }

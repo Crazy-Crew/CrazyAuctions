@@ -8,7 +8,7 @@ import com.badbones69.crazyauctions.api.enums.misc.Files;
 import com.badbones69.crazyauctions.api.enums.misc.Keys;
 import com.badbones69.crazyauctions.api.guis.Holder;
 import com.badbones69.crazyauctions.api.guis.HolderManager;
-import com.badbones69.crazyauctions.controllers.GuiListener;
+import com.badbones69.crazyauctions.api.GuiManager;
 import io.papermc.paper.persistence.PersistentDataContainerView;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -109,7 +109,7 @@ public class CategoriesMenu extends Holder {
 
         final Category category = Category.getFromName(type);
 
-        GuiListener.openShop(player, HolderManager.getShopType(player), HolderManager.getShopCategory(player) != null ? HolderManager.getShopCategory(player) : category, 1);
+        GuiManager.openShop(player, HolderManager.getShopType(player), HolderManager.getShopCategory(player) != null ? HolderManager.getShopCategory(player) : category, 1);
 
         click();
     }

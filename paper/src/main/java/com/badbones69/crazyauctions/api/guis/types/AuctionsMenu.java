@@ -11,7 +11,7 @@ import com.badbones69.crazyauctions.api.enums.misc.Keys;
 import com.badbones69.crazyauctions.api.events.AuctionCancelledEvent;
 import com.badbones69.crazyauctions.api.guis.Holder;
 import com.badbones69.crazyauctions.api.guis.HolderManager;
-import com.badbones69.crazyauctions.controllers.GuiListener;
+import com.badbones69.crazyauctions.api.GuiManager;
 import com.ryderbelserion.vital.paper.util.scheduler.FoliaRunnable;
 import io.papermc.paper.persistence.PersistentDataContainerView;
 import org.bukkit.OfflinePlayer;
@@ -27,9 +27,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
-import static com.badbones69.crazyauctions.controllers.GuiListener.openCategories;
-import static com.badbones69.crazyauctions.controllers.GuiListener.openPlayersCurrentList;
-import static com.badbones69.crazyauctions.controllers.GuiListener.openPlayersExpiredList;
+import static com.badbones69.crazyauctions.api.GuiManager.openCategories;
+import static com.badbones69.crazyauctions.api.GuiManager.openPlayersCurrentList;
+import static com.badbones69.crazyauctions.api.GuiManager.openPlayersExpiredList;
 
 @SuppressWarnings({"FieldCanBeLocal", "UnusedAssignment"})
 public class AuctionsMenu extends Holder {
@@ -205,7 +205,7 @@ public class AuctionsMenu extends Holder {
 
                         if (page == 1) page++;
 
-                        GuiListener.openShop(player, HolderManager.getShopType(player), HolderManager.getShopCategory(player), page - 1);
+                        GuiManager.openShop(player, HolderManager.getShopType(player), HolderManager.getShopCategory(player), page - 1);
 
                         return;
                     }
@@ -215,19 +215,19 @@ public class AuctionsMenu extends Holder {
 
                         int page = Integer.parseInt(title.split("#")[1]);
 
-                        GuiListener.openShop(player, HolderManager.getShopType(player), HolderManager.getShopCategory(player), page);
+                        GuiManager.openShop(player, HolderManager.getShopType(player), HolderManager.getShopCategory(player), page);
 
                         return;
                     }
 
                     case "Bidding/Selling.Selling" -> {
-                        GuiListener.openShop(player, ShopType.BID, HolderManager.getShopCategory(player), 1);
+                        GuiManager.openShop(player, ShopType.BID, HolderManager.getShopCategory(player), 1);
 
                         return;
                     }
 
                     case "Bidding/Selling.Bidding" -> {
-                        GuiListener.openShop(player, ShopType.SELL, HolderManager.getShopCategory(player), 1);
+                        GuiManager.openShop(player, ShopType.SELL, HolderManager.getShopCategory(player), 1);
 
                         return;
                     }
@@ -307,7 +307,7 @@ public class AuctionsMenu extends Holder {
 
                     int page = Integer.parseInt(event.getView().getTitle().split("#")[1]);
 
-                    GuiListener.openShop(player, HolderManager.getShopType(player), HolderManager.getShopCategory(player), page);
+                    GuiManager.openShop(player, HolderManager.getShopType(player), HolderManager.getShopCategory(player), page);
 
                     return;
                 }
@@ -389,13 +389,13 @@ public class AuctionsMenu extends Holder {
 
                 click();
 
-                GuiListener.openBidding(player, i);
+                GuiManager.openBidding(player, i);
 
                 HolderManager.addBidId(player, i);
             } else {
                 click();
 
-                GuiListener.openBuying(player, i);
+                GuiManager.openBuying(player, i);
             }
         }
     }

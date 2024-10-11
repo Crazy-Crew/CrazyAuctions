@@ -9,8 +9,7 @@ import com.badbones69.crazyauctions.api.enums.misc.Keys;
 import com.badbones69.crazyauctions.api.events.AuctionBuyEvent;
 import com.badbones69.crazyauctions.api.guis.Holder;
 import com.badbones69.crazyauctions.api.guis.HolderManager;
-import com.badbones69.crazyauctions.api.guis.types.CategoriesMenu;
-import com.badbones69.crazyauctions.controllers.GuiListener;
+import com.badbones69.crazyauctions.api.GuiManager;
 import com.badbones69.crazyauctions.currency.VaultSupport;
 import io.papermc.paper.persistence.PersistentDataContainerView;
 import org.bukkit.OfflinePlayer;
@@ -21,7 +20,6 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -35,8 +33,8 @@ public class BuyingMenu extends Holder {
     private List<String> options;
     private String id;
 
-    public BuyingMenu(final Player player, final String id, final String title, final int size) {
-        super(player, title, size);
+    public BuyingMenu(final Player player, final String id, final String title) {
+        super(player, title, 9);
 
         this.config = Files.config.getConfiguration();
         this.data = Files.data.getConfiguration();
@@ -53,7 +51,7 @@ public class BuyingMenu extends Holder {
         Methods.updateAuction();
 
         if (!this.data.contains("Items." + this.id)) {
-            GuiListener.openShop(this.player, ShopType.SELL, HolderManager.getShopCategory(this.player), 1);
+            GuiManager.openShop(this.player, ShopType.SELL, HolderManager.getShopCategory(this.player), 1);
 
             this.player.sendMessage(Messages.ITEM_DOESNT_EXIST.getMessage(this.player));
 
@@ -179,7 +177,7 @@ public class BuyingMenu extends Holder {
                 if (!data.contains("Items." + ID)) {
                     click();
 
-                    //openShop(player, HolderManager.getShopType(player), HolderManager.getShopCategory(player), 1);
+                    GuiManager.openShop(player, HolderManager.getShopType(player), HolderManager.getShopCategory(player), 1);
 
                     player.sendMessage(Messages.ITEM_DOESNT_EXIST.getMessage(player));
 
@@ -252,11 +250,11 @@ public class BuyingMenu extends Holder {
 
                 click();
 
-                GuiListener.openShop(player, HolderManager.getShopType(player), HolderManager.getShopCategory(player), 1);
+                GuiManager.openShop(player, HolderManager.getShopType(player), HolderManager.getShopCategory(player), 1);
             }
 
             case "Cancel" -> {
-                GuiListener.openShop(player, HolderManager.getShopType(player), HolderManager.getShopCategory(player), 1);
+                GuiManager.openShop(player, HolderManager.getShopType(player), HolderManager.getShopCategory(player), 1);
 
                 click();
             }
