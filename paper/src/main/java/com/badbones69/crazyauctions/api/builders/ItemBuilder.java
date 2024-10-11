@@ -730,6 +730,16 @@ public class ItemBuilder {
         return this;
     }
 
+    public ItemBuilder addInteger(int value) {
+        this.itemStack.editMeta(itemMeta -> {
+            PersistentDataContainer container = itemMeta.getPersistentDataContainer();
+
+            container.set(Keys.auction_price.getNamespacedKey(), PersistentDataType.INTEGER, value);
+        });
+
+        return this;
+    }
+
     /**
      * Set the lore of the item with papi support in the builder. This will auto force color in all the lores that contains color code. (&a, &c, &7, etc...)
      *
