@@ -14,6 +14,7 @@ import com.badbones69.crazyauctions.api.guis.types.AuctionsMenu;
 import com.badbones69.crazyauctions.api.guis.types.CategoriesMenu;
 import com.badbones69.crazyauctions.api.guis.types.CurrentMenu;
 import com.badbones69.crazyauctions.api.guis.types.ExpiredMenu;
+import com.badbones69.crazyauctions.api.guis.types.transactions.BuyingMenu;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Sound;
@@ -63,92 +64,9 @@ public class GuiListener implements Listener {
     }
 
     public static void openBuying(Player player, String ID) {
-        Methods.updateAuction();
+        final FileConfiguration config = Files.config.getConfiguration();
 
-        FileConfiguration config = Files.config.getConfiguration();
-        FileConfiguration data = Files.data.getConfiguration();
-
-        if (!data.contains("Items." + ID)) {
-            openShop(player, ShopType.SELL, HolderManager.getShopCategory(player), 1);
-
-            player.sendMessage(Messages.ITEM_DOESNT_EXIST.getMessage(player));
-
-            return;
-        }
-
-        Inventory inv = plugin.getServer().createInventory(null, 9, Methods.color(config.getString("Settings.Buying-Item")));
-
-        List<String> options = new ArrayList<>();
-
-        options.add("Confirm");
-        options.add("Cancel");
-
-        for (String o : options) {
-            String id = config.getString("Settings.GUISettings.OtherSettings." + o + ".Item");
-            String name = config.getString("Settings.GUISettings.OtherSettings." + o + ".Name");
-            ItemStack item;
-
-            ItemBuilder itemBuilder = new ItemBuilder().setMaterial(id).setName(name).setAmount(1);
-
-            List<String> lore = new ArrayList<>(itemBuilder.getUpdatedLore());
-
-            lore.add(" ");
-
-            if (config.contains("Settings.GUISettings.OtherSettings." + o + ".Lore")) {
-                lore.addAll(config.getStringList("Settings.GUISettings.OtherSettings." + o + ".Lore"));
-
-                itemBuilder.setLore(lore);
-            }
-
-            item = itemBuilder.build();
-
-            if (o.equals("Confirm")) {
-                inv.setItem(0, item);
-                inv.setItem(1, item);
-                inv.setItem(2, item);
-                inv.setItem(3, item);
-            }
-
-            if (o.equals("Cancel")) {
-                inv.setItem(5, item);
-                inv.setItem(6, item);
-                inv.setItem(7, item);
-                inv.setItem(8, item);
-            }
-        }
-
-        ItemBuilder itemBuilder = ItemBuilder.convertItemStack(data.getString("Items." + ID + ".Item"));
-
-        List<String> lore = new ArrayList<>(itemBuilder.getUpdatedLore());
-
-        lore.add(" ");
-
-        String price = Methods.getPrice(ID, false);
-        String time = Methods.convertToTime(data.getLong("Items." + ID + ".Time-Till-Expire"));
-
-        OfflinePlayer target = null;
-
-        String id = data.getString("Items." + ID + ".Seller");
-
-        if (id != null) {
-            target = Methods.getOfflinePlayer(id);
-        }
-
-        for (String l : config.getStringList("Settings.GUISettings.SellingItemLore")) {
-            lore.add(l.replace("%Price%", price).replace("%price%", price)
-                    .replace("%Seller%", target != null ? target.getName() : "N/A")
-                    .replace("%seller%", target != null ? target.getName() : "N/A")
-                    .replace("%Time%", time)
-                    .replace("%time%", time));
-        }
-
-        itemBuilder.setLore(lore);
-
-        inv.setItem(4, itemBuilder.build());
-
-        HolderManager.addId(player, ID);
-
-        player.openInventory(inv);
+        new BuyingMenu(player, ID, config.getString("Settings.Buying-Item", "N/A"), 9).build();
     }
 
     public static void openBidding(Player player, String ID) {
@@ -379,18 +297,6 @@ public class GuiListener implements Listener {
         return itemBuilder.build();
     }
 
-    private void playSoldSound(@NotNull Player player) {
-        FileConfiguration config = Files.config.getConfiguration();
-
-        String sound = config.getString("Settings.Sold-Item-Sound", "");
-
-        if (sound.isEmpty()) return;
-
-        try {
-            player.playSound(player.getLocation(), Sound.valueOf(sound), 1, 1);
-        } catch (Exception ignored) {}
-    }
-
     @EventHandler
     public void onInvClick(InventoryClickEvent e) {
         FileConfiguration config = Files.config.getConfiguration();
@@ -503,96 +409,6 @@ public class GuiListener implements Listener {
                         return;
                     }
                 }
-            }
-        }
-
-        if (strippedTitle.contains(Methods.strip(config.getString("Settings.Buying-Item")))) {
-            e.setCancelled(true);
-            int slot = e.getRawSlot();
-
-            if (slot > inv.getSize()) return;
-
-            if (strippedDisplayName.equalsIgnoreCase(Methods.strip(config.getString("Settings.GUISettings.OtherSettings.Confirm.Name")))) {
-                String ID = HolderManager.getId(player);
-                long cost = data.getLong("Items." + ID + ".Price");
-                String seller = data.getString("Items." + ID + ".Seller");
-
-                if (!data.contains("Items." + ID)) {
-                    playClick(player);
-
-                    openShop(player, HolderManager.getShopType(player), HolderManager.getShopCategory(player), 1);
-
-                    player.sendMessage(Messages.ITEM_DOESNT_EXIST.getMessage(player));
-
-                    return;
-                }
-
-                if (Methods.isInvFull(player)) {
-                    playClick(player);
-
-                    player.closeInventory();
-                    player.sendMessage(Messages.INVENTORY_FULL.getMessage(player));
-
-                    return;
-                }
-
-                if (plugin.getSupport().getMoney(player) < cost) {
-                    playClick(player);
-                    player.closeInventory();
-
-                    Map<String, String> placeholders = new HashMap<>();
-                    placeholders.put("%Money_Needed%", (cost - plugin.getSupport().getMoney(player)) + "");
-                    placeholders.put("%money_needed%", (cost - plugin.getSupport().getMoney(player)) + "");
-
-                    player.sendMessage(Messages.NEED_MORE_MONEY.getMessage(player, placeholders));
-
-                    return;
-                }
-
-                ItemStack i = Methods.fromBase64(data.getString("Items." + ID + ".Item"));
-
-                plugin.getServer().getPluginManager().callEvent(new AuctionBuyEvent(player, i, cost));
-                plugin.getSupport().removeMoney(player, cost);
-                plugin.getSupport().addMoney(Methods.getOfflinePlayer(seller), cost);
-
-                Map<String, String> placeholders = new HashMap<>();
-
-                String price = Methods.getPrice(ID, false);
-
-                placeholders.put("%Price%", price);
-                placeholders.put("%price%", price);
-                placeholders.put("%Player%", player.getName());
-                placeholders.put("%player%", player.getName());
-
-                player.sendMessage(Messages.BOUGHT_ITEM.getMessage(player, placeholders));
-
-                if (seller != null && Methods.isOnline(seller) && Methods.getPlayer(seller) != null) {
-                    Player sell = Methods.getPlayer(seller);
-
-                    if (sell != null) {
-                        sell.sendMessage(Messages.PLAYER_BOUGHT_ITEM.getMessage(player, placeholders));
-                        playSoldSound(sell);
-                    }
-                }
-
-                player.getInventory().addItem(i);
-
-                data.set("Items." + ID, null);
-                Files.data.save();
-
-                playClick(player);
-
-                openShop(player, HolderManager.getShopType(player), HolderManager.getShopCategory(player), 1);
-
-                return;
-            }
-
-            if (strippedDisplayName.equalsIgnoreCase(Methods.strip(config.getString("Settings.GUISettings.OtherSettings.Cancel.Name")))) {
-                openShop(player, HolderManager.getShopType(player), HolderManager.getShopCategory(player), 1);
-
-                playClick(player);
-
-                return;
             }
         }
     }
