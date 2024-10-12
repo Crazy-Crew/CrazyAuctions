@@ -177,9 +177,15 @@ public class ExpiredMenu extends Holder {
 
                                 break;
                             } else {
-                                player.getInventory().addItem(Methods.fromBase64(data.getString("OutOfTime/Cancelled." + i + ".Item")));
+                                final ItemStack yoink = Methods.fromBase64(data.getString("OutOfTime/Cancelled." + i + ".Item", ""));
 
-                                data.set("OutOfTime/Cancelled." + i, null);
+                                if (yoink != null) {
+                                    player.getInventory().addItem(yoink);
+
+                                    data.set("OutOfTime/Cancelled." + i, null);
+                                } else {
+                                    this.plugin.getLogger().warning("The player " + player.getName() + " tried to redeem an invalid item in the expired menu.");
+                                }
                             }
                         }
                     }
@@ -225,15 +231,21 @@ public class ExpiredMenu extends Holder {
 
                         player.sendMessage(Messages.GOT_ITEM_BACK.getMessage(player));
 
-                        player.getInventory().addItem(Methods.fromBase64(auction.getString("Item")));
+                        final ItemStack yoink = Methods.fromBase64(auction.getString("Item"));
 
-                        data.set("OutOfTime/Cancelled." + key, null);
+                        if (yoink != null) {
+                            player.getInventory().addItem(yoink);
 
-                        Files.data.save();
+                            data.set("OutOfTime/Cancelled." + key, null);
 
-                        menu.click(player);
+                            Files.data.save();
 
-                        GuiManager.openPlayersExpiredList(player, 1);
+                            menu.click(player);
+
+                            GuiManager.openPlayersExpiredList(player, 1);
+                        } else {
+                            this.plugin.getLogger().warning("The player " + player.getName() + " tried to redeem an invalid item in the expired menu.");
+                        }
 
                         return;
                     }
