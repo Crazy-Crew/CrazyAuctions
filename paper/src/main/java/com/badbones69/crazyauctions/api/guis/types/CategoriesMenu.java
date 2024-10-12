@@ -107,9 +107,9 @@ public class CategoriesMenu extends Holder {
 
         final String type = container.getOrDefault(Keys.auction_button.getNamespacedKey(), PersistentDataType.STRING, "Category-Settings.None");
 
-        final Category category = Category.getFromName(type);
+        final Category category = Category.getFromName(type.replace("Category-Settings.", ""));
 
-        GuiManager.openShop(player, HolderManager.getShopType(player), HolderManager.getShopCategory(player) != null ? HolderManager.getShopCategory(player) : category, 1);
+        GuiManager.openShop(player, HolderManager.getShopType(player), category, 1);
 
         menu.click(player);
     }
