@@ -345,14 +345,14 @@ public class AuctionCommand implements CommandExecutor {
                         int id = ThreadLocalRandom.current().nextInt(999999);
 
                         // Runs 3x to check for same ID.
-                        for (String i : data.getConfigurationSection("Items").getKeys(false))
+                        for (String i : data.getConfigurationSection("Items").getKeys(false)) //todo() store ids not needed anymore.
                             if (data.getInt("Items." + i + ".StoreID") == id) id = ThreadLocalRandom.current().nextInt(Integer.MAX_VALUE);
                         for (String i : data.getConfigurationSection("Items").getKeys(false))
                             if (data.getInt("Items." + i + ".StoreID") == id) id = ThreadLocalRandom.current().nextInt(Integer.MAX_VALUE);
                         for (String i : data.getConfigurationSection("Items").getKeys(false))
                             if (data.getInt("Items." + i + ".StoreID") == id) id = ThreadLocalRandom.current().nextInt(Integer.MAX_VALUE);
 
-                        data.set("Items." + num + ".StoreID", id);
+                        data.set("Items." + num + ".StoreID", id); //todo() not needed
                         ShopType type = ShopType.SELL;
 
                         if (args[0].equalsIgnoreCase("bid")) {
