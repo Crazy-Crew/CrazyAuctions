@@ -7,8 +7,8 @@ import com.badbones69.crazyauctions.api.guis.types.AuctionsMenu;
 import com.badbones69.crazyauctions.api.guis.types.CategoriesMenu;
 import com.badbones69.crazyauctions.api.guis.types.CurrentMenu;
 import com.badbones69.crazyauctions.api.guis.types.ExpiredMenu;
-import com.badbones69.crazyauctions.api.guis.types.transactions.BidMenu;
-import com.badbones69.crazyauctions.api.guis.types.transactions.BuyingMenu;
+import com.badbones69.crazyauctions.api.guis.types.other.BidMenu;
+import com.badbones69.crazyauctions.api.guis.types.other.BuyingMenu;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
@@ -29,7 +29,7 @@ public class GuiManager {
     public static void openPlayersCurrentList(Player player, int page) {
         FileConfiguration config = Files.config.getConfiguration();
 
-        new CurrentMenu(player, config.getString("Settings.Players-Current-Items", "N/A"), 54, page);
+        new CurrentMenu(player, config.getString("Settings.Players-Current-Items", "N/A"), 54, page).build();
     }
 
     public static void openPlayersExpiredList(Player player, int page) {
@@ -47,7 +47,7 @@ public class GuiManager {
     public static void openBidding(Player player, String ID) {
         FileConfiguration config = Files.config.getConfiguration();
 
-        new BidMenu(player, ID, config.getString("Settings.Bidding-On-Item"));
+        new BidMenu(player, ID, config.getString("Settings.Bidding-On-Item")).build();
     }
 
     public static void openViewer(Player player, String other, int page) {

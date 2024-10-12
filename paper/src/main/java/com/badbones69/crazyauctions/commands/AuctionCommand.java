@@ -8,8 +8,8 @@ import com.badbones69.crazyauctions.api.enums.misc.Files;
 import com.badbones69.crazyauctions.api.enums.Messages;
 import com.badbones69.crazyauctions.api.enums.ShopType;
 import com.badbones69.crazyauctions.api.events.AuctionListEvent;
-import com.badbones69.crazyauctions.api.guis.types.AuctionsMenu;
 import com.badbones69.crazyauctions.api.GuiManager;
+import com.badbones69.crazyauctions.tasks.InventoryManager;
 import com.ryderbelserion.vital.paper.api.files.FileManager;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -59,9 +59,9 @@ public class AuctionCommand implements CommandExecutor {
             }
 
             if (this.crazyManager.isSellingEnabled()) {
-                new AuctionsMenu(player, ShopType.SELL, Category.NONE, config.getString("Settings.GUIName", "N/A"), 54, 1).build();
+                GuiManager.openShop(player, ShopType.SELL, Category.NONE, 1);
             } else if (this.crazyManager.isBiddingEnabled()) {
-                new AuctionsMenu(player, ShopType.BID, Category.NONE, config.getString("Settings.GUIName", "N/A"), 54, 1).build();
+                GuiManager.openShop(player, ShopType.BID, Category.NONE, 1);
             } else {
                 player.sendMessage(Methods.getPrefix() + Methods.color("&cThe bidding and selling options are both disabled. Please contact the admin about this."));
             }
