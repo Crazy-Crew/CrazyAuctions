@@ -436,6 +436,12 @@ public class AuctionsMenu extends Holder {
 
         final ItemBuilder itemBuilder = ItemBuilder.convertItemStack(item);
 
+        if (itemBuilder == null) {
+            this.plugin.getLogger().warning("The item with store id " + auction.getString("StoreID", "auctions_menu") + " obtained from your data.yml could not be converted!");
+
+            return;
+        }
+
         if (this.category != null && this.category != Category.NONE && !this.category.getItems().contains(itemBuilder.getMaterial())) return;
 
         final long price = auction.getLong("Price");

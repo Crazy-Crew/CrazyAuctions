@@ -9,7 +9,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.regex.Matcher;
@@ -80,8 +81,12 @@ public class Methods {
         return Base64.getEncoder().encodeToString(itemStack.serializeAsBytes());
     }
 
-    public static @NotNull ItemStack fromBase64(final String base64) {
-        return ItemStack.deserializeBytes(Base64.getDecoder().decode(base64));
+    public static @Nullable ItemStack fromBase64(final String base64) {
+        if (base64 == null || base64.isEmpty()) return null;
+
+        final byte[] decoded = Base64.getDecoder().decode(base64);
+
+        return ItemStack.deserializeBytes(decoded);
     }
 
     public static OfflinePlayer getOfflinePlayer(String name) {

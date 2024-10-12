@@ -105,6 +105,12 @@ public class BuyingMenu extends Holder {
 
         ItemBuilder itemBuilder = ItemBuilder.convertItemStack(this.data.getString("Items." + this.id + ".Item"));
 
+        if (itemBuilder == null) {
+            this.plugin.getLogger().warning("The item with store id " + this.data.getString("Items." + this.id + ".StoreID", "buying_menu") + " obtained from your data.yml could not be converted!");
+
+            return this;
+        }
+
         List<String> lore = new ArrayList<>(itemBuilder.getUpdatedLore());
 
         lore.add(" ");

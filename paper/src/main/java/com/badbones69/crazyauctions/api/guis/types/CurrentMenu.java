@@ -205,6 +205,12 @@ public class CurrentMenu extends Holder {
 
             final ItemBuilder itemBuilder = ItemBuilder.convertItemStack(item);
 
+            if (itemBuilder == null) {
+                this.plugin.getLogger().warning("The item with store id " + auction.getString("StoreID", "current_menu") + " obtained from your data.yml could not be converted!");
+
+                continue;
+            }
+
             final long price = auction.getLong("Price");
 
             final String priceFormat = String.format(Locale.ENGLISH, "%,d", price);

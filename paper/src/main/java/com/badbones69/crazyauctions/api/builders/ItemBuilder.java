@@ -1109,7 +1109,11 @@ public class ItemBuilder {
     }
 
     public static ItemBuilder convertItemStack(String item) {
-        return new ItemBuilder(Methods.fromBase64(item));
+        final ItemStack base64 = Methods.fromBase64(item);
+
+        if (base64 == null) return null;
+
+        return new ItemBuilder(base64);
     }
 
     public static ItemBuilder convertItemStack(ItemStack item, Player player) {
