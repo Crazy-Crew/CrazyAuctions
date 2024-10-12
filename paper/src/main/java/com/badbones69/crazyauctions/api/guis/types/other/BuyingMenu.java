@@ -130,9 +130,10 @@ public class BuyingMenu extends Holder {
 
         itemBuilder.setLore(lore);
 
-        this.inventory.setItem(4, itemBuilder.build());
+        itemBuilder.addInteger(this.data.getInt("Items." + this.id + ".StoreID"), Keys.auction_id.getNamespacedKey());
+        itemBuilder.addString(this.id, Keys.auction_item.getNamespacedKey());
 
-        HolderManager.addId(this.player, this.id);
+        this.inventory.setItem(4, itemBuilder.build());
 
         this.player.openInventory(this.inventory);
 
@@ -170,11 +171,9 @@ public class BuyingMenu extends Holder {
 
         switch (type) {
             case "Confirm" -> {
-                String ID = HolderManager.getId(player);
-                long cost = data.getLong("Items." + ID + ".Price");
-                String seller = data.getString("Items." + ID + ".Seller");
+                String id = menu.id;
 
-                if (!data.contains("Items." + ID)) {
+                if (!data.contains("Items." + id)) {
                     menu.click(player);
 
                     GuiManager.openShop(player, HolderManager.getShopType(player), HolderManager.getShopCategory(player), 1);
@@ -193,6 +192,9 @@ public class BuyingMenu extends Holder {
                     return;
                 }
 
+                long cost = data.getLong("Items." + id + ".Price");
+                String seller = data.getString("Items." + id + ".Seller");
+
                 final VaultSupport support = this.plugin.getSupport();
 
                 if (support.getMoney(player) < cost) {
@@ -208,7 +210,7 @@ public class BuyingMenu extends Holder {
                     return;
                 }
 
-                ItemStack i = Methods.fromBase64(data.getString("Items." + ID + ".Item"));
+                ItemStack i = Methods.fromBase64(data.getString("Items." + id + ".Item"));
 
                 this.server.getPluginManager().callEvent(new AuctionBuyEvent(player, i, cost));
                 support.removeMoney(player, cost);
@@ -216,7 +218,7 @@ public class BuyingMenu extends Holder {
 
                 Map<String, String> placeholders = new HashMap<>();
 
-                String price = Methods.getPrice(ID, false);
+                String price = Methods.getPrice(id, false);
 
                 placeholders.put("%Price%", price);
                 placeholders.put("%price%", price);
@@ -245,7 +247,7 @@ public class BuyingMenu extends Holder {
 
                 player.getInventory().addItem(i);
 
-                data.set("Items." + ID, null);
+                data.set("Items." + id, null);
                 Files.data.save();
 
                 menu.click(player);

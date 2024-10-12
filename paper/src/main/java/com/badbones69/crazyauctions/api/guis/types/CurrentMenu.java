@@ -27,7 +27,6 @@ public class CurrentMenu extends Holder {
 
     private List<ItemStack> items;
     private List<String> options;
-    private List<Integer> ids;
 
     private FileConfiguration config;
     private FileConfiguration data;
@@ -37,7 +36,6 @@ public class CurrentMenu extends Holder {
 
         this.items = new ArrayList<>();
         this.options = new ArrayList<>();
-        this.ids = new ArrayList<>();
 
         this.config = Files.config.getConfiguration();
         this.data = Files.data.getConfiguration();
@@ -84,8 +82,6 @@ public class CurrentMenu extends Holder {
             this.inventory.setItem(slot, item);
         }
 
-        HolderManager.addPages(this.player, Methods.getPageItems(this.ids, getPage()));
-
         this.player.openInventory(this.inventory);
 
         return this;
@@ -127,9 +123,7 @@ public class CurrentMenu extends Holder {
             return;
         }
 
-        if (HolderManager.containsPage(player)) return;
-
-        final List<Integer> pages = HolderManager.getPages(player);
+        final List<Integer> pages = new ArrayList<>();
 
         if (pages.size() >= slot) {
             int id = pages.get(slot);
@@ -227,9 +221,10 @@ public class CurrentMenu extends Holder {
 
             itemBuilder.setLore(lore);
 
-            this.items.add(itemBuilder.build());
+            itemBuilder.addInteger(auction.getInt("StoreID"), Keys.auction_id.getNamespacedKey());
+            itemBuilder.addString(auction.getName(), Keys.auction_item.getNamespacedKey());
 
-            this.ids.add(auction.getInt("StoreID"));
+            this.items.add(itemBuilder.build());
         }
     }
 }

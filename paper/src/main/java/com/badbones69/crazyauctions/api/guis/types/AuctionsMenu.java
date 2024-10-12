@@ -34,7 +34,6 @@ public class AuctionsMenu extends Holder {
 
     private List<ItemStack> items;
     private List<String> options;
-    private List<Integer> ids;
     private int maxPages;
 
     private FileConfiguration config;
@@ -47,7 +46,6 @@ public class AuctionsMenu extends Holder {
 
         this.items = new ArrayList<>();
         this.options = new ArrayList<>();
-        this.ids = new ArrayList<>();
 
         this.config = Files.config.getConfiguration();
         this.data = Files.data.getConfiguration();
@@ -153,8 +151,6 @@ public class AuctionsMenu extends Holder {
 
             this.inventory.setItem(slot, item);
         }
-
-        HolderManager.addPages(this.player, Methods.getPageItems(this.ids, getPage()));
 
         this.player.openInventory(this.inventory);
 
@@ -276,77 +272,118 @@ public class AuctionsMenu extends Holder {
             }
         }
 
-        if (HolderManager.containsPage(player)) return;
-
         if (!data.contains("Items")) return;
 
         final ConfigurationSection section = data.getConfigurationSection("Items");
 
         if (section == null) return;
 
-        final List<Integer> pages = HolderManager.getPages(player);
+        final String auction_id = container.getOrDefault(Keys.auction_item.getNamespacedKey(), PersistentDataType.STRING, "");
 
-        if (pages.size() < slot) return;
+        final ConfigurationSection auction = section.getConfigurationSection(auction_id);
 
-        final int id = pages.get(slot);
+        if (auction == null) return;
 
         final UUID uuid = player.getUniqueId();
 
-        for (String i : section.getKeys(false)) {
-            int ID = data.getInt("Items." + i + ".StoreID");
+        if (player.hasPermission("crazyauctions.admin") || player.hasPermission("crazyauctions.force-end")) {
+            if (event.getAction() == InventoryAction.MOVE_TO_OTHER_INVENTORY) {
+                int num = 1;
 
-            if (id != ID) {
+                for (;data.contains("OutOfTime/Cancelled." + num); num++);
+
+                String seller = auction.getString("Seller");
+
+                Player sellerPlayer = Methods.getPlayer(seller);
+
+                if (Methods.isOnline(seller) && sellerPlayer != null) {
+                    sellerPlayer.sendMessage(Messages.ADMIN_FORCE_CANCELLED_TO_PLAYER.getMessage(player));
+                }
+
+                AuctionCancelledEvent auctionCancelledEvent = new AuctionCancelledEvent((sellerPlayer != null ? sellerPlayer : Methods.getOfflinePlayer(seller)), Methods.fromBase64(auction.getString("Item")), Reasons.ADMIN_FORCE_CANCEL);
+                this.server.getPluginManager().callEvent(auctionCancelledEvent);
+
+                data.set("OutOfTime/Cancelled." + num + ".Seller", section.getString("Seller"));
+                data.set("OutOfTime/Cancelled." + num + ".Full-Time", section.getLong("Full-Time"));
+                data.set("OutOfTime/Cancelled." + num + ".StoreID", section.getInt("StoreID"));
+                data.set("OutOfTime/Cancelled." + num + ".Item", auction.getString("Item"));
+                data.set("Items." + auction_id, null);
+
+                Files.data.save();
+
+                player.sendMessage(Messages.ADMIN_FORCE_CANCELLED.getMessage(player));
+
+                menu.click(player);
+
+                GuiManager.openShop(player, HolderManager.getShopType(player), HolderManager.getShopCategory(player), menu.getPage());
+
                 return;
             }
+        }
 
-            if (player.hasPermission("crazyauctions.admin") || player.hasPermission("crazyauctions.force-end")) {
-                if (event.getAction() == InventoryAction.MOVE_TO_OTHER_INVENTORY) {
-                    int num = 1;
+        if (auction.getString("Seller", "").equalsIgnoreCase(uuid.toString())) {
+            String itemName = config.getString("Settings.GUISettings.OtherSettings.Your-Item.Item");
+            String name = config.getString("Settings.GUISettings.OtherSettings.Your-Item.Name");
 
-                    for (;data.contains("OutOfTime/Cancelled." + num); num++);
+            ItemBuilder itemBuilder = new ItemBuilder().setMaterial(itemName).setName(name).setAmount(1);
 
-                    String seller = data.getString("Items." + i + ".Seller");
-
-                    Player sellerPlayer = Methods.getPlayer(seller);
-
-                    if (Methods.isOnline(seller) && sellerPlayer != null) {
-                        sellerPlayer.sendMessage(Messages.ADMIN_FORCE_CANCELLED_TO_PLAYER.getMessage(player));
-                    }
-
-                    AuctionCancelledEvent auctionCancelledEvent = new AuctionCancelledEvent((sellerPlayer != null ? sellerPlayer : Methods.getOfflinePlayer(seller)), Methods.fromBase64(data.getString("Items." + ID + ".Item")), Reasons.ADMIN_FORCE_CANCEL);
-                    this.server.getPluginManager().callEvent(auctionCancelledEvent);
-
-                    data.set("OutOfTime/Cancelled." + num + ".Seller", section.getString("Seller"));
-                    data.set("OutOfTime/Cancelled." + num + ".Full-Time", section.getLong("Full-Time"));
-                    data.set("OutOfTime/Cancelled." + num + ".StoreID", section.getInt("StoreID"));
-                    data.set("OutOfTime/Cancelled." + num + ".Item", data.getString("Items." + ID + ".Item"));
-                    data.set("Items." + i, null);
-
-                    Files.data.save();
-
-                    player.sendMessage(Messages.ADMIN_FORCE_CANCELLED.getMessage(player));
-
-                    menu.click(player);
-
-                    GuiManager.openShop(player, HolderManager.getShopType(player), HolderManager.getShopCategory(player), menu.getPage());
-
-                    return;
-                }
+            if (config.contains("Settings.GUISettings.OtherSettings.Your-Item.Lore")) {
+                itemBuilder.setLore(config.getStringList("Settings.GUISettings.OtherSettings.Your-Item.Lore"));
             }
 
-            if (data.getString("Items." + i + ".Seller", "").equalsIgnoreCase(uuid.toString())) {
-                String itemName = config.getString("Settings.GUISettings.OtherSettings.Your-Item.Item");
-                String name = config.getString("Settings.GUISettings.OtherSettings.Your-Item.Name");
+            inventory.setItem(slot, itemBuilder.build());
+
+            menu.click(player);
+
+            new FoliaRunnable(this.plugin.getServer().getGlobalRegionScheduler()) {
+                @Override
+                public void run() {
+                    inventory.setItem(slot, itemStack);
+                }
+            }.runDelayed(this.plugin, 3 * 20);
+
+            return;
+        }
+
+        long cost = auction.getLong("Price");
+
+        if (this.plugin.getSupport().getMoney(player) < cost) {
+            String itemName = config.getString("Settings.GUISettings.OtherSettings.Cant-Afford.Item");
+            String name = config.getString("Settings.GUISettings.OtherSettings.Cant-Afford.Name");
+
+            ItemBuilder itemBuilder = new ItemBuilder().setMaterial(itemName).setName(name).setAmount(1);
+
+            if (config.contains("Settings.GUISettings.OtherSettings.Cant-Afford.Lore")) {
+                itemBuilder.setLore(config.getStringList("Settings.GUISettings.OtherSettings.Cant-Afford.Lore"));
+            }
+
+            inventory.setItem(slot, itemBuilder.build());
+            menu.click(player);
+
+            new FoliaRunnable(this.plugin.getServer().getGlobalRegionScheduler()) {
+                @Override
+                public void run() {
+                    inventory.setItem(slot, itemStack);
+                }
+            }.runDelayed(this.plugin, 3 * 20);
+
+            return;
+        }
+
+        if (auction.getBoolean("Biddable")) {
+            if (uuid.toString().equalsIgnoreCase(auction.getString("TopBidder"))) {
+                String itemName = config.getString("Settings.GUISettings.OtherSettings.Top-Bidder.Item");
+                String name = config.getString("Settings.GUISettings.OtherSettings.Top-Bidder.Name");
 
                 ItemBuilder itemBuilder = new ItemBuilder().setMaterial(itemName).setName(name).setAmount(1);
 
-                if (config.contains("Settings.GUISettings.OtherSettings.Your-Item.Lore")) {
-                    itemBuilder.setLore(config.getStringList("Settings.GUISettings.OtherSettings.Your-Item.Lore"));
+                if (config.contains("Settings.GUISettings.OtherSettings.Top-Bidder.Lore")) {
+                    itemBuilder.setLore(config.getStringList("Settings.GUISettings.OtherSettings.Top-Bidder.Lore"));
                 }
 
                 inventory.setItem(slot, itemBuilder.build());
 
-                click(player);
+                menu.click(player);
 
                 new FoliaRunnable(this.plugin.getServer().getGlobalRegionScheduler()) {
                     @Override
@@ -358,66 +395,13 @@ public class AuctionsMenu extends Holder {
                 return;
             }
 
-            long cost = data.getLong("Items." + i + ".Price");
+            menu.click(player);
 
-            if (this.plugin.getSupport().getMoney(player) < cost) {
-                String itemName = config.getString("Settings.GUISettings.OtherSettings.Cant-Afford.Item");
-                String name = config.getString("Settings.GUISettings.OtherSettings.Cant-Afford.Name");
+            GuiManager.openBidding(player, auction_id);
+        } else {
+            menu.click(player);
 
-                ItemBuilder itemBuilder = new ItemBuilder().setMaterial(itemName).setName(name).setAmount(1);
-
-                if (config.contains("Settings.GUISettings.OtherSettings.Cant-Afford.Lore")) {
-                    itemBuilder.setLore(config.getStringList("Settings.GUISettings.OtherSettings.Cant-Afford.Lore"));
-                }
-
-                inventory.setItem(slot, itemBuilder.build());
-                menu.click(player);
-
-                new FoliaRunnable(this.plugin.getServer().getGlobalRegionScheduler()) {
-                    @Override
-                    public void run() {
-                        inventory.setItem(slot, itemStack);
-                    }
-                }.runDelayed(this.plugin, 3 * 20);
-
-                return;
-            }
-
-            if (data.getBoolean("Items." + i + ".Biddable")) {
-                if (player.getUniqueId().toString().equalsIgnoreCase(data.getString("Items." + i + ".TopBidder"))) {
-                    String itemName = config.getString("Settings.GUISettings.OtherSettings.Top-Bidder.Item");
-                    String name = config.getString("Settings.GUISettings.OtherSettings.Top-Bidder.Name");
-
-                    ItemBuilder itemBuilder = new ItemBuilder().setMaterial(itemName).setName(name).setAmount(1);
-
-                    if (config.contains("Settings.GUISettings.OtherSettings.Top-Bidder.Lore")) {
-                        itemBuilder.setLore(config.getStringList("Settings.GUISettings.OtherSettings.Top-Bidder.Lore"));
-                    }
-
-                    inventory.setItem(slot, itemBuilder.build());
-
-                    menu.click(player);
-
-                    new FoliaRunnable(this.plugin.getServer().getGlobalRegionScheduler()) {
-                        @Override
-                        public void run() {
-                            inventory.setItem(slot, itemStack);
-                        }
-                    }.runDelayed(this.plugin, 3 * 20);
-
-                    return;
-                }
-
-                menu.click(player);
-
-                GuiManager.openBidding(player, i);
-
-                HolderManager.addBidId(player, i);
-            } else {
-                menu.click(player);
-
-                GuiManager.openBuying(player, i);
-            }
+            GuiManager.openBuying(player, auction_id);
         }
     }
 
@@ -498,8 +482,9 @@ public class AuctionsMenu extends Holder {
 
         itemBuilder.setLore(lore);
 
-        this.items.add(itemBuilder.build());
+        itemBuilder.addInteger(auction.getInt("StoreID"), Keys.auction_id.getNamespacedKey());
+        itemBuilder.addString(auction.getName(), Keys.auction_item.getNamespacedKey());
 
-        this.ids.add(auction.getInt("StoreID"));
+        this.items.add(itemBuilder.build());
     }
 }

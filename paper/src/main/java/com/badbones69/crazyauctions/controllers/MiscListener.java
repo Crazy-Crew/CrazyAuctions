@@ -22,9 +22,7 @@ public class MiscListener implements Listener {
         Player player = event.getPlayer();
 
         HolderManager.removeBidding(player);
-        HolderManager.removeId(player);
         HolderManager.removeShopCategory(player);
         HolderManager.removeShopType(player);
-        HolderManager.removePage(player);
     }
 }

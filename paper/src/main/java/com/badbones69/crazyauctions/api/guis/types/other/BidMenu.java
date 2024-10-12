@@ -115,11 +115,11 @@ public class BidMenu extends Holder {
 
         switch (type) {
             case "bid_item" -> {
-                String ID = HolderManager.getBidId(player);
+                String id = menu.id;
 
                 int bid = HolderManager.getBidding(player);
 
-                String topBidder = data.getString("Items." + ID + ".TopBidder", "None");
+                String topBidder = data.getString("Items." + id + ".TopBidder", "None");
 
                 final long money = support.getMoney(player);
 
@@ -134,22 +134,22 @@ public class BidMenu extends Holder {
                     return;
                 }
 
-                if (data.getLong("Items." + ID + ".Price") > bid) {
+                if (data.getLong("Items." + id + ".Price") > bid) {
                     player.sendMessage(Messages.BID_MORE_MONEY.getMessage(player));
 
                     return;
                 }
 
-                if (data.getLong("Items." + ID + ".Price") >= bid && !topBidder.equalsIgnoreCase("None")) {
+                if (data.getLong("Items." + id + ".Price") >= bid && !topBidder.equalsIgnoreCase("None")) {
                     player.sendMessage(Messages.BID_MORE_MONEY.getMessage(player));
 
                     return;
                 }
 
-                this.server.getPluginManager().callEvent(new AuctionNewBidEvent(player, Methods.fromBase64(data.getString("Items." + ID + ".Item")), bid));
+                this.server.getPluginManager().callEvent(new AuctionNewBidEvent(player, Methods.fromBase64(data.getString("Items." + id + ".Item")), bid));
 
-                data.set("Items." + ID + ".Price", bid);
-                data.set("Items." + ID + ".TopBidder", player.getUniqueId().toString());
+                data.set("Items." + id + ".Price", bid);
+                data.set("Items." + id + ".TopBidder", player.getUniqueId().toString());
 
                 final Map<String, String> placeholders = new HashMap<>();
                 placeholders.put("%Bid%", String.valueOf(bid));
@@ -169,10 +169,8 @@ public class BidMenu extends Holder {
 
                     HolderManager.addBidding(player, HolderManager.getBidding(player) + price);
 
-                    final String bid_id = HolderManager.getBidId(player);
-
-                    this.inventory.setItem(4, getBiddingItem(bid_id));
-                    this.inventory.setItem(13, getBiddingGlass(player, bid_id));
+                    this.inventory.setItem(4, getBiddingItem(menu.id));
+                    this.inventory.setItem(13, getBiddingGlass(player, menu.id));
                 } catch (Exception exception) {
                     player.closeInventory();
 
@@ -186,10 +184,8 @@ public class BidMenu extends Holder {
 
                     HolderManager.addBidding(player, HolderManager.getBidding(player) + price);
 
-                    final String bid_id = HolderManager.getBidId(player);
-
-                    this.inventory.setItem(4, getBiddingItem(bid_id));
-                    this.inventory.setItem(13, getBiddingGlass(player, bid_id));
+                    this.inventory.setItem(4, getBiddingItem(menu.id));
+                    this.inventory.setItem(13, getBiddingGlass(player, menu.id));
                 } catch (Exception exception) {
                     player.closeInventory();
 

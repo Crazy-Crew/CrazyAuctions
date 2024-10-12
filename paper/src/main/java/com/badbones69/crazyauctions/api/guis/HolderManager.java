@@ -4,18 +4,14 @@ import com.badbones69.crazyauctions.api.enums.Category;
 import com.badbones69.crazyauctions.api.enums.ShopType;
 import org.bukkit.entity.Player;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 public class HolderManager {
 
     private static final Map<UUID, Integer> bidding = new HashMap<>();
-    private static final Map<UUID, String> bidIds = new HashMap<>();
     private static final Map<UUID, ShopType> shopTypes = new HashMap<>();
     private static final Map<UUID, Category> shopCategory = new HashMap<>();
-    private static final Map<UUID, List<Integer>> pages = new HashMap<>();
-    private static final Map<UUID, String> ids = new HashMap<>();
 
     public static void addShopCategory(final Player player, final Category category) {
         shopCategory.put(player.getUniqueId(), category);
@@ -67,76 +63,5 @@ public class HolderManager {
 
     public static Map<UUID, ShopType> getShopType() {
         return shopTypes;
-    }
-
-    public static void addPages(final Player player, List<Integer> list) {
-        pages.put(player.getUniqueId(), list);
-    }
-
-    public static void addPage(final Player player, final int page) {
-        final UUID uuid = player.getUniqueId();
-
-        final List<Integer> list = pages.get(uuid);
-        list.add(page);
-
-        pages.put(uuid, list);
-    }
-
-    public static void removePage(final Player player, final int page) {
-        final UUID uuid = player.getUniqueId();
-
-        final List<Integer> list = pages.get(uuid);
-
-        list.remove(page);
-
-        pages.put(uuid, list);
-    }
-
-    public static void removePage(final Player player) {
-        pages.remove(player.getUniqueId());
-    }
-
-    public static boolean containsPage(final Player player) {
-        return !pages.containsKey(player.getUniqueId());
-    }
-
-    public static List<Integer> getPages(final Player player) {
-        return pages.get(player.getUniqueId());
-    }
-
-    public static Map<UUID, List<Integer>> getPages() {
-        return pages;
-    }
-
-    public static void addBidId(final Player player, final String id) {
-        bidIds.put(player.getUniqueId(), id);
-    }
-
-    public static void removeBidId(final Player player) {
-        bidIds.remove(player.getUniqueId());
-    }
-
-    public static String getBidId(final Player player) {
-        return bidIds.get(player.getUniqueId());
-    }
-
-    public static Map<UUID, String> getBidIds() {
-        return bidIds;
-    }
-
-    public static void addId(final Player player, final String id) {
-        ids.put(player.getUniqueId(), id);
-    }
-
-    public static void removeId(final Player player) {
-        ids.remove(player.getUniqueId());
-    }
-
-    public static String getId(final Player player) {
-        return ids.get(player.getUniqueId());
-    }
-
-    public static Map<UUID, String> getIds() {
-        return ids;
     }
 }
