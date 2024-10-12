@@ -17,7 +17,7 @@ public class GuiManager {
     public static void openShop(Player player, ShopType shopType, Category category, int page) {
         FileConfiguration config = Files.config.getConfiguration();
 
-        new AuctionsMenu(player, shopType, category, config.getString("Settings.GUIName", "N/A"), 54, page);
+        new AuctionsMenu(player, shopType, category, config.getString("Settings.GUIName", "&4Crazy &bAuctions&8 #{page}").replaceAll("\\{page}", String.valueOf(page)), 54, page).build();
     }
 
     public static void openCategories(Player player, ShopType shopType) {
@@ -35,7 +35,7 @@ public class GuiManager {
     public static void openPlayersExpiredList(Player player, int page) {
         FileConfiguration config = Files.config.getConfiguration();
 
-        new ExpiredMenu(player, config.getString("Settings.Cancelled/Expired-Items") + " #" + page, 54, page).build();
+        new ExpiredMenu(player, config.getString("Settings.Cancelled/Expired-Items", "&8Cancelled/Expired Listings #{page}").replaceAll("\\{page}", String.valueOf(page)), 54, page).build();
     }
 
     public static void openBuying(Player player, String ID) {
@@ -53,6 +53,6 @@ public class GuiManager {
     public static void openViewer(Player player, String other, int page) {
         FileConfiguration config = Files.config.getConfiguration();
 
-        new AuctionsMenu(player, other, config.getString("Settings.GUIName") + " #" + page, 54, page).build();
+        new AuctionsMenu(player, other, config.getString("Settings.GUIName", "&4Crazy &bAuctions&8 #{page}").replaceAll("\\{page}", String.valueOf(page)), 54, page).build();
     }
 }
