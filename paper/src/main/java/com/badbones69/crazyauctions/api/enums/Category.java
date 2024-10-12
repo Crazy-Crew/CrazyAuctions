@@ -118,6 +118,8 @@ public enum Category {
         ma.add(Material.NETHERITE_SWORD);
         ma.add(Material.NETHERITE_AXE);
 
+        ma.add(Material.MACE);
+
         return ma;
     }
     
