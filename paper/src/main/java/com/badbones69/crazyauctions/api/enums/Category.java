@@ -120,6 +120,8 @@ public enum Category {
 
         ma.add(Material.MACE);
 
+        ma.add(Material.SHIELD);
+
         return ma;
     }
     
