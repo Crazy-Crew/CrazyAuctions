@@ -452,7 +452,7 @@ public class AuctionsMenu extends Holder {
 
         final ItemBuilder itemBuilder = ItemBuilder.convertItemStack(item);
 
-        if (this.category != Category.NONE && !this.category.getItems().contains(itemBuilder.getMaterial())) return;
+        if (this.category != null && this.category != Category.NONE && !this.category.getItems().contains(itemBuilder.getMaterial())) return;
 
         final long price = auction.getLong("Price");
 
