@@ -65,7 +65,7 @@ public class CategoriesMenu extends Holder {
             String name = this.config.getString("Settings.GUISettings." + key + ".Name");
             int slot = this.config.getInt("Settings.GUISettings." + key + ".Slot");
 
-            ItemBuilder itemBuilder = new ItemBuilder().setMaterial(id).setName(name).addString(key).setAmount(1);
+            ItemBuilder itemBuilder = new ItemBuilder().setMaterial(id).setName(name).addString(key, Keys.auction_button.getNamespacedKey()).setAmount(1);
 
             if (this.config.contains("Settings.GUISettings." + key + ".Lore")) {
                 itemBuilder.setLore(this.config.getStringList("Settings.GUISettings." + key + ".Lore"));

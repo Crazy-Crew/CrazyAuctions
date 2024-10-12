@@ -718,23 +718,23 @@ public class ItemBuilder {
         return this;
     }
 
-    public ItemBuilder addString(String name) {
+    public ItemBuilder addString(String name, NamespacedKey key) {
         if (name.isEmpty()) return this;
 
         this.itemStack.editMeta(itemMeta -> {
             PersistentDataContainer container = itemMeta.getPersistentDataContainer();
 
-            container.set(Keys.auction_button.getNamespacedKey(), PersistentDataType.STRING, name);
+            container.set(key, PersistentDataType.STRING, name);
         });
 
         return this;
     }
 
-    public ItemBuilder addInteger(int value) {
+    public ItemBuilder addInteger(int value, NamespacedKey key) {
         this.itemStack.editMeta(itemMeta -> {
             PersistentDataContainer container = itemMeta.getPersistentDataContainer();
 
-            container.set(Keys.auction_price.getNamespacedKey(), PersistentDataType.INTEGER, value);
+            container.set(key, PersistentDataType.INTEGER, value);
         });
 
         return this;
