@@ -203,6 +203,8 @@ public class AuctionsMenu extends Holder {
                         menu.nextPage();
 
                         GuiManager.openShop(player, HolderManager.getShopType(player), HolderManager.getShopCategory(player), menu.getPage());
+
+                        return;
                     }
 
                     case "PreviousPage" -> {
