@@ -92,8 +92,12 @@ public class HolderManager {
         pages.put(uuid, list);
     }
 
+    public static void removePage(final Player player) {
+        pages.remove(player.getUniqueId());
+    }
+
     public static boolean containsPage(final Player player) {
-        return pages.containsKey(player.getUniqueId());
+        return !pages.containsKey(player.getUniqueId());
     }
 
     public static List<Integer> getPages(final Player player) {

@@ -4,8 +4,6 @@ import com.badbones69.crazyauctions.api.enums.misc.Files;
 import com.badbones69.crazyauctions.api.enums.Messages;
 import com.badbones69.crazyauctions.api.events.AuctionExpireEvent;
 import com.badbones69.crazyauctions.api.events.AuctionWinBidEvent;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.*;
@@ -150,32 +148,7 @@ public class Methods {
         return true;
     }
     
-    public static List<ItemStack> getPage(List<ItemStack> list, Integer page) {
-        List<ItemStack> items = new ArrayList<>();
-
-        if (page <= 0) page = 1;
-
-        int max = 45;
-        int index = page * max - max;
-        int endIndex = index >= list.size() ? list.size() - 1 : index + max;
-
-        for (; index < endIndex; index++) {
-            if (index < list.size()) items.add(list.get(index));
-        }
-
-        for (; items.size() == 0; page--) {
-            if (page <= 0) break;
-            index = page * max - max;
-            endIndex = index >= list.size() ? list.size() - 1 : index + max;
-            for (; index < endIndex; index++) {
-                if (index < list.size()) items.add(list.get(index));
-            }
-        }
-
-        return items;
-    }
-    
-    public static List<Integer> getPageInts(List<Integer> list, Integer page) {
+    public static List<Integer> getPageItems(List<Integer> list, int page) {
         List<Integer> items = new ArrayList<>();
 
         if (page <= 0) page = 1;
@@ -200,15 +173,6 @@ public class Methods {
         }
 
         return items;
-    }
-    
-    public static int getMaxPage(List<ItemStack> list) {
-        int maxPage = 1;
-        int amount = list.size();
-
-        for (; amount > 45; amount -= 45, maxPage++) ;
-
-        return maxPage;
     }
     
     public static String convertToTime(long time) {

@@ -12,6 +12,7 @@ import com.badbones69.crazyauctions.api.events.AuctionCancelledEvent;
 import com.badbones69.crazyauctions.api.guis.Holder;
 import com.badbones69.crazyauctions.api.guis.HolderManager;
 import com.badbones69.crazyauctions.api.GuiManager;
+import com.badbones69.crazyauctions.tasks.InventoryManager;
 import com.ryderbelserion.vital.paper.util.scheduler.FoliaRunnable;
 import io.papermc.paper.persistence.PersistentDataContainerView;
 import org.bukkit.OfflinePlayer;
@@ -27,9 +28,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
-import static com.badbones69.crazyauctions.api.GuiManager.openCategories;
-import static com.badbones69.crazyauctions.api.GuiManager.openPlayersCurrentList;
-import static com.badbones69.crazyauctions.api.GuiManager.openPlayersExpiredList;
 
 @SuppressWarnings({"FieldCanBeLocal", "UnusedAssignment"})
 public class AuctionsMenu extends Holder {
@@ -37,6 +35,7 @@ public class AuctionsMenu extends Holder {
     private List<ItemStack> items;
     private List<String> options;
     private List<Integer> ids;
+    private int maxPages;
 
     private FileConfiguration config;
     private FileConfiguration data;
@@ -44,7 +43,7 @@ public class AuctionsMenu extends Holder {
     private Category category;
 
     public AuctionsMenu(final Player player, final ShopType shopType, final Category category, final String title, final int size, final int page) {
-        super(player, shopType, title + " #" + page, size, page);
+        super(player, shopType, title, size, page);
 
         this.items = new ArrayList<>();
         this.options = new ArrayList<>();
@@ -95,9 +94,7 @@ public class AuctionsMenu extends Holder {
 
         getItems(); // populates the lists
 
-        int maxPage = Methods.getMaxPage(this.items);
-
-        for (;this.page > maxPage; this.page--);
+        this.maxPages = getMaxPage(this.items);
 
         HolderManager.addShopType(this.player, this.shopType);
 
@@ -140,20 +137,24 @@ public class AuctionsMenu extends Holder {
                 for (final String line : this.config.getStringList("Settings.GUISettings.OtherSettings." + key + ".Lore")) {
                     lore.add(line.replace("%Category%", cName).replace("%category%", cName));
                 }
+            }
 
-                this.inventory.setItem(slot - 1, itemBuilder.setLore(lore).addString(key).build());
-            } else {
-                this.inventory.setItem(slot - 1, itemBuilder.setLore(lore).addString(key).build());
+            switch (key) {
+                case "NextPage" -> this.inventory.setItem(slot - 1, InventoryManager.getNextButton(this.player, this).setLore(lore).build());
+
+                case "PreviousPage" -> this.inventory.setItem(slot - 1, InventoryManager.getBackButton(this.player, this).setLore(lore).build());
+
+                default -> this.inventory.setItem(slot - 1, itemBuilder.setLore(lore).addString(key, Keys.auction_button.getNamespacedKey()).build());
             }
         }
 
-        for (final ItemStack item : Methods.getPage(this.items, this.page)) {
+        for (final ItemStack item : getPageItems(this.items, getPage(), getSize())) {
             int slot = this.inventory.firstEmpty();
 
             this.inventory.setItem(slot, item);
         }
 
-        HolderManager.addPages(this.player, Methods.getPageInts(this.ids, this.page));
+        HolderManager.addPages(this.player, Methods.getPageItems(this.ids, getPage()));
 
         this.player.openInventory(this.inventory);
 
@@ -186,66 +187,88 @@ public class AuctionsMenu extends Holder {
         FileConfiguration data = Files.data.getConfiguration();
 
         if (container.has(Keys.auction_button.getNamespacedKey())) {
-            click();
-
             String type = container.getOrDefault(Keys.auction_button.getNamespacedKey(), PersistentDataType.STRING, this.target == null ? "Refresh" : "");
-
-            final String title = event.getView().getTitle();
 
             if (this.target == null && !type.isEmpty()) {
                 switch (type) {
-                    case "NextPage", "Your-Item", "Top-Bidder", "Cant-Afford" -> {
+                    case "Your-Item", "Top-Bidder", "Cant-Afford" -> {
+                        menu.click(player);
+
                         return;
                     }
 
+                    case "NextPage" -> {
+                        menu.click(player);
+
+                        if (menu.getPage() >= menu.maxPages) {
+                            return;
+                        }
+
+                        menu.nextPage();
+
+                        GuiManager.openShop(player, HolderManager.getShopType(player), HolderManager.getShopCategory(player), menu.getPage());
+                    }
+
                     case "PreviousPage" -> {
-                        Methods.updateAuction();
+                        menu.click(player);
 
-                        int page = Integer.parseInt(title.split("#")[1]);
+                        final int page = menu.getPage();
 
-                        if (page == 1) page++;
+                        if (page <= 1) {
+                            return;
+                        }
 
-                        GuiManager.openShop(player, HolderManager.getShopType(player), HolderManager.getShopCategory(player), page - 1);
+                        menu.backPage();
+
+                        GuiManager.openShop(player, HolderManager.getShopType(player), HolderManager.getShopCategory(player), menu.getPage());
 
                         return;
                     }
 
                     case "Refesh", "Refresh" -> {
-                        Methods.updateAuction();
+                        menu.click(player);
 
-                        int page = Integer.parseInt(title.split("#")[1]);
-
-                        GuiManager.openShop(player, HolderManager.getShopType(player), HolderManager.getShopCategory(player), page);
+                        GuiManager.openShop(player, HolderManager.getShopType(player), HolderManager.getShopCategory(player), menu.getPage());
 
                         return;
                     }
 
                     case "Bidding/Selling.Selling" -> {
+                        menu.click(player);
+
                         GuiManager.openShop(player, ShopType.BID, HolderManager.getShopCategory(player), 1);
 
                         return;
                     }
 
                     case "Bidding/Selling.Bidding" -> {
+                        menu.click(player);
+
                         GuiManager.openShop(player, ShopType.SELL, HolderManager.getShopCategory(player), 1);
 
                         return;
                     }
 
                     case "Cancelled/ExpiredItems" -> {
-                        openPlayersExpiredList(player, 1);
+                        menu.click(player);
+
+                        GuiManager.openPlayersExpiredList(player, 1);
 
                         return;
                     }
 
                     case "SellingItems" -> {
-                        openPlayersCurrentList(player, 1);
+                        menu.click(player);
+
+                        GuiManager.openPlayersCurrentList(player, 1);
 
                         return;
                     }
 
                     case "Category1", "Category2" -> {
-                        openCategories(player, HolderManager.getShopType(player));
+                        menu.click(player);
+
+                        GuiManager.openCategories(player, HolderManager.getShopType(player));
 
                         return;
                     }
@@ -253,7 +276,7 @@ public class AuctionsMenu extends Holder {
             }
         }
 
-        if (!HolderManager.containsPage(player)) return;
+        if (HolderManager.containsPage(player)) return;
 
         if (!data.contains("Items")) return;
 
@@ -303,11 +326,9 @@ public class AuctionsMenu extends Holder {
 
                     player.sendMessage(Messages.ADMIN_FORCE_CANCELLED.getMessage(player));
 
-                    click();
+                    menu.click(player);
 
-                    int page = Integer.parseInt(event.getView().getTitle().split("#")[1]);
-
-                    GuiManager.openShop(player, HolderManager.getShopType(player), HolderManager.getShopCategory(player), page);
+                    GuiManager.openShop(player, HolderManager.getShopType(player), HolderManager.getShopCategory(player), menu.getPage());
 
                     return;
                 }
@@ -325,7 +346,7 @@ public class AuctionsMenu extends Holder {
 
                 inventory.setItem(slot, itemBuilder.build());
 
-                click();
+                click(player);
 
                 new FoliaRunnable(this.plugin.getServer().getGlobalRegionScheduler()) {
                     @Override
@@ -350,7 +371,7 @@ public class AuctionsMenu extends Holder {
                 }
 
                 inventory.setItem(slot, itemBuilder.build());
-                click();
+                menu.click(player);
 
                 new FoliaRunnable(this.plugin.getServer().getGlobalRegionScheduler()) {
                     @Override
@@ -375,7 +396,7 @@ public class AuctionsMenu extends Holder {
 
                     inventory.setItem(slot, itemBuilder.build());
 
-                    click();
+                    menu.click(player);
 
                     new FoliaRunnable(this.plugin.getServer().getGlobalRegionScheduler()) {
                         @Override
@@ -387,13 +408,13 @@ public class AuctionsMenu extends Holder {
                     return;
                 }
 
-                click();
+                menu.click(player);
 
                 GuiManager.openBidding(player, i);
 
                 HolderManager.addBidId(player, i);
             } else {
-                click();
+                menu.click(player);
 
                 GuiManager.openBuying(player, i);
             }

@@ -111,6 +111,6 @@ public class CategoriesMenu extends Holder {
 
         GuiManager.openShop(player, HolderManager.getShopType(player), HolderManager.getShopCategory(player) != null ? HolderManager.getShopCategory(player) : category, 1);
 
-        click();
+        menu.click(player);
     }
 }

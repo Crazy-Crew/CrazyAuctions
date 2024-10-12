@@ -17,7 +17,12 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public abstract class Holder implements InventoryHolder, Listener {
 
@@ -64,6 +69,63 @@ public abstract class Holder implements InventoryHolder, Listener {
 
     public abstract void run(InventoryClickEvent event);
 
+    public void setSize(final int size) {
+        this.size = size;
+    }
+
+    public final int getSize() {
+        return this.size - 9;
+    }
+
+    public void setPage(final int page) {
+        this.page = page;
+    }
+
+    public void nextPage() {
+        setPage(getPage() + 1);
+    }
+
+    public void backPage() {
+        setPage(getPage() - 1);
+    }
+
+    public final int getPage() {
+        return this.page;
+    }
+
+    public final List<ItemStack> getPageItems(final List<ItemStack> list, int page, final int size) {
+        List<ItemStack> items = new ArrayList<>();
+
+        if (page <= 0) page = 1;
+
+        int index = page * size - size;
+        int endIndex = index >= list.size() ? list.size() - 1 : index + size;
+
+        for (;index < endIndex; index++) {
+            if (index < list.size()) items.add(list.get(index));
+        }
+
+        for (;items.isEmpty(); page--) {
+            if (page <= 0) break;
+
+            index = page * size - size;
+
+            endIndex = index >= list.size() ? list.size() - 1 : index + size;
+
+            for (; index < endIndex; index++) {
+                if (index < list.size()) items.add(list.get(index));
+            }
+        }
+
+        return items;
+    }
+
+    public final int getMaxPage(final List<ItemStack> list) {
+        final int size = list.size();
+
+        return (int) Math.ceil((double) size / getSize());
+    }
+
     @EventHandler
     public void onPlayerClick(InventoryClickEvent event) {
         run(event);
@@ -74,16 +136,16 @@ public abstract class Holder implements InventoryHolder, Listener {
         return this.inventory;
     }
 
-    public void click() {
+    public void click(final Player player) {
         final FileConfiguration config = Files.config.getConfiguration();
 
         if (config.getBoolean("Settings.Sounds.Toggle", false)) {
             final String sound = config.getString("Settings.Sounds.Sound", "UI_BUTTON_CLICK");
 
             try {
-                this.player.playSound(this.player.getLocation(), Sound.valueOf(sound), 1, 1);
+                player.playSound(player.getLocation(), Sound.valueOf(sound), 1, 1);
             } catch (Exception e) {
-                this.player.playSound(this.player.getLocation(), Sound.UI_BUTTON_CLICK, SoundCategory.PLAYERS, 1F, 1F);
+                player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, SoundCategory.PLAYERS, 1F, 1F);
             }
         }
     }

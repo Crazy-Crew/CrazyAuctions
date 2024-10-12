@@ -33,6 +33,8 @@ public class CurrentMenu extends Holder {
     private FileConfiguration config;
     private FileConfiguration data;
 
+    private int maxPages;
+
     public CurrentMenu(final Player player, final String title, final int size, final int page) {
         super(player, title, size, page);
 
@@ -57,9 +59,7 @@ public class CurrentMenu extends Holder {
 
         getItems();
 
-        int maxPage = Methods.getMaxPage(this.items);
-
-        for (;this.page > maxPage; this.page--);
+        this.maxPages = getMaxPage(this.items);
 
         for (final String key : this.options) {
             if (!this.config.contains("Settings.GUISettings.OtherSettings." + key)) {
@@ -83,13 +83,13 @@ public class CurrentMenu extends Holder {
             this.inventory.setItem(slot - 1, itemBuilder.build());
         }
 
-        for (final ItemStack item : Methods.getPage(this.items, this.page)) {
+        for (final ItemStack item : getPageItems(this.items, getPage(), getSize())) {
             int slot = this.inventory.firstEmpty();
 
             this.inventory.setItem(slot, item);
         }
 
-        HolderManager.addPages(this.player, Methods.getPageInts(this.ids, this.page));
+        HolderManager.addPages(this.player, Methods.getPageItems(this.ids, getPage()));
 
         this.player.openInventory(this.inventory);
 
@@ -127,12 +127,12 @@ public class CurrentMenu extends Holder {
         if (type.equalsIgnoreCase("Back")) {
             GuiManager.openShop(player, HolderManager.getShopType(player), HolderManager.getShopCategory(player), 1);
 
-            click();
+            menu.click(player);
 
             return;
         }
 
-        if (!HolderManager.containsPage(player)) return;
+        if (HolderManager.containsPage(player)) return;
 
         final List<Integer> pages = HolderManager.getPages(player);
 
@@ -173,7 +173,7 @@ public class CurrentMenu extends Holder {
 
                         Files.data.save();
 
-                        click();
+                        menu.click(player);
 
                         GuiManager.openPlayersCurrentList(player, 1);
 
@@ -183,7 +183,7 @@ public class CurrentMenu extends Holder {
             }
 
             if (!valid) {
-                click();
+                menu.click(player);
 
                 GuiManager.openShop(player, HolderManager.getShopType(player), HolderManager.getShopCategory(player), 1);
 

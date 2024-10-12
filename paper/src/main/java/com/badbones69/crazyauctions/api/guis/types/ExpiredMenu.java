@@ -8,6 +8,7 @@ import com.badbones69.crazyauctions.api.enums.misc.Keys;
 import com.badbones69.crazyauctions.api.guis.Holder;
 import com.badbones69.crazyauctions.api.guis.HolderManager;
 import com.badbones69.crazyauctions.api.GuiManager;
+import com.badbones69.crazyauctions.tasks.InventoryManager;
 import io.papermc.paper.persistence.PersistentDataContainerView;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -16,7 +17,6 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -30,6 +30,8 @@ public class ExpiredMenu extends Holder {
 
     private FileConfiguration config;
     private FileConfiguration data;
+
+    private int maxPages;
 
     public ExpiredMenu(final Player player, final String title, final int size, final int page) {
         super(player, title, size, page);
@@ -58,9 +60,7 @@ public class ExpiredMenu extends Holder {
 
         getItems();
 
-        int maxPage = Methods.getMaxPage(this.items);
-
-        for (;this.page > maxPage; this.page--);
+        this.maxPages = getMaxPage(this.items);
 
         for (final String key : this.options) {
             if (!this.config.contains("Settings.GUISettings.OtherSettings." + key)) {
@@ -75,22 +75,28 @@ public class ExpiredMenu extends Holder {
             String name = this.config.getString("Settings.GUISettings.OtherSettings." + key + ".Name");
             int slot = this.config.getInt("Settings.GUISettings.OtherSettings." + key + ".Slot");
 
-            ItemBuilder itemBuilder = new ItemBuilder().setMaterial(id).setName(name).addString(key).setAmount(1);
+            ItemBuilder itemBuilder = new ItemBuilder().setMaterial(id).setName(name).setAmount(1);
 
             if (this.config.contains("Settings.GUISettings.OtherSettings." + key + ".Lore")) {
                 itemBuilder.setLore(this.config.getStringList("Settings.GUISettings.OtherSettings." + key + ".Lore"));
             }
 
-            this.inventory.setItem(slot - 1, itemBuilder.build());
+            switch (key) {
+                case "NextPage" -> this.inventory.setItem(slot - 1, InventoryManager.getNextButton(this.player, this).build());
+
+                case "PreviousPage" -> this.inventory.setItem(slot - 1, InventoryManager.getBackButton(this.player, this).build());
+
+                default -> this.inventory.setItem(slot - 1, itemBuilder.addString(key, Keys.auction_button.getNamespacedKey()).build());
+            }
         }
 
-        for (final ItemStack item : Methods.getPage(this.items, this.page)) {
+        for (final ItemStack item : getPageItems(this.items, getPage(), getSize())) {
             int slot = this.inventory.firstEmpty();
 
             this.inventory.setItem(slot, item);
         }
 
-        HolderManager.addPages(this.player, Methods.getPageInts(this.ids, this.page));
+        HolderManager.addPages(this.player, Methods.getPageItems(this.ids, getPage()));
 
         this.player.openInventory(this.inventory);
 
@@ -125,36 +131,46 @@ public class ExpiredMenu extends Holder {
 
         final Player player = (Player) event.getWhoClicked();
 
-        if (type.equalsIgnoreCase("Back")) {
-            GuiManager.openShop(player, HolderManager.getShopType(player), HolderManager.getShopCategory(player), 1);
-
-            click();
-
-            return;
-        }
-
-        final String title = event.getView().getTitle();
-
         switch (type) {
             case "Back" -> {
-                click();
+                menu.click(player);
 
                 GuiManager.openShop(player, HolderManager.getShopType(player), HolderManager.getShopCategory(player), 1);
+
+                return;
             }
 
             case "PreviousPage" -> {
-                int page = Integer.parseInt(title.split("#")[1]);
+                menu.click(player);
 
-                if (page == 1) page++;
+                final int page = menu.getPage();
 
-                click();
+                if (page > 1 && page <= menu.maxPages) {
+                    return;
+                }
 
-                GuiManager.openPlayersExpiredList(player, (page - 1));
+                menu.backPage();
+
+                GuiManager.openPlayersExpiredList(player, menu.getPage());
+
+                return;
+            }
+
+            case "NextPage" -> {
+                menu.click(player);
+
+                if (menu.getPage() >= menu.maxPages) {
+                    return;
+                }
+
+                menu.nextPage();
+
+                GuiManager.openPlayersExpiredList(player, menu.getPage());
+
+                return;
             }
 
             case "Return" -> {
-                int page = Integer.parseInt(title.split("#")[1]);
-
                 FileConfiguration data = Files.data.getConfiguration();
 
                 if (data.contains("OutOfTime/Cancelled")) {
@@ -177,23 +193,15 @@ public class ExpiredMenu extends Holder {
 
                 Files.data.save();
 
-                click();
+                menu.click(player);
 
-                GuiManager.openPlayersExpiredList(player, page);
+                GuiManager.openPlayersExpiredList(player, menu.getPage());
+
+                return;
             }
-
-            case "NextPage" -> {
-                int page = Integer.parseInt(title.split("#")[1]);
-
-                click();
-
-                GuiManager.openPlayersExpiredList(player, (page + 1));
-            }
-
-            default -> click();
         }
 
-        if (!HolderManager.containsPage(player)) return;
+        if (HolderManager.containsPage(player)) return;
 
         final List<Integer> pages = HolderManager.getPages(player);
 
@@ -229,7 +237,7 @@ public class ExpiredMenu extends Holder {
 
                         Files.data.save();
 
-                        click();
+                        menu.click(player);
 
                         GuiManager.openPlayersExpiredList(player, 1);
 
@@ -239,7 +247,7 @@ public class ExpiredMenu extends Holder {
             }
 
             if (!valid) {
-                click();
+                menu.click(player);
 
                 GuiManager.openShop(player, HolderManager.getShopType(player), HolderManager.getShopCategory(player), 1);
 

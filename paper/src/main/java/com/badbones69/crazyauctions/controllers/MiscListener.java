@@ -1,7 +1,7 @@
 package com.badbones69.crazyauctions.controllers;
 
 import com.badbones69.crazyauctions.api.guis.HolderManager;
-import com.badbones69.crazyauctions.api.guis.types.transactions.BidMenu;
+import com.badbones69.crazyauctions.api.guis.types.other.BidMenu;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
