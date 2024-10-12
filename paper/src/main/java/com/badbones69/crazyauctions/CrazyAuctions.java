@@ -8,14 +8,15 @@ import com.badbones69.crazyauctions.api.guis.types.AuctionsMenu;
 import com.badbones69.crazyauctions.api.guis.types.CategoriesMenu;
 import com.badbones69.crazyauctions.api.guis.types.CurrentMenu;
 import com.badbones69.crazyauctions.api.guis.types.ExpiredMenu;
-import com.badbones69.crazyauctions.api.guis.types.transactions.BidMenu;
-import com.badbones69.crazyauctions.api.guis.types.transactions.BuyingMenu;
+import com.badbones69.crazyauctions.api.guis.types.other.BidMenu;
+import com.badbones69.crazyauctions.api.guis.types.other.BuyingMenu;
 import com.badbones69.crazyauctions.api.support.MetricsWrapper;
 import com.badbones69.crazyauctions.commands.AuctionCommand;
 import com.badbones69.crazyauctions.commands.AuctionTab;
 import com.badbones69.crazyauctions.controllers.MarcoListener;
 import com.badbones69.crazyauctions.controllers.MiscListener;
 import com.badbones69.crazyauctions.currency.VaultSupport;
+import com.badbones69.crazyauctions.tasks.InventoryManager;
 import com.ryderbelserion.vital.paper.Vital;
 import com.ryderbelserion.vital.paper.util.scheduler.FoliaRunnable;
 import org.bukkit.OfflinePlayer;
@@ -55,6 +56,8 @@ public class CrazyAuctions extends Vital {
                 .addFile(new File(getDataFolder(), "data.yml"))
                 .addFile(new File(getDataFolder(), "messages.yml"))
                 .init();
+
+        InventoryManager.loadButtons();
 
         this.crazyManager = new CrazyManager();
 

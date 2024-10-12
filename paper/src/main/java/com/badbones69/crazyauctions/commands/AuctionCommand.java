@@ -92,6 +92,8 @@ public class AuctionCommand implements CommandExecutor {
 
                     this.crazyManager.load();
 
+                    InventoryManager.loadButtons();
+
                     sender.sendMessage(Messages.RELOAD.getMessage(sender));
 
                     return true;
