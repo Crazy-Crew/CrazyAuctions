@@ -9,11 +9,9 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 /**
- *
  * @author BadBones69
  *
  * This event is fired when a player's item is cancelled.
- *
  */
 public class AuctionCancelledEvent extends Event {
     

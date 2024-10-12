@@ -18,7 +18,6 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -32,8 +31,6 @@ public class CurrentMenu extends Holder {
 
     private FileConfiguration config;
     private FileConfiguration data;
-
-    private int maxPages;
 
     public CurrentMenu(final Player player, final String title, final int size, final int page) {
         super(player, title, size, page);
@@ -58,8 +55,6 @@ public class CurrentMenu extends Holder {
         ));
 
         getItems();
-
-        this.maxPages = getMaxPage(this.items);
 
         for (final String key : this.options) {
             if (!this.config.contains("Settings.GUISettings.OtherSettings." + key)) {

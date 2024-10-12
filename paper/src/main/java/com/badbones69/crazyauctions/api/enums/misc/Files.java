@@ -4,7 +4,6 @@ import com.badbones69.crazyauctions.CrazyAuctions;
 import com.ryderbelserion.vital.paper.api.files.FileManager;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.jetbrains.annotations.NotNull;
-
 import java.io.File;
 
 public enum Files {

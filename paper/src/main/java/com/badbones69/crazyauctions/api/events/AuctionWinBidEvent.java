@@ -7,11 +7,9 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 /**
- *
  * @author BadBones69
  *
  * This event is fired when a bidding item's time has run out and so a player wins the item.
- *
  */
 public class AuctionWinBidEvent extends Event {
     

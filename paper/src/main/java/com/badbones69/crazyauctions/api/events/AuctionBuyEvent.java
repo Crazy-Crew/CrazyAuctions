@@ -7,11 +7,9 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 /**
- *
  * @author BadBones69
  *
  * This event is fired when a player buys something from the selling auction house.
- *
  */
 public class AuctionBuyEvent extends Event {
     

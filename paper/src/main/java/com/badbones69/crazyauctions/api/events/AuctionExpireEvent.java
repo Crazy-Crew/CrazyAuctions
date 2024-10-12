@@ -8,11 +8,9 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 /**
- *
  * @author BadBones69
  *
  * This event is fired when a player item expires.
- *
  */
 public class AuctionExpireEvent extends Event {
     
