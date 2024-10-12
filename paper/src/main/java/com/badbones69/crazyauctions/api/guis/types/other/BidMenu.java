@@ -1,4 +1,4 @@
-package com.badbones69.crazyauctions.api.guis.types.transactions;
+package com.badbones69.crazyauctions.api.guis.types.other;
 
 import com.badbones69.crazyauctions.Methods;
 import com.badbones69.crazyauctions.api.builders.ItemBuilder;
@@ -13,6 +13,7 @@ import com.badbones69.crazyauctions.api.GuiManager;
 import com.badbones69.crazyauctions.currency.VaultSupport;
 import io.papermc.paper.persistence.PersistentDataContainerView;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -59,17 +60,20 @@ public class BidMenu extends Holder {
 
         final ItemBuilder builder = new ItemBuilder().setMaterial(Material.LIME_STAINED_GLASS_PANE).setAmount(1);
 
-        this.inventory.setItem(9, builder.addString("+1").addInteger(1).setName("&a+1").build());
-        this.inventory.setItem(10, builder.addString("+10").addInteger(10).setName("&a+10").build());
-        this.inventory.setItem(11, builder.addString("+100").addInteger(100).setName("&a+100").build());
-        this.inventory.setItem(12, builder.addString("+1000").addInteger(1000).setName("&a+1000").build());
-        this.inventory.setItem(14, builder.addString("-1000").addInteger(-1000).setName("&c-1000").build());
-        this.inventory.setItem(15, builder.addString("-100").addInteger(-100).setName("&c-100").build());
-        this.inventory.setItem(16, builder.addString("-10").addInteger(-10).setName("&c-10").build());
-        this.inventory.setItem(17, builder.addString("-1").addInteger(-1).setName("&c-1").build());
+        NamespacedKey auction_button = Keys.auction_button.getNamespacedKey();
+        NamespacedKey auction_price = Keys.auction_price.getNamespacedKey();
+
+        this.inventory.setItem(9, builder.addString("+1", auction_button).addInteger(1, auction_price).setName("&a+1").build());
+        this.inventory.setItem(10, builder.addString("+10", auction_button).addInteger(10, auction_price).setName("&a+10").build());
+        this.inventory.setItem(11, builder.addString("+100", auction_button).addInteger(100, auction_price).setName("&a+100").build());
+        this.inventory.setItem(12, builder.addString("+1000", auction_button).addInteger(1000, auction_price).setName("&a+1000").build());
+        this.inventory.setItem(14, builder.addString("-1000", auction_button).addInteger(-1000, auction_price).setName("&c-1000").build());
+        this.inventory.setItem(15, builder.addString("-100", auction_button).addInteger(-100, auction_price).setName("&c-100").build());
+        this.inventory.setItem(16, builder.addString("-10", auction_button).addInteger(-10, auction_price).setName("&c-10").build());
+        this.inventory.setItem(17, builder.addString("-1", auction_button).addInteger(-1, auction_price).setName("&c-1").build());
         this.inventory.setItem(13, getBiddingGlass(this.player, this.id));
 
-        this.inventory.setItem(22, new ItemBuilder().addString("bid_item").setMaterial(this.config.getString("Settings.GUISettings.OtherSettings.Bid.Item")).setAmount(1)
+        this.inventory.setItem(22, new ItemBuilder().addString("bid_item", auction_button).setMaterial(this.config.getString("Settings.GUISettings.OtherSettings.Bid.Item")).setAmount(1)
                 .setName(this.config.getString("Settings.GUISettings.OtherSettings.Bid.Name")).setLore(this.config.getStringList("Settings.GUISettings.OtherSettings.Bid.Lore")).build());
 
         this.inventory.setItem(4, getBiddingItem(this.id));
@@ -117,11 +121,13 @@ public class BidMenu extends Holder {
 
                 String topBidder = data.getString("Items." + ID + ".TopBidder", "None");
 
-                if (support.getMoney(player) < bid) {
-                    Map<String, String> placeholders = new HashMap<>();
+                final long money = support.getMoney(player);
 
-                    placeholders.put("%Money_Needed%", (bid - support.getMoney(player)) + "");
-                    placeholders.put("%money_needed%", (bid - support.getMoney(player)) + "");
+                if (money < bid) {
+                    final Map<String, String> placeholders = new HashMap<>();
+
+                    placeholders.put("%Money_Needed%", String.valueOf(bid - money));
+                    placeholders.put("%money_needed%", String.valueOf(bid - money));
 
                     player.sendMessage(Messages.NEED_MORE_MONEY.getMessage(player, placeholders));
 
@@ -145,8 +151,8 @@ public class BidMenu extends Holder {
                 data.set("Items." + ID + ".Price", bid);
                 data.set("Items." + ID + ".TopBidder", player.getUniqueId().toString());
 
-                Map<String, String> placeholders = new HashMap<>();
-                placeholders.put("%Bid%", bid + "");
+                final Map<String, String> placeholders = new HashMap<>();
+                placeholders.put("%Bid%", String.valueOf(bid));
 
                 player.sendMessage(Messages.BID_MESSAGE.getMessage(player, placeholders));
 
@@ -154,7 +160,7 @@ public class BidMenu extends Holder {
 
                 HolderManager.addBidding(player, 0);
                 player.closeInventory();
-                click();
+                menu.click(player);
             }
 
             case "+1", "+10", "+100", "+1000" -> {

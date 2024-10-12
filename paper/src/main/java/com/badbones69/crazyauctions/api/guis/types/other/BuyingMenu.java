@@ -1,4 +1,4 @@
-package com.badbones69.crazyauctions.api.guis.types.transactions;
+package com.badbones69.crazyauctions.api.guis.types.other;
 
 import com.badbones69.crazyauctions.Methods;
 import com.badbones69.crazyauctions.api.builders.ItemBuilder;
@@ -79,12 +79,12 @@ public class BuyingMenu extends Holder {
             final ItemBuilder itemBuilder = new ItemBuilder().setMaterial(id).setName(name).setAmount(1);
 
             if (this.config.contains("Settings.GUISettings.OtherSettings." + key + ".Lore")) {
-                itemBuilder.setLore(this.config.getStringList("Settings.GUISettings.OtherSettings." + key + ".Lore")).addString(key);
+                itemBuilder.setLore(this.config.getStringList("Settings.GUISettings.OtherSettings." + key + ".Lore")).addString(key, Keys.auction_button.getNamespacedKey());
             }
 
             switch (key) {
                 case "Confirm" -> {
-                    final ItemStack itemStack = itemBuilder.addString("Confirm").build();
+                    final ItemStack itemStack = itemBuilder.addString("Confirm", Keys.auction_button.getNamespacedKey()).build();
 
                     this.inventory.setItem(0, itemStack);
                     this.inventory.setItem(1, itemStack);
@@ -93,7 +93,7 @@ public class BuyingMenu extends Holder {
                 }
 
                 case "Cancel" -> {
-                    final ItemStack itemStack = itemBuilder.addString("Cancel").build();
+                    final ItemStack itemStack = itemBuilder.addString("Cancel", Keys.auction_button.getNamespacedKey()).build();
 
                     this.inventory.setItem(5, itemStack);
                     this.inventory.setItem(6, itemStack);
@@ -103,18 +103,18 @@ public class BuyingMenu extends Holder {
             }
         }
 
-        ItemBuilder itemBuilder = ItemBuilder.convertItemStack(data.getString("Items." + this.id + ".Item"));
+        ItemBuilder itemBuilder = ItemBuilder.convertItemStack(this.data.getString("Items." + this.id + ".Item"));
 
         List<String> lore = new ArrayList<>(itemBuilder.getUpdatedLore());
 
         lore.add(" ");
 
         String price = Methods.getPrice(this.id, false);
-        String time = Methods.convertToTime(data.getLong("Items." + this.id + ".Time-Till-Expire"));
+        String time = Methods.convertToTime(this.data.getLong("Items." + this.id + ".Time-Till-Expire"));
 
         OfflinePlayer target = null;
 
-        String id = data.getString("Items." + this.id + ".Seller");
+        String id = this.data.getString("Items." + this.id + ".Seller");
 
         if (id != null) {
             target = Methods.getOfflinePlayer(id);
@@ -175,7 +175,7 @@ public class BuyingMenu extends Holder {
                 String seller = data.getString("Items." + ID + ".Seller");
 
                 if (!data.contains("Items." + ID)) {
-                    click();
+                    menu.click(player);
 
                     GuiManager.openShop(player, HolderManager.getShopType(player), HolderManager.getShopCategory(player), 1);
 
@@ -185,7 +185,7 @@ public class BuyingMenu extends Holder {
                 }
 
                 if (Methods.isInvFull(player)) {
-                    click();
+                    menu.click(player);
 
                     player.closeInventory();
                     player.sendMessage(Messages.INVENTORY_FULL.getMessage(player));
@@ -196,7 +196,7 @@ public class BuyingMenu extends Holder {
                 final VaultSupport support = this.plugin.getSupport();
 
                 if (support.getMoney(player) < cost) {
-                    click();
+                    menu.click(player);
                     player.closeInventory();
 
                     Map<String, String> placeholders = new HashMap<>();
@@ -248,7 +248,7 @@ public class BuyingMenu extends Holder {
                 data.set("Items." + ID, null);
                 Files.data.save();
 
-                click();
+                menu.click(player);
 
                 GuiManager.openShop(player, HolderManager.getShopType(player), HolderManager.getShopCategory(player), 1);
             }
@@ -256,7 +256,7 @@ public class BuyingMenu extends Holder {
             case "Cancel" -> {
                 GuiManager.openShop(player, HolderManager.getShopType(player), HolderManager.getShopCategory(player), 1);
 
-                click();
+                menu.click(player);
             }
         }
     }
