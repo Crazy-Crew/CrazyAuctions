@@ -107,18 +107,20 @@ public class CurrentMenu extends Holder {
 
         final PersistentDataContainerView container = itemStack.getPersistentDataContainer();
 
-        if (!container.has(Keys.auction_button.getNamespacedKey())) return;
-
-        final String type = container.getOrDefault(Keys.auction_button.getNamespacedKey(), PersistentDataType.STRING, "");
-
-        if (type.isEmpty()) return;
-
         final Player player = (Player) event.getWhoClicked();
 
-        if (type.equalsIgnoreCase("Back")) {
-            GuiManager.openShop(player, HolderManager.getShopType(player), HolderManager.getShopCategory(player), 1);
+        if (container.has(Keys.auction_button.getNamespacedKey())) {
+            final String type = container.getOrDefault(Keys.auction_button.getNamespacedKey(), PersistentDataType.STRING, "");
 
-            menu.click(player);
+            if (!type.isEmpty()) {
+                if (type.equalsIgnoreCase("Back")) {
+                    GuiManager.openShop(player, HolderManager.getShopType(player), HolderManager.getShopCategory(player), 1);
+
+                    menu.click(player);
+                }
+
+                return;
+            }
 
             return;
         }
@@ -127,7 +129,7 @@ public class CurrentMenu extends Holder {
 
         final FileConfiguration data = Files.data.getConfiguration();
 
-        final ConfigurationSection section = data.getConfigurationSection("OutOfTime/Cancelled");
+        final ConfigurationSection section = data.getConfigurationSection("Items");
 
         if (id.isEmpty() || section == null) {
             menu.click(player);
@@ -159,7 +161,7 @@ public class CurrentMenu extends Holder {
         this.plugin.getServer().getPluginManager().callEvent(auctionCancelledEvent);
 
         int num = 1;
-        for (; data.contains("OutOfTime/Cancelled." + num); num++) ;
+        for (;data.contains("OutOfTime/Cancelled." + num); num++);
 
         data.set("OutOfTime/Cancelled." + num + ".Seller", auction.getString("Seller"));
         data.set("OutOfTime/Cancelled." + num + ".Full-Time", auction.getString("Full-Time"));
