@@ -5,6 +5,8 @@ import com.badbones69.crazyauctions.Methods;
 import com.badbones69.crazyauctions.api.CrazyManager;
 import com.badbones69.crazyauctions.api.enums.ShopType;
 import com.badbones69.crazyauctions.api.enums.misc.Files;
+import com.badbones69.crazyauctions.tasks.UserManager;
+import com.badbones69.crazyauctions.tasks.objects.Auction;
 import com.ryderbelserion.vital.paper.api.enums.Support;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Server;
@@ -17,7 +19,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
-import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +28,8 @@ public abstract class Holder implements InventoryHolder, Listener {
     protected final CrazyAuctions plugin = CrazyAuctions.getPlugin();
 
     protected final CrazyManager crazyManager = this.plugin.getCrazyManager();
+
+    protected final UserManager userManager = this.plugin.getUserManager();
 
     protected final Server server = this.plugin.getServer();
 
@@ -91,8 +94,8 @@ public abstract class Holder implements InventoryHolder, Listener {
         return this.page;
     }
 
-    public final List<ItemStack> getPageItems(final List<ItemStack> list, int page, final int size) {
-        List<ItemStack> items = new ArrayList<>();
+    public final List<Auction> getPageItems(final List<Auction> list, int page, final int size) {
+        List<Auction> items = new ArrayList<>();
 
         if (page <= 0) page = 1;
 
@@ -118,7 +121,7 @@ public abstract class Holder implements InventoryHolder, Listener {
         return items;
     }
 
-    public final int getMaxPage(final List<ItemStack> list) {
+    public final int getMaxPage(final List<Auction> list) {
         final int size = list.size();
 
         return (int) Math.ceil((double) size / getSize());
