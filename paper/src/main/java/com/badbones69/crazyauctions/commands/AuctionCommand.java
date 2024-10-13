@@ -10,6 +10,7 @@ import com.badbones69.crazyauctions.api.enums.ShopType;
 import com.badbones69.crazyauctions.api.events.AuctionListEvent;
 import com.badbones69.crazyauctions.api.GuiManager;
 import com.badbones69.crazyauctions.tasks.InventoryManager;
+import com.badbones69.crazyauctions.tasks.UserManager;
 import com.ryderbelserion.vital.paper.api.files.FileManager;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -30,6 +31,8 @@ public class AuctionCommand implements CommandExecutor {
     private final CrazyAuctions plugin = CrazyAuctions.getPlugin();
 
     private final CrazyManager crazyManager = this.plugin.getCrazyManager();
+
+    private final UserManager userManager = this.plugin.getUserManager();
 
     private final FileManager fileManager = this.plugin.getFileManager();
 
@@ -89,7 +92,10 @@ public class AuctionCommand implements CommandExecutor {
                     this.fileManager.reloadFiles().init();
 
                     // update it again!
-                    this.plugin.getUserManager().updateAuctionsCache();
+                    this.userManager.updateAuctionsCache();
+
+                    // we want to update this cache, after the cache above... because we will also calculate if items are expired!
+                    this.userManager.updateExpiredCache();
 
                     //todo() close inventories by tracking viewers, so the cache can be updated than re-open their inventories
                     //todo() we need to track the specific inventory they opened, and if it's for them or another player
@@ -336,7 +342,7 @@ public class AuctionCommand implements CommandExecutor {
                         ItemStack stack = item.clone();
                         stack.setAmount(amount);
 
-                        this.plugin.getUserManager().addAuction(player, stack, price, args[0].equalsIgnoreCase("bid"));
+                        this.userManager.addAuction(player, stack, price, args[0].equalsIgnoreCase("bid"));
 
                         this.plugin.getServer().getPluginManager().callEvent(new AuctionListEvent(player, type, stack, price));
 

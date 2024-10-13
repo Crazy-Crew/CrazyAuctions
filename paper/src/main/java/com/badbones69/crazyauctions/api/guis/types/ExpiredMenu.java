@@ -9,6 +9,7 @@ import com.badbones69.crazyauctions.api.guis.Holder;
 import com.badbones69.crazyauctions.api.guis.HolderManager;
 import com.badbones69.crazyauctions.api.GuiManager;
 import com.badbones69.crazyauctions.tasks.InventoryManager;
+import com.badbones69.crazyauctions.tasks.objects.ExpiredItem;
 import io.papermc.paper.persistence.PersistentDataContainerView;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -19,17 +20,14 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.UUID;
 
 public class ExpiredMenu extends Holder {
 
-    private List<ItemStack> items;
+    private List<ExpiredItem> items;
     private List<String> options;
 
     private FileConfiguration config;
-    private FileConfiguration data;
-
     private int maxPages;
 
     public ExpiredMenu(final Player player, final String title, final int size, final int page) {
@@ -39,7 +37,6 @@ public class ExpiredMenu extends Holder {
         this.options = new ArrayList<>();
 
         this.config = Files.config.getConfiguration();
-        this.data = Files.data.getConfiguration();
     }
 
     public ExpiredMenu() {}
@@ -54,9 +51,9 @@ public class ExpiredMenu extends Holder {
                 "WhatIsThis.Cancelled/ExpiredItems"
         ));
 
-        getItems();
+        this.items = this.userManager.getExpiredItems().get(this.player.getUniqueId());
 
-        this.maxPages = getMaxPage(this.items);
+        this.maxPages = getExpiredMaxPages(this.items);
 
         for (final String key : this.options) {
             if (!this.config.contains("Settings.GUISettings.OtherSettings." + key)) {
@@ -86,10 +83,10 @@ public class ExpiredMenu extends Holder {
             }
         }
 
-        for (final ItemStack item : getPageItems(this.items, getPage(), getSize())) {
+        for (final ExpiredItem item : getPageItem(this.items, getPage(), getSize())) {
             int slot = this.inventory.firstEmpty();
 
-            this.inventory.setItem(slot, item);
+            this.inventory.setItem(slot, item.getExpiredItem().build());
         }
 
         this.player.openInventory(this.inventory);
@@ -165,33 +162,47 @@ public class ExpiredMenu extends Holder {
             }
 
             case "Return" -> {
-                FileConfiguration data = Files.data.getConfiguration();
+                if (Methods.isInvFull(player)) { // run this first obviously, just because
+                    player.sendMessage(Messages.INVENTORY_FULL.getMessage(player));
 
-                if (data.contains("OutOfTime/Cancelled")) {
-                    for (String i : data.getConfigurationSection("OutOfTime/Cancelled").getKeys(false)) {
-                        if (data.getString("OutOfTime/Cancelled." + i + ".Seller").equalsIgnoreCase(player.getUniqueId().toString())) {
-                            if (Methods.isInvFull(player)) {
-                                player.sendMessage(Messages.INVENTORY_FULL.getMessage(player));
-
-                                break;
-                            } else {
-                                final ItemStack yoink = Methods.fromBase64(data.getString("OutOfTime/Cancelled." + i + ".Item", ""));
-
-                                if (yoink != null) {
-                                    player.getInventory().addItem(yoink);
-
-                                    data.set("OutOfTime/Cancelled." + i, null);
-                                } else {
-                                    this.plugin.getLogger().warning("The player " + player.getName() + " tried to redeem an invalid item in the expired menu.");
-                                }
-                            }
-                        }
-                    }
+                    return;
                 }
 
-                player.sendMessage(Messages.GOT_ITEM_BACK.getMessage(player));
+                final FileConfiguration data = Files.data.getConfiguration();
+
+                final ConfigurationSection section = data.getConfigurationSection("expired_auctions");
+
+                if (section == null) return;
+
+                final ConfigurationSection player_section = section.getConfigurationSection(player.getUniqueId().toString());
+
+                if (player_section == null) return;
+
+                final Inventory player_inventory = player.getInventory();
+
+                for (final String key : section.getKeys(false)) {
+                    if (Methods.isInvFull(player)) { // run this here obviously as well
+                        player.sendMessage(Messages.INVENTORY_FULL.getMessage(player));
+
+                        break;
+                    }
+
+                    final ConfigurationSection auction_section = section.getConfigurationSection(key);
+
+                    if (auction_section == null) continue;
+
+                    final ItemStack auction_item = Methods.fromBase64(auction_section.getString("item"));
+
+                    if (auction_item == null) continue;
+
+                    player_inventory.addItem(auction_item);
+
+                    player_section.set(key, null);
+                }
 
                 Files.data.save();
+
+                player.sendMessage(Messages.GOT_ITEM_BACK.getMessage(player));
 
                 menu.click(player);
 
@@ -201,99 +212,24 @@ public class ExpiredMenu extends Holder {
             }
         }
 
-        String id = container.getOrDefault(Keys.auction_item.getNamespacedKey(), PersistentDataType.STRING, "");
-
-        if (id.isEmpty()) return;
-
-        if (Methods.isInvFull(player)) {
+        if (Methods.isInvFull(player)) { // run this here obviously as well
             player.sendMessage(Messages.INVENTORY_FULL.getMessage(player));
 
             return;
         }
 
-        final FileConfiguration data = Files.data.getConfiguration();
+        final UUID uuid = player.getUniqueId();
 
-        final ConfigurationSection section = data.getConfigurationSection("OutOfTime/Cancelled");
-
-        if (section == null) return;
-
-        final ConfigurationSection auction = section.getConfigurationSection(id);
+        final ExpiredItem auction = this.userManager.getExpiredItemById(uuid, container.getOrDefault(Keys.auction_store_id.getNamespacedKey(), PersistentDataType.STRING, ""));
 
         if (auction == null) return;
 
-        final ItemStack yoink = Methods.fromBase64(auction.getString("Item"));
+        player.getInventory().addItem(auction.asItemStack());
 
-        if (yoink != null) {
-            player.sendMessage(Messages.GOT_ITEM_BACK.getMessage(player));
+        Files.data.save();
 
-            player.getInventory().addItem(yoink);
+        menu.click(player);
 
-            data.set("OutOfTime/Cancelled." + id, null);
-
-            Files.data.save();
-
-            menu.click(player);
-
-            GuiManager.openPlayersExpiredList(player, 1);
-        } else {
-            menu.click(player);
-
-            GuiManager.openShop(player, HolderManager.getShopType(player), HolderManager.getShopCategory(player), 1);
-
-            player.sendMessage(Messages.ITEM_DOESNT_EXIST.getMessage(player));
-        }
-    }
-
-    private void getItems() {
-        final ConfigurationSection section = this.data.getConfigurationSection("OutOfTime/Cancelled");
-
-        if (section == null) return;
-
-        final UUID uuid = this.player.getUniqueId();
-
-        for (String key : section.getKeys(false)) {
-            final ConfigurationSection auction = section.getConfigurationSection(key);
-
-            if (auction == null) continue;
-
-            final String seller = auction.getString("Seller", "");
-
-            if (seller.isEmpty()) continue;
-
-            if (!seller.equalsIgnoreCase(uuid.toString())) continue;
-
-            final String item = auction.getString("Item", "");
-
-            if (item.isEmpty()) continue;
-
-            final ItemBuilder itemBuilder = ItemBuilder.convertItemStack(item);
-
-            if (itemBuilder == null) {
-                this.plugin.getLogger().warning("The item with store id " + auction.getString("StoreID", "expired_menu") + " obtained from your data.yml could not be converted!");
-
-                continue;
-            }
-
-            final long price = auction.getLong("Price");
-
-            final String priceFormat = String.format(Locale.ENGLISH, "%,d", price);
-
-            final String time = Methods.convertToTime(auction.getLong("Time-Till-Expire"));
-
-            final List<String> lore = new ArrayList<>(itemBuilder.getUpdatedLore());
-
-            lore.add(" ");
-
-            for (final String line : this.config.getStringList("Settings.GUISettings.Cancelled/ExpiredLore")) {
-                lore.add(line.replace("%Time%", time).replace("%time%", time).replace("%price%", priceFormat).replace("%Price%", priceFormat));
-            }
-
-            itemBuilder.setLore(lore);
-
-            itemBuilder.addInteger(auction.getInt("StoreID"), Keys.auction_id.getNamespacedKey());
-            itemBuilder.addString(auction.getName(), Keys.auction_item.getNamespacedKey());
-
-            this.items.add(itemBuilder.build());
-        }
+        GuiManager.openPlayersExpiredList(player, menu.getPage());
     }
 }

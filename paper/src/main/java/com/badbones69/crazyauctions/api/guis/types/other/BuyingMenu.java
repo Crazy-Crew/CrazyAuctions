@@ -116,7 +116,7 @@ public class BuyingMenu extends Holder {
 
         String id = this.data.getString("Items." + this.id + ".Name", "None");
 
-        for (String l : config.getStringList("Settings.GUISettings.SellingItemLore")) {
+        for (String l : this.config.getStringList("Settings.GUISettings.SellingItemLore")) {
             lore.add(l.replace("%Price%", price).replace("%price%", price)
                     .replace("%Seller%", id)
                     .replace("%seller%", id)
@@ -126,8 +126,8 @@ public class BuyingMenu extends Holder {
 
         itemBuilder.setLore(lore);
 
-        itemBuilder.addInteger(this.data.getInt("Items." + this.id + ".StoreID"), Keys.auction_id.getNamespacedKey());
-        itemBuilder.addString(this.id, Keys.auction_item.getNamespacedKey());
+        itemBuilder.addInteger(this.data.getInt("Items." + this.id + ".StoreID"), Keys.auction_store_id.getNamespacedKey());
+        itemBuilder.addString(this.id, Keys.auction_number.getNamespacedKey());
 
         this.inventory.setItem(4, itemBuilder.build());
 

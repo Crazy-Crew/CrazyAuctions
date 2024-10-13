@@ -2,8 +2,11 @@ package com.badbones69.crazyauctions.tasks;
 
 import com.badbones69.crazyauctions.CrazyAuctions;
 import com.badbones69.crazyauctions.Methods;
+import com.badbones69.crazyauctions.api.enums.Reasons;
 import com.badbones69.crazyauctions.api.enums.misc.Files;
-import com.badbones69.crazyauctions.tasks.objects.Auction;
+import com.badbones69.crazyauctions.api.events.AuctionCancelledEvent;
+import com.badbones69.crazyauctions.tasks.objects.AuctionItem;
+import com.badbones69.crazyauctions.tasks.objects.ExpiredItem;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -18,7 +21,9 @@ public class UserManager {
 
     private final CrazyAuctions plugin = CrazyAuctions.getPlugin();
 
-    private final Map<UUID, List<Auction>> auctions = new HashMap<>();
+    private final Map<UUID, List<AuctionItem>> auctions = new HashMap<>();
+
+    private final Map<UUID, List<ExpiredItem>> expired_items = new HashMap<>();
 
     public void addAuction(final Player player, final ItemStack itemStack, final long price, final boolean isBiddable) {
         final FileConfiguration data = Files.data.getConfiguration();
@@ -51,6 +56,18 @@ public class UserManager {
         addItem(itemStack, uuid, price, isBiddable, config, section);
     }
 
+    public void removeAuction(final AuctionItem auction) {
+        if (!this.auctions.containsKey(auction.getUuid())) {
+            return;
+        }
+
+        final List<AuctionItem> auctions = this.auctions.get(auction.getUuid());
+
+        auctions.remove(auction);
+
+        this.auctions.put(auction.getUuid(), auctions);
+    }
+
     public final void updateAuctionsCache() {
         this.auctions.clear();
 
@@ -70,19 +87,43 @@ public class UserManager {
 
                 if (auction == null) continue;
 
-                addCache(key, auction);
+                addActiveAuction(key, auction);
             }
         }
     }
 
-    public final Map<UUID, List<Auction>> getAuctions() {
+    public final void updateExpiredCache() {
+        this.expired_items.clear();
+
+        final FileConfiguration data = Files.data.getConfiguration();
+
+        final ConfigurationSection section = data.getConfigurationSection("expired_auctions");
+
+        if (section == null) return;
+
+        for (String key : section.getKeys(false)) {
+            final ConfigurationSection player = section.getConfigurationSection(key);
+
+            if (player == null) continue;
+
+            for (String number : player.getKeys(false)) {
+                final ConfigurationSection auction = player.getConfigurationSection(number);
+
+                if (auction == null) continue;
+
+                addExpiredAuction(key, auction);
+            }
+        }
+    }
+
+    public final Map<UUID, List<AuctionItem>> getAuctions() {
         return this.auctions;
     }
 
-    public final Auction getAuctionById(final UUID uuid, final String store_id) {
-        Auction key = null;
+    public final AuctionItem getAuctionById(final UUID uuid, final String store_id) {
+        AuctionItem key = null;
 
-        for (final Auction auction : this.auctions.get(uuid)) {
+        for (final AuctionItem auction : this.auctions.get(uuid)) {
             if (!auction.getStoreID().equals(store_id)) continue;
 
             key = auction;
@@ -91,6 +132,80 @@ public class UserManager {
         }
 
         return key;
+    }
+
+    public void addExpiredItem(final Player player, final AuctionItem auction) {
+        final AuctionCancelledEvent auctionCancelledEvent = new AuctionCancelledEvent(player, auction.asItemStack(), Reasons.PLAYER_FORCE_CANCEL);
+        this.plugin.getServer().getPluginManager().callEvent(auctionCancelledEvent);
+
+        final UUID uuid = player.getUniqueId();
+
+        final FileConfiguration data = Files.data.getConfiguration();
+
+        int number = 1;
+
+        for (;data.contains("expired_auctions." + uuid + "." + number); number++);
+
+        data.set("expired_auctions." + uuid + "." + number + ".name", auction.getName());
+
+        final ConfigurationSection section = data.getConfigurationSection("expired_auctions." + uuid + "." + number);
+
+        if (section == null) return;
+
+        section.set("item", auction.asBase64());
+        section.set("store_id", auction.getStoreID());
+        section.set("full_time", auction.getFullExpire());
+        section.set("price", auction.getPrice());
+
+        data.set("active_auctions." + uuid+ "." + auction.getId(), null);
+
+        if (!data.contains("active_auctions." + uuid + "." + auction.getId())) {
+            removeAuction(auction);
+        }
+
+        Files.data.save();
+
+        final ExpiredItem expiredItem = new ExpiredItem(
+                auction.getUuid().toString(),
+                auction.getName(),
+                String.valueOf(number),
+                auction.asBase64(),
+                auction.getStoreID(),
+                auction.getFullExpire(),
+                auction.getPrice()
+        );
+
+        if (this.expired_items.containsKey(uuid)) {
+            final List<ExpiredItem> items = this.expired_items.get(uuid);
+
+            items.add(expiredItem);
+
+            this.expired_items.put(uuid, items);
+
+            return;
+        }
+
+        this.expired_items.put(uuid, new ArrayList<>() {{
+            add(expiredItem);
+        }});
+    }
+
+    public final ExpiredItem getExpiredItemById(final UUID uuid, final String store_id) {
+        ExpiredItem key = null;
+
+        for (final ExpiredItem auction : this.expired_items.get(uuid)) {
+            if (!auction.getStoreID().equals(store_id)) continue;
+
+            key = auction;
+
+            break;
+        }
+
+        return key;
+    }
+
+    public final Map<UUID, List<ExpiredItem>> getExpiredItems() {
+        return this.expired_items;
     }
 
     /**
@@ -119,13 +234,39 @@ public class UserManager {
         section.set("status.top_bidder.name", "None");
         section.set("status.biddable", isBiddable);
 
-        addCache(uuid, section);
+        addActiveAuction(uuid, section);
 
         Files.data.save();
     }
 
-    private void addCache(final String uuid, final ConfigurationSection section) {
-        final Auction new_auction = new Auction(uuid, section.getString("name"),
+    private void addExpiredAuction(final String uuid, final ConfigurationSection section) {
+        final ExpiredItem expired_item = new ExpiredItem(
+                uuid,
+                section.getString("name"),
+                section.getName(),
+                section.getString("item"),
+                section.getString("store_id"),
+                section.getLong("full_time"),
+                section.getLong("price")
+        );
+
+        final UUID fromString = UUID.fromString(uuid);
+
+        if (this.expired_items.containsKey(fromString)) {
+            final List<ExpiredItem> auctions = this.expired_items.get(fromString);
+
+            auctions.add(expired_item);
+
+            this.expired_items.put(fromString, auctions);
+        } else {
+            this.expired_items.put(fromString, new ArrayList<>() {{
+                add(expired_item);
+            }});
+        }
+    }
+
+    private void addActiveAuction(final String uuid, final ConfigurationSection section) {
+        final AuctionItem new_auction = new AuctionItem(uuid, section.getString("name"),
                 section.getName(),
                 section.getString("item"),
                 section.getString("store_id"),
@@ -140,7 +281,7 @@ public class UserManager {
         final UUID fromString = UUID.fromString(uuid);
 
         if (this.auctions.containsKey(fromString)) {
-            final List<Auction> auctions = this.auctions.get(fromString);
+            final List<AuctionItem> auctions = this.auctions.get(fromString);
 
             auctions.add(new_auction);
 

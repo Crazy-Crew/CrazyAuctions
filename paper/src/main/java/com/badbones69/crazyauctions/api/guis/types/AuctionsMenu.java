@@ -11,7 +11,7 @@ import com.badbones69.crazyauctions.api.guis.HolderManager;
 import com.badbones69.crazyauctions.api.GuiManager;
 import com.badbones69.crazyauctions.currency.VaultSupport;
 import com.badbones69.crazyauctions.tasks.InventoryManager;
-import com.badbones69.crazyauctions.tasks.objects.Auction;
+import com.badbones69.crazyauctions.tasks.objects.AuctionItem;
 import com.ryderbelserion.vital.paper.util.scheduler.FoliaRunnable;
 import io.papermc.paper.persistence.PersistentDataContainerView;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -26,7 +26,7 @@ import java.util.UUID;
 
 public class AuctionsMenu extends Holder {
 
-    private List<Auction> items;
+    private List<AuctionItem> items;
     private List<String> options;
     private int maxPages;
 
@@ -138,10 +138,10 @@ public class AuctionsMenu extends Holder {
             }
         }
 
-        for (final Auction item : getPageItems(this.items, getPage(), getSize())) {
+        for (final AuctionItem item : getPageItems(this.items, getPage(), getSize())) {
             int slot = this.inventory.firstEmpty();
 
-            this.inventory.setItem(slot, item.getItemBuilder(this.shopType).build());
+            this.inventory.setItem(slot, item.getActiveItem(this.shopType).build());
         }
 
         this.player.openInventory(this.inventory);
@@ -267,7 +267,7 @@ public class AuctionsMenu extends Holder {
 
         final UUID uuid = player.getUniqueId();
 
-        final Auction auction = this.userManager.getAuctionById(uuid, container.getOrDefault(Keys.auction_store_id.getNamespacedKey(), PersistentDataType.STRING, ""));
+        final AuctionItem auction = this.userManager.getAuctionById(uuid, container.getOrDefault(Keys.auction_store_id.getNamespacedKey(), PersistentDataType.STRING, ""));
 
         if (auction == null) return;
 
@@ -364,16 +364,14 @@ public class AuctionsMenu extends Holder {
     }
 
     private void getItems() {
-        this.userManager.getAuctions().forEach(((uuid, auctions) -> {
-            auctions.forEach(auction -> {
-                final ItemBuilder itemBuilder = auction.getItemBuilder(this.shopType);
+        this.userManager.getAuctions().forEach(((uuid, auctions) -> auctions.forEach(auction -> {
+            final ItemBuilder itemBuilder = auction.getActiveItem(this.shopType);
 
-                if (this.category != null && this.category != Category.NONE && !this.category.getItems().contains(itemBuilder.getMaterial())) {
-                    return;
-                }
+            if (this.category != null && this.category != Category.NONE && !this.category.getItems().contains(itemBuilder.getMaterial())) {
+                return;
+            }
 
-                this.items.add(auction);
-            });
-        }));
+            this.items.add(auction);
+        })));
     }
 }

@@ -2,16 +2,13 @@ package com.badbones69.crazyauctions.api.guis.types;
 
 import com.badbones69.crazyauctions.api.builders.ItemBuilder;
 import com.badbones69.crazyauctions.api.enums.Messages;
-import com.badbones69.crazyauctions.api.enums.Reasons;
 import com.badbones69.crazyauctions.api.enums.misc.Files;
 import com.badbones69.crazyauctions.api.enums.misc.Keys;
-import com.badbones69.crazyauctions.api.events.AuctionCancelledEvent;
 import com.badbones69.crazyauctions.api.guis.Holder;
 import com.badbones69.crazyauctions.api.guis.HolderManager;
 import com.badbones69.crazyauctions.api.GuiManager;
-import com.badbones69.crazyauctions.tasks.objects.Auction;
+import com.badbones69.crazyauctions.tasks.objects.AuctionItem;
 import io.papermc.paper.persistence.PersistentDataContainerView;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -26,7 +23,7 @@ public class CurrentMenu extends Holder {
 
     private FileConfiguration config;
     private List<String> options;
-    private List<Auction> items;
+    private List<AuctionItem> items;
     private int maxPages;
 
     public CurrentMenu(final Player player, final String title, final int size, final int page) {
@@ -74,10 +71,10 @@ public class CurrentMenu extends Holder {
             this.inventory.setItem(slot - 1, itemBuilder.build());
         }
 
-        for (final Auction item : getPageItems(this.items, getPage(), getSize())) {
+        for (final AuctionItem item : getPageItems(this.items, getPage(), getSize())) {
             int slot = this.inventory.firstEmpty();
 
-            this.inventory.setItem(slot, item.getItemBuilder().build());
+            this.inventory.setItem(slot, item.getCurrentItem().build());
         }
 
         this.player.openInventory(this.inventory);
@@ -155,36 +152,11 @@ public class CurrentMenu extends Holder {
 
         final UUID uuid = player.getUniqueId();
 
-        final Auction auction = this.userManager.getAuctionById(uuid, container.getOrDefault(Keys.auction_store_id.getNamespacedKey(), PersistentDataType.STRING, ""));
+        final AuctionItem auction = this.userManager.getAuctionById(uuid, container.getOrDefault(Keys.auction_store_id.getNamespacedKey(), PersistentDataType.STRING, ""));
 
         if (auction == null) return;
 
-        AuctionCancelledEvent auctionCancelledEvent = new AuctionCancelledEvent(player, auction.asItemStack(), Reasons.PLAYER_FORCE_CANCEL);
-        this.plugin.getServer().getPluginManager().callEvent(auctionCancelledEvent);
-
-        final FileConfiguration data = Files.data.getConfiguration();
-
-        int number = 1;
-
-        for (;data.contains("expired_auctions." + uuid + "." + number); number++);
-
-        data.set("expired_auctions." + uuid + "." + number + ".name", auction.getName());
-
-        final ConfigurationSection section = data.getConfigurationSection("expired_auctions." + uuid + "." + number);
-
-        if (section == null) return;
-
-        section.set("item", auction.asBase64());
-        section.set("store_id", auction.getStoreID());
-        section.set("full_time", auction.getFullExpire());
-
-        data.set("active_auctions." + uuid+ "." + auction.getId(), null);
-
-        if (!data.contains("active_auctions." + uuid + "." + auction.getId())) {
-            this.userManager.removeAuction(auction);
-        }
-
-        Files.data.save();
+        this.userManager.addExpiredItem(player, auction);
 
         player.sendMessage(Messages.CANCELLED_ITEM.getMessage(player));
 

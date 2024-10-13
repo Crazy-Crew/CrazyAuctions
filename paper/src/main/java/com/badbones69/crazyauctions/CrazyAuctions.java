@@ -58,8 +58,19 @@ public class CrazyAuctions extends Vital {
         this.userManager = new UserManager();
         this.userManager.updateAuctionsCache();
 
-        this.crazyManager = new CrazyManager();
+        // we want to update this cache, after the cache above... because we will also calculate if items are expired!
+        this.userManager.updateExpiredCache();
 
+        /*new FoliaRunnable(getServer().getGlobalRegionScheduler()) {
+            @Override
+            public void run() {
+                userManager.updateAuctionsCache();
+
+                //todo() update existing inventories.
+            }
+        }.runAtFixedRate(this, 20, 300 * 5);*/
+
+        this.crazyManager = new CrazyManager();
         this.crazyManager.load();
 
         final PluginManager manager = getServer().getPluginManager();

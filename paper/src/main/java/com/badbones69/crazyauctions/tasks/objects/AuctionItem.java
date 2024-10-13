@@ -13,7 +13,7 @@ import java.util.Locale;
 import java.util.UUID;
 
 @SuppressWarnings("UnusedAssignment")
-public class Auction {
+public class AuctionItem {
 
     private final UUID uuid;
     private final String name;
@@ -30,7 +30,7 @@ public class Auction {
     private final String bidder_name;
     private final boolean isBiddable;
 
-    public Auction(final String uuid, final String name, final String id, final String item, final String store_id, final long price, final long time_till_expire, final long full_expire, final String bidder_uuid, final String bidder_name, final boolean biddable) {
+    public AuctionItem(final String uuid, final String name, final String id, final String item, final String store_id, final long price, final long time_till_expire, final long full_expire, final String bidder_uuid, final String bidder_name, final boolean biddable) {
         this.uuid = UUID.fromString(uuid);
         this.name = name;
         this.id = id;
@@ -88,7 +88,15 @@ public class Auction {
         return this.isBiddable;
     }
 
-    public final ItemBuilder getItemBuilder(final ShopType shopType) {
+    public final ItemStack asItemStack() {
+        return this.itemStack;
+    }
+
+    public final String asBase64() {
+        return Methods.toBase64(asItemStack());
+    }
+
+    public final ItemBuilder getActiveItem(final ShopType shopType) {
         final FileConfiguration configuration = Files.config.getConfiguration();
 
         final ItemBuilder itemBuilder = ItemBuilder.convertItemStack(this.itemStack.clone());
@@ -135,7 +143,7 @@ public class Auction {
         return itemBuilder;
     }
 
-    public final ItemBuilder getItemBuilder() {
+    public final ItemBuilder getCurrentItem() {
         final FileConfiguration configuration = Files.config.getConfiguration();
 
         final ItemBuilder itemBuilder = ItemBuilder.convertItemStack(this.itemStack.clone());

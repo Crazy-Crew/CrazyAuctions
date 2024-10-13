@@ -3,10 +3,12 @@ package com.badbones69.crazyauctions.api.guis;
 import com.badbones69.crazyauctions.CrazyAuctions;
 import com.badbones69.crazyauctions.Methods;
 import com.badbones69.crazyauctions.api.CrazyManager;
+import com.badbones69.crazyauctions.api.builders.ItemBuilder;
 import com.badbones69.crazyauctions.api.enums.ShopType;
 import com.badbones69.crazyauctions.api.enums.misc.Files;
 import com.badbones69.crazyauctions.tasks.UserManager;
-import com.badbones69.crazyauctions.tasks.objects.Auction;
+import com.badbones69.crazyauctions.tasks.objects.AuctionItem;
+import com.badbones69.crazyauctions.tasks.objects.ExpiredItem;
 import com.ryderbelserion.vital.paper.api.enums.Support;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Server;
@@ -94,8 +96,8 @@ public abstract class Holder implements InventoryHolder, Listener {
         return this.page;
     }
 
-    public final List<Auction> getPageItems(final List<Auction> list, int page, final int size) {
-        List<Auction> items = new ArrayList<>();
+    public final List<ExpiredItem> getPageItem(final List<ExpiredItem> list, int page, final int size) {
+        List<ExpiredItem> items = new ArrayList<>();
 
         if (page <= 0) page = 1;
 
@@ -121,7 +123,40 @@ public abstract class Holder implements InventoryHolder, Listener {
         return items;
     }
 
-    public final int getMaxPage(final List<Auction> list) {
+    public final List<AuctionItem> getPageItems(final List<AuctionItem> list, int page, final int size) {
+        List<AuctionItem> items = new ArrayList<>();
+
+        if (page <= 0) page = 1;
+
+        int index = page * size - size;
+        int endIndex = index >= list.size() ? list.size() - 1 : index + size;
+
+        for (;index < endIndex; index++) {
+            if (index < list.size()) items.add(list.get(index));
+        }
+
+        for (;items.isEmpty(); page--) {
+            if (page <= 0) break;
+
+            index = page * size - size;
+
+            endIndex = index >= list.size() ? list.size() - 1 : index + size;
+
+            for (; index < endIndex; index++) {
+                if (index < list.size()) items.add(list.get(index));
+            }
+        }
+
+        return items;
+    }
+
+    public final int getExpiredMaxPages(final List<ExpiredItem> list) {
+        final int size = list.size();
+
+        return (int) Math.ceil((double) size / getSize());
+    }
+
+    public final int getMaxPage(final List<AuctionItem> list) {
         final int size = list.size();
 
         return (int) Math.ceil((double) size / getSize());
