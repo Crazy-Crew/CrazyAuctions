@@ -36,7 +36,7 @@ gson = "2.10.1"
 jalu = "1.4.1"
 
 # Vital API
-vital-paper = "0.0.7"
+vital-paper = "1.0.6"
 
 [libraries]
 # Velocity API

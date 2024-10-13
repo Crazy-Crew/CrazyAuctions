@@ -24,7 +24,6 @@ import org.bukkit.command.TabCompleter;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
-import java.io.File;
 
 public class CrazyAuctions extends Vital {
 
@@ -46,9 +45,9 @@ public class CrazyAuctions extends Vital {
             return;
         }
 
-        getFileManager().addFile(new File(getDataFolder(), "config.yml"))
-                .addFile(new File(getDataFolder(), "data.yml"))
-                .addFile(new File(getDataFolder(), "messages.yml"))
+        getFileManager().addFile("config.yml")
+                .addFile("data.yml")
+                .addFile("messages.yml")
                 .init();
 
         InventoryManager.loadButtons();
