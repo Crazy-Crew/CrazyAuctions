@@ -46,8 +46,6 @@ public class ExpiredMenu extends Holder {
 
     @Override
     public final Holder build() {
-        Methods.updateAuction();
-
         this.options.addAll(List.of(
                 "Back",
                 "PreviousPage",

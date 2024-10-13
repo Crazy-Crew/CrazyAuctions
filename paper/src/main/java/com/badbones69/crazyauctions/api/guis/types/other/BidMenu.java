@@ -14,7 +14,6 @@ import com.badbones69.crazyauctions.currency.VaultSupport;
 import io.papermc.paper.persistence.PersistentDataContainerView;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -46,8 +45,6 @@ public class BidMenu extends Holder {
 
     @Override
     public final Holder build() {
-        Methods.updateAuction();
-
         if (!this.data.contains("Items." + this.id)) {
             GuiManager.openShop(this.player, ShopType.BID, HolderManager.getShopCategory(this.player), 1);
 

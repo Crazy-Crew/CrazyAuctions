@@ -1,6 +1,5 @@
 package com.badbones69.crazyauctions.api.guis.types;
 
-import com.badbones69.crazyauctions.Methods;
 import com.badbones69.crazyauctions.api.builders.ItemBuilder;
 import com.badbones69.crazyauctions.api.enums.Category;
 import com.badbones69.crazyauctions.api.enums.ShopType;
@@ -37,8 +36,6 @@ public class CategoriesMenu extends Holder {
 
     @Override
     public final Holder build() {
-        Methods.updateAuction();
-
         this.options.addAll(List.of(
                 "OtherSettings.Back",
                 "OtherSettings.WhatIsThis.Categories",

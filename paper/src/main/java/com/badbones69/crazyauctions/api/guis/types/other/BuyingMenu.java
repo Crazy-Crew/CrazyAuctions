@@ -12,7 +12,6 @@ import com.badbones69.crazyauctions.api.guis.HolderManager;
 import com.badbones69.crazyauctions.api.GuiManager;
 import com.badbones69.crazyauctions.currency.VaultSupport;
 import io.papermc.paper.persistence.PersistentDataContainerView;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -48,8 +47,6 @@ public class BuyingMenu extends Holder {
 
     @Override
     public final Holder build() {
-        Methods.updateAuction();
-
         if (!this.data.contains("Items." + this.id)) {
             GuiManager.openShop(this.player, ShopType.SELL, HolderManager.getShopCategory(this.player), 1);
 
