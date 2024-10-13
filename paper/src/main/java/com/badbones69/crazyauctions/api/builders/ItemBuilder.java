@@ -739,6 +739,16 @@ public class ItemBuilder {
         return this;
     }
 
+    public ItemBuilder addLong(long value, NamespacedKey key) {
+        this.itemStack.editMeta(itemMeta -> {
+            PersistentDataContainer container = itemMeta.getPersistentDataContainer();
+
+            container.set(key, PersistentDataType.LONG, value);
+        });
+
+        return this;
+    }
+
     /**
      * Set the lore of the item with papi support in the builder. This will auto force color in all the lores that contains color code. (&a, &c, &7, etc...)
      *
