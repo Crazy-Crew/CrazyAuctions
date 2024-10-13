@@ -121,6 +121,16 @@ public class AuctionCommand implements CommandExecutor {
                     return true;
                 }
 
+                case "migrate" -> {
+                    if (!Methods.hasPermission(sender, "migrate")) {
+                        return true;
+                    }
+
+                    this.plugin.getUserManager().migrateAuctions();
+
+                    return true;
+                }
+
                 case "expired", "collect" -> {
                     if (!Methods.hasPermission(sender, "access")) {
                         return true;
