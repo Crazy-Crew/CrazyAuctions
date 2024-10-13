@@ -29,9 +29,9 @@ oraxen = "1.171.0"
 vault = "1.7.1"
 
 # Common API
-triumph-cmd = "2.0.0-ALPHA-10"
 jetbrains = "24.1.0"
 adventure = "4.17.0"
+hikari = "4.0.3"
 gson = "2.10.1"
 jalu = "1.4.1"
 
@@ -66,9 +66,7 @@ cmi-lib = { module = "CMILib:CMILib", version = "1.5.1.4" }
 
 # Vital API
 vital-paper = { module = "com.ryderbelserion.vital:paper", version.ref = "vital-paper" }
-
-# Common API
-triumph-cmds = { module = "dev.triumphteam:triumph-cmd-bukkit", version.ref = "triumph-cmd" }
+hikari-cp = { module = "com.zaxxer:HikariCP", version.ref = "hikari" }
 
 jetbrains = { module = "org.jetbrains:annotations", version.ref = "jetbrains" }
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
