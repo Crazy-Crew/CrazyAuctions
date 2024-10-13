@@ -203,62 +203,46 @@ public class ExpiredMenu extends Holder {
             }
         }
 
-        final List<Integer> pages = new ArrayList<>();
+        String id = container.getOrDefault(Keys.auction_item.getNamespacedKey(), PersistentDataType.STRING, "");
 
-        if (pages.size() >= slot) {
-            int id = pages.get(slot);
+        if (id.isEmpty()) return;
 
-            boolean valid = false;
+        if (Methods.isInvFull(player)) {
+            player.sendMessage(Messages.INVENTORY_FULL.getMessage(player));
 
-            final FileConfiguration data = Files.data.getConfiguration();
+            return;
+        }
 
-            final ConfigurationSection section = this.data.getConfigurationSection("OutOfTime/Cancelled");
+        final FileConfiguration data = Files.data.getConfiguration();
 
-            if (section != null) {
-                for (String key : section.getKeys(false)) {
-                    final ConfigurationSection auction = section.getConfigurationSection(key);
+        final ConfigurationSection section = data.getConfigurationSection("OutOfTime/Cancelled");
 
-                    if (auction == null) continue;
+        if (section == null) return;
 
-                    int config_id = auction.getInt("StoreID");
+        final ConfigurationSection auction = section.getConfigurationSection(id);
 
-                    if (id == config_id) {
-                        if (Methods.isInvFull(player)) {
-                            player.sendMessage(Messages.INVENTORY_FULL.getMessage(player));
+        if (auction == null) return;
 
-                            return;
-                        }
+        final ItemStack yoink = Methods.fromBase64(auction.getString("Item"));
 
-                        player.sendMessage(Messages.GOT_ITEM_BACK.getMessage(player));
+        if (yoink != null) {
+            player.sendMessage(Messages.GOT_ITEM_BACK.getMessage(player));
 
-                        final ItemStack yoink = Methods.fromBase64(auction.getString("Item"));
+            player.getInventory().addItem(yoink);
 
-                        if (yoink != null) {
-                            player.getInventory().addItem(yoink);
+            data.set("OutOfTime/Cancelled." + id, null);
 
-                            data.set("OutOfTime/Cancelled." + key, null);
+            Files.data.save();
 
-                            Files.data.save();
+            menu.click(player);
 
-                            menu.click(player);
+            GuiManager.openPlayersExpiredList(player, 1);
+        } else {
+            menu.click(player);
 
-                            GuiManager.openPlayersExpiredList(player, 1);
-                        } else {
-                            this.plugin.getLogger().warning("The player " + player.getName() + " tried to redeem an invalid item in the expired menu.");
-                        }
+            GuiManager.openShop(player, HolderManager.getShopType(player), HolderManager.getShopCategory(player), 1);
 
-                        return;
-                    }
-                }
-            }
-
-            if (!valid) {
-                menu.click(player);
-
-                GuiManager.openShop(player, HolderManager.getShopType(player), HolderManager.getShopCategory(player), 1);
-
-                player.sendMessage(Messages.ITEM_DOESNT_EXIST.getMessage(player));
-            }
+            player.sendMessage(Messages.ITEM_DOESNT_EXIST.getMessage(player));
         }
     }
 
