@@ -88,6 +88,12 @@ public class AuctionCommand implements CommandExecutor {
 
                     this.fileManager.reloadFiles().init();
 
+                    // update it again!
+                    this.plugin.getUserManager().updateAuctionsCache();
+
+                    //todo() close inventories by tracking viewers, so the cache can be updated than re-open their inventories
+                    //todo() we need to track the specific inventory they opened, and if it's for them or another player
+
                     this.crazyManager.load();
 
                     InventoryManager.loadButtons();

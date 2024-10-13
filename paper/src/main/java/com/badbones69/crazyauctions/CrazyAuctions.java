@@ -22,6 +22,8 @@ import com.ryderbelserion.vital.paper.util.scheduler.FoliaRunnable;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.command.TabCompleter;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -54,6 +56,7 @@ public class CrazyAuctions extends Vital {
         InventoryManager.loadButtons();
 
         this.userManager = new UserManager();
+        this.userManager.updateAuctionsCache();
 
         this.crazyManager = new CrazyManager();
 
