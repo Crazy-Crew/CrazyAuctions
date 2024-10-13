@@ -16,6 +16,7 @@ import com.badbones69.crazyauctions.controllers.MarcoListener;
 import com.badbones69.crazyauctions.controllers.MiscListener;
 import com.badbones69.crazyauctions.currency.VaultSupport;
 import com.badbones69.crazyauctions.tasks.InventoryManager;
+import com.badbones69.crazyauctions.tasks.UserManager;
 import com.ryderbelserion.vital.paper.Vital;
 import com.ryderbelserion.vital.paper.util.scheduler.FoliaRunnable;
 import org.bukkit.command.CommandExecutor;
@@ -23,14 +24,14 @@ import org.bukkit.command.PluginCommand;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.jetbrains.annotations.NotNull;
 
 public class CrazyAuctions extends Vital {
 
-    public @NotNull static CrazyAuctions getPlugin() {
+    public static CrazyAuctions getPlugin() {
         return JavaPlugin.getPlugin(CrazyAuctions.class);
     }
 
+    private UserManager userManager;
     private CrazyManager crazyManager;
 
     private VaultSupport support;
@@ -51,6 +52,8 @@ public class CrazyAuctions extends Vital {
                 .init();
 
         InventoryManager.loadButtons();
+
+        this.userManager = new UserManager();
 
         this.crazyManager = new CrazyManager();
 
@@ -110,5 +113,9 @@ public class CrazyAuctions extends Vital {
 
     public final CrazyManager getCrazyManager() {
         return this.crazyManager;
+    }
+
+    public final UserManager getUserManager() {
+        return this.userManager;
     }
 }
