@@ -24,7 +24,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ThreadLocalRandom;
 
 public class AuctionCommand implements CommandExecutor {
 
@@ -37,7 +36,6 @@ public class AuctionCommand implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String commandLabel, String[] args) {
         FileConfiguration config = Files.config.getConfiguration();
-        FileConfiguration data = Files.data.getConfiguration();
 
         if (args.length == 0) {
             if (!(sender instanceof Player player)) {
@@ -337,53 +335,17 @@ public class AuctionCommand implements CommandExecutor {
                             return true;
                         }*/
 
-                        int num = 1;
-
-                        for (; data.contains("Items." + num); num++) ;
-                        data.set("Items." + num + ".Price", price);
-                        data.set("Items." + num + ".Seller", player.getUniqueId().toString());
-                        data.set("Items." + num + ".Name", player.getName());
-
-                        if (args[0].equalsIgnoreCase("bid")) {
-                            data.set("Items." + num + ".Time-Till-Expire", Methods.convertToMill(config.getString("Settings.Bid-Time", "2m 30s")));
-                        } else {
-                            data.set("Items." + num + ".Time-Till-Expire", Methods.convertToMill(config.getString("Settings.Sell-Time", "2d")));
-                        }
-
-                        data.set("Items." + num + ".Full-Time", Methods.convertToMill(config.getString("Settings.Full-Expire-Time", "10d")));
-                        int id = ThreadLocalRandom.current().nextInt(999999);
-
-                        // Runs 3x to check for same ID.
-                        for (String i : data.getConfigurationSection("Items").getKeys(false)) //todo() store ids not needed anymore.
-                            if (data.getInt("Items." + i + ".StoreID") == id) id = ThreadLocalRandom.current().nextInt(Integer.MAX_VALUE);
-                        for (String i : data.getConfigurationSection("Items").getKeys(false))
-                            if (data.getInt("Items." + i + ".StoreID") == id) id = ThreadLocalRandom.current().nextInt(Integer.MAX_VALUE);
-                        for (String i : data.getConfigurationSection("Items").getKeys(false))
-                            if (data.getInt("Items." + i + ".StoreID") == id) id = ThreadLocalRandom.current().nextInt(Integer.MAX_VALUE);
-
-                        data.set("Items." + num + ".StoreID", id); //todo() not needed
-                        ShopType type = ShopType.SELL;
-
-                        if (args[0].equalsIgnoreCase("bid")) {
-                            data.set("Items." + num + ".Biddable", true);
-                            type = ShopType.BID;
-                        } else {
-                            data.set("Items." + num + ".Biddable", false);
-                        }
-
-                        data.set("Items." + num + ".TopBidder", "None");
-                        data.set("Items." + num + ".TopBidderName", "None");
+                        ShopType type = args[0].equalsIgnoreCase("bid") ? ShopType.BID : ShopType.SELL;
 
                         ItemStack stack = item.clone();
                         stack.setAmount(amount);
 
-                        data.set("Items." + num + ".Item", Methods.toBase64(stack));
-
-                        Files.data.save();
+                        this.plugin.getUserManager().addAuction(player, stack, price, args[0].equalsIgnoreCase("bid"));
 
                         this.plugin.getServer().getPluginManager().callEvent(new AuctionListEvent(player, type, stack, price));
 
                         Map<String, String> placeholders = new HashMap<>();
+
                         placeholders.put("%Price%", String.valueOf(price));
                         placeholders.put("%price%", String.valueOf(price));
 
