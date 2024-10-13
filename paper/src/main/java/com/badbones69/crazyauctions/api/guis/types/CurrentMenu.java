@@ -123,62 +123,56 @@ public class CurrentMenu extends Holder {
             return;
         }
 
-        final List<Integer> pages = new ArrayList<>();
+        String id = container.getOrDefault(Keys.auction_item.getNamespacedKey(), PersistentDataType.STRING, "");
 
-        if (pages.size() >= slot) {
-            int id = pages.get(slot);
+        final FileConfiguration data = Files.data.getConfiguration();
 
-            boolean valid = false;
+        final ConfigurationSection section = data.getConfigurationSection("OutOfTime/Cancelled");
 
-            final FileConfiguration data = Files.data.getConfiguration();
+        if (id.isEmpty() || section == null) {
+            menu.click(player);
 
-            final ConfigurationSection section = this.data.getConfigurationSection("Items");
+            GuiManager.openShop(player, HolderManager.getShopType(player), HolderManager.getShopCategory(player), 1);
 
-            if (section != null) {
-                for (String key : section.getKeys(false)) {
-                    final ConfigurationSection auction = section.getConfigurationSection(key);
+            player.sendMessage(Messages.ITEM_DOESNT_EXIST.getMessage(player));
 
-                    if (auction == null) continue;
-
-                    int config_id = auction.getInt("StoreID");
-
-                    if (id == config_id) {
-                        player.sendMessage(Messages.CANCELLED_ITEM.getMessage(player));
-
-                        final String item = auction.getString("Item");
-
-                        AuctionCancelledEvent auctionCancelledEvent = new AuctionCancelledEvent(player, Methods.fromBase64(item), Reasons.PLAYER_FORCE_CANCEL);
-                        this.plugin.getServer().getPluginManager().callEvent(auctionCancelledEvent);
-
-                        int num = 1;
-                        for (; data.contains("OutOfTime/Cancelled." + num); num++) ;
-
-                        data.set("OutOfTime/Cancelled." + num + ".Seller", auction.getString("Seller"));
-                        data.set("OutOfTime/Cancelled." + num + ".Full-Time", auction.getString("Full-Time"));
-                        data.set("OutOfTime/Cancelled." + num + ".StoreID",config_id);
-                        data.set("OutOfTime/Cancelled." + num + ".Item", item);
-
-                        data.set("Items." + key, null);
-
-                        Files.data.save();
-
-                        menu.click(player);
-
-                        GuiManager.openPlayersCurrentList(player, 1);
-
-                        return;
-                    }
-                }
-            }
-
-            if (!valid) {
-                menu.click(player);
-
-                GuiManager.openShop(player, HolderManager.getShopType(player), HolderManager.getShopCategory(player), 1);
-
-                player.sendMessage(Messages.ITEM_DOESNT_EXIST.getMessage(player));
-            }
+            return;
         }
+
+        final ConfigurationSection auction = section.getConfigurationSection(id);
+
+        if (auction == null) {
+            menu.click(player);
+
+            GuiManager.openShop(player, HolderManager.getShopType(player), HolderManager.getShopCategory(player), 1);
+
+            player.sendMessage(Messages.ITEM_DOESNT_EXIST.getMessage(player));
+
+            return;
+        }
+
+        player.sendMessage(Messages.CANCELLED_ITEM.getMessage(player));
+
+        final String item = auction.getString("Item");
+
+        AuctionCancelledEvent auctionCancelledEvent = new AuctionCancelledEvent(player, Methods.fromBase64(item), Reasons.PLAYER_FORCE_CANCEL);
+        this.plugin.getServer().getPluginManager().callEvent(auctionCancelledEvent);
+
+        int num = 1;
+        for (; data.contains("OutOfTime/Cancelled." + num); num++) ;
+
+        data.set("OutOfTime/Cancelled." + num + ".Seller", auction.getString("Seller"));
+        data.set("OutOfTime/Cancelled." + num + ".Full-Time", auction.getString("Full-Time"));
+        data.set("OutOfTime/Cancelled." + num + ".StoreID", auction.getString("StoreID"));
+        data.set("OutOfTime/Cancelled." + num + ".Item", item);
+
+        data.set("Items." + id, null);
+
+        Files.data.save();
+
+        menu.click(player);
+
+        GuiManager.openPlayersCurrentList(player, 1);
     }
 
     private void getItems() {

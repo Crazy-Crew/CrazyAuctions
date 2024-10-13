@@ -25,10 +25,6 @@ public class HolderManager {
         return shopCategory.get(player.getUniqueId());
     }
 
-    public static Map<UUID, Category> getShopCategory() {
-        return shopCategory;
-    }
-
     public static void addBidding(final Player player, final int amount) {
         bidding.put(player.getUniqueId(), amount);
     }
@@ -39,10 +35,6 @@ public class HolderManager {
 
     public static int getBidding(final Player player) {
         return bidding.get(player.getUniqueId());
-    }
-
-    public static Map<UUID, Integer> getBidding() {
-        return bidding;
     }
 
     public static boolean containsBidding(final Player player) {
@@ -59,9 +51,5 @@ public class HolderManager {
 
     public static ShopType getShopType(final Player player) {
         return shopTypes.get(player.getUniqueId());
-    }
-
-    public static Map<UUID, ShopType> getShopType() {
-        return shopTypes;
     }
 }
