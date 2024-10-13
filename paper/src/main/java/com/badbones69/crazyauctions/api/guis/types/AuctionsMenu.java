@@ -13,9 +13,9 @@ import com.badbones69.crazyauctions.api.guis.Holder;
 import com.badbones69.crazyauctions.api.guis.HolderManager;
 import com.badbones69.crazyauctions.api.GuiManager;
 import com.badbones69.crazyauctions.tasks.InventoryManager;
+import com.badbones69.crazyauctions.tasks.objects.Auction;
 import com.ryderbelserion.vital.paper.util.scheduler.FoliaRunnable;
 import io.papermc.paper.persistence.PersistentDataContainerView;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -24,14 +24,10 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
-import org.jetbrains.annotations.Nullable;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.UUID;
 
-@SuppressWarnings({"FieldCanBeLocal", "UnusedAssignment"})
 public class AuctionsMenu extends Holder {
 
     private List<ItemStack> items;
@@ -92,7 +88,7 @@ public class AuctionsMenu extends Holder {
             ));
         }
 
-        getItems(); // populates the lists
+        getItems(); // populate the inventory
 
         this.maxPages = getMaxPage(this.items);
 
@@ -185,9 +181,9 @@ public class AuctionsMenu extends Holder {
         FileConfiguration data = Files.data.getConfiguration();
 
         if (container.has(Keys.auction_button.getNamespacedKey())) {
-            String type = container.getOrDefault(Keys.auction_button.getNamespacedKey(), PersistentDataType.STRING, this.target == null ? "Refresh" : "");
+            String type = container.getOrDefault(Keys.auction_button.getNamespacedKey(), PersistentDataType.STRING, menu.target == null ? "Refresh" : "");
 
-            if (this.target == null && !type.isEmpty()) {
+            if (menu.target == null && !type.isEmpty()) {
                 switch (type) {
                     case "Your-Item", "Top-Bidder", "Cant-Afford" -> {
                         menu.click(player);
@@ -276,7 +272,9 @@ public class AuctionsMenu extends Holder {
             }
         }
 
-        if (!data.contains("Items")) return;
+
+
+        /*if (!data.contains("Items")) return;
 
         final ConfigurationSection section = data.getConfigurationSection("Items");
 
@@ -407,87 +405,20 @@ public class AuctionsMenu extends Holder {
             menu.click(player);
 
             GuiManager.openBuying(player, auction_id);
-        }
+        }*/
     }
 
     private void getItems() {
-        final ConfigurationSection section = this.data.getConfigurationSection("Items");
+        final List<Auction> auctions = this.plugin.getUserManager().getAuctions();
 
-        if (section == null) return;
+        auctions.forEach(auction -> {
+            final ItemBuilder itemBuilder = auction.getItemBuilder(this.shopType);
 
-        for (String key : section.getKeys(false)) {
-            final ConfigurationSection auction = section.getConfigurationSection(key);
-
-            if (auction == null) continue;
-
-            final String seller = auction.getString("Seller", "");
-
-            if (seller.isEmpty()) continue;
-
-            if (this.target != null && !this.target.isEmpty() && seller.equalsIgnoreCase(this.target)) {
-                fetch(auction, seller);
-
+            if (this.category != null && this.category != Category.NONE && !this.category.getItems().contains(itemBuilder.getMaterial())) {
                 return;
             }
 
-            fetch(auction, seller);
-        }
-    }
-
-    private void fetch(final ConfigurationSection auction, final String seller) {
-        final String item = auction.getString("Item", "");
-
-        if (item.isEmpty()) return;
-
-        final ItemBuilder itemBuilder = ItemBuilder.convertItemStack(item);
-
-        if (itemBuilder == null) {
-            this.plugin.getLogger().warning("The item with store id " + auction.getString("StoreID", "auctions_menu") + " obtained from your data.yml could not be converted!");
-
-            return;
-        }
-
-        if (this.category != null && this.category != Category.NONE && !this.category.getItems().contains(itemBuilder.getMaterial())) return;
-
-        final long price = auction.getLong("Price");
-
-        final String priceFormat = String.format(Locale.ENGLISH, "%,d", price);
-
-        final String player = auction.getString("Name", "None");
-
-        final String time = Methods.convertToTime(auction.getLong("Time-Till-Expire"));
-
-        final List<String> lore = new ArrayList<>(itemBuilder.getUpdatedLore());
-
-        lore.add(" ");
-
-        if (this.shopType != null && this.shopType == ShopType.BID && auction.getBoolean("Biddable") || auction.getBoolean("Biddable")) {
-            final String top_bidder = auction.getString("TopBidderName", "None");
-
-            for (final String line : this.config.getStringList("Settings.GUISettings.Bidding")) {
-                String newLine = line.replace("%TopBid%", priceFormat).replace("%topbid%", priceFormat);
-
-                newLine = line.replace("%Seller%", player).replace("%seller%", player);
-
-                newLine = line.replace("%TopBidder%", top_bidder).replace("%topbid%", top_bidder);
-
-                lore.add(newLine.replace("%Time%", time).replace("%time%", time));
-            }
-        } else {
-            for (final String line : this.config.getStringList("Settings.GUISettings.SellingItemLore")) {
-                String newLine = line.replace("%TopBid%", priceFormat).replace("%topbid%", priceFormat);
-
-                newLine = line.replace("%Seller%", player).replace("%seller%", player);
-
-                lore.add(newLine.replace("%Time%", time).replace("%time%", time).replace("%price%", priceFormat).replace("%Price%", priceFormat));
-            }
-        }
-
-        itemBuilder.setLore(lore);
-
-        itemBuilder.addInteger(auction.getInt("StoreID"), Keys.auction_id.getNamespacedKey());
-        itemBuilder.addString(auction.getName(), Keys.auction_item.getNamespacedKey());
-
-        this.items.add(itemBuilder.build());
+            this.items.add(itemBuilder.build());
+        });
     }
 }
