@@ -153,27 +153,43 @@ public class CurrentMenu extends Holder {
             }
         }
 
-        player.sendMessage(Messages.CANCELLED_ITEM.getMessage(player));
+        final UUID uuid = player.getUniqueId();
 
-        final String item = auction.getString("Item");
+        final Auction auction = this.userManager.getAuctionById(uuid, container.getOrDefault(Keys.auction_store_id.getNamespacedKey(), PersistentDataType.STRING, ""));
 
-        AuctionCancelledEvent auctionCancelledEvent = new AuctionCancelledEvent(player, Methods.fromBase64(item), Reasons.PLAYER_FORCE_CANCEL);
+        if (auction == null) return;
+
+        AuctionCancelledEvent auctionCancelledEvent = new AuctionCancelledEvent(player, auction.asItemStack(), Reasons.PLAYER_FORCE_CANCEL);
         this.plugin.getServer().getPluginManager().callEvent(auctionCancelledEvent);
 
-        int num = 1;
-        for (;data.contains("OutOfTime/Cancelled." + num); num++);
+        final FileConfiguration data = Files.data.getConfiguration();
 
-        data.set("OutOfTime/Cancelled." + num + ".Seller", auction.getString("Seller"));
-        data.set("OutOfTime/Cancelled." + num + ".Full-Time", auction.getString("Full-Time"));
-        data.set("OutOfTime/Cancelled." + num + ".StoreID", auction.getString("StoreID"));
-        data.set("OutOfTime/Cancelled." + num + ".Item", item);
+        int number = 1;
 
-        data.set("Items." + id, null);
+        for (;data.contains("expired_auctions." + uuid + "." + number); number++);
+
+        data.set("expired_auctions." + uuid + "." + number + ".name", auction.getName());
+
+        final ConfigurationSection section = data.getConfigurationSection("expired_auctions." + uuid + "." + number);
+
+        if (section == null) return;
+
+        section.set("item", auction.asBase64());
+        section.set("store_id", auction.getStoreID());
+        section.set("full_time", auction.getFullExpire());
+
+        data.set("active_auctions." + uuid+ "." + auction.getId(), null);
+
+        if (!data.contains("active_auctions." + uuid + "." + auction.getId())) {
+            this.userManager.removeAuction(auction);
+        }
 
         Files.data.save();
 
+        player.sendMessage(Messages.CANCELLED_ITEM.getMessage(player));
+
         menu.click(player);
 
-        GuiManager.openPlayersCurrentList(player, 1);
+        GuiManager.openPlayersCurrentList(player, menu.getPage());
     }
 }
