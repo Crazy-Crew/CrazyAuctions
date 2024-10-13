@@ -32,7 +32,6 @@ public class AuctionTab implements TabCompleter {
             if (hasPermission(sender, "view")) completions.add("view");
             if (hasPermission(sender, "sell")) completions.add("sell");
             if (hasPermission(sender, "bid")) completions.add("bid");
-            if (hasPermission(sender, "migrate")) completions.add("migrate");
 
             return StringUtil.copyPartialMatches(args[0], completions, new ArrayList<>());
         } else if (args.length == 2) { // /crazyauctions arg0

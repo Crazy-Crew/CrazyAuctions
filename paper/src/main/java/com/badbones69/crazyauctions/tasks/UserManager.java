@@ -93,63 +93,6 @@ public class UserManager {
         return key;
     }
 
-    public void migrateAuctions() {
-        final FileConfiguration data = Files.data.getConfiguration();
-
-        final ConfigurationSection section = data.getConfigurationSection("Items");
-
-        if (section == null) return;
-
-        boolean isSave = false;
-
-        for (String key : section.getKeys(false)) {
-            final ConfigurationSection auction = section.getConfigurationSection(key);
-
-            if (auction == null) continue;
-
-            final String itemStack = auction.getString("Item");
-            final long price = auction.getLong("Price");
-            final String seller = auction.getString("Seller");
-
-            final String name = auction.getString("Name", Methods.getOfflinePlayer(seller).getName());
-
-            final String time_till_expire = auction.getString("Time-Till-Expire");
-            final String full_time = auction.getString("Full-Time");
-
-            final String store_id = auction.getString("StoreID");
-
-            final boolean biddable = auction.getBoolean("Biddable", false);
-
-            final String top_bidder = auction.getString("TopBidder", "None");
-            final String top_bidder_name = auction.getString("TopBidderName", "None");
-
-            data.set("active_auctions." + seller + "." + key + ".name", name);
-
-            final ConfigurationSection new_section = data.getConfigurationSection("active_auctions." + seller + "." + key);
-
-            if (new_section == null) return;
-
-            new_section.set("item", itemStack);
-            new_section.set("store_id", store_id);
-            new_section.set("price", price);
-
-            new_section.set("time.expire", time_till_expire);
-            new_section.set("time.full", full_time);
-
-            new_section.set("status.biddable", biddable);
-            new_section.set("status.top_bidder.uuid", top_bidder);
-            new_section.set("status.top_bidder.name", top_bidder_name);
-
-            data.set("Items." + key, null);
-
-            isSave = true;
-        }
-
-        if (isSave) {
-            Files.data.save();
-        }
-    }
-
     /**
      * Adds an item to the configuration section
      *

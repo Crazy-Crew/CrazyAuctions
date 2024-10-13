@@ -18,7 +18,6 @@ public enum Permissions {
     sell("sell", "Access to /crazyauctions sell", PermissionDefault.TRUE, false),
     bid("bid", "Access to /crazyauctions bid", PermissionDefault.TRUE, false),
     use("use", "Access to /crazyauctions", PermissionDefault.TRUE, false),
-    migrate("migrate", "Access to /crazycrates migrate", PermissionDefault.OP, true),
 
     bypass("bypass", "Bypasses most plugin restrictions", PermissionDefault.OP, true),
 
@@ -36,7 +35,6 @@ public enum Permissions {
         put("crazyauctions.reload", true);
         put("crazyauctions.bypass", true);
         put("crazyauctions.view", true);
-        put("crazyauctions.migrate", true);
     }}, true);
 
     private final String node;
