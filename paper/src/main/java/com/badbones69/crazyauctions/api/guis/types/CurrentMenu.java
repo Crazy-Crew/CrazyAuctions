@@ -1,6 +1,5 @@
 package com.badbones69.crazyauctions.api.guis.types;
 
-import com.badbones69.crazyauctions.Methods;
 import com.badbones69.crazyauctions.api.builders.ItemBuilder;
 import com.badbones69.crazyauctions.api.enums.Messages;
 import com.badbones69.crazyauctions.api.enums.Reasons;
@@ -21,17 +20,21 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class CurrentMenu extends Holder {
 
     private FileConfiguration config;
     private List<String> options;
+    private List<Auction> items;
+    private int maxPages;
 
     public CurrentMenu(final Player player, final String title, final int size, final int page) {
         super(player, title, size, page);
 
         this.config = Files.config.getConfiguration();
         this.options = new ArrayList<>();
+        this.items = new ArrayList<>();
     }
 
     public CurrentMenu() {}
@@ -40,8 +43,14 @@ public class CurrentMenu extends Holder {
     public final Holder build() {
         this.options.addAll(List.of(
                 "Back",
+                "PreviousPage",
+                "NextPage",
                 "WhatIsThis.CurrentItems"
         ));
+
+        this.items = this.userManager.getAuctions().get(this.player.getUniqueId());
+
+        this.maxPages = getMaxPage(this.items);
 
         for (final String key : this.options) {
             if (!this.config.contains("Settings.GUISettings.OtherSettings." + key)) {
@@ -65,7 +74,7 @@ public class CurrentMenu extends Holder {
             this.inventory.setItem(slot - 1, itemBuilder.build());
         }
 
-        for (final Auction item : getPageItems(this.userManager.getAuctions().get(this.player.getUniqueId()), getPage(), getSize())) {
+        for (final Auction item : getPageItems(this.items, getPage(), getSize())) {
             int slot = this.inventory.firstEmpty();
 
             this.inventory.setItem(slot, item.getItemBuilder().build());
@@ -102,44 +111,46 @@ public class CurrentMenu extends Holder {
             final String type = container.getOrDefault(Keys.auction_button.getNamespacedKey(), PersistentDataType.STRING, "");
 
             if (!type.isEmpty()) {
-                if (type.equalsIgnoreCase("Back")) {
-                    GuiManager.openShop(player, HolderManager.getShopType(player), HolderManager.getShopCategory(player), 1);
+                switch (type) {
+                    case "NextPage" -> {
+                        menu.click(player);
 
-                    menu.click(player);
+                        if (menu.getPage() >= menu.maxPages) {
+                            return;
+                        }
+
+                        menu.nextPage();
+
+                        GuiManager.openPlayersCurrentList(player, menu.getPage());
+
+                        return;
+                    }
+
+                    case "PreviousPage" -> {
+                        menu.click(player);
+
+                        final int page = menu.getPage();
+
+                        if (page <= 1) {
+                            return;
+                        }
+
+                        menu.backPage();
+
+                        GuiManager.openPlayersCurrentList(player, menu.getPage());
+
+                        return;
+                    }
+
+                    case "Back" -> {
+                        GuiManager.openShop(player, HolderManager.getShopType(player), HolderManager.getShopCategory(player), 1);
+
+                        menu.click(player);
+
+                        return;
+                    }
                 }
-
-                return;
             }
-
-            return;
-        }
-
-        String id = container.getOrDefault(Keys.auction_number.getNamespacedKey(), PersistentDataType.STRING, "");
-
-        final FileConfiguration data = Files.data.getConfiguration();
-
-        final ConfigurationSection section = data.getConfigurationSection("Items");
-
-        if (id.isEmpty() || section == null) {
-            menu.click(player);
-
-            GuiManager.openShop(player, HolderManager.getShopType(player), HolderManager.getShopCategory(player), 1);
-
-            player.sendMessage(Messages.ITEM_DOESNT_EXIST.getMessage(player));
-
-            return;
-        }
-
-        final ConfigurationSection auction = section.getConfigurationSection(id);
-
-        if (auction == null) {
-            menu.click(player);
-
-            GuiManager.openShop(player, HolderManager.getShopType(player), HolderManager.getShopCategory(player), 1);
-
-            player.sendMessage(Messages.ITEM_DOESNT_EXIST.getMessage(player));
-
-            return;
         }
 
         player.sendMessage(Messages.CANCELLED_ITEM.getMessage(player));
