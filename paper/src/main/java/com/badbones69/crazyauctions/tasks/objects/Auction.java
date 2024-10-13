@@ -91,7 +91,7 @@ public class Auction {
     public final ItemBuilder getItemBuilder(final ShopType shopType) {
         final FileConfiguration configuration = Files.config.getConfiguration();
 
-        final ItemBuilder itemBuilder = ItemBuilder.convertItemStack(this.itemStack);
+        final ItemBuilder itemBuilder = ItemBuilder.convertItemStack(this.itemStack.clone());
 
         final String priceFormat = String.format(Locale.ENGLISH, "%,d", this.price);
 
@@ -103,29 +103,59 @@ public class Auction {
 
         if (shopType == ShopType.BID && isBiddable()) {
             for (final String line : configuration.getStringList("Settings.GUISettings.Bidding")) {
-                String newLine = line.replace("%TopBid%", priceFormat).replace("%topbid%", priceFormat);
+                String newLine = line.replace("%TopBid%", priceFormat)
+                        .replace("%topbid%", priceFormat);
 
-                newLine = line.replace("%Seller%", getName()).replace("%seller%", getName());
+                newLine = line.replace("%Seller%", getName())
+                        .replace("%seller%", getName());
 
-                newLine = line.replace("%TopBidder%", getBidderName()).replace("%topbid%", getBidderName());
+                newLine = line.replace("%TopBidder%", getBidderName())
+                        .replace("%topbid%", getBidderName());
 
-                lore.add(newLine.replace("%Time%", time).replace("%time%", time));
+                lore.add(newLine.replace("%Time%", time)
+                        .replace("%time%", time));
             }
         } else {
             for (final String line : configuration.getStringList("Settings.GUISettings.SellingItemLore")) {
-                String newLine = line.replace("%TopBid%", priceFormat).replace("%topbid%", priceFormat);
+                String newLine = line.replace("%TopBid%", priceFormat)
+                        .replace("%topbid%", priceFormat);
 
-                newLine = line.replace("%Seller%", getName()).replace("%seller%", getName());
+                newLine = line.replace("%Seller%", getName())
+                        .replace("%seller%", getName());
 
-                lore.add(newLine.replace("%Time%", time).replace("%time%", time).replace("%price%", priceFormat).replace("%Price%", priceFormat));
+                lore.add(newLine.replace("%Time%", time)
+                        .replace("%time%", time)
+                        .replace("%price%", priceFormat).replace("%Price%", priceFormat));
             }
         }
 
-        itemBuilder.setLore(lore);
+        itemBuilder.setLore(lore)
+                .addString(getStoreID(), Keys.auction_store_id.getNamespacedKey());
 
-        itemBuilder.addString(getStoreID(), Keys.auction_id.getNamespacedKey());
-        itemBuilder.addString(String.valueOf(getUuid()), Keys.auction_uuid.getNamespacedKey());
-        itemBuilder.addString(getId(), Keys.auction_item.getNamespacedKey());
+        return itemBuilder;
+    }
+
+    public final ItemBuilder getItemBuilder() {
+        final FileConfiguration configuration = Files.config.getConfiguration();
+
+        final ItemBuilder itemBuilder = ItemBuilder.convertItemStack(this.itemStack.clone());
+
+        final String priceFormat = String.format(Locale.ENGLISH, "%,d", this.price);
+
+        final String time = Methods.convertToTime(getTimeTillExpire());
+
+        final List<String> lore = new ArrayList<>(itemBuilder.getUpdatedLore());
+
+        lore.add(" ");
+
+        for (final String line : configuration.getStringList("Settings.GUISettings.CurrentLore")) {
+            lore.add(line.replace("%Time%", time).replace("%time%", time)
+                    .replace("%price%", priceFormat)
+                    .replace("%Price%", priceFormat));
+        }
+
+        itemBuilder.setLore(lore)
+                .addString(getStoreID(), Keys.auction_store_id.getNamespacedKey());;
 
         return itemBuilder;
     }

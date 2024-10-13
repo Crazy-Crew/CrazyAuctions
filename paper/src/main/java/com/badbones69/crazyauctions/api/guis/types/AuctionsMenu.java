@@ -3,23 +3,19 @@ package com.badbones69.crazyauctions.api.guis.types;
 import com.badbones69.crazyauctions.Methods;
 import com.badbones69.crazyauctions.api.builders.ItemBuilder;
 import com.badbones69.crazyauctions.api.enums.Category;
-import com.badbones69.crazyauctions.api.enums.Messages;
-import com.badbones69.crazyauctions.api.enums.Reasons;
 import com.badbones69.crazyauctions.api.enums.ShopType;
 import com.badbones69.crazyauctions.api.enums.misc.Files;
 import com.badbones69.crazyauctions.api.enums.misc.Keys;
-import com.badbones69.crazyauctions.api.events.AuctionCancelledEvent;
 import com.badbones69.crazyauctions.api.guis.Holder;
 import com.badbones69.crazyauctions.api.guis.HolderManager;
 import com.badbones69.crazyauctions.api.GuiManager;
+import com.badbones69.crazyauctions.currency.VaultSupport;
 import com.badbones69.crazyauctions.tasks.InventoryManager;
 import com.badbones69.crazyauctions.tasks.objects.Auction;
 import com.ryderbelserion.vital.paper.util.scheduler.FoliaRunnable;
 import io.papermc.paper.persistence.PersistentDataContainerView;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -30,7 +26,7 @@ import java.util.UUID;
 
 public class AuctionsMenu extends Holder {
 
-    private List<ItemStack> items;
+    private List<Auction> items;
     private List<String> options;
     private int maxPages;
 
@@ -71,8 +67,6 @@ public class AuctionsMenu extends Holder {
 
     @Override
     public final Holder build() {
-        Methods.updateAuction();
-
         if (this.target != null) {
             this.options.add("WhatIsThis.Viewing");
         } else {
@@ -144,10 +138,10 @@ public class AuctionsMenu extends Holder {
             }
         }
 
-        for (final ItemStack item : getPageItems(this.items, getPage(), getSize())) {
+        for (final Auction item : getPageItems(this.items, getPage(), getSize())) {
             int slot = this.inventory.firstEmpty();
 
-            this.inventory.setItem(slot, item);
+            this.inventory.setItem(slot, item.getItemBuilder(this.shopType).build());
         }
 
         this.player.openInventory(this.inventory);
@@ -178,7 +172,6 @@ public class AuctionsMenu extends Holder {
         final Player player = (Player) event.getWhoClicked();
 
         FileConfiguration config = Files.config.getConfiguration();
-        FileConfiguration data = Files.data.getConfiguration();
 
         if (container.has(Keys.auction_button.getNamespacedKey())) {
             String type = container.getOrDefault(Keys.auction_button.getNamespacedKey(), PersistentDataType.STRING, menu.target == null ? "Refresh" : "");
@@ -272,59 +265,13 @@ public class AuctionsMenu extends Holder {
             }
         }
 
+        final UUID uuid = player.getUniqueId();
 
-
-        /*if (!data.contains("Items")) return;
-
-        final ConfigurationSection section = data.getConfigurationSection("Items");
-
-        if (section == null) return;
-
-        final String auction_id = container.getOrDefault(Keys.auction_item.getNamespacedKey(), PersistentDataType.STRING, "");
-
-        final ConfigurationSection auction = section.getConfigurationSection(auction_id);
+        final Auction auction = this.userManager.getAuctionById(uuid, container.getOrDefault(Keys.auction_store_id.getNamespacedKey(), PersistentDataType.STRING, ""));
 
         if (auction == null) return;
 
-        final UUID uuid = player.getUniqueId();
-
-        if (player.hasPermission("crazyauctions.admin") || player.hasPermission("crazyauctions.force-end")) {
-            if (event.getAction() == InventoryAction.MOVE_TO_OTHER_INVENTORY) {
-                int num = 1;
-
-                for (;data.contains("OutOfTime/Cancelled." + num); num++);
-
-                String seller = auction.getString("Seller");
-
-                Player sellerPlayer = Methods.getPlayer(seller);
-
-                if (Methods.isOnline(seller) && sellerPlayer != null) {
-                    sellerPlayer.sendMessage(Messages.ADMIN_FORCE_CANCELLED_TO_PLAYER.getMessage(player));
-                }
-
-                AuctionCancelledEvent auctionCancelledEvent = new AuctionCancelledEvent((sellerPlayer != null ? sellerPlayer : Methods.getOfflinePlayer(seller)), Methods.fromBase64(auction.getString("Item")), Reasons.ADMIN_FORCE_CANCEL);
-                this.server.getPluginManager().callEvent(auctionCancelledEvent);
-
-                data.set("OutOfTime/Cancelled." + num + ".Seller", section.getString("Seller"));
-                data.set("OutOfTime/Cancelled." + num + ".Name", section.getString("Name"));
-                data.set("OutOfTime/Cancelled." + num + ".Full-Time", section.getLong("Full-Time"));
-                data.set("OutOfTime/Cancelled." + num + ".StoreID", section.getInt("StoreID"));
-                data.set("OutOfTime/Cancelled." + num + ".Item", auction.getString("Item"));
-                data.set("Items." + auction_id, null);
-
-                Files.data.save();
-
-                player.sendMessage(Messages.ADMIN_FORCE_CANCELLED.getMessage(player));
-
-                menu.click(player);
-
-                GuiManager.openShop(player, HolderManager.getShopType(player), HolderManager.getShopCategory(player), menu.getPage());
-
-                return;
-            }
-        }
-
-        if (auction.getString("Seller", "").equalsIgnoreCase(uuid.toString())) {
+        if (uuid.toString().equalsIgnoreCase(auction.getUuid().toString())) {
             String itemName = config.getString("Settings.GUISettings.OtherSettings.Your-Item.Item");
             String name = config.getString("Settings.GUISettings.OtherSettings.Your-Item.Name");
 
@@ -348,9 +295,13 @@ public class AuctionsMenu extends Holder {
             return;
         }
 
-        long cost = auction.getLong("Price");
+        final long price = auction.getPrice();
 
-        if (this.plugin.getSupport().getMoney(player) < cost) {
+        if (price == 0L) return;
+
+        final VaultSupport support = this.plugin.getSupport();
+
+        if (support.getMoney(player) < price) {
             String itemName = config.getString("Settings.GUISettings.OtherSettings.Cant-Afford.Item");
             String name = config.getString("Settings.GUISettings.OtherSettings.Cant-Afford.Name");
 
@@ -373,8 +324,10 @@ public class AuctionsMenu extends Holder {
             return;
         }
 
-        if (auction.getBoolean("Biddable")) {
-            if (uuid.toString().equalsIgnoreCase(auction.getString("TopBidder"))) {
+        final String auction_id = auction.getId();
+
+        if (auction.isBiddable()) {
+            if (uuid.toString().equalsIgnoreCase(auction.getUuid().toString())) {
                 String itemName = config.getString("Settings.GUISettings.OtherSettings.Top-Bidder.Item");
                 String name = config.getString("Settings.GUISettings.OtherSettings.Top-Bidder.Name");
 
@@ -401,24 +354,26 @@ public class AuctionsMenu extends Holder {
             menu.click(player);
 
             GuiManager.openBidding(player, auction_id);
-        } else {
-            menu.click(player);
 
-            GuiManager.openBuying(player, auction_id);
-        }*/
+            return;
+        }
+
+        menu.click(player);
+
+        GuiManager.openBuying(player, auction_id);
     }
 
     private void getItems() {
-        final List<Auction> auctions = this.plugin.getUserManager().getAuctions();
+        this.userManager.getAuctions().forEach(((uuid, auctions) -> {
+            auctions.forEach(auction -> {
+                final ItemBuilder itemBuilder = auction.getItemBuilder(this.shopType);
 
-        auctions.forEach(auction -> {
-            final ItemBuilder itemBuilder = auction.getItemBuilder(this.shopType);
+                if (this.category != null && this.category != Category.NONE && !this.category.getItems().contains(itemBuilder.getMaterial())) {
+                    return;
+                }
 
-            if (this.category != null && this.category != Category.NONE && !this.category.getItems().contains(itemBuilder.getMaterial())) {
-                return;
-            }
-
-            this.items.add(itemBuilder.build());
-        });
+                this.items.add(auction);
+            });
+        }));
     }
 }

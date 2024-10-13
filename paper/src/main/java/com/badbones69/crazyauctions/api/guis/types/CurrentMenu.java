@@ -10,6 +10,7 @@ import com.badbones69.crazyauctions.api.events.AuctionCancelledEvent;
 import com.badbones69.crazyauctions.api.guis.Holder;
 import com.badbones69.crazyauctions.api.guis.HolderManager;
 import com.badbones69.crazyauctions.api.GuiManager;
+import com.badbones69.crazyauctions.tasks.objects.Auction;
 import io.papermc.paper.persistence.PersistentDataContainerView;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -20,39 +21,27 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
-import java.util.UUID;
 
 public class CurrentMenu extends Holder {
 
-    private List<ItemStack> items;
-    private List<String> options;
-
     private FileConfiguration config;
-    private FileConfiguration data;
+    private List<String> options;
 
     public CurrentMenu(final Player player, final String title, final int size, final int page) {
         super(player, title, size, page);
 
-        this.items = new ArrayList<>();
-        this.options = new ArrayList<>();
-
         this.config = Files.config.getConfiguration();
-        this.data = Files.data.getConfiguration();
+        this.options = new ArrayList<>();
     }
 
     public CurrentMenu() {}
 
     @Override
     public final Holder build() {
-        Methods.updateAuction();
-
         this.options.addAll(List.of(
                 "Back",
                 "WhatIsThis.CurrentItems"
         ));
-
-        getItems();
 
         for (final String key : this.options) {
             if (!this.config.contains("Settings.GUISettings.OtherSettings." + key)) {
@@ -76,10 +65,10 @@ public class CurrentMenu extends Holder {
             this.inventory.setItem(slot - 1, itemBuilder.build());
         }
 
-        for (final ItemStack item : getPageItems(this.items, getPage(), getSize())) {
+        for (final Auction item : getPageItems(this.userManager.getAuctions().get(this.player.getUniqueId()), getPage(), getSize())) {
             int slot = this.inventory.firstEmpty();
 
-            this.inventory.setItem(slot, item);
+            this.inventory.setItem(slot, item.getItemBuilder().build());
         }
 
         this.player.openInventory(this.inventory);
@@ -125,7 +114,7 @@ public class CurrentMenu extends Holder {
             return;
         }
 
-        String id = container.getOrDefault(Keys.auction_item.getNamespacedKey(), PersistentDataType.STRING, "");
+        String id = container.getOrDefault(Keys.auction_number.getNamespacedKey(), PersistentDataType.STRING, "");
 
         final FileConfiguration data = Files.data.getConfiguration();
 
@@ -175,58 +164,5 @@ public class CurrentMenu extends Holder {
         menu.click(player);
 
         GuiManager.openPlayersCurrentList(player, 1);
-    }
-
-    private void getItems() {
-        final ConfigurationSection section = this.data.getConfigurationSection("Items");
-
-        if (section == null) return;
-
-        final UUID uuid = this.player.getUniqueId();
-
-        for (String key : section.getKeys(false)) {
-            final ConfigurationSection auction = section.getConfigurationSection(key);
-
-            if (auction == null) continue;
-
-            final String seller = auction.getString("Seller", "");
-
-            if (seller.isEmpty()) continue;
-
-            if (!seller.equalsIgnoreCase(uuid.toString())) continue;
-
-            final String item = auction.getString("Item", "");
-
-            if (item.isEmpty()) continue;
-
-            final ItemBuilder itemBuilder = ItemBuilder.convertItemStack(item);
-
-            if (itemBuilder == null) {
-                this.plugin.getLogger().warning("The item with store id " + auction.getString("StoreID", "current_menu") + " obtained from your data.yml could not be converted!");
-
-                continue;
-            }
-
-            final long price = auction.getLong("Price");
-
-            final String priceFormat = String.format(Locale.ENGLISH, "%,d", price);
-
-            final String time = Methods.convertToTime(auction.getLong("Time-Till-Expire"));
-
-            final List<String> lore = new ArrayList<>(itemBuilder.getUpdatedLore());
-
-            lore.add(" ");
-
-            for (final String line : this.config.getStringList("Settings.GUISettings.CurrentLore")) {
-                lore.add(line.replace("%Time%", time).replace("%time%", time).replace("%price%", priceFormat).replace("%Price%", priceFormat));
-            }
-
-            itemBuilder.setLore(lore);
-
-            itemBuilder.addInteger(auction.getInt("StoreID"), Keys.auction_id.getNamespacedKey());
-            itemBuilder.addString(auction.getName(), Keys.auction_item.getNamespacedKey());
-
-            this.items.add(itemBuilder.build());
-        }
     }
 }
