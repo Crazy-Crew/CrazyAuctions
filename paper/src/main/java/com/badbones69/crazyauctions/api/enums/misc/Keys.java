@@ -14,6 +14,8 @@ public enum Keys {
     // this contains, the number for the item which can be found in the data.yml
     auction_item("auction_item", PersistentDataType.STRING),
 
+    auction_uuid("auction_uuid", PersistentDataType.STRING),
+
     // any button in the gui
     auction_button("auction_button", PersistentDataType.STRING),
 
