@@ -9,12 +9,10 @@ import org.jetbrains.annotations.NotNull;
 public enum Keys {
 
     // contains the store id
-    auction_id("auction_id", PersistentDataType.INTEGER),
+    auction_store_id("auction_store_id", PersistentDataType.INTEGER),
 
     // this contains, the number for the item which can be found in the data.yml
-    auction_item("auction_item", PersistentDataType.STRING),
-
-    auction_uuid("auction_uuid", PersistentDataType.STRING),
+    auction_number("auction_number", PersistentDataType.STRING),
 
     // any button in the gui
     auction_button("auction_button", PersistentDataType.STRING),
