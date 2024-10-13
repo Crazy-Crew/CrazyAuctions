@@ -24,6 +24,8 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -306,6 +308,7 @@ public class AuctionsMenu extends Holder {
                 this.server.getPluginManager().callEvent(auctionCancelledEvent);
 
                 data.set("OutOfTime/Cancelled." + num + ".Seller", section.getString("Seller"));
+                data.set("OutOfTime/Cancelled." + num + ".Name", section.getString("Name"));
                 data.set("OutOfTime/Cancelled." + num + ".Full-Time", section.getLong("Full-Time"));
                 data.set("OutOfTime/Cancelled." + num + ".StoreID", section.getInt("StoreID"));
                 data.set("OutOfTime/Cancelled." + num + ".Item", auction.getString("Item"));
@@ -450,7 +453,7 @@ public class AuctionsMenu extends Holder {
 
         final String priceFormat = String.format(Locale.ENGLISH, "%,d", price);
 
-        final OfflinePlayer player = Methods.getOfflinePlayer(seller);
+        final String player = auction.getString("Name", "None");
 
         final String time = Methods.convertToTime(auction.getLong("Time-Till-Expire"));
 
@@ -459,20 +462,14 @@ public class AuctionsMenu extends Holder {
         lore.add(" ");
 
         if (this.shopType != null && this.shopType == ShopType.BID && auction.getBoolean("Biddable") || auction.getBoolean("Biddable")) {
-            final String bidder = auction.getString("TopBidder", "None");
-
-            final OfflinePlayer top_bidder = bidder.equalsIgnoreCase("None") ? null : Methods.getOfflinePlayer(bidder);
+            final String top_bidder = auction.getString("TopBidderName", "None");
 
             for (final String line : this.config.getStringList("Settings.GUISettings.Bidding")) {
                 String newLine = line.replace("%TopBid%", priceFormat).replace("%topbid%", priceFormat);
 
-                final String targetName = player.getName() == null ? "N/A" : player.getName();
+                newLine = line.replace("%Seller%", player).replace("%seller%", player);
 
-                newLine = line.replace("%Seller%", targetName).replace("%seller%", targetName);
-
-                final String bidderName = top_bidder == null ? "N/A" : top_bidder.getName() == null ? "N/A" : top_bidder.getName();
-
-                newLine = line.replace("%TopBidder%", bidderName).replace("%topbid%", bidderName);
+                newLine = line.replace("%TopBidder%", top_bidder).replace("%topbid%", top_bidder);
 
                 lore.add(newLine.replace("%Time%", time).replace("%time%", time));
             }
@@ -480,9 +477,7 @@ public class AuctionsMenu extends Holder {
             for (final String line : this.config.getStringList("Settings.GUISettings.SellingItemLore")) {
                 String newLine = line.replace("%TopBid%", priceFormat).replace("%topbid%", priceFormat);
 
-                final String targetName = player.getName() == null ? "N/A" : player.getName();
-
-                newLine = line.replace("%Seller%", targetName).replace("%seller%", targetName);
+                newLine = line.replace("%Seller%", player).replace("%seller%", player);
 
                 lore.add(newLine.replace("%Time%", time).replace("%time%", time).replace("%price%", priceFormat).replace("%Price%", priceFormat));
             }

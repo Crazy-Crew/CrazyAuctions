@@ -63,7 +63,6 @@ public class BuyingMenu extends Holder {
                 "Cancel"
         ));
 
-
         for (final String key : this.options) {
             if (!this.config.contains("Settings.GUISettings.OtherSettings." + key)) {
                 continue;
@@ -118,18 +117,12 @@ public class BuyingMenu extends Holder {
         String price = Methods.getPrice(this.id, false);
         String time = Methods.convertToTime(this.data.getLong("Items." + this.id + ".Time-Till-Expire"));
 
-        OfflinePlayer target = null;
-
-        String id = this.data.getString("Items." + this.id + ".Seller");
-
-        if (id != null) {
-            target = Methods.getOfflinePlayer(id);
-        }
+        String id = this.data.getString("Items." + this.id + ".Name", "None");
 
         for (String l : config.getStringList("Settings.GUISettings.SellingItemLore")) {
             lore.add(l.replace("%Price%", price).replace("%price%", price)
-                    .replace("%Seller%", target != null ? target.getName() : "N/A")
-                    .replace("%seller%", target != null ? target.getName() : "N/A")
+                    .replace("%Seller%", id)
+                    .replace("%seller%", id)
                     .replace("%Time%", time)
                     .replace("%time%", time));
         }

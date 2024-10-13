@@ -150,6 +150,7 @@ public class BidMenu extends Holder {
 
                 data.set("Items." + id + ".Price", bid);
                 data.set("Items." + id + ".TopBidder", player.getUniqueId().toString());
+                data.set("Items." + id + ".TopBidderName", player.getName());
 
                 final Map<String, String> placeholders = new HashMap<>();
                 placeholders.put("%Bid%", String.valueOf(bid));
@@ -240,27 +241,14 @@ public class BidMenu extends Holder {
         String price = Methods.getPrice(id, false);
         String time = Methods.convertToTime(data.getLong("Items." + id + ".Time-Till-Expire"));
 
-        OfflinePlayer target = null;
-
-        String seller = data.getString("Items." + id + ".Seller");
-
-        if (seller != null) {
-            target = Methods.getOfflinePlayer(seller);
-        }
-
-        OfflinePlayer bidder = null;
-
-        String bid = data.getString("Items." + id + ".TopBidder");
-
-        if (bid != null && !bid.equals("None")) {
-            bidder = Methods.getOfflinePlayer(bid);
-        }
+        String seller = data.getString("Items." + id + ".Name", "None");
+        String bidder = data.getString("Items." + id + ".TopBidderName", "None");
 
         for (String l : config.getStringList("Settings.GUISettings.Bidding")) {
             lore.add(l.replace("%TopBid%", price)
                     .replace("%topbid%", price)
-                    .replace("%Seller%", target != null ? target.getName() : "N/A").replace("%seller%", target != null ? target.getName() : "N/A")
-                    .replace("%TopBidder%", bidder != null ? bidder.getName() : "N/A").replace("%topbidder%", bidder != null ? bidder.getName() : "N/A")
+                    .replace("%Seller%", seller).replace("%seller%", seller)
+                    .replace("%TopBidder%", bidder).replace("%topbidder%", bidder)
                     .replace("%Time%", time)
                     .replace("%time%", time));
         }

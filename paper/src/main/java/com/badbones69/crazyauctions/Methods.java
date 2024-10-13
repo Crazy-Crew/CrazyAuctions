@@ -269,6 +269,7 @@ public class Methods {
                         }
 
                         data.set("OutOfTime/Cancelled." + num + ".Seller", winner);
+                        data.set("OutOfTime/Cancelled." + num + ".Name", data.getString("Items." + i + ".TopBidderName", "None"));
                         data.set("OutOfTime/Cancelled." + num + ".Full-Time", fullExpireTime.getTimeInMillis());
                         data.set("OutOfTime/Cancelled." + num + ".StoreID", data.getInt("Items." + i + ".StoreID"));
                         data.set("OutOfTime/Cancelled." + num + ".Item", data.getString("Items." + i + ".Item"));
@@ -284,6 +285,7 @@ public class Methods {
                         plugin.getServer().getPluginManager().callEvent(event);
 
                         data.set("OutOfTime/Cancelled." + num + ".Seller", data.getString("Items." + i + ".Seller"));
+                        data.set("OutOfTime/Cancelled." + num + ".Name", data.getString("Items." + i + ".Name", "None"));
                         data.set("OutOfTime/Cancelled." + num + ".Full-Time", fullExpireTime.getTimeInMillis());
                         data.set("OutOfTime/Cancelled." + num + ".StoreID", data.getInt("Items." + i + ".StoreID"));
                         data.set("OutOfTime/Cancelled." + num + ".Item", data.getString("Items." + i + ".Item"));
