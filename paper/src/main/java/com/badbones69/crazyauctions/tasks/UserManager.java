@@ -25,7 +25,31 @@ public class UserManager {
 
     private final Map<UUID, List<ExpiredItem>> expired_items = new HashMap<>();
 
-    public void addAuction(final Player player, final ItemStack itemStack, final long price, final boolean isBiddable) {
+    public final void updateAuctionsCache() {
+        this.auctions.clear();
+
+        final FileConfiguration data = Files.data.getConfiguration();
+
+        final ConfigurationSection section = data.getConfigurationSection("active_auctions");
+
+        if (section == null) return;
+
+        for (String key : section.getKeys(false)) {
+            final ConfigurationSection player = section.getConfigurationSection(key);
+
+            if (player == null) continue;
+
+            for (String number : player.getKeys(false)) {
+                final ConfigurationSection auction = player.getConfigurationSection(number);
+
+                if (auction == null) continue;
+
+                addActiveAuction(key, auction);
+            }
+        }
+    }
+
+    public void addAuctionItem(final Player player, final ItemStack itemStack, final long price, final boolean isBiddable) {
         final FileConfiguration data = Files.data.getConfiguration();
         final FileConfiguration config = Files.config.getConfiguration();
 
@@ -56,10 +80,28 @@ public class UserManager {
         addItem(itemStack, uuid, price, isBiddable, config, section);
     }
 
-    public void removeAuction(final AuctionItem auction) {
-        if (!this.auctions.containsKey(auction.getUuid())) {
-            return;
+    public void removeAuctionItem(final AuctionItem auction) {
+        final FileConfiguration data = Files.data.getConfiguration();
+
+        final ConfigurationSection section = data.getConfigurationSection("active_auctions");
+
+        boolean isNuked = false;
+
+        final UUID uuid = auction.getUuid();
+
+        if (section != null) {
+            final ConfigurationSection player_section = section.getConfigurationSection(uuid.toString());
+
+            final String id = auction.getId();
+
+            if (player_section != null && player_section.contains(id)) {
+                player_section.set(id, null);
+
+                isNuked = true;
+            }
         }
+
+        if (!isNuked || !this.auctions.containsKey(uuid)) return; // only remove from the cache, if the data file removal was successful!
 
         final List<AuctionItem> auctions = this.auctions.get(auction.getUuid());
 
@@ -68,28 +110,46 @@ public class UserManager {
         this.auctions.put(auction.getUuid(), auctions);
     }
 
-    public final void updateAuctionsCache() {
-        this.auctions.clear();
+    public void removeAuctionItems(final Player player) {
+        final UUID uuid = player.getUniqueId();
 
         final FileConfiguration data = Files.data.getConfiguration();
 
         final ConfigurationSection section = data.getConfigurationSection("active_auctions");
 
-        if (section == null) return;
+        boolean isNuked = false;
 
-        for (String key : section.getKeys(false)) {
-            final ConfigurationSection player = section.getConfigurationSection(key);
+        if (section != null) {
+            final ConfigurationSection player_section = section.getConfigurationSection(uuid.toString());
 
-            if (player == null) continue;
+            if (player_section != null) {
+                section.set(uuid.toString(), null);
 
-            for (String number : player.getKeys(false)) {
-                final ConfigurationSection auction = player.getConfigurationSection(number);
-
-                if (auction == null) continue;
-
-                addActiveAuction(key, auction);
+                isNuked = true;
             }
         }
+
+        if (!isNuked || !this.auctions.containsKey(uuid)) return; // only remove from cache, if successfully removed from file.
+
+        this.auctions.remove(uuid);
+    }
+
+    public final AuctionItem getAuctionItemById(final UUID uuid, final String store_id) {
+        AuctionItem key = null;
+
+        for (final AuctionItem auction : this.auctions.get(uuid)) {
+            if (!auction.getStoreID().equals(store_id)) continue;
+
+            key = auction;
+
+            break;
+        }
+
+        return key;
+    }
+
+    public final Map<UUID, List<AuctionItem>> getAuctions() {
+        return this.auctions;
     }
 
     public final void updateExpiredCache() {
@@ -114,24 +174,6 @@ public class UserManager {
                 addExpiredAuction(key, auction);
             }
         }
-    }
-
-    public final Map<UUID, List<AuctionItem>> getAuctions() {
-        return this.auctions;
-    }
-
-    public final AuctionItem getAuctionById(final UUID uuid, final String store_id) {
-        AuctionItem key = null;
-
-        for (final AuctionItem auction : this.auctions.get(uuid)) {
-            if (!auction.getStoreID().equals(store_id)) continue;
-
-            key = auction;
-
-            break;
-        }
-
-        return key;
     }
 
     public void addExpiredItem(final Player player, final AuctionItem auction) {
@@ -160,7 +202,7 @@ public class UserManager {
         data.set("active_auctions." + uuid+ "." + auction.getId(), null);
 
         if (!data.contains("active_auctions." + uuid + "." + auction.getId())) {
-            removeAuction(auction);
+            removeAuctionItem(auction);
         }
 
         Files.data.save();
@@ -188,6 +230,60 @@ public class UserManager {
         this.expired_items.put(uuid, new ArrayList<>() {{
             add(expiredItem);
         }});
+    }
+
+    public void removeExpiredItem(final ExpiredItem expiredItem) {
+        final FileConfiguration data = Files.data.getConfiguration();
+
+        final ConfigurationSection section = data.getConfigurationSection("expired_auctions");
+
+        boolean isNuked = false;
+
+        final UUID uuid = expiredItem.getUuid();
+
+        if (section != null) {
+            final ConfigurationSection player_section = section.getConfigurationSection(uuid.toString());
+
+            final String id = expiredItem.getId();
+
+            if (player_section != null && player_section.contains(id)) {
+                player_section.set(id, null);
+
+                isNuked = true;
+            }
+        }
+
+        if (!isNuked || !this.expired_items.containsKey(uuid)) return; // only remove from the cache, if the data file removal was successful!
+
+        final List<ExpiredItem> auctions = this.expired_items.get(uuid);
+
+        auctions.remove(expiredItem);
+
+        this.expired_items.put(expiredItem.getUuid(), auctions);
+    }
+
+    public void removeExpiredItems(final Player player) {
+        final UUID uuid = player.getUniqueId();
+
+        final FileConfiguration data = Files.data.getConfiguration();
+
+        final ConfigurationSection section = data.getConfigurationSection("expired_auctions");
+
+        boolean isNuked = false;
+
+        if (section != null) {
+            final ConfigurationSection player_section = section.getConfigurationSection(uuid.toString());
+
+            if (player_section != null) {
+                section.set(uuid.toString(), null);
+
+                isNuked = true;
+            }
+        }
+
+        if (!isNuked || !this.expired_items.containsKey(uuid)) return; // only remove from cache, if successfully removed from file.
+
+        this.expired_items.remove(uuid);
     }
 
     public final ExpiredItem getExpiredItemById(final UUID uuid, final String store_id) {

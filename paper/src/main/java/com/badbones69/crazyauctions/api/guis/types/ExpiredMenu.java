@@ -196,9 +196,9 @@ public class ExpiredMenu extends Holder {
                     if (auction_item == null) continue;
 
                     player_inventory.addItem(auction_item);
-
-                    player_section.set(key, null);
                 }
+
+                this.userManager.removeExpiredItems(this.player);
 
                 Files.data.save();
 
@@ -225,6 +225,8 @@ public class ExpiredMenu extends Holder {
         if (auction == null) return;
 
         player.getInventory().addItem(auction.asItemStack());
+
+        this.userManager.removeExpiredItem(auction);
 
         Files.data.save();
 

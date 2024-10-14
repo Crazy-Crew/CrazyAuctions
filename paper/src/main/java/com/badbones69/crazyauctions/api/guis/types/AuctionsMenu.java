@@ -267,7 +267,7 @@ public class AuctionsMenu extends Holder {
 
         final UUID uuid = player.getUniqueId();
 
-        final AuctionItem auction = this.userManager.getAuctionById(uuid, container.getOrDefault(Keys.auction_store_id.getNamespacedKey(), PersistentDataType.STRING, ""));
+        final AuctionItem auction = this.userManager.getAuctionItemById(uuid, container.getOrDefault(Keys.auction_store_id.getNamespacedKey(), PersistentDataType.STRING, ""));
 
         if (auction == null) return;
 

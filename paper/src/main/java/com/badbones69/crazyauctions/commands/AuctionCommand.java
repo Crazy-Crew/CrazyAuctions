@@ -342,7 +342,7 @@ public class AuctionCommand implements CommandExecutor {
                         ItemStack stack = item.clone();
                         stack.setAmount(amount);
 
-                        this.userManager.addAuction(player, stack, price, args[0].equalsIgnoreCase("bid"));
+                        this.userManager.addAuctionItem(player, stack, price, args[0].equalsIgnoreCase("bid"));
 
                         this.plugin.getServer().getPluginManager().callEvent(new AuctionListEvent(player, type, stack, price));
 
