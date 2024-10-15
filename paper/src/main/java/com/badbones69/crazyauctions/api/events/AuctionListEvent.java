@@ -8,9 +8,11 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 /**
+ *
  * @author BadBones69
  *
  * This event is fired when a new item is listed onto the auction house.
+ *
  */
 public class AuctionListEvent extends Event {
     

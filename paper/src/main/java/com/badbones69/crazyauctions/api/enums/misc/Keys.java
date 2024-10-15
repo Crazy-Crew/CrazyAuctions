@@ -8,17 +8,8 @@ import org.jetbrains.annotations.NotNull;
 @SuppressWarnings("rawtypes")
 public enum Keys {
 
-    // contains the store id
-    auction_store_id("auction_store_id", PersistentDataType.INTEGER),
-
-    // this contains, the number for the item which can be found in the data.yml
-    auction_number("auction_number", PersistentDataType.STRING),
-
-    // any button in the gui
-    auction_button("auction_button", PersistentDataType.STRING),
-
-    // contains the auction item price
-    auction_price("auction_price", PersistentDataType.INTEGER);
+    auction_item("auction_item", PersistentDataType.BOOLEAN),
+    auction_expired("auction_expired", PersistentDataType.BOOLEAN);
 
     private final CrazyAuctions plugin = CrazyAuctions.getPlugin();
 

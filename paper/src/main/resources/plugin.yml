@@ -12,6 +12,39 @@ folia-supported: true
 softdepend: [Vault]
 
 commands:
-  crazyauctions:
+  ca:
     description: Opens the Crazy Auctions GUI.
-    aliases: [crazyauction, ah, ca]
+    aliases: [ah]
+
+permissions:
+  crazyauctions.access:
+    default: true
+
+  crazyauctions.test:
+    default: op
+
+  crazyauctions.view:
+    default: true
+
+  crazyauctions.bypass:
+    default: false
+
+  crazyauctions.sell:
+    default: true
+
+  crazyauctions.bid:
+    default: true
+
+  crazyauctions.player.*:
+    default: false
+    children:
+      crazyauctions.bid: true
+      crazyauctions.sell: true
+      crazyauctions.access: true
+      crazyauctions.view: true
+
+  crazyauctions.admin:
+    default: false
+    children:
+      crazyauctions.test: true
+      crazyauctions.bypass: true

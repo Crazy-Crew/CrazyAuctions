@@ -1,52 +1,72 @@
 plugins {
-    `maven-publish`
-    `java-library`
+    alias(libs.plugins.minotaur)
+    alias(libs.plugins.hangar)
+
+    `java-plugin`
 }
 
 val buildNumber: String? = System.getenv("BUILD_NUMBER")
 
-rootProject.version = if (buildNumber != null) "${libs.versions.minecraft.get()}-$buildNumber" else "1.7"
+rootProject.version = if (buildNumber != null) "${libs.versions.minecraft.get()}-$buildNumber" else "2.0"
+
+val isSnapshot = true
+
+val content: String = rootProject.file("CHANGELOG.md").readText(Charsets.UTF_8)
 
 subprojects.filter { it.name != "api" }.forEach {
     it.project.version = rootProject.version
 }
 
-subprojects {
-    apply(plugin = "maven-publish")
-    apply(plugin = "java-library")
+tasks {
+    modrinth {
+        token.set(System.getenv("MODRINTH_TOKEN"))
 
-    group = "com.badbones69.crazyauctions"
-    description = "Auction off items in style."
+        projectId.set(rootProject.name.lowercase())
 
-    repositories {
-        maven("https://repo.codemc.io/repository/maven-public")
+        versionType.set(if (isSnapshot) "beta" else "release")
 
-        maven("https://repo.crazycrew.us/libraries")
-        maven("https://repo.crazycrew.us/releases")
+        versionName.set("${rootProject.name} ${rootProject.version}")
+        versionNumber.set(rootProject.version as String)
 
-        maven("https://jitpack.io")
+        changelog.set(content)
 
-        mavenCentral()
+        uploadFile.set(rootProject.projectDir.resolve("jars/${rootProject.name}-${rootProject.version}.jar"))
+
+        gameVersions.set(listOf(libs.versions.minecraft.get()))
+
+        loaders.addAll(listOf("purpur", "paper", "folia"))
+
+        syncBodyFrom.set(rootProject.file("README.md").readText(Charsets.UTF_8))
+
+        autoAddDependsOn.set(false)
+        detectLoaders.set(false)
     }
 
-    java {
-        toolchain {
-            languageVersion.set(JavaLanguageVersion.of(21))
-        }
-    }
+    hangarPublish {
+        publications.register("plugin") {
+            apiKey.set(System.getenv("HANGAR_KEY"))
 
-    tasks {
-        compileJava {
-            options.encoding = Charsets.UTF_8.name()
-            options.release.set(21)
-        }
+            id.set(rootProject.name.lowercase())
 
-        javadoc {
-            options.encoding = Charsets.UTF_8.name()
-        }
+            version.set(rootProject.version as String)
 
-        processResources {
-            filteringCharset = Charsets.UTF_8.name()
+            channel.set(if (isSnapshot) "Beta" else "Release")
+
+            changelog.set(content)
+
+            platforms {
+                paper {
+                    jar.set(rootProject.projectDir.resolve("jars/${rootProject.name}-${rootProject.version}.jar"))
+
+                    platformVersions.set(listOf(libs.versions.minecraft.get()))
+
+                    dependencies {
+                        hangar("PlaceholderAPI") {
+                            required = false
+                        }
+                    }
+                }
+            }
         }
     }
 }

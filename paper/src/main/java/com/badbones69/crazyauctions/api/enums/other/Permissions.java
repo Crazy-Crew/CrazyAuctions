@@ -12,30 +12,7 @@ public enum Permissions {
 
     reload("reload", "Access to /crazyauctions reload", PermissionDefault.OP, false),
     help("help", "Access to /crazyauctions help", PermissionDefault.TRUE, false),
-    view("view", "Access to /crazyauctions view", PermissionDefault.TRUE, false),
-    expired("expired", "Access to /crazyauctions expired", PermissionDefault.TRUE, false),
-    listed("listed", "Access to /crazyauctions listed", PermissionDefault.TRUE, false),
-    sell("sell", "Access to /crazyauctions sell", PermissionDefault.TRUE, false),
-    bid("bid", "Access to /crazyauctions bid", PermissionDefault.TRUE, false),
-    use("use", "Access to /crazyauctions", PermissionDefault.TRUE, false),
-
-    bypass("bypass", "Bypasses most plugin restrictions", PermissionDefault.OP, true),
-
-    access("access", "Access other portions of the plugin", PermissionDefault.TRUE, true),
-
-    player_wildcard("player.*", "Access multiple player based commands", PermissionDefault.FALSE, new HashMap<>() {{
-        put("crazyauctions.bid", true);
-        put("crazyauctions.sell", true);
-        put("crazyauctions.access", true);
-        put("crazyauctions.view", true);
-    }}, true),
-
-    admin_wildcard("admin", "Access multiple admin based commands", PermissionDefault.FALSE, new HashMap<>() {{
-        put("crazyauctions.player.*", true);
-        put("crazyauctions.reload", true);
-        put("crazyauctions.bypass", true);
-        put("crazyauctions.view", true);
-    }}, true);
+    use("use", "Access to /crazyauctions", PermissionDefault.TRUE, false);
 
     private final String node;
     private final String description;
@@ -94,7 +71,7 @@ public enum Permissions {
     }
 
     public final Permission getPermission() {
-        return new Permission(getNode(), getDescription(), isDefault(), getChildren().isEmpty() ? null : getChildren());
+        return new Permission(getNode(), getDescription(), isDefault());
     }
 
     public void registerPermission() {

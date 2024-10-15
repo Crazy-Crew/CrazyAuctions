@@ -1,0 +1,77 @@
+# Support: https://discord.gg/badbones-s-live-chat-182615261403283459
+# Github: https://github.com/Crazy-Crew
+#
+# Issues: https://github.com/Crazy-Crew/CrazyAuctions/issues
+# Features: https://github.com/Crazy-Crew/CrazyAuctions/issues
+#
+# List of all sounds: https://minecraft.wiki/w/Sounds.json#Java_Edition_values
+# List of all enchantments: https://jd.papermc.io/paper/1.20/org/bukkit/enchantments/Enchantment.html
+root:
+  # The prefix in front of CrazyAuction messages
+  prefix: '<gray>[<dark_red>Crazy <blue>Auctions<gray>]: '
+
+# What features should be enabled?
+features:
+  # Should selling be enabled?
+  selling: true
+  # Should bidding be enabled?
+  bidding: true
+
+# Handling the click sounds for buttons.
+sounds:
+  # The sound to play when an item is sold.
+  sold-item:
+    # The sound to play when an item is sold, Set to '' to disable it.
+    sound: 'ui.button.click'
+    # The volume of the sound to play.
+    volume: 1.0
+    # The direction of the sound to play.
+    pitch: 1.0
+  # The sound to play when an item is clicked.
+  click-item:
+    # The sound to play when an item is sold, Set to '' to disable it.
+    sound: 'ui.button.click'
+    # The volume of the sound to play.
+    volume: 1.0
+    # The direction of the sound to play.
+    pitch: 1.0
+
+# Settings related to patches.
+patches:
+  # Patches a duplication bug, where a player can duplicate items when logging out/being dead.
+  macro-dupe: true
+
+# Settings related to how /ca functions.
+auctions:
+  # Should damage items be allowed to be auctioned?
+  allow-damaged-items: false
+  # Should the category page open first when doing /ca?
+  category-page-opens-first: false
+  # Settings related to how long items are sold for.
+  interval:
+    # The default sell time for each item.
+    sell-time: 2d
+    # The default bid time when using /ca bid,
+    bid-time: 2m 30s
+    # The time the item is in auction, until it expires.
+    expire-time: 10d
+    # The time the winner has to claim what they won.
+    winner-time: 20d
+  # The price settings.
+  price-settings:
+    # The bid settings.
+    bid:
+      # The minimum starting bid price.
+      minimum: 10
+      # The maximum starting bid price.
+      maximum: 1000000
+    # The sell settings.
+    sell:
+      # The minimum starting sell price.
+      minimum: 10
+      # The maximum starting sell price.
+      maximum: 1000000
+  # Prevent items from being sold in /ca.
+  blacklist:
+    - 'end_portal_frame'
+    - 'bedrock'

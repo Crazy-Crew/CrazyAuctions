@@ -1,0 +1,37 @@
+# Github: https://github.com/CoreCraftMC
+# 
+# Issues: https://github.com/CoreCraftMC/LobbyPlus/issues
+# Features: https://github.com/CoreCraftMC/LobbyPlus/issues
+# 
+# All messages allow the use of {prefix} unless stated otherwise.
+# 
+misc:
+  # A list of available placeholders: {command}
+  unknown-command: "{prefix}<red>{command} is not a known command."
+  # A list of available placeholders: {usage}
+  correct-usage: "{prefix}<red>The correct usage for this command is <yellow>{usage}"
+  feature-disabled: "{prefix}<red>This feature is disabled."
+  # This is the message, for the /lobbyplus help command!
+  command-help:
+    entry:
+      "1":
+        - "<bold><gold>━━━━━━━━━━━━━━━━━━━ CrazyAuctions Help ━━━━━━━━━━━━━━━━━━━</gold></bold>"
+        - " ⤷ <red>/crazyauctions help - <white>Opens this help menu"
+        - " ⤷ <red>/crazyauctions reload - <white>Reloads the plugin."
+        - "<bold><gold>━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</gold></bold>"
+# All messages related to players.
+player:
+  requirements:
+    must-be-player: "{prefix}<red>You must be a player to use this command."
+    must-be-console-sender: "{prefix}<red>You must be using console to use this command."
+  # A list of available placeholders: {player}
+  target-not-online: "{prefix}<red>{player} <gray>is not online."
+  target-same-player: "{prefix}<red>You cannot use this command on yourself."
+  no-permission: "{prefix}<red>You do not have permission to use that command!"
+  inventory-not-empty: "{prefix}<red>Inventory is not empty, Please clear up some
+    room."
+# All messages related to errors.
+errors:
+  internal-error: "{prefix}<red>An internal error has occurred. Please check the console
+    for the full error."
+  message-empty: "{prefix}<red>The message cannot be empty."
