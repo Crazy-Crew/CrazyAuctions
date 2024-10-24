@@ -45,9 +45,7 @@ public class CurrentMenu extends Holder {
                 "WhatIsThis.CurrentItems"
         ));
 
-        this.items = this.userManager.getAuctions().get(this.player.getUniqueId());
-
-        this.maxPages = getMaxPage(this.items);
+        calculateItems();
 
         for (final String key : this.options) {
             if (!this.config.contains("Settings.GUISettings.OtherSettings." + key)) {
@@ -163,5 +161,11 @@ public class CurrentMenu extends Holder {
         menu.click(player);
 
         GuiManager.openPlayersCurrentList(player, menu.getPage());
+    }
+
+    public void calculateItems() {
+        this.items = this.userManager.getAuctions().get(this.player.getUniqueId());
+
+        this.maxPages = getMaxPage(this.items);
     }
 }

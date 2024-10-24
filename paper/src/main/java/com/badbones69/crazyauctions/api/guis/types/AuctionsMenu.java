@@ -82,9 +82,7 @@ public class AuctionsMenu extends Holder {
             ));
         }
 
-        getItems(); // populate the inventory
-
-        this.maxPages = getMaxPage(this.items);
+        calculateItems();
 
         HolderManager.addShopType(this.player, this.shopType);
 
@@ -363,7 +361,7 @@ public class AuctionsMenu extends Holder {
         GuiManager.openBuying(player, auction_id);
     }
 
-    private void getItems() {
+    public void calculateItems() {
         this.userManager.getAuctions().forEach(((uuid, auctions) -> auctions.forEach(auction -> {
             final ItemBuilder itemBuilder = auction.getActiveItem(this.shopType);
 
@@ -373,5 +371,7 @@ public class AuctionsMenu extends Holder {
 
             this.items.add(auction);
         })));
+
+        this.maxPages = getMaxPage(this.items);
     }
 }
