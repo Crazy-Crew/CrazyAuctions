@@ -9,6 +9,7 @@ import com.badbones69.crazyauctions.api.guis.types.CurrentMenu;
 import com.badbones69.crazyauctions.api.guis.types.ExpiredMenu;
 import com.badbones69.crazyauctions.api.guis.types.other.BidMenu;
 import com.badbones69.crazyauctions.api.guis.types.other.BuyingMenu;
+import com.badbones69.crazyauctions.tasks.objects.AuctionItem;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
@@ -26,7 +27,7 @@ public class GuiManager {
         new CategoriesMenu(player, shopType, config.getString("Settings.Categories", "N/A"), 54).build();
     }
 
-    public static void openPlayersCurrentList(Player player, int page) {
+    public static void openPlayersCurrentList(final Player player, int page) {
         FileConfiguration config = Files.config.getConfiguration();
 
         new CurrentMenu(player, config.getString("Settings.Players-Current-Items", "N/A"), 54, page).build();
@@ -38,16 +39,16 @@ public class GuiManager {
         new ExpiredMenu(player, config.getString("Settings.Cancelled/Expired-Items", "&8Cancelled/Expired Listings #{page}").replaceAll("\\{page}", String.valueOf(page)), 54, page).build();
     }
 
-    public static void openBuying(Player player, String ID) {
+    public static void openBuying(Player player, String id, AuctionItem auction) {
         final FileConfiguration config = Files.config.getConfiguration();
 
-        new BuyingMenu(player, ID, config.getString("Settings.Buying-Item", "N/A")).build();
+        new BuyingMenu(auction, player, id, config.getString("Settings.Buying-Item", "N/A")).build();
     }
 
-    public static void openBidding(Player player, String ID) {
+    public static void openBidding(Player player, String id, AuctionItem auction) {
         FileConfiguration config = Files.config.getConfiguration();
 
-        new BidMenu(player, ID, config.getString("Settings.Bidding-On-Item")).build();
+        new BidMenu(auction, player, id, config.getString("Settings.Bidding-On-Item", "N/A")).build();
     }
 
     public static void openViewer(Player player, String other, int page) {

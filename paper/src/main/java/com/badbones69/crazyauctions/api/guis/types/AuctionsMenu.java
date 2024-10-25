@@ -351,14 +351,14 @@ public class AuctionsMenu extends Holder {
 
             menu.click(player);
 
-            GuiManager.openBidding(player, auction_id);
+            GuiManager.openBidding(player, auction_id, auction);
 
             return;
         }
 
         menu.click(player);
 
-        GuiManager.openBuying(player, auction_id);
+        GuiManager.openBuying(player, auction_id, auction);
     }
 
     public void calculateItems() {

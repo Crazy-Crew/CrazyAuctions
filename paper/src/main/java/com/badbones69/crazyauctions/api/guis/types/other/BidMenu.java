@@ -11,29 +11,36 @@ import com.badbones69.crazyauctions.api.guis.Holder;
 import com.badbones69.crazyauctions.api.guis.HolderManager;
 import com.badbones69.crazyauctions.api.GuiManager;
 import com.badbones69.crazyauctions.currency.VaultSupport;
+import com.badbones69.crazyauctions.tasks.objects.AuctionItem;
 import io.papermc.paper.persistence.PersistentDataContainerView;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
+import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 public class BidMenu extends Holder {
 
     private FileConfiguration config;
     private FileConfiguration data;
 
+    private AuctionItem auction;
     private String id;
 
-    public BidMenu(final Player player, final String id, final String title) {
+    public BidMenu(final AuctionItem auction, final Player player, final String id, final String title) {
         super(player, title, 27);
+
+        this.auction = auction;
 
         this.config = Files.config.getConfiguration();
         this.data = Files.data.getConfiguration();
@@ -45,20 +52,24 @@ public class BidMenu extends Holder {
 
     @Override
     public final Holder build() {
-        if (!this.data.contains("Items." + this.id)) {
+        final UUID uuid = this.player.getUniqueId();
+
+        if (!this.data.contains("active_auctions." + uuid + "." + this.id)) {
             GuiManager.openShop(this.player, ShopType.BID, HolderManager.getShopCategory(this.player), 1);
 
             this.player.sendMessage(Messages.ITEM_DOESNT_EXIST.getMessage(this.player));
 
+            this.userManager.removeAuctionItem(this.auction); // remove auction item, as it's not in the active_auctions
+
             return this;
         }
 
-        if (!HolderManager.containsBidding(this.player)) HolderManager.addBidding(this.player, 0);
+        final ItemStack item = this.auction.getActiveItem(ShopType.BID).getItemStack();
 
         final ItemBuilder builder = new ItemBuilder().setMaterial(Material.LIME_STAINED_GLASS_PANE).setAmount(1);
 
-        NamespacedKey auction_button = Keys.auction_button.getNamespacedKey();
-        NamespacedKey auction_price = Keys.auction_price.getNamespacedKey();
+        final NamespacedKey auction_button = Keys.auction_button.getNamespacedKey();
+        final NamespacedKey auction_price = Keys.auction_price.getNamespacedKey();
 
         this.inventory.setItem(9, builder.addString("+1", auction_button).addInteger(1, auction_price).setName("&a+1").build());
         this.inventory.setItem(10, builder.addString("+10", auction_button).addInteger(10, auction_price).setName("&a+10").build());
@@ -68,12 +79,13 @@ public class BidMenu extends Holder {
         this.inventory.setItem(15, builder.addString("-100", auction_button).addInteger(-100, auction_price).setName("&c-100").build());
         this.inventory.setItem(16, builder.addString("-10", auction_button).addInteger(-10, auction_price).setName("&c-10").build());
         this.inventory.setItem(17, builder.addString("-1", auction_button).addInteger(-1, auction_price).setName("&c-1").build());
-        this.inventory.setItem(13, getBiddingGlass(this.player, this.id));
+
+        this.inventory.setItem(13, getGlass(null));
 
         this.inventory.setItem(22, new ItemBuilder().addString("bid_item", auction_button).setMaterial(this.config.getString("Settings.GUISettings.OtherSettings.Bid.Item")).setAmount(1)
                 .setName(this.config.getString("Settings.GUISettings.OtherSettings.Bid.Name")).setLore(this.config.getStringList("Settings.GUISettings.OtherSettings.Bid.Lore")).build());
 
-        this.inventory.setItem(4, getBiddingItem(this.id));
+        this.inventory.setItem(4, item);
 
         this.player.openInventory(this.inventory);
 
@@ -82,13 +94,13 @@ public class BidMenu extends Holder {
 
     @Override
     public void run(InventoryClickEvent event) {
-        if (!(event.getInventory().getHolder(false) instanceof BidMenu menu)) return;
+        if (!(event.getInventory().getHolder(false) instanceof BidMenu bidMenu)) return;
 
         event.setCancelled(true);
 
         final int slot = event.getSlot();
 
-        final Inventory inventory = menu.getInventory();
+        final Inventory inventory = bidMenu.getInventory();
 
         if (slot > inventory.getSize()) return;
 
@@ -106,19 +118,21 @@ public class BidMenu extends Holder {
 
         if (type.isEmpty()) return;
 
-        final FileConfiguration data = Files.data.getConfiguration();
-        final Player player = (Player) event.getWhoClicked();
-        final VaultSupport support = this.plugin.getSupport();
+        final Player player = bidMenu.player;
+
+        final ItemStack item = bidMenu.auction.getActiveItem(ShopType.BID).getItemStack();
+
+        final AuctionItem auction = bidMenu.auction;
 
         switch (type) {
             case "bid_item" -> {
-                String id = menu.id;
+                final VaultSupport support = this.plugin.getSupport();
 
-                int bid = HolderManager.getBidding(player);
-
-                String topBidder = data.getString("Items." + id + ".TopBidder", "None");
+                final long bid = auction.getTopBid();
 
                 final long money = support.getMoney(player);
+
+                final String topBidder = auction.getBidderName();
 
                 if (money < bid) {
                     final Map<String, String> placeholders = new HashMap<>();
@@ -131,126 +145,98 @@ public class BidMenu extends Holder {
                     return;
                 }
 
-                if (data.getLong("Items." + id + ".Price") > bid) {
+                if (auction.getPrice() > bid) {
                     player.sendMessage(Messages.BID_MORE_MONEY.getMessage(player));
 
                     return;
                 }
 
-                if (data.getLong("Items." + id + ".Price") >= bid && !topBidder.equalsIgnoreCase("None")) {
+                if (auction.getPrice() >= bid && !topBidder.equalsIgnoreCase("None")) {
                     player.sendMessage(Messages.BID_MORE_MONEY.getMessage(player));
 
                     return;
                 }
 
-                this.server.getPluginManager().callEvent(new AuctionNewBidEvent(player, Methods.fromBase64(data.getString("Items." + id + ".Item")), bid));
-
-                data.set("Items." + id + ".Price", bid);
-                data.set("Items." + id + ".TopBidder", player.getUniqueId().toString());
-                data.set("Items." + id + ".TopBidderName", player.getName());
+                this.server.getPluginManager().callEvent(new AuctionNewBidEvent(player, auction.asItemStack(), bid));
 
                 final Map<String, String> placeholders = new HashMap<>();
                 placeholders.put("%Bid%", String.valueOf(bid));
 
                 player.sendMessage(Messages.BID_MESSAGE.getMessage(player, placeholders));
 
-                Files.data.save();
+                auction.setBidderName(player.getName());
+                auction.setBidderUUID(player.getUniqueId().toString());
+                auction.setPrice(bid);
 
-                HolderManager.addBidding(player, 0);
+                this.userManager.removeAuctionItem(auction); // remove it
+
+                final FileConfiguration data = bidMenu.data;
+
+                final String uuid = auction.getUuid().toString();
+
+                final ConfigurationSection section = data.getConfigurationSection("active_auctions." + uuid + "." + bidMenu.id);
+
+                if (section == null) { // do not add if not found in data.yml
+                    player.closeInventory();
+
+                    bidMenu.click(player);
+
+                    return;
+                }
+
+                this.userManager.addActiveAuction(auction.getUuid().toString(), section);
+
                 player.closeInventory();
-                menu.click(player);
+                bidMenu.click(player);
             }
 
             case "+1", "+10", "+100", "+1000" -> {
-                try {
-                    final int price = container.getOrDefault(Keys.auction_price.getNamespacedKey(), PersistentDataType.INTEGER, 10);
+                final int price = container.getOrDefault(Keys.auction_price.getNamespacedKey(), PersistentDataType.INTEGER, 10);
 
-                    HolderManager.addBidding(player, HolderManager.getBidding(player) + price);
+                auction.setTopBid(auction.getTopBid() + price);
 
-                    this.inventory.setItem(4, getBiddingItem(menu.id));
-                    this.inventory.setItem(13, getBiddingGlass(player, menu.id));
-                } catch (Exception exception) {
-                    player.closeInventory();
-
-                    player.sendMessage(Messages.ITEM_DOESNT_EXIST.getMessage(player));
-                }
+                this.inventory.setItem(4, auction.getActiveItem(ShopType.BID).getItemStack());
+                this.inventory.setItem(13, getGlass(bidMenu));
             }
 
             case "-1", "-10", "-100", "-1000" -> {
-                try {
-                    final int price = container.getOrDefault(Keys.auction_price.getNamespacedKey(), PersistentDataType.INTEGER, -10);
+                final int price = container.getOrDefault(Keys.auction_price.getNamespacedKey(), PersistentDataType.INTEGER, -10);
 
-                    HolderManager.addBidding(player, HolderManager.getBidding(player) + price);
+                auction.setTopBid(auction.getTopBid() + price);
 
-                    this.inventory.setItem(4, getBiddingItem(menu.id));
-                    this.inventory.setItem(13, getBiddingGlass(player, menu.id));
-                } catch (Exception exception) {
-                    player.closeInventory();
-
-                    player.sendMessage(Messages.ITEM_DOESNT_EXIST.getMessage(player));
-                }
+                this.inventory.setItem(4, auction.getActiveItem(ShopType.BID).getItemStack());
+                this.inventory.setItem(13, getGlass(bidMenu));
             }
         }
     }
 
-    private ItemStack getBiddingGlass(Player player, String id) {
-        FileConfiguration config = Files.config.getConfiguration();
+    private ItemStack getGlass(@Nullable final BidMenu bidMenu) {
+        FileConfiguration config = bidMenu != null ? bidMenu.config : this.config;
 
         String item = config.getString("Settings.GUISettings.OtherSettings.Bidding.Item");
         String name = config.getString("Settings.GUISettings.OtherSettings.Bidding.Name");
 
         ItemBuilder itemBuilder = new ItemBuilder().setMaterial(item).setName(name).setAmount(1);
 
-        int bid = HolderManager.getBidding(player);
+        final AuctionItem auction = bidMenu != null ? bidMenu.auction : this.auction;
 
-        String price = Methods.getPrice(id, false);
+        final long bid = auction.getPrice();
+        final long topBid = auction.getTopBid();
 
         if (config.contains("Settings.GUISettings.OtherSettings.Bidding.Lore")) {
             List<String> lore = new ArrayList<>(itemBuilder.getUpdatedLore());
 
             lore.add(" ");
 
-            for (String l : config.getStringList("Settings.GUISettings.OtherSettings.Bidding.Lore")) {
-                lore.add(l.replace("%Bid%", String.valueOf(bid))
+            for (String line : config.getStringList("Settings.GUISettings.OtherSettings.Bidding.Lore")) {
+                lore.add(line.replace("%Bid%", String.valueOf(bid))
                         .replace("%bid%", String.valueOf(bid))
-                        .replace("%TopBid%", price)
-                        .replace("%topbid%", price));
+                        .replace("%TopBid%", String.valueOf(topBid))
+                        .replace("%topbid%", String.valueOf(topBid)));
             }
 
             itemBuilder.setLore(lore);
         }
-
-        return itemBuilder.build();
-    }
-
-    private ItemStack getBiddingItem(final String id) {
-        FileConfiguration config = Files.config.getConfiguration();
-        FileConfiguration data = Files.data.getConfiguration();
-
-        ItemStack item = Methods.fromBase64(data.getString("Items." + id + ".Item"));
-
-        ItemBuilder itemBuilder = ItemBuilder.convertItemStack(item);
-
-        List<String> lore = new ArrayList<>(itemBuilder.getUpdatedLore());
-
-        lore.add(" ");
-
-        String price = Methods.getPrice(id, false);
-        String time = Methods.convertToTime(data.getLong("Items." + id + ".Time-Till-Expire"));
-
-        String seller = data.getString("Items." + id + ".Name", "None");
-        String bidder = data.getString("Items." + id + ".TopBidderName", "None");
-
-        for (String l : config.getStringList("Settings.GUISettings.Bidding")) {
-            lore.add(l.replace("%TopBid%", price)
-                    .replace("%topbid%", price)
-                    .replace("%Seller%", seller).replace("%seller%", seller)
-                    .replace("%TopBidder%", bidder).replace("%topbidder%", bidder)
-                    .replace("%Time%", time)
-                    .replace("%time%", time));
-        }
-
-        itemBuilder.setLore(lore);
 
         return itemBuilder.build();
     }

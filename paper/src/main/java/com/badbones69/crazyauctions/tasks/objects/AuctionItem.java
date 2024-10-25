@@ -22,15 +22,17 @@ public class AuctionItem {
 
     private final String store_id;
     private final ItemStack itemStack;
-    private final long price;
+    private long price;
     private final long time_till_expire;
     private final long full_expire;
 
-    private final String bidder_uuid;
-    private final String bidder_name;
+    private String bidder_uuid;
+    private String bidder_name;
+    private long topBid;
+
     private final boolean isBiddable;
 
-    public AuctionItem(final String uuid, final String name, final String id, final String item, final String store_id, final long price, final long time_till_expire, final long full_expire, final String bidder_uuid, final String bidder_name, final boolean biddable) {
+    public AuctionItem(final String uuid, final String name, final String id, final String item, final String store_id, final long price, final long time_till_expire, final long full_expire, final String bidder_uuid, final String bidder_name, final long topBid, final boolean biddable) {
         this.uuid = UUID.fromString(uuid);
         this.name = name;
         this.id = id;
@@ -45,6 +47,8 @@ public class AuctionItem {
 
         this.bidder_uuid = bidder_uuid;
         this.bidder_name = bidder_name;
+        this.topBid = topBid;
+
         this.isBiddable = biddable;
     }
 
@@ -68,6 +72,10 @@ public class AuctionItem {
         return this.price;
     }
 
+    public void setPrice(final long price) {
+        this.price = price;
+    }
+
     public final long getTimeTillExpire() {
         return this.time_till_expire;
     }
@@ -80,8 +88,24 @@ public class AuctionItem {
         return this.bidder_uuid;
     }
 
+    public void setBidderUUID(final String uuid) {
+        this.bidder_uuid = uuid;
+    }
+
     public final String getBidderName() {
         return this.bidder_name;
+    }
+
+    public void setBidderName(String name) {
+        this.bidder_name = name;
+    }
+
+    public final long getTopBid() {
+        return this.topBid;
+    }
+
+    public void setTopBid(final long topBid) {
+        this.topBid = topBid;
     }
 
     public final boolean isBiddable() {
@@ -101,8 +125,6 @@ public class AuctionItem {
 
         final ItemBuilder itemBuilder = ItemBuilder.convertItemStack(this.itemStack.clone());
 
-        final String priceFormat = String.format(Locale.ENGLISH, "%,d", this.price);
-
         final String time = Methods.convertToTime(getTimeTillExpire());
 
         final List<String> lore = new ArrayList<>(itemBuilder.getUpdatedLore());
@@ -110,6 +132,8 @@ public class AuctionItem {
         lore.add(" ");
 
         if (shopType == ShopType.BID && isBiddable()) {
+            final String priceFormat = String.format(Locale.ENGLISH, "%,d", this.topBid);
+
             for (final String line : configuration.getStringList("Settings.GUISettings.Bidding")) {
                 String newLine = line.replace("%TopBid%", priceFormat)
                         .replace("%topbid%", priceFormat);
@@ -118,12 +142,14 @@ public class AuctionItem {
                         .replace("%seller%", getName());
 
                 newLine = line.replace("%TopBidder%", getBidderName())
-                        .replace("%topbid%", getBidderName());
+                        .replace("%topbidder%", getBidderName());
 
                 lore.add(newLine.replace("%Time%", time)
                         .replace("%time%", time));
             }
         } else {
+            final String priceFormat = String.format(Locale.ENGLISH, "%,d", this.price);
+
             for (final String line : configuration.getStringList("Settings.GUISettings.SellingItemLore")) {
                 String newLine = line.replace("%TopBid%", priceFormat)
                         .replace("%topbid%", priceFormat);
@@ -137,8 +163,7 @@ public class AuctionItem {
             }
         }
 
-        itemBuilder.setLore(lore)
-                .addString(getStoreID(), Keys.auction_store_id.getNamespacedKey());
+        itemBuilder.setLore(lore).addString(getStoreID(), Keys.auction_store_id.getNamespacedKey());
 
         return itemBuilder;
     }
@@ -162,8 +187,7 @@ public class AuctionItem {
                     .replace("%Price%", priceFormat));
         }
 
-        itemBuilder.setLore(lore)
-                .addString(getStoreID(), Keys.auction_store_id.getNamespacedKey());;
+        itemBuilder.setLore(lore).addString(getStoreID(), Keys.auction_store_id.getNamespacedKey());;
 
         return itemBuilder;
     }
