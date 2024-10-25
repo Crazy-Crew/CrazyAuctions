@@ -106,13 +106,6 @@ public class CrazyAuctions extends Vital {
         this.support = new VaultSupport();
         this.support.loadVault();
 
-        new FoliaRunnable(getServer().getGlobalRegionScheduler()) {
-            @Override
-            public void run() {
-                Methods.updateAuction();
-            }
-        }.runAtFixedRate(this, 0L, 5000L);
-
         Messages.addMissingMessages();
 
         new MetricsWrapper(this, 4624);
