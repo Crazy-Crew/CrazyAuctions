@@ -328,6 +328,7 @@ public class UserManager {
 
         section.set("status.top_bidder.uuid", "None");
         section.set("status.top_bidder.name", "None");
+        section.set("status.top_bidder.price", 0);
         section.set("status.biddable", isBiddable);
 
         addActiveAuction(uuid, section);
@@ -361,7 +362,7 @@ public class UserManager {
         }
     }
 
-    private void addActiveAuction(final String uuid, final ConfigurationSection section) {
+    public void addActiveAuction(final String uuid, final ConfigurationSection section) {
         final AuctionItem new_auction = new AuctionItem(uuid, section.getString("name"),
                 section.getName(),
                 section.getString("item"),
@@ -371,6 +372,7 @@ public class UserManager {
                 section.getLong("time.full"),
                 section.getString("status.top_bidder.uuid", "None"),
                 section.getString("status.top_bidder.name", "None"),
+                section.getLong("status.top_bidder.price", 0),
                 section.getBoolean("status.biddable")
         );
 
