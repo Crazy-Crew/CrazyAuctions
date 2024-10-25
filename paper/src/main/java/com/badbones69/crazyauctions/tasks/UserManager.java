@@ -110,7 +110,7 @@ public class UserManager {
         this.auctions.put(auction.getUuid(), auctions);
     }
 
-    public void removeAuctionItems(final Player player) {
+    public void removeActiveItems(final Player player) {
         final UUID uuid = player.getUniqueId();
 
         final FileConfiguration data = Files.data.getConfiguration();
@@ -304,6 +304,35 @@ public class UserManager {
         return this.expired_items;
     }
 
+    public void addActiveAuction(final String uuid, final ConfigurationSection section) {
+        final AuctionItem new_auction = new AuctionItem(uuid, section.getString("name"),
+                section.getName(),
+                section.getString("item"),
+                section.getString("store_id"),
+                section.getLong("price"),
+                section.getLong("time.expire"),
+                section.getLong("time.full"),
+                section.getString("status.top_bidder.uuid", "None"),
+                section.getString("status.top_bidder.name", "None"),
+                section.getLong("status.top_bidder.price", 0),
+                section.getBoolean("status.biddable")
+        );
+
+        final UUID fromString = UUID.fromString(uuid);
+
+        if (this.auctions.containsKey(fromString)) {
+            final List<AuctionItem> auctions = this.auctions.get(fromString);
+
+            auctions.add(new_auction);
+
+            this.auctions.put(fromString, auctions);
+        } else {
+            this.auctions.put(fromString, new ArrayList<>() {{
+                add(new_auction);
+            }});
+        }
+    }
+
     /**
      * Adds an item to the configuration section
      *
@@ -358,35 +387,6 @@ public class UserManager {
         } else {
             this.expired_items.put(fromString, new ArrayList<>() {{
                 add(expired_item);
-            }});
-        }
-    }
-
-    public void addActiveAuction(final String uuid, final ConfigurationSection section) {
-        final AuctionItem new_auction = new AuctionItem(uuid, section.getString("name"),
-                section.getName(),
-                section.getString("item"),
-                section.getString("store_id"),
-                section.getLong("price"),
-                section.getLong("time.expire"),
-                section.getLong("time.full"),
-                section.getString("status.top_bidder.uuid", "None"),
-                section.getString("status.top_bidder.name", "None"),
-                section.getLong("status.top_bidder.price", 0),
-                section.getBoolean("status.biddable")
-        );
-
-        final UUID fromString = UUID.fromString(uuid);
-
-        if (this.auctions.containsKey(fromString)) {
-            final List<AuctionItem> auctions = this.auctions.get(fromString);
-
-            auctions.add(new_auction);
-
-            this.auctions.put(fromString, auctions);
-        } else {
-            this.auctions.put(fromString, new ArrayList<>() {{
-                add(new_auction);
             }});
         }
     }
