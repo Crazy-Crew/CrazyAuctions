@@ -1,6 +1,5 @@
 package com.badbones69.crazyauctions.api.guis.types.other;
 
-import com.badbones69.crazyauctions.Methods;
 import com.badbones69.crazyauctions.api.builders.ItemBuilder;
 import com.badbones69.crazyauctions.api.enums.Messages;
 import com.badbones69.crazyauctions.api.enums.ShopType;
@@ -119,8 +118,6 @@ public class BidMenu extends Holder {
         if (type.isEmpty()) return;
 
         final Player player = bidMenu.player;
-
-        final ItemStack item = bidMenu.auction.getActiveItem(ShopType.BID).getItemStack();
 
         final AuctionItem auction = bidMenu.auction;
 

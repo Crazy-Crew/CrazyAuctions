@@ -11,6 +11,7 @@ import com.badbones69.crazyauctions.api.guis.Holder;
 import com.badbones69.crazyauctions.api.guis.HolderManager;
 import com.badbones69.crazyauctions.api.GuiManager;
 import com.badbones69.crazyauctions.currency.VaultSupport;
+import com.badbones69.crazyauctions.tasks.objects.AuctionItem;
 import io.papermc.paper.persistence.PersistentDataContainerView;
 import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -23,17 +24,21 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 public class BuyingMenu extends Holder {
 
     private FileConfiguration config;
     private FileConfiguration data;
 
+    private AuctionItem auction;
     private List<String> options;
     private String id;
 
-    public BuyingMenu(final Player player, final String id, final String title) {
+    public BuyingMenu(final AuctionItem auction, final Player player, final String id, final String title) {
         super(player, title, 9);
+
+        this.auction = auction;
 
         this.config = Files.config.getConfiguration();
         this.data = Files.data.getConfiguration();
@@ -47,10 +52,14 @@ public class BuyingMenu extends Holder {
 
     @Override
     public final Holder build() {
-        if (!this.data.contains("Items." + this.id)) {
-            GuiManager.openShop(this.player, ShopType.SELL, HolderManager.getShopCategory(this.player), 1);
+        final UUID uuid = this.player.getUniqueId();
+
+        if (!this.data.contains("active_auctions." + uuid + "." + this.id)) {
+            GuiManager.openShop(this.player, ShopType.BID, HolderManager.getShopCategory(this.player), 1);
 
             this.player.sendMessage(Messages.ITEM_DOESNT_EXIST.getMessage(this.player));
+
+            this.userManager.removeAuctionItem(this.auction); // remove auction item, as it's not in the active_auctions
 
             return this;
         }
@@ -99,37 +108,7 @@ public class BuyingMenu extends Holder {
             }
         }
 
-        ItemBuilder itemBuilder = ItemBuilder.convertItemStack(this.data.getString("Items." + this.id + ".Item"));
-
-        if (itemBuilder == null) {
-            this.plugin.getLogger().warning("The item with store id " + this.data.getString("Items." + this.id + ".StoreID", "buying_menu") + " obtained from your data.yml could not be converted!");
-
-            return this;
-        }
-
-        List<String> lore = new ArrayList<>(itemBuilder.getUpdatedLore());
-
-        lore.add(" ");
-
-        String price = Methods.getPrice(this.id, false);
-        String time = Methods.convertToTime(this.data.getLong("Items." + this.id + ".Time-Till-Expire"));
-
-        String id = this.data.getString("Items." + this.id + ".Name", "None");
-
-        for (String l : this.config.getStringList("Settings.GUISettings.SellingItemLore")) {
-            lore.add(l.replace("%Price%", price).replace("%price%", price)
-                    .replace("%Seller%", id)
-                    .replace("%seller%", id)
-                    .replace("%Time%", time)
-                    .replace("%time%", time));
-        }
-
-        itemBuilder.setLore(lore);
-
-        itemBuilder.addInteger(this.data.getInt("Items." + this.id + ".StoreID"), Keys.auction_store_id.getNamespacedKey());
-        itemBuilder.addString(this.id, Keys.auction_number.getNamespacedKey());
-
-        this.inventory.setItem(4, itemBuilder.build());
+        this.inventory.setItem(4, this.auction.getActiveItem(ShopType.SELL).build());
 
         this.player.openInventory(this.inventory);
 
@@ -138,13 +117,13 @@ public class BuyingMenu extends Holder {
 
     @Override
     public void run(InventoryClickEvent event) {
-        if (!(event.getInventory().getHolder(false) instanceof BuyingMenu menu)) return;
+        if (!(event.getInventory().getHolder(false) instanceof BuyingMenu buyingMenu)) return;
 
         event.setCancelled(true);
 
         final int slot = event.getSlot();
 
-        final Inventory inventory = menu.getInventory();
+        final Inventory inventory = buyingMenu.getInventory();
 
         if (slot > inventory.getSize()) return;
 
@@ -162,25 +141,30 @@ public class BuyingMenu extends Holder {
 
         if (type.isEmpty()) return;
 
-        final FileConfiguration data = Files.data.getConfiguration();
-        final Player player = (Player) event.getWhoClicked();
+        final FileConfiguration data = buyingMenu.data;
+        final Player player = buyingMenu.player;
+        final UUID uuid = player.getUniqueId();
+
+        final AuctionItem auction = buyingMenu.auction;
 
         switch (type) {
             case "Confirm" -> {
-                String id = menu.id;
+                final String id = buyingMenu.id;
 
-                if (!data.contains("Items." + id)) {
-                    menu.click(player);
+                if (!this.data.contains("active_auctions." + uuid + "." + id)) {
+                    buyingMenu.click(player);
 
                     GuiManager.openShop(player, HolderManager.getShopType(player), HolderManager.getShopCategory(player), 1);
 
                     player.sendMessage(Messages.ITEM_DOESNT_EXIST.getMessage(player));
 
+                    this.userManager.removeAuctionItem(this.auction); // remove auction item, as it's not in the active_auctions
+
                     return;
                 }
 
                 if (Methods.isInvFull(player)) {
-                    menu.click(player);
+                    buyingMenu.click(player);
 
                     player.closeInventory();
                     player.sendMessage(Messages.INVENTORY_FULL.getMessage(player));
@@ -188,16 +172,18 @@ public class BuyingMenu extends Holder {
                     return;
                 }
 
-                long cost = data.getLong("Items." + id + ".Price");
-                String seller = data.getString("Items." + id + ".Seller");
+                final long cost = auction.getPrice();
+                final String seller = auction.getName();
 
                 final VaultSupport support = this.plugin.getSupport();
 
                 if (support.getMoney(player) < cost) {
-                    menu.click(player);
+                    buyingMenu.click(player);
+
                     player.closeInventory();
 
                     Map<String, String> placeholders = new HashMap<>();
+
                     placeholders.put("%Money_Needed%", (cost - support.getMoney(player)) + "");
                     placeholders.put("%money_needed%", (cost - support.getMoney(player)) + "");
 
@@ -206,15 +192,15 @@ public class BuyingMenu extends Holder {
                     return;
                 }
 
-                ItemStack i = Methods.fromBase64(data.getString("Items." + id + ".Item"));
+                final ItemStack item = auction.asItemStack();
 
-                this.server.getPluginManager().callEvent(new AuctionBuyEvent(player, i, cost));
+                this.server.getPluginManager().callEvent(new AuctionBuyEvent(player, item, cost));
                 support.removeMoney(player, cost);
                 support.addMoney(Methods.getOfflinePlayer(seller), cost);
 
                 Map<String, String> placeholders = new HashMap<>();
 
-                String price = Methods.getPrice(id, false);
+                String price = String.valueOf(auction.getPrice());
 
                 placeholders.put("%Price%", price);
                 placeholders.put("%price%", price);
@@ -231,22 +217,23 @@ public class BuyingMenu extends Holder {
 
                         FileConfiguration config = Files.config.getConfiguration();
 
-                        String sound = config.getString("Settings.Sold-Item-Sound", "");
+                        String sound = config.getString("Settings.Sold-Item-Sound", "UI_BUTTON_CLICK");
 
                         if (sound.isEmpty()) return;
 
-                        try {
-                            player.playSound(player.getLocation(), Sound.valueOf(sound), 1f, 1f);
-                        } catch (Exception ignored) {}
+                        player.playSound(player.getLocation(), Sound.valueOf(sound), 1f, 1f);
                     }
                 }
 
-                player.getInventory().addItem(i);
+                player.getInventory().addItem(item);
 
-                data.set("Items." + id, null);
+                data.set("active_auctions." + player.getUniqueId() + "." + id, null);
+
+                this.userManager.removeAuctionItem(this.auction);
+
                 Files.data.save();
 
-                menu.click(player);
+                buyingMenu.click(player);
 
                 GuiManager.openShop(player, HolderManager.getShopType(player), HolderManager.getShopCategory(player), 1);
             }
@@ -254,7 +241,7 @@ public class BuyingMenu extends Holder {
             case "Cancel" -> {
                 GuiManager.openShop(player, HolderManager.getShopType(player), HolderManager.getShopCategory(player), 1);
 
-                menu.click(player);
+                buyingMenu.click(player);
             }
         }
     }

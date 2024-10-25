@@ -116,6 +116,10 @@ public class AuctionItem {
         return this.itemStack;
     }
 
+    public final ItemBuilder asItemBuilder() {
+        return new ItemBuilder(this.itemStack);
+    }
+
     public final String asBase64() {
         return Methods.toBase64(asItemStack());
     }
@@ -163,7 +167,9 @@ public class AuctionItem {
             }
         }
 
-        itemBuilder.setLore(lore).addString(getStoreID(), Keys.auction_store_id.getNamespacedKey());
+        itemBuilder.setLore(lore)
+                .addString(this.id, Keys.auction_number.getNamespacedKey())
+                .addString(getStoreID(), Keys.auction_store_id.getNamespacedKey());
 
         return itemBuilder;
     }
