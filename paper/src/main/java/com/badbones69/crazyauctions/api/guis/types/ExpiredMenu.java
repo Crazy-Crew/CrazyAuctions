@@ -51,7 +51,11 @@ public class ExpiredMenu extends Holder {
                 "WhatIsThis.Cancelled/ExpiredItems"
         ));
 
-        this.items = this.userManager.getExpiredItems().get(this.player.getUniqueId());
+        final UUID uuid = this.player.getUniqueId();
+
+        if (this.userManager.hasExpiredItem(uuid)) {
+            this.items = this.userManager.getExpiredItems(uuid);
+        }
 
         this.maxPages = getExpiredMaxPages(this.items == null ? new ArrayList<>() : this.items);
 

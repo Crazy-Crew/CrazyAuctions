@@ -164,7 +164,11 @@ public class CurrentMenu extends Holder {
     }
 
     public void calculateItems() {
-        this.items = this.userManager.getAuctions().get(this.player.getUniqueId());
+        final UUID uuid = this.player.getUniqueId();
+
+        if (this.userManager.hasAuction(uuid)) {
+            this.items = this.userManager.getAuctions(uuid);
+        }
 
         this.maxPages = getMaxPage(this.items);
     }

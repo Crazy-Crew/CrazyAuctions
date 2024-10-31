@@ -152,6 +152,14 @@ public class UserManager {
         return this.auctions;
     }
 
+    public final boolean hasAuction(final UUID uuid) {
+        return this.auctions.containsKey(uuid);
+    }
+
+    public final List<AuctionItem> getAuctions(final UUID uuid) {
+        return this.auctions.get(uuid);
+    }
+
     public final void updateExpiredCache() {
         this.expired_items.clear();
 
@@ -302,6 +310,14 @@ public class UserManager {
 
     public final Map<UUID, List<ExpiredItem>> getExpiredItems() {
         return this.expired_items;
+    }
+
+    public final boolean hasExpiredItem(final UUID uuid) {
+        return this.expired_items.containsKey(uuid);
+    }
+
+    public final List<ExpiredItem> getExpiredItems(final UUID uuid) {
+        return this.expired_items.get(uuid);
     }
 
     public void addActiveAuction(final String uuid, final ConfigurationSection section) {
