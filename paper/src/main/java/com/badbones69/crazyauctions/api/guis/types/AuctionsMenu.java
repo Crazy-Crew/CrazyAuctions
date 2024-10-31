@@ -372,6 +372,6 @@ public class AuctionsMenu extends Holder {
             this.items.add(auction);
         })));
 
-        this.maxPages = getMaxPage(this.items);
+        this.maxPages = getMaxPage(this.items == null ? new ArrayList<>() : this.items);
     }
 }

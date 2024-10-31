@@ -53,7 +53,7 @@ public class ExpiredMenu extends Holder {
 
         this.items = this.userManager.getExpiredItems().get(this.player.getUniqueId());
 
-        this.maxPages = getExpiredMaxPages(this.items);
+        this.maxPages = getExpiredMaxPages(this.items == null ? new ArrayList<>() : this.items);
 
         for (final String key : this.options) {
             if (!this.config.contains("Settings.GUISettings.OtherSettings." + key)) {
