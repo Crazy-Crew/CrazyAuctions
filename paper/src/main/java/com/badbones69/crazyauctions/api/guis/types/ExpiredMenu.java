@@ -216,6 +216,10 @@ public class ExpiredMenu extends Holder {
             }
         }
 
+        if (!container.has(Keys.auction_store_id.getNamespacedKey())) { // do not run, if there is no key.
+            return;
+        }
+
         if (Methods.isInvFull(player)) { // run this here obviously as well
             player.sendMessage(Messages.INVENTORY_FULL.getMessage(player));
 
