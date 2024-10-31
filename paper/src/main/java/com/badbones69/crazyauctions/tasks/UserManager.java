@@ -103,11 +103,11 @@ public class UserManager {
 
         if (!isNuked || !this.auctions.containsKey(uuid)) return; // only remove from the cache, if the data file removal was successful!
 
-        final List<AuctionItem> auctions = this.auctions.get(auction.getUuid());
+        final List<AuctionItem> auctions = this.auctions.get(uuid);
 
         auctions.remove(auction);
 
-        this.auctions.put(auction.getUuid(), auctions);
+        this.auctions.put(uuid, auctions);
     }
 
     public void removeActiveItems(final Player player) {
@@ -207,9 +207,9 @@ public class UserManager {
         section.set("full_time", auction.getFullExpire());
         section.set("price", auction.getPrice());
 
-        data.set("active_auctions." + uuid+ "." + auction.getId(), null);
+        // data.set("active_auctions." + uuid + "." + auction.getId(), null);
 
-        if (!data.contains("active_auctions." + uuid + "." + auction.getId())) {
+        if (data.contains("active_auctions." + uuid + "." + auction.getId())) {
             removeAuctionItem(auction);
         }
 
