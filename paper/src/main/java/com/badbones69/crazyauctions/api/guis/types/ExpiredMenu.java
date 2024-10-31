@@ -202,7 +202,7 @@ public class ExpiredMenu extends Holder {
                     player_inventory.addItem(auction_item);
                 }
 
-                this.userManager.removeExpiredItems(this.player);
+                this.userManager.removeExpiredItems(player);
 
                 Files.data.save();
 
