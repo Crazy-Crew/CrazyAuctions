@@ -148,6 +148,11 @@ public class CurrentMenu extends Holder {
             }
         }
 
+        // return early, fixes npe
+        if (!container.has(Keys.auction_store_id.getNamespacedKey())) {
+            return;
+        }
+
         final UUID uuid = player.getUniqueId();
 
         final AuctionItem auction = this.userManager.getAuctionItemById(uuid, container.getOrDefault(Keys.auction_store_id.getNamespacedKey(), PersistentDataType.STRING, ""));
