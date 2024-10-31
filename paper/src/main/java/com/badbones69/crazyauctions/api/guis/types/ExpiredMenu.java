@@ -118,101 +118,101 @@ public class ExpiredMenu extends Holder {
 
         final PersistentDataContainerView container = itemStack.getPersistentDataContainer();
 
-        if (!container.has(Keys.auction_button.getNamespacedKey())) return;
-
-        final String type = container.getOrDefault(Keys.auction_button.getNamespacedKey(), PersistentDataType.STRING, "");
-
-        if (type.isEmpty()) return;
-
         final Player player = (Player) event.getWhoClicked();
 
-        switch (type) {
-            case "Back" -> {
-                menu.click(player);
+        if (container.has(Keys.auction_button.getNamespacedKey())) {
+            final String type = container.getOrDefault(Keys.auction_button.getNamespacedKey(), PersistentDataType.STRING, "");
 
-                GuiManager.openShop(player, HolderManager.getShopType(player), HolderManager.getShopCategory(player), 1);
+            if (type.isEmpty()) return;
 
-                return;
-            }
+            switch (type) {
+                case "Back" -> {
+                    menu.click(player);
 
-            case "PreviousPage" -> {
-                menu.click(player);
-
-                final int page = menu.getPage();
-
-                if (page > 1 && page <= menu.maxPages) {
-                    return;
-                }
-
-                menu.backPage();
-
-                GuiManager.openPlayersExpiredList(player, menu.getPage());
-
-                return;
-            }
-
-            case "NextPage" -> {
-                menu.click(player);
-
-                if (menu.getPage() >= menu.maxPages) {
-                    return;
-                }
-
-                menu.nextPage();
-
-                GuiManager.openPlayersExpiredList(player, menu.getPage());
-
-                return;
-            }
-
-            case "Return" -> {
-                if (Methods.isInvFull(player)) { // run this first obviously, just because
-                    player.sendMessage(Messages.INVENTORY_FULL.getMessage(player));
+                    GuiManager.openShop(player, HolderManager.getShopType(player), HolderManager.getShopCategory(player), 1);
 
                     return;
                 }
 
-                final FileConfiguration data = Files.data.getConfiguration();
+                case "PreviousPage" -> {
+                    menu.click(player);
 
-                final ConfigurationSection section = data.getConfigurationSection("expired_auctions");
+                    final int page = menu.getPage();
 
-                if (section == null) return;
-
-                final ConfigurationSection player_section = section.getConfigurationSection(player.getUniqueId().toString());
-
-                if (player_section == null) return;
-
-                final Inventory player_inventory = player.getInventory();
-
-                for (final String key : section.getKeys(false)) {
-                    if (Methods.isInvFull(player)) { // run this here obviously as well
-                        player.sendMessage(Messages.INVENTORY_FULL.getMessage(player));
-
-                        break;
+                    if (page > 1 && page <= menu.maxPages) {
+                        return;
                     }
 
-                    final ConfigurationSection auction_section = section.getConfigurationSection(key);
+                    menu.backPage();
 
-                    if (auction_section == null) continue;
+                    GuiManager.openPlayersExpiredList(player, menu.getPage());
 
-                    final ItemStack auction_item = Methods.fromBase64(auction_section.getString("item"));
-
-                    if (auction_item == null) continue;
-
-                    player_inventory.addItem(auction_item);
+                    return;
                 }
 
-                this.userManager.removeExpiredItems(player);
+                case "NextPage" -> {
+                    menu.click(player);
 
-                Files.data.save();
+                    if (menu.getPage() >= menu.maxPages) {
+                        return;
+                    }
 
-                player.sendMessage(Messages.GOT_ITEM_BACK.getMessage(player));
+                    menu.nextPage();
 
-                menu.click(player);
+                    GuiManager.openPlayersExpiredList(player, menu.getPage());
 
-                GuiManager.openPlayersExpiredList(player, menu.getPage());
+                    return;
+                }
 
-                return;
+                case "Return" -> {
+                    if (Methods.isInvFull(player)) { // run this first obviously, just because
+                        player.sendMessage(Messages.INVENTORY_FULL.getMessage(player));
+
+                        return;
+                    }
+
+                    final FileConfiguration data = Files.data.getConfiguration();
+
+                    final ConfigurationSection section = data.getConfigurationSection("expired_auctions");
+
+                    if (section == null) return;
+
+                    final ConfigurationSection player_section = section.getConfigurationSection(player.getUniqueId().toString());
+
+                    if (player_section == null) return;
+
+                    final Inventory player_inventory = player.getInventory();
+
+                    for (final String key : section.getKeys(false)) {
+                        if (Methods.isInvFull(player)) { // run this here obviously as well
+                            player.sendMessage(Messages.INVENTORY_FULL.getMessage(player));
+
+                            break;
+                        }
+
+                        final ConfigurationSection auction_section = section.getConfigurationSection(key);
+
+                        if (auction_section == null) continue;
+
+                        final ItemStack auction_item = Methods.fromBase64(auction_section.getString("item"));
+
+                        if (auction_item == null) continue;
+
+                        player_inventory.addItem(auction_item);
+                    }
+
+                    this.userManager.removeExpiredItems(player);
+
+                    Files.data.save();
+
+                    player.sendMessage(Messages.GOT_ITEM_BACK.getMessage(player));
+
+                    menu.click(player);
+
+                    GuiManager.openPlayersExpiredList(player, menu.getPage());
+
+                    return;
+                }
             }
         }
 
