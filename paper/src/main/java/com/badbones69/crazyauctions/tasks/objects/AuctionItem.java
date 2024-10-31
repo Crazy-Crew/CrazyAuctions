@@ -169,7 +169,8 @@ public class AuctionItem {
 
         itemBuilder.setLore(lore)
                 .addString(this.id, Keys.auction_number.getNamespacedKey())
-                .addString(getStoreID(), Keys.auction_store_id.getNamespacedKey());
+                .addString(getStoreID(), Keys.auction_store_id.getNamespacedKey())
+                .addString(this.uuid.toString(), Keys.auction_uuid.getNamespacedKey());
 
         return itemBuilder;
     }

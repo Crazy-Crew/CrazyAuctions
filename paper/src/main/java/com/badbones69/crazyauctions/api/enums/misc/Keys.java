@@ -17,6 +17,8 @@ public enum Keys {
     // any button in the gui
     auction_button("auction_button", PersistentDataType.STRING),
 
+    auction_uuid("auction_uuid", PersistentDataType.STRING),
+
     // contains the auction item price
     auction_price("auction_price", PersistentDataType.INTEGER);
 
