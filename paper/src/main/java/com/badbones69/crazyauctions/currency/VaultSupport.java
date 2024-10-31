@@ -17,10 +17,12 @@ public class VaultSupport {
         return this.vault;
     }
 
-    public void loadVault() {
+    public boolean setupEconomy() {
         RegisteredServiceProvider<Economy> serviceProvider = this.plugin.getServer().getServicesManager().getRegistration(Economy.class);
 
         if (serviceProvider != null) this.vault = serviceProvider.getProvider();
+
+        return this.vault != null;
     }
 
     public long getMoney(@NotNull Player player) {

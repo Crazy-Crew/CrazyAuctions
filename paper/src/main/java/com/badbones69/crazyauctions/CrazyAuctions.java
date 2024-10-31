@@ -18,6 +18,7 @@ import com.badbones69.crazyauctions.currency.VaultSupport;
 import com.badbones69.crazyauctions.tasks.InventoryManager;
 import com.badbones69.crazyauctions.tasks.UserManager;
 import com.ryderbelserion.vital.paper.Vital;
+import com.ryderbelserion.vital.paper.api.enums.Support;
 import com.ryderbelserion.vital.paper.util.scheduler.FoliaRunnable;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.PluginCommand;
@@ -40,8 +41,18 @@ public class CrazyAuctions extends Vital {
 
     @Override
     public void onEnable() {
-        if (!getServer().getPluginManager().isPluginEnabled("Vault")) {
-            getLogger().severe("Vault was not found so the plugin will now disable.");
+        if (!Support.vault.isEnabled()) {
+            getLogger().severe("Vault was not found, so the plugin will now disable.");
+
+            getServer().getPluginManager().disablePlugin(this);
+
+            return;
+        }
+
+        this.support = new VaultSupport();
+
+        if (!this.support.setupEconomy()) {
+            getLogger().severe("An economy provider was not found, so the plugin will disable.");
 
             getServer().getPluginManager().disablePlugin(this);
 
@@ -57,12 +68,14 @@ public class CrazyAuctions extends Vital {
 
         this.userManager = new UserManager();
         this.userManager.updateAuctionsCache();
+        this.userManager.updateExpiredCache();
 
         // we want to update this cache, after the cache above... because we will also calculate if items are expired!
         new FoliaRunnable(getServer().getGlobalRegionScheduler()) {
             @Override
             public void run() {
                 userManager.updateAuctionsCache();
+                userManager.updateExpiredCache();
 
                 for (final Player player : getServer().getOnlinePlayers()) {
                     final Inventory inventory = player.getInventory();
@@ -102,9 +115,6 @@ public class CrazyAuctions extends Vital {
                 permission.registerPermission();
             }
         }
-
-        this.support = new VaultSupport();
-        this.support.loadVault();
 
         Messages.addMissingMessages();
 
