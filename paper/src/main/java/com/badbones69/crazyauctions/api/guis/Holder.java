@@ -80,7 +80,9 @@ public abstract class Holder implements InventoryHolder, Listener {
         return this.size - 9;
     }
 
-    public void setPage(final int page) {
+    public void setPage(int page) {
+        if (page <= 0) page = 1;
+
         this.page = page;
     }
 
