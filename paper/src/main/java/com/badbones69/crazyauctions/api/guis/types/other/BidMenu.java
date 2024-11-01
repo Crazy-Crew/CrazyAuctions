@@ -51,9 +51,7 @@ public class BidMenu extends Holder {
 
     @Override
     public final Holder build() {
-        final UUID uuid = this.player.getUniqueId();
-
-        if (!this.data.contains("active_auctions." + uuid + "." + this.id)) {
+        if (!this.data.contains("active_auctions." + this.auction.getUuid() + "." + this.id)) {
             GuiManager.openShop(this.player, ShopType.BID, HolderManager.getShopCategory(this.player), 1);
 
             this.player.sendMessage(Messages.ITEM_DOESNT_EXIST.getMessage(this.player));
@@ -181,7 +179,7 @@ public class BidMenu extends Holder {
                     return;
                 }
 
-                this.userManager.addActiveAuction(auction.getUuid().toString(), section);
+                this.userManager.addActiveAuction(uuid, section);
 
                 player.closeInventory();
                 bidMenu.click(player);
