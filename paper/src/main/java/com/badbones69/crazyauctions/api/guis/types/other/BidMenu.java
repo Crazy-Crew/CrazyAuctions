@@ -26,7 +26,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 public class BidMenu extends Holder {
 
@@ -34,6 +33,7 @@ public class BidMenu extends Holder {
     private FileConfiguration data;
 
     private AuctionItem auction;
+    private long current_bid = 0;
     private String id;
 
     public BidMenu(final AuctionItem auction, final Player player, final String id, final String title) {
@@ -117,51 +117,55 @@ public class BidMenu extends Holder {
 
         final Player player = bidMenu.player;
 
-        final AuctionItem auction = bidMenu.auction;
+        final AuctionItem auction = this.userManager.getAuctionItemById(bidMenu.auction.getUuid(), bidMenu.auction.getStoreID());
+
+        if (auction == null) { // if auction is null, someone else bid it. or the person cancelled it
+            GuiManager.openShop(player, ShopType.BID, HolderManager.getShopCategory(player), 1);
+
+            player.sendMessage(Messages.ITEM_DOESNT_EXIST.getMessage(player));
+
+            return;
+        }
 
         switch (type) {
             case "bid_item" -> {
                 final VaultSupport support = this.plugin.getSupport();
 
-                final long bid = auction.getTopBid();
+                final long top_bid = auction.getTopBid();
 
                 final long money = support.getMoney(player);
 
                 final String topBidder = auction.getBidderName();
 
-                if (money < bid) {
+                if (money < top_bid) {
                     final Map<String, String> placeholders = new HashMap<>();
 
-                    placeholders.put("%Money_Needed%", String.valueOf(bid - money));
-                    placeholders.put("%money_needed%", String.valueOf(bid - money));
+                    placeholders.put("%Money_Needed%", String.valueOf(top_bid - money));
+                    placeholders.put("%money_needed%", String.valueOf(top_bid - money));
 
                     player.sendMessage(Messages.NEED_MORE_MONEY.getMessage(player, placeholders));
 
                     return;
                 }
 
-                if (auction.getPrice() > bid) {
+                final long current_bid = bidMenu.current_bid;
+
+                if (current_bid < top_bid && !topBidder.equalsIgnoreCase("None")) {
                     player.sendMessage(Messages.BID_MORE_MONEY.getMessage(player));
 
                     return;
                 }
 
-                if (auction.getPrice() >= bid && !topBidder.equalsIgnoreCase("None")) {
-                    player.sendMessage(Messages.BID_MORE_MONEY.getMessage(player));
-
-                    return;
-                }
-
-                this.server.getPluginManager().callEvent(new AuctionNewBidEvent(player, auction.asItemStack(), bid));
+                this.server.getPluginManager().callEvent(new AuctionNewBidEvent(player, auction.asItemStack(), top_bid));
 
                 final Map<String, String> placeholders = new HashMap<>();
-                placeholders.put("%Bid%", String.valueOf(bid));
+                placeholders.put("%Bid%", String.valueOf(top_bid));
 
                 player.sendMessage(Messages.BID_MESSAGE.getMessage(player, placeholders));
 
                 auction.setBidderName(player.getName());
                 auction.setBidderUUID(player.getUniqueId().toString());
-                auction.setPrice(bid);
+                auction.setPrice(current_bid);
 
                 this.userManager.removeAuctionItem(auction); // remove it
 
@@ -188,7 +192,7 @@ public class BidMenu extends Holder {
             case "+1", "+10", "+100", "+1000" -> {
                 final int price = container.getOrDefault(Keys.auction_price.getNamespacedKey(), PersistentDataType.INTEGER, 10);
 
-                auction.setTopBid(auction.getTopBid() + price);
+                bidMenu.current_bid = bidMenu.current_bid + price;
 
                 inventory.setItem(4, auction.getActiveItem(ShopType.BID).getItemStack());
                 inventory.setItem(13, getGlass(bidMenu));
@@ -197,7 +201,7 @@ public class BidMenu extends Holder {
             case "-1", "-10", "-100", "-1000" -> {
                 final int price = container.getOrDefault(Keys.auction_price.getNamespacedKey(), PersistentDataType.INTEGER, -10);
 
-                auction.setTopBid(auction.getTopBid() + price);
+                bidMenu.current_bid = bidMenu.current_bid + price;
 
                 inventory.setItem(4, auction.getActiveItem(ShopType.BID).getItemStack());
                 inventory.setItem(13, getGlass(bidMenu));
@@ -215,7 +219,7 @@ public class BidMenu extends Holder {
 
         final AuctionItem auction = bidMenu != null ? bidMenu.auction : this.auction;
 
-        final long bid = auction.getPrice();
+        final long bid = bidMenu != null ? bidMenu.current_bid : this.current_bid;
         final long topBid = auction.getTopBid();
 
         if (config.contains("Settings.GUISettings.OtherSettings.Bidding.Lore")) {

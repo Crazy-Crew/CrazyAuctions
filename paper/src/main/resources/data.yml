@@ -1,2 +1,27 @@
-active_auctions: {}
+active_auctions:
+  45123240-248b-44e3-93c9-5c89093ffaad:
+    '1':
+      name: ryderbelserion
+      item: H4sIAAAAAAAA/+NiYGBm4HZJLEkMSy0qzszPY2DgL+ZgYMpMYRDJzcxLTS5KTCuxyizKz4vPzEvPL2FmYE3OL80rYWBg4GIAABMgbks9AAAA
+      store_id: 57ba09ce
+      price: 100
+      time:
+        expire: 1730423765397
+        full: 1731291215397
+      status:
+        top_bidder:
+          uuid: None
+          name: None
+          price: 0
+        biddable: true
+      current_bids: # or if I have active bids on an item stored on the auction item object.
+        - '42bf0b48-8574-44b5-8cce-5accf9363b05;100'
+  42bf0b48-8574-44b5-8cce-5accf9363b05: {}
+
+active_bids: # undecided, if I want active bids in a hashmap format.
+  42bf0b48-8574-44b5-8cce-5accf9363b05:
+    '1':
+      store_id: 57ba90ce
+      bid: 100
+
 expired_auctions: {}
