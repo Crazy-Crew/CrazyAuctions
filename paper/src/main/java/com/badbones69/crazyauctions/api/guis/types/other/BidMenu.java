@@ -190,8 +190,8 @@ public class BidMenu extends Holder {
 
                 auction.setTopBid(auction.getTopBid() + price);
 
-                this.inventory.setItem(4, auction.getActiveItem(ShopType.BID).getItemStack());
-                this.inventory.setItem(13, getGlass(bidMenu));
+                inventory.setItem(4, auction.getActiveItem(ShopType.BID).getItemStack());
+                inventory.setItem(13, getGlass(bidMenu));
             }
 
             case "-1", "-10", "-100", "-1000" -> {
@@ -199,8 +199,8 @@ public class BidMenu extends Holder {
 
                 auction.setTopBid(auction.getTopBid() + price);
 
-                this.inventory.setItem(4, auction.getActiveItem(ShopType.BID).getItemStack());
-                this.inventory.setItem(13, getGlass(bidMenu));
+                inventory.setItem(4, auction.getActiveItem(ShopType.BID).getItemStack());
+                inventory.setItem(13, getGlass(bidMenu));
             }
         }
     }
