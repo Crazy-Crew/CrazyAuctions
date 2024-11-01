@@ -105,7 +105,7 @@ public class AuctionItem {
     }
 
     public void setTopBid(long topBid) {
-        if (topBid <= 0L) topBid = 1L;
+        if (topBid <= 0L) topBid = this.topBid;
 
         this.topBid = topBid;
     }
