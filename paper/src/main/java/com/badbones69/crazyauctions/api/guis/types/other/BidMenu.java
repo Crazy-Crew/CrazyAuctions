@@ -79,7 +79,7 @@ public class BidMenu extends Holder {
 
         this.inventory.setItem(13, getGlass(null));
 
-        this.inventory.setItem(22, new ItemBuilder().addString("bid_item", auction_button).setMaterial(this.config.getString("Settings.GUISettings.OtherSettings.Bid.Item")).setAmount(1)
+        this.inventory.setItem(22, new ItemBuilder().setMaterial(this.config.getString("Settings.GUISettings.OtherSettings.Bid.Item")).setAmount(1).addString("bid_item", auction_button)
                 .setName(this.config.getString("Settings.GUISettings.OtherSettings.Bid.Name")).setLore(this.config.getStringList("Settings.GUISettings.OtherSettings.Bid.Lore")).build());
 
         this.inventory.setItem(4, item);
