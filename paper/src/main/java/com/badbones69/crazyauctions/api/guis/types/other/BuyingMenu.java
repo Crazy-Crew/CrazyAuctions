@@ -52,9 +52,7 @@ public class BuyingMenu extends Holder {
 
     @Override
     public final Holder build() {
-        final UUID uuid = this.player.getUniqueId();
-
-        if (!this.data.contains("active_auctions." + uuid + "." + this.id)) {
+        if (!this.data.contains("active_auctions." + this.auction.getUuid() + "." + this.id)) { // this grabs the uuid of the person who auctioned it
             GuiManager.openShop(this.player, ShopType.BID, HolderManager.getShopCategory(this.player), 1);
 
             this.player.sendMessage(Messages.ITEM_DOESNT_EXIST.getMessage(this.player));
@@ -143,22 +141,22 @@ public class BuyingMenu extends Holder {
 
         final FileConfiguration data = buyingMenu.data;
         final Player player = buyingMenu.player;
-        final UUID uuid = player.getUniqueId();
 
         final AuctionItem auction = buyingMenu.auction;
 
         switch (type) {
             case "Confirm" -> {
+                final UUID uuid = auction.getUuid();
                 final String id = buyingMenu.id;
 
-                if (!this.data.contains("active_auctions." + uuid + "." + id)) {
+                if (!data.contains("active_auctions." + uuid + "." + id)) {
                     buyingMenu.click(player);
 
                     GuiManager.openShop(player, HolderManager.getShopType(player), HolderManager.getShopCategory(player), 1);
 
                     player.sendMessage(Messages.ITEM_DOESNT_EXIST.getMessage(player));
 
-                    this.userManager.removeAuctionItem(this.auction); // remove auction item, as it's not in the active_auctions
+                    this.userManager.removeAuctionItem(auction); // remove auction item, as it's not in the active_auctions
 
                     return;
                 }
@@ -173,7 +171,6 @@ public class BuyingMenu extends Holder {
                 }
 
                 final long cost = auction.getPrice();
-                final String seller = auction.getName();
 
                 final VaultSupport support = this.plugin.getSupport();
 
@@ -196,7 +193,7 @@ public class BuyingMenu extends Holder {
 
                 this.server.getPluginManager().callEvent(new AuctionBuyEvent(player, item, cost));
                 support.removeMoney(player, cost);
-                support.addMoney(Methods.getOfflinePlayer(seller), cost);
+                support.addMoney(Methods.getOfflinePlayer(String.valueOf(uuid)), cost);
 
                 Map<String, String> placeholders = new HashMap<>();
 
@@ -209,27 +206,25 @@ public class BuyingMenu extends Holder {
 
                 player.sendMessage(Messages.BOUGHT_ITEM.getMessage(player, placeholders));
 
-                if (seller != null && Methods.isOnline(seller) && Methods.getPlayer(seller) != null) {
-                    Player sell = Methods.getPlayer(seller);
+                final Player originalSeller = Methods.getPlayer(String.valueOf(uuid));
 
-                    if (sell != null) {
-                        sell.sendMessage(Messages.PLAYER_BOUGHT_ITEM.getMessage(player, placeholders));
+                if (originalSeller != null && originalSeller.isOnline()) {
+                    originalSeller.sendMessage(Messages.PLAYER_BOUGHT_ITEM.getMessage(player, placeholders));
 
-                        FileConfiguration config = Files.config.getConfiguration();
+                    FileConfiguration config = Files.config.getConfiguration();
 
-                        String sound = config.getString("Settings.Sold-Item-Sound", "UI_BUTTON_CLICK");
+                    String sound = config.getString("Settings.Sold-Item-Sound", "UI_BUTTON_CLICK");
 
-                        if (sound.isEmpty()) return;
+                    if (sound.isEmpty()) return;
 
-                        player.playSound(player.getLocation(), Sound.valueOf(sound), 1f, 1f);
-                    }
+                    player.playSound(player.getLocation(), Sound.valueOf(sound), 1f, 1f);
                 }
 
                 player.getInventory().addItem(item);
 
-                data.set("active_auctions." + player.getUniqueId() + "." + id, null);
+                //data.set("active_auctions." + uuid + "." + id, null); // removeAuctionItem already handles this.
 
-                this.userManager.removeAuctionItem(this.auction);
+                this.userManager.removeAuctionItem(auction);
 
                 Files.data.save();
 
