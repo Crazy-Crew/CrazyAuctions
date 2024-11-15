@@ -26,8 +26,6 @@
 CrazyAuctions as first install will come with a set of default files such as `config.yml`, `messages.yml`
 You can simply edit these files, and configure the looks and settings then do `/crazyauctions reload`<br>
 
-[![Partnered with ApexHosting](https://raw.githubusercontent.com/Crazy-Crew/Branding/main/apex-banner-transparent.webp)](https://billing.apexminecrafthosting.com/aff.php?aff=5511)
-
 ![Features Banner](https://raw.githubusercontent.com/Crazy-Crew/Branding/main/crazyauctions/banner/webp/features.webp)<br>
 **Selling/buying/bidding items with ease.**<br>
 **Easy to use configurations.**<br>

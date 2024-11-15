@@ -14,14 +14,13 @@ active_auctions:
           name: None
           price: 0
         biddable: true
-      current_bids: # or if I have active bids on an item stored on the auction item object.
+      current_bids:
         - '42bf0b48-8574-44b5-8cce-5accf9363b05;100'
   42bf0b48-8574-44b5-8cce-5accf9363b05: {}
 
-active_bids: # undecided, if I want active bids in a hashmap format.
-  42bf0b48-8574-44b5-8cce-5accf9363b05:
-    '1':
-      store_id: 57ba90ce
+active_bids:
+  57ba90ce:
+    '42bf0b48-8574-44b5-8cce-5accf9363b05':
       bid: 100
 
 expired_auctions: {}
