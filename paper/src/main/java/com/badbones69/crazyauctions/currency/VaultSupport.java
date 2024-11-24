@@ -2,6 +2,7 @@ package com.badbones69.crazyauctions.currency;
 
 import com.badbones69.crazyauctions.CrazyAuctions;
 import net.milkbowl.vault.economy.Economy;
+import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -29,19 +30,23 @@ public class VaultSupport {
         return (long) this.vault.getBalance(player);
     }
 
-    public void removeMoney(@NotNull Player player, long amount) {
-        this.vault.withdrawPlayer(player, amount);
+    public boolean removeMoney(@NotNull Player player, long amount) {
+        EconomyResponse result = this.vault.withdrawPlayer(player, amount);
+        return result.transactionSuccess();
     }
 
-    public void removeMoney(@NotNull OfflinePlayer player, long amount) {
-        this.vault.withdrawPlayer(player, amount);
+    public boolean removeMoney(@NotNull OfflinePlayer player, long amount) {
+        EconomyResponse result = this.vault.withdrawPlayer(player, amount);
+        return result.transactionSuccess();
     }
 
-    public void addMoney(Player player, long amount) {
-        this.vault.depositPlayer(player, amount);
+    public boolean addMoney(Player player, long amount) {
+        EconomyResponse result = this.vault.depositPlayer(player, amount);
+        return result.transactionSuccess();
     }
 
-    public void addMoney(OfflinePlayer player, long amount) {
-        this.vault.depositPlayer(player, amount);
+    public boolean addMoney(OfflinePlayer player, long amount) {
+        EconomyResponse result = this.vault.depositPlayer(player, amount);
+        return result.transactionSuccess();
     }
 }

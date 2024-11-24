@@ -173,13 +173,13 @@ public class BuyingMenu extends Holder {
                 final long cost = auction.getPrice();
 
                 final VaultSupport support = this.plugin.getSupport();
+                Map<String, String> placeholders = new HashMap<>();
+
 
                 if (support.getMoney(player) < cost) {
                     buyingMenu.click(player);
 
                     player.closeInventory();
-
-                    Map<String, String> placeholders = new HashMap<>();
 
                     placeholders.put("%Money_Needed%", (cost - support.getMoney(player)) + "");
                     placeholders.put("%money_needed%", (cost - support.getMoney(player)) + "");
@@ -192,10 +192,19 @@ public class BuyingMenu extends Holder {
                 final ItemStack item = auction.asItemStack();
 
                 this.server.getPluginManager().callEvent(new AuctionBuyEvent(player, item, cost));
-                support.removeMoney(player, cost);
-                support.addMoney(Methods.getOfflinePlayer(String.valueOf(uuid)), cost);
+                if (!support.removeMoney(player, cost)) {
+                    buyingMenu.click(player);
 
-                Map<String, String> placeholders = new HashMap<>();
+                    player.closeInventory();
+
+                    placeholders.put("%Money_Needed%", (cost - support.getMoney(player)) + "");
+                    placeholders.put("%money_needed%", (cost - support.getMoney(player)) + "");
+
+                    player.sendMessage(Messages.NEED_MORE_MONEY.getMessage(player, placeholders));
+
+                    return;
+                }
+                support.addMoney(Methods.getOfflinePlayer(String.valueOf(uuid)), cost);
 
                 String price = String.valueOf(auction.getPrice());
 
