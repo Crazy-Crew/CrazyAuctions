@@ -1,66 +1,83 @@
-[versions]
-# Minecraft
-paper = "1.21-R0.1-SNAPSHOT"
-minecraft = "1.21"
-
-# Plugins
-itemsadder = "3.6.3-beta-14"
-headdatabaseapi = "1.3.1"
-placeholderapi = "2.11.6"
-decentholograms = "2.8.8"
-fancyholograms = "2.2.0"
-worldguard = "7.0.10"
-oraxen = "1.171.0"
-nbtapi = "2.13.0"
-vault = "1.7.1"
-
-# Libraries
-triumph-cmd = "2.0.0-ALPHA-10"
-tirumph-gui = "3.1.7"
-jetbrains = "24.1.0"
-kyori = "4.17.0"
-vital = "2.0.1"
-
-# Paper
-paperweight = "1.7.1"
-runPaper = "2.3.0"
-hangar = "0.1.2"
-
-# Other
-shadowJar = "8.1.7"
-
-# Modrinth
-minotaur = "2.+"
-
 [plugins]
 paperweight = { id = "io.papermc.paperweight.userdev", version.ref = "paperweight" }
 hangar = { id = "io.papermc.hangar-publish-plugin", version.ref = "hangar" }
-shadowJar = { id = "io.github.goooler.shadow", version.ref = "shadowJar" }
 runPaper = { id = "xyz.jpenilla.run-paper", version.ref = "runPaper" }
 minotaur = { id = "com.modrinth.minotaur", version.ref = "minotaur" }
+shadow = { id = "com.gradleup.shadow", version.ref = "shadow" }
+
+[versions]
+# Paper API
+paper = "1.21.1-R0.1-SNAPSHOT"
+velocity = "3.3.0-SNAPSHOT"
+minecraft = "1.21.1"
+brigadier = "1.3.10"
+
+# Gradle Plugins
+paperweight = "1.7.3"
+runPaper = "2.3.0"
+minotaur = "2.8.7"
+hangar = "0.1.2"
+shadow = "8.3.0"
+
+# Bukkit Plugins
+itemsadder = "3.6.3-beta-14"
+decentholograms = "2.8.8"
+headdatabaseapi = "1.3.1"
+placeholderapi = "2.11.6"
+fancyholograms = "2.3.3"
+oraxen = "1.171.0"
+vault = "1.7.1"
+
+# Common API
+jetbrains = "24.1.0"
+adventure = "4.17.0"
+hikari = "4.0.3"
+gson = "2.10.1"
+jalu = "1.4.1"
+
+# Vital API
+vital-paper = "1.0.6"
 
 [libraries]
-# Plugins
+# Velocity API
+velocity = { module = "com.velocitypowered:velocity-api", version.ref = "velocity" }
+
+# Mojang API
+brigadier = { module = "com.mojang:brigadier", version.ref = "brigadier" }
+
+# Paper API
+paper = { module = "io.papermc.paper:paper-api", version.ref = "paper" }
+
+# Kyori API
+kyori-logger = { module = "net.kyori:adventure-text-logger-slf4j", version.ref = "adventure" }
+kyori-text = { module = "net.kyori:adventure-text-minimessage", version.ref = "adventure" }
+kyori-api = { module = "net.kyori:adventure-api", version.ref = "adventure" }
+
+# Bukkit Plugins API
 decent-holograms = { module = "com.github.decentsoftware-eu:decentholograms", version.ref = "decentholograms" }
-fancy-holograms = { module = "de.oliver:FancyHolograms", version.ref = "fancyholograms" }
-
 headdatabaseapi = { module = "com.arcaniax:HeadDatabase-API", version.ref = "headdatabaseapi" }
-placeholderapi = { module = "me.clip:placeholderapi", version.ref = "placeholderapi" }
-
-vault = { module = "com.github.MilkBowl:VaultAPI", version.ref = "vault" }
-
 itemsadder = { module = "com.github.LoneDev6:api-itemsadder", version.ref = "itemsadder" }
+fancy-holograms = { module = "de.oliver:FancyHolograms", version.ref = "fancyholograms" }
+placeholderapi = { module = "me.clip:placeholderapi", version.ref = "placeholderapi" }
+vault = { module = "com.github.MilkBowl:VaultAPI", version.ref = "vault" }
 oraxen = { module = "io.th0rgal:oraxen", version.ref = "oraxen" }
+cmi-api = { module = "CMI-API:CMI-API", version = "9.7.4.1" }
+cmi-lib = { module = "CMILib:CMILib", version = "1.5.1.4" }
 
-# Libraries
-triumph-cmds = { module = "dev.triumphteam:triumph-cmd-bukkit", version.ref = "triumph-cmd" }
-triumph-gui = { module = "dev.triumphteam:triumph-gui", version.ref = "tirumph-gui" }
+# Vital API
+vital-paper = { module = "com.ryderbelserion.vital:paper", version.ref = "vital-paper" }
+hikari-cp = { module = "com.zaxxer:HikariCP", version.ref = "hikari" }
 
 jetbrains = { module = "org.jetbrains:annotations", version.ref = "jetbrains" }
-
-vital-paper = { module = "com.ryderbelserion.vital:paper", version.ref = "vital" }
-vital-core = { module = "com.ryderbelserion.vital:core", version.ref = "vital" }
+gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
+jalu = { module = "ch.jalu:configme", version.ref = "jalu" }
 
 [bundles]
-holograms = ["fancy-holograms", "decent-holograms"]
-triumph = ["triumph-cmds", "triumph-gui"]
+# Soft Depends
+dependencies = ["decent-holograms", "fancy-holograms", "cmi-lib", "cmi-api"]
+
+# Shared with the git submodules
+shared = ["headdatabaseapi", "placeholderapi", "oraxen", "vault"]
+
+# Adventure API
+adventure = ["kyori-api", "kyori-text", "kyori-logger"]

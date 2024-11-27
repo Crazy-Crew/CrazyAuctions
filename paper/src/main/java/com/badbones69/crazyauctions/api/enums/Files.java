@@ -1,7 +1,7 @@
 package com.badbones69.crazyauctions.api.enums;
 
 import com.badbones69.crazyauctions.CrazyAuctions;
-import com.ryderbelserion.vital.paper.files.config.FileManager;
+import com.ryderbelserion.vital.paper.api.files.FileManager;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
@@ -31,7 +31,7 @@ public enum Files {
     }
 
     public final YamlConfiguration getConfiguration() {
-        return this.fileManager.getFile(this.fileName);
+        return this.fileManager.getFile(this.fileName).getConfiguration();
     }
 
     public final String getStrippedName() {
@@ -47,6 +47,6 @@ public enum Files {
     }
 
     public void reload() {
-        this.fileManager.reloadFile(this.fileName);
+        this.fileManager.addFile(this.fileName);
     }
 }

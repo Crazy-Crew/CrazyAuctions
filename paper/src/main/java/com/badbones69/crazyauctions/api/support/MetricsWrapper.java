@@ -1,7 +1,7 @@
 package com.badbones69.crazyauctions.api.support;
 
 import com.badbones69.crazyauctions.CrazyAuctions;
-import com.ryderbelserion.vital.paper.bStats;
+import com.ryderbelserion.vital.paper.api.bStats;
 
 public class MetricsWrapper extends bStats {
 

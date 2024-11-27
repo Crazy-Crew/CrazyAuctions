@@ -1,7 +1,7 @@
 package com.badbones69.crazyauctions.api.enums;
 
 import com.badbones69.crazyauctions.Methods;
-import com.ryderbelserion.vital.paper.enums.Support;
+import com.ryderbelserion.vital.paper.api.enums.Support;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
