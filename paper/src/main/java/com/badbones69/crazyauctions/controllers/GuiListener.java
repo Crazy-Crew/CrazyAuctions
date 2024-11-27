@@ -35,17 +35,17 @@ import java.util.Map;
 import java.util.UUID;
 
 public class GuiListener implements Listener {
-    
+
     private static final CrazyAuctions plugin = CrazyAuctions.get();
     private static final CrazyManager crazyManager = plugin.getCrazyManager();
-    
+
     private static final Map<UUID, Integer> bidding = new HashMap<>();
     private static final Map<UUID, String> biddingID = new HashMap<>();
     private static final Map<UUID, ShopType> shopType = new HashMap<>(); // Shop Type
     private static final Map<UUID, Category> shopCategory = new HashMap<>(); // Category Type
     private static final Map<UUID, List<Integer>> List = new HashMap<>();
     private static final Map<UUID, String> IDs = new HashMap<>();
-    
+
     public static void openShop(Player player, ShopType sell, Category cat, int page) {
         Methods.updateAuction();
 
@@ -213,7 +213,7 @@ public class GuiListener implements Listener {
 
         player.openInventory(inv);
     }
-    
+
     public static void openCategories(Player player, ShopType shop) {
         Methods.updateAuction();
         FileConfiguration config = Files.config.getConfiguration();
@@ -256,7 +256,7 @@ public class GuiListener implements Listener {
         shopType.put(player.getUniqueId(), shop);
         player.openInventory(inv);
     }
-    
+
     public static void openPlayersCurrentList(Player player, int page) {
         Methods.updateAuction();
 
@@ -330,7 +330,7 @@ public class GuiListener implements Listener {
 
         player.openInventory(inv);
     }
-    
+
     public static void openPlayersExpiredList(Player player, int page) {
         Methods.updateAuction();
 
@@ -413,7 +413,7 @@ public class GuiListener implements Listener {
 
         player.openInventory(inv);
     }
-    
+
     public static void openBuying(Player player, String ID) {
         Methods.updateAuction();
 
@@ -494,7 +494,7 @@ public class GuiListener implements Listener {
 
         player.openInventory(inv);
     }
-    
+
     public static void openBidding(Player player, String ID) {
         Methods.updateAuction();
 
@@ -525,12 +525,12 @@ public class GuiListener implements Listener {
 
         inv.setItem(22, new ItemBuilder().setMaterial(config.getString("Settings.GUISettings.OtherSettings.Bid.Item")).setAmount(1)
                 .setName(config.getString("Settings.GUISettings.OtherSettings.Bid.Name")).setLore(config.getStringList("Settings.GUISettings.OtherSettings.Bid.Lore")).build());
-        
+
         inv.setItem(4, getBiddingItem(ID));
 
         player.openInventory(inv);
     }
-    
+
     public static void openViewer(Player player, String other, int page) {
         Methods.updateAuction();
 
@@ -643,7 +643,7 @@ public class GuiListener implements Listener {
 
         player.openInventory(inv);
     }
-    
+
     private static ItemStack getBiddingGlass(Player player, String ID) {
         FileConfiguration config = Files.config.getConfiguration();
 
@@ -671,7 +671,7 @@ public class GuiListener implements Listener {
 
         return itemBuilder.build();
     }
-    
+
     private static ItemStack getBiddingItem(String ID) {
         FileConfiguration config = Files.config.getConfiguration();
         FileConfiguration data = Files.data.getConfiguration();
@@ -714,7 +714,7 @@ public class GuiListener implements Listener {
 
         return itemBuilder.build();
     }
-    
+
     private static void playClick(Player player) {
         FileConfiguration config = Files.config.getConfiguration();
 
@@ -740,7 +740,7 @@ public class GuiListener implements Listener {
             player.playSound(player.getLocation(), Sound.valueOf(sound), 1, 1);
         } catch (Exception ignored) {}
     }
-    
+
     @EventHandler
     public void onInvClose(InventoryCloseEvent e) {
         FileConfiguration config = Files.config.getConfiguration();
@@ -749,7 +749,7 @@ public class GuiListener implements Listener {
 
         if (e.getView().getTitle().contains(Methods.color(config.getString("Settings.Bidding-On-Item")))) bidding.remove(player);
     }
-    
+
     @EventHandler
     public void onInvClick(InventoryClickEvent e) {
         FileConfiguration config = Files.config.getConfiguration();

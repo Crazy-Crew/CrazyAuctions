@@ -118,7 +118,7 @@ public class CrazyAuctions extends Vital {
         registerCommand(getCommand("crazyauctions"), new AuctionTab(), new AuctionCommand());
 
         this.support = new VaultSupport();
-        this.support.loadVault();
+        this.support.setupEconomy();
 
         new FoliaRunnable(getServer().getGlobalRegionScheduler()) {
             @Override

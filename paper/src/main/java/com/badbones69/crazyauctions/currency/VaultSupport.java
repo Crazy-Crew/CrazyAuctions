@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class VaultSupport {
 
-    private final CrazyAuctions plugin = CrazyAuctions.getPlugin();
+    private final CrazyAuctions plugin = CrazyAuctions.get();
 
     private Economy vault = null;
 

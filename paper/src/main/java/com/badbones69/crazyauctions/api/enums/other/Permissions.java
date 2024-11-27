@@ -44,7 +44,7 @@ public enum Permissions {
 
     private final boolean register;
 
-    private final PluginManager manager = CrazyAuctions.getPlugin().getServer().getPluginManager();
+    private final PluginManager manager = CrazyAuctions.get().getServer().getPluginManager();
 
     Permissions(String node, String description, PermissionDefault isDefault, Map<String, Boolean> children, boolean register) {
         this.node = node;

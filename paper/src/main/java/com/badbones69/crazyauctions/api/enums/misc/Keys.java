@@ -22,7 +22,7 @@ public enum Keys {
     // contains the auction item price
     auction_price("auction_price", PersistentDataType.INTEGER);
 
-    private final CrazyAuctions plugin = CrazyAuctions.getPlugin();
+    private final CrazyAuctions plugin = CrazyAuctions.get();
 
     private final String NamespacedKey;
     private final PersistentDataType type;
