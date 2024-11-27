@@ -33,9 +33,9 @@ tasks {
         autoAddDependsOn.set(false)
         detectLoaders.set(false)
 
-        dependencies {
+        /*dependencies {
             optional.version("fancyholograms", "2.3.2")
-        }
+        }*/
     }
 
     hangarPublish {
@@ -61,11 +61,11 @@ tasks {
                             required = false
                         }
 
-                        hangar("FancyHolograms") {
+                        url("Oraxen", "https://www.spigotmc.org/resources/%E2%98%84%EF%B8%8F-oraxen-custom-items-blocks-emotes-furniture-resourcepack-and-gui-1-18-1-20-4.72448/") {
                             required = false
                         }
 
-                        url("Oraxen", "https://www.spigotmc.org/resources/%E2%98%84%EF%B8%8F-oraxen-custom-items-blocks-emotes-furniture-resourcepack-and-gui-1-18-1-20-4.72448/") {
+                        /*hangar("FancyHolograms") {
                             required = false
                         }
 
@@ -75,7 +75,7 @@ tasks {
 
                         url("DecentHolograms", "https://www.spigotmc.org/resources/decentholograms-1-8-1-20-4-papi-support-no-dependencies.96927/") {
                             required = false
-                        }
+                        }*/
                     }
                 }
             }

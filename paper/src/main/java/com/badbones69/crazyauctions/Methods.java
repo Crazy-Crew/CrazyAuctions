@@ -1,6 +1,6 @@
 package com.badbones69.crazyauctions;
 
-import com.badbones69.crazyauctions.api.enums.misc.Files;
+import com.badbones69.crazyauctions.api.enums.Files;
 import com.badbones69.crazyauctions.api.enums.Messages;
 import com.badbones69.crazyauctions.api.events.AuctionExpireEvent;
 import com.badbones69.crazyauctions.api.events.AuctionWinBidEvent;
@@ -9,16 +9,14 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.Nullable;
-
+import org.jetbrains.annotations.NotNull;
 import java.util.*;
-import java.util.concurrent.CompletableFuture;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Methods {
 
-    private final static CrazyAuctions plugin = CrazyAuctions.getPlugin();
+    private final static CrazyAuctions plugin = CrazyAuctions.get();
 
     private final static Pattern HEX_PATTERN = Pattern.compile("#[a-fA-F0-9]{6}");
     
@@ -81,23 +79,11 @@ public class Methods {
         return Base64.getEncoder().encodeToString(itemStack.serializeAsBytes());
     }
 
-    public static @Nullable ItemStack fromBase64(final String base64) {
-        if (base64 == null || base64.isEmpty()) return null;
-
-        final byte[] decoded = Base64.getDecoder().decode(base64);
-
-        return ItemStack.deserializeBytes(decoded);
+    public static @NotNull ItemStack fromBase64(final String base64) {
+        return ItemStack.deserializeBytes(Base64.getDecoder().decode(base64));
     }
 
     public static OfflinePlayer getOfflinePlayer(String name) {
-        return getOfflinePlayer(name, true);
-    }
-
-    public static OfflinePlayer getOfflinePlayer(String name, boolean fetchUUID) {
-        if (!fetchUUID) {
-            return CompletableFuture.supplyAsync(() -> plugin.getServer().getOfflinePlayer(name)).join();
-        }
-
         return plugin.getServer().getOfflinePlayer(UUID.fromString(name));
     }
 
@@ -108,6 +94,17 @@ public class Methods {
             }
         }
 
+        return false;
+    }
+    
+    public static boolean isOnline(String name, CommandSender p) {
+        for (Player player : plugin.getServer().getOnlinePlayers()) {
+            if (player.getName().equalsIgnoreCase(name)) {
+                return true;
+            }
+        }
+
+        p.sendMessage(Messages.NOT_ONLINE.getMessage(p));
         return false;
     }
     
@@ -123,13 +120,44 @@ public class Methods {
     
     public static boolean hasPermission(CommandSender sender, String perm) {
         if (sender instanceof Player player) {
-            return hasPermission(player, perm);
+            if (!player.hasPermission("crazyauctions." + perm)) {
+                player.sendMessage(Messages.NO_PERMISSION.getMessage(player));
+
+                return false;
+            }
+
+            return true;
         }
 
         return true;
     }
     
-    public static List<Integer> getPageItems(List<Integer> list, int page) {
+    public static List<ItemStack> getPage(List<ItemStack> list, Integer page) {
+        List<ItemStack> items = new ArrayList<>();
+
+        if (page <= 0) page = 1;
+
+        int max = 45;
+        int index = page * max - max;
+        int endIndex = index >= list.size() ? list.size() - 1 : index + max;
+
+        for (; index < endIndex; index++) {
+            if (index < list.size()) items.add(list.get(index));
+        }
+
+        for (; items.size() == 0; page--) {
+            if (page <= 0) break;
+            index = page * max - max;
+            endIndex = index >= list.size() ? list.size() - 1 : index + max;
+            for (; index < endIndex; index++) {
+                if (index < list.size()) items.add(list.get(index));
+            }
+        }
+
+        return items;
+    }
+    
+    public static List<Integer> getPageInts(List<Integer> list, Integer page) {
         List<Integer> items = new ArrayList<>();
 
         if (page <= 0) page = 1;
@@ -154,6 +182,15 @@ public class Methods {
         }
 
         return items;
+    }
+    
+    public static int getMaxPage(List<ItemStack> list) {
+        int maxPage = 1;
+        int amount = list.size();
+
+        for (; amount > 45; amount -= 45, maxPage++) ;
+
+        return maxPage;
     }
     
     public static String convertToTime(long time) {
@@ -269,7 +306,6 @@ public class Methods {
                         }
 
                         data.set("OutOfTime/Cancelled." + num + ".Seller", winner);
-                        data.set("OutOfTime/Cancelled." + num + ".Name", data.getString("Items." + i + ".TopBidderName", "None"));
                         data.set("OutOfTime/Cancelled." + num + ".Full-Time", fullExpireTime.getTimeInMillis());
                         data.set("OutOfTime/Cancelled." + num + ".StoreID", data.getInt("Items." + i + ".StoreID"));
                         data.set("OutOfTime/Cancelled." + num + ".Item", data.getString("Items." + i + ".Item"));
@@ -285,7 +321,6 @@ public class Methods {
                         plugin.getServer().getPluginManager().callEvent(event);
 
                         data.set("OutOfTime/Cancelled." + num + ".Seller", data.getString("Items." + i + ".Seller"));
-                        data.set("OutOfTime/Cancelled." + num + ".Name", data.getString("Items." + i + ".Name", "None"));
                         data.set("OutOfTime/Cancelled." + num + ".Full-Time", fullExpireTime.getTimeInMillis());
                         data.set("OutOfTime/Cancelled." + num + ".StoreID", data.getInt("Items." + i + ".StoreID"));
                         data.set("OutOfTime/Cancelled." + num + ".Item", data.getString("Items." + i + ".Item"));

@@ -1,7 +1,7 @@
 package com.badbones69.crazyauctions.api;
 
 import com.badbones69.crazyauctions.Methods;
-import com.badbones69.crazyauctions.api.enums.misc.Files;
+import com.badbones69.crazyauctions.api.enums.Files;
 import com.badbones69.crazyauctions.api.enums.ShopType;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;

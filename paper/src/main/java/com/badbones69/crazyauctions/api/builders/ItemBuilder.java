@@ -26,8 +26,6 @@ import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.inventory.meta.trim.ArmorTrim;
 import org.bukkit.inventory.meta.trim.TrimMaterial;
 import org.bukkit.inventory.meta.trim.TrimPattern;
-import org.bukkit.persistence.PersistentDataContainer;
-import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionEffect;
@@ -47,7 +45,7 @@ import java.util.stream.Collectors;
 public class ItemBuilder {
 
     @NotNull
-    private static final CrazyAuctions plugin = CrazyAuctions.getPlugin();
+    private static final CrazyAuctions plugin = CrazyAuctions.get();
 
     // Items
     private Material material = Material.STONE;
@@ -717,38 +715,6 @@ public class ItemBuilder {
         return this;
     }
 
-    public ItemBuilder addString(String name, NamespacedKey key) {
-        if (name.isEmpty()) return this;
-
-        this.itemStack.editMeta(itemMeta -> {
-            PersistentDataContainer container = itemMeta.getPersistentDataContainer();
-
-            container.set(key, PersistentDataType.STRING, name);
-        });
-
-        return this;
-    }
-
-    public ItemBuilder addInteger(int value, NamespacedKey key) {
-        this.itemStack.editMeta(itemMeta -> {
-            PersistentDataContainer container = itemMeta.getPersistentDataContainer();
-
-            container.set(key, PersistentDataType.INTEGER, value);
-        });
-
-        return this;
-    }
-
-    public ItemBuilder addLong(long value, NamespacedKey key) {
-        this.itemStack.editMeta(itemMeta -> {
-            PersistentDataContainer container = itemMeta.getPersistentDataContainer();
-
-            container.set(key, PersistentDataType.LONG, value);
-        });
-
-        return this;
-    }
-
     /**
      * Set the lore of the item with papi support in the builder. This will auto force color in all the lores that contains color code. (&a, &c, &7, etc...)
      *
@@ -1119,11 +1085,9 @@ public class ItemBuilder {
     }
 
     public static ItemBuilder convertItemStack(String item) {
-        final ItemStack base64 = Methods.fromBase64(item);
+        ItemStack itemStack = Methods.fromBase64(item);
 
-        if (base64 == null) return null;
-
-        return new ItemBuilder(base64);
+        return new ItemBuilder(itemStack).setAmount(itemStack.getAmount()).setEnchantments(new HashMap<>(itemStack.getEnchantments()));
     }
 
     public static ItemBuilder convertItemStack(ItemStack item, Player player) {

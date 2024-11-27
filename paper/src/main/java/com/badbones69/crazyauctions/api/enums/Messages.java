@@ -1,7 +1,6 @@
 package com.badbones69.crazyauctions.api.enums;
 
 import com.badbones69.crazyauctions.Methods;
-import com.badbones69.crazyauctions.api.enums.misc.Files;
 import com.ryderbelserion.vital.paper.api.enums.Support;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.command.CommandSender;
@@ -49,7 +48,6 @@ public enum Messages {
     CRAZYAUCTIONS_VIEW("CrazyAuctions-View", "&c/ah view <player>"),
     CRAZYAUCTIONS_SELL_BID("CrazyAuctions-Sell-Bid", "&c/ah sell/bid <price> [amount of items]"),
     BOOK_NOT_ALLOWED("Book-Not-Allowed", "&cThat book is not able to be sold in this auction house!"),
-    HELP_MSG("Help-Msg", "&cPlease do /crazyauctions help for more information."),
     HELP("Help-Menu", Arrays.asList(
     "&e-- &6Crazy Auctions Help &e--",
     "&9/Ah - &eOpens the crazy auction.",

@@ -13,7 +13,7 @@ import java.util.List;
 
 public class AuctionTab implements TabCompleter {
 
-    private final CrazyAuctions plugin = CrazyAuctions.getPlugin();
+    private final CrazyAuctions plugin = CrazyAuctions.get();
     
     @Override
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String commandLabel, String[] args) {

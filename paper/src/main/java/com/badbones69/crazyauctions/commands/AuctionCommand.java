@@ -4,13 +4,11 @@ import com.badbones69.crazyauctions.CrazyAuctions;
 import com.badbones69.crazyauctions.Methods;
 import com.badbones69.crazyauctions.api.CrazyManager;
 import com.badbones69.crazyauctions.api.enums.Category;
-import com.badbones69.crazyauctions.api.enums.misc.Files;
+import com.badbones69.crazyauctions.api.enums.Files;
 import com.badbones69.crazyauctions.api.enums.Messages;
 import com.badbones69.crazyauctions.api.enums.ShopType;
 import com.badbones69.crazyauctions.api.events.AuctionListEvent;
-import com.badbones69.crazyauctions.api.GuiManager;
-import com.badbones69.crazyauctions.tasks.InventoryManager;
-import com.badbones69.crazyauctions.tasks.UserManager;
+import com.badbones69.crazyauctions.controllers.GuiListener;
 import com.ryderbelserion.vital.paper.api.files.FileManager;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -25,20 +23,20 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class AuctionCommand implements CommandExecutor {
 
-    private final CrazyAuctions plugin = CrazyAuctions.getPlugin();
+    private final CrazyAuctions plugin = CrazyAuctions.get();
 
     private final CrazyManager crazyManager = this.plugin.getCrazyManager();
-
-    private final UserManager userManager = this.plugin.getUserManager();
 
     private final FileManager fileManager = this.plugin.getFileManager();
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String commandLabel, String[] args) {
         FileConfiguration config = Files.config.getConfiguration();
+        FileConfiguration data = Files.data.getConfiguration();
 
         if (args.length == 0) {
             if (!(sender instanceof Player player)) {
@@ -53,16 +51,16 @@ public class AuctionCommand implements CommandExecutor {
 
             if (config.contains("Settings.Category-Page-Opens-First")) {
                 if (config.getBoolean("Settings.Category-Page-Opens-First")) {
-                    GuiManager.openCategories(player, ShopType.SELL);
+                    GuiListener.openCategories(player, ShopType.SELL);
 
                     return true;
                 }
             }
 
-            if (this.crazyManager.isSellingEnabled()) {
-                GuiManager.openShop(player, ShopType.SELL, Category.NONE, 1);
-            } else if (this.crazyManager.isBiddingEnabled()) {
-                GuiManager.openShop(player, ShopType.BID, Category.NONE, 1);
+            if (crazyManager.isSellingEnabled()) {
+                GuiListener.openShop(player, ShopType.SELL, Category.NONE, 1);
+            } else if (crazyManager.isBiddingEnabled()) {
+                GuiListener.openShop(player, ShopType.BID, Category.NONE, 1);
             } else {
                 player.sendMessage(Methods.getPrefix() + Methods.color("&cThe bidding and selling options are both disabled. Please contact the admin about this."));
             }
@@ -85,24 +83,9 @@ public class AuctionCommand implements CommandExecutor {
                         return true;
                     }
 
-                    Files.config.reload();
-                    Files.data.reload();
-                    Files.messages.reload();
-
                     this.fileManager.reloadFiles().init();
 
-                    // update it again!
-                    this.userManager.updateAuctionsCache();
-
-                    // we want to update this cache, after the cache above... because we will also calculate if items are expired!
-                    this.userManager.updateExpiredCache();
-
-                    //todo() close inventories by tracking viewers, so the cache can be updated than re-open their inventories
-                    //todo() we need to track the specific inventory they opened, and if it's for them or another player
-
                     this.crazyManager.load();
-
-                    InventoryManager.loadButtons();
 
                     sender.sendMessage(Messages.RELOAD.getMessage(sender));
 
@@ -121,7 +104,7 @@ public class AuctionCommand implements CommandExecutor {
                     }
 
                     if (args.length >= 2) {
-                        GuiManager.openViewer(player, args[1], 1);
+                        GuiListener.openViewer(player, args[1], 1);
 
                         return true;
                     }
@@ -142,7 +125,7 @@ public class AuctionCommand implements CommandExecutor {
                         return true;
                     }
 
-                    GuiManager.openPlayersExpiredList(player, 1);
+                    GuiListener.openPlayersExpiredList(player, 1);
 
                     return true;
                 }
@@ -156,7 +139,7 @@ public class AuctionCommand implements CommandExecutor {
                         return true;
                     }
 
-                    GuiManager.openPlayersCurrentList(player, 1);
+                    GuiListener.openPlayersCurrentList(player, 1);
 
                     return true;
                 }
@@ -311,7 +294,7 @@ public class AuctionCommand implements CommandExecutor {
                             }
                         }
 
-                        if (config.getStringList("Settings.BlackList").contains(item.getType().getKey().getKey().toUpperCase())) {
+                        if (config.getStringList("Settings.BlackList").contains(item.getType().getKey().getKey())) {
                             player.sendMessage(Messages.ITEM_BLACKLISTED.getMessage(sender));
 
                             return true;
@@ -337,17 +320,53 @@ public class AuctionCommand implements CommandExecutor {
                             return true;
                         }*/
 
-                        ShopType type = args[0].equalsIgnoreCase("bid") ? ShopType.BID : ShopType.SELL;
+                        String seller = player.getUniqueId().toString();
+
+                        int num = 1;
+
+                        for (; data.contains("Items." + num); num++) ;
+                        data.set("Items." + num + ".Price", price);
+                        data.set("Items." + num + ".Seller", seller);
+
+                        if (args[0].equalsIgnoreCase("bid")) {
+                            data.set("Items." + num + ".Time-Till-Expire", Methods.convertToMill(config.getString("Settings.Bid-Time", "2m 30s")));
+                        } else {
+                            data.set("Items." + num + ".Time-Till-Expire", Methods.convertToMill(config.getString("Settings.Sell-Time", "2d")));
+                        }
+
+                        data.set("Items." + num + ".Full-Time", Methods.convertToMill(config.getString("Settings.Full-Expire-Time", "10d")));
+                        int id = ThreadLocalRandom.current().nextInt(999999);
+
+                        // Runs 3x to check for same ID.
+                        for (String i : data.getConfigurationSection("Items").getKeys(false))
+                            if (data.getInt("Items." + i + ".StoreID") == id) id = ThreadLocalRandom.current().nextInt(Integer.MAX_VALUE);
+                        for (String i : data.getConfigurationSection("Items").getKeys(false))
+                            if (data.getInt("Items." + i + ".StoreID") == id) id = ThreadLocalRandom.current().nextInt(Integer.MAX_VALUE);
+                        for (String i : data.getConfigurationSection("Items").getKeys(false))
+                            if (data.getInt("Items." + i + ".StoreID") == id) id = ThreadLocalRandom.current().nextInt(Integer.MAX_VALUE);
+
+                        data.set("Items." + num + ".StoreID", id);
+                        ShopType type = ShopType.SELL;
+
+                        if (args[0].equalsIgnoreCase("bid")) {
+                            data.set("Items." + num + ".Biddable", true);
+                            type = ShopType.BID;
+                        } else {
+                            data.set("Items." + num + ".Biddable", false);
+                        }
+
+                        data.set("Items." + num + ".TopBidder", "None");
 
                         ItemStack stack = item.clone();
                         stack.setAmount(amount);
 
-                        this.userManager.addAuctionItem(player, stack, price, args[0].equalsIgnoreCase("bid"));
+                        data.set("Items." + num + ".Item", Methods.toBase64(stack));
+
+                        Files.data.save();
 
                         this.plugin.getServer().getPluginManager().callEvent(new AuctionListEvent(player, type, stack, price));
 
                         Map<String, String> placeholders = new HashMap<>();
-
                         placeholders.put("%Price%", String.valueOf(price));
                         placeholders.put("%price%", String.valueOf(price));
 
@@ -366,7 +385,7 @@ public class AuctionCommand implements CommandExecutor {
                 }
 
                 default -> {
-                    sender.sendMessage(Messages.HELP_MSG.getMessage(sender));
+                    sender.sendMessage(Methods.getPrefix("&cPlease do /crazyauctions help for more information."));
 
                     return true;
                 }
