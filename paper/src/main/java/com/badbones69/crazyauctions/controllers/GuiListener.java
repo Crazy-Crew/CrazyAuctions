@@ -68,9 +68,9 @@ public class GuiListener implements Listener {
 
         if (data.contains("Items")) {
             for (String i : data.getConfigurationSection("Items").getKeys(false)) {
-                List<String> lore = new ArrayList<>();
-
                 ItemBuilder itemBuilder = ItemBuilder.convertItemStack(data.getString("Items." + i + ".Item"));
+
+                List<String> lore = new ArrayList<>(itemBuilder.getUpdatedLore());
 
                 if (itemBuilder != null && data.contains("Items." + i + ".Item") && (cat.getItems().contains(itemBuilder.getItemStack().getType()) || cat == Category.NONE)) {
                     if (data.getBoolean("Items." + i + ".Biddable")) {
@@ -185,11 +185,12 @@ public class GuiListener implements Listener {
 
             String id = config.getString("Settings.GUISettings.OtherSettings." + o + ".Item");
             String name = config.getString("Settings.GUISettings.OtherSettings." + o + ".Name");
-            List<String> lore = new ArrayList<>();
             int slot = config.getInt("Settings.GUISettings.OtherSettings." + o + ".Slot");
             String cName = Methods.color(config.getString("Settings.GUISettings.Category-Settings." + shopCategory.get(player.getUniqueId()).getName() + ".Name"));
 
             ItemBuilder itemBuilder = new ItemBuilder().setMaterial(id).setName(name).setAmount(1);
+
+            List<String> lore = new ArrayList<>(itemBuilder.getUpdatedLore());
 
             if (config.contains("Settings.GUISettings.OtherSettings." + o + ".Lore")) {
                 for (String l : config.getStringList("Settings.GUISettings.OtherSettings." + o + ".Lore")) {
@@ -296,10 +297,13 @@ public class GuiListener implements Listener {
         if (data.contains("Items")) {
             for (String i : data.getConfigurationSection("Items").getKeys(false)) {
                 if (data.getString("Items." + i + ".Seller").equalsIgnoreCase(player.getUniqueId().toString())) {
-                    List<String> lore = new ArrayList<>();
 
                     String price = Methods.getPrice(i, false);
                     String time = Methods.convertToTime(data.getLong("Items." + i + ".Time-Till-Expire"));
+
+                    ItemBuilder itemBuilder = ItemBuilder.convertItemStack(data.getString("Items." + i + ".Item"));
+
+                    List<String> lore = new ArrayList<>(itemBuilder.getUpdatedLore());
 
                     for (String l : config.getStringList("Settings.GUISettings.CurrentLore")) {
                         lore.add(l.replace("%Price%", price)
@@ -307,8 +311,6 @@ public class GuiListener implements Listener {
                                 .replace("%Time%", time)
                                 .replace("%time%", time));
                     }
-
-                    ItemBuilder itemBuilder = ItemBuilder.convertItemStack(data.getString("Items." + i + ".Item"));
 
                     itemBuilder.setLore(lore);
 
@@ -344,10 +346,12 @@ public class GuiListener implements Listener {
             for (String i : data.getConfigurationSection("OutOfTime/Cancelled").getKeys(false)) {
                 if (data.getString("OutOfTime/Cancelled." + i + ".Seller") != null) {
                     if (data.getString("OutOfTime/Cancelled." + i + ".Seller").equalsIgnoreCase(player.getUniqueId().toString())) {
-                        List<String> lore = new ArrayList<>();
-
                         String price = Methods.getPrice(i, true);
                         String time = Methods.convertToTime(data.getLong("OutOfTime/Cancelled." + i + ".Full-Time"));
+
+                        ItemBuilder itemBuilder = ItemBuilder.convertItemStack(data.getString("OutOfTime/Cancelled." + i + ".Item"));
+
+                        List<String> lore = new ArrayList<>(itemBuilder.getUpdatedLore());
 
                         for (String l : config.getStringList("Settings.GUISettings.Cancelled/ExpiredLore")) {
                             lore.add(l.replace("%Price%", price)
@@ -355,8 +359,6 @@ public class GuiListener implements Listener {
                                     .replace("%Time%", time)
                                     .replace("%time%", time));
                         }
-
-                        ItemBuilder itemBuilder = ItemBuilder.convertItemStack(data.getString("OutOfTime/Cancelled." + i + ".Item"));
 
                         itemBuilder.setLore(lore);
 
@@ -463,7 +465,6 @@ public class GuiListener implements Listener {
             }
         }
 
-        List<String> lore = new ArrayList<>();
 
         String price = Methods.getPrice(ID, false);
         String time = Methods.convertToTime(data.getLong("Items." + ID + ".Time-Till-Expire"));
@@ -476,6 +477,10 @@ public class GuiListener implements Listener {
             target = Methods.getOfflinePlayer(id);
         }
 
+        ItemBuilder itemBuilder = ItemBuilder.convertItemStack(data.getString("Items." + ID + ".Item"));
+
+        List<String> lore = new ArrayList<>(itemBuilder.getUpdatedLore());
+
         for (String l : config.getStringList("Settings.GUISettings.SellingItemLore")) {
             lore.add(l.replace("%Price%", price).replace("%price%", price)
                     .replace("%Seller%", target != null ? target.getName() : "N/A")
@@ -483,8 +488,6 @@ public class GuiListener implements Listener {
                     .replace("%Time%", time)
                     .replace("%time%", time));
         }
-
-        ItemBuilder itemBuilder = ItemBuilder.convertItemStack(data.getString("Items." + ID + ".Item"));
 
         itemBuilder.setLore(lore);
 
@@ -549,8 +552,6 @@ public class GuiListener implements Listener {
         if (data.contains("Items")) {
             for (String i : data.getConfigurationSection("Items").getKeys(false)) {
                 if (data.getString("Items." + i + ".Seller").equalsIgnoreCase(other)) {
-                    List<String> lore = new ArrayList<>();
-
                     String price = Methods.getPrice(i, false);
                     String time = Methods.convertToTime(data.getLong("Items." + i + ".Time-Till-Expire"));
 
@@ -569,6 +570,10 @@ public class GuiListener implements Listener {
                     if (id != null) {
                         bidder = Methods.getOfflinePlayer(bid);
                     }
+
+                    ItemBuilder itemBuilder = ItemBuilder.convertItemStack(data.getString("Items." + ID + ".Item"));
+
+                    List<String> lore = new ArrayList<>(itemBuilder.getUpdatedLore());
 
                     if (data.getBoolean("Items." + i + ".Biddable")) {
                         for (String l : config.getStringList("Settings.GUISettings.Bidding")) {
@@ -591,8 +596,6 @@ public class GuiListener implements Listener {
                                     .replace("%time%", time));
                         }
                     }
-
-                    ItemBuilder itemBuilder = ItemBuilder.convertItemStack(data.getString("Items." + ID + ".Item"));
 
                     itemBuilder.setLore(lore);
 
@@ -657,7 +660,7 @@ public class GuiListener implements Listener {
         String price = Methods.getPrice(ID, false);
 
         if (config.contains("Settings.GUISettings.OtherSettings.Bidding.Lore")) {
-            List<String> lore = new ArrayList<>();
+            List<String> lore = new ArrayList<>(itemBuilder.getUpdatedLore());
 
             for (String l : config.getStringList("Settings.GUISettings.OtherSettings.Bidding.Lore")) {
                 lore.add(l.replace("%Bid%", String.valueOf(bid))
@@ -678,8 +681,6 @@ public class GuiListener implements Listener {
 
         ItemStack item = Methods.fromBase64(data.getString("Items." + ID + ".Item"));
 
-        List<String> lore = new ArrayList<>();
-
         String price = Methods.getPrice(ID, false);
         String time = Methods.convertToTime(data.getLong("Items." + ID + ".Time-Till-Expire"));
 
@@ -699,6 +700,10 @@ public class GuiListener implements Listener {
             bidder = Methods.getOfflinePlayer(bid);
         }
 
+        ItemBuilder itemBuilder = ItemBuilder.convertItemStack(item);
+
+        List<String> lore = new ArrayList<>(itemBuilder.getUpdatedLore());
+
         for (String l : config.getStringList("Settings.GUISettings.Bidding")) {
             lore.add(l.replace("%TopBid%", price)
                     .replace("%topbid%", price)
@@ -707,8 +712,6 @@ public class GuiListener implements Listener {
                     .replace("%Time%", time)
                     .replace("%time%", time));
         }
-
-        ItemBuilder itemBuilder = ItemBuilder.convertItemStack(item);
 
         itemBuilder.setLore(lore);
 
