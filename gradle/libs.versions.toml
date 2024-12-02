@@ -1,5 +1,4 @@
 [plugins]
-paperweight = { id = "io.papermc.paperweight.userdev", version.ref = "paperweight" }
 hangar = { id = "io.papermc.hangar-publish-plugin", version.ref = "hangar" }
 runPaper = { id = "xyz.jpenilla.run-paper", version.ref = "runPaper" }
 minotaur = { id = "com.modrinth.minotaur", version.ref = "minotaur" }
@@ -7,13 +6,12 @@ shadow = { id = "com.gradleup.shadow", version.ref = "shadow" }
 
 [versions]
 # Paper API
-paper = "1.21.1-R0.1-SNAPSHOT"
+paper = "1.21.3-R0.1-SNAPSHOT"
 velocity = "3.3.0-SNAPSHOT"
-minecraft = "1.21.1"
+minecraft = "1.21.3"
 brigadier = "1.3.10"
 
 # Gradle Plugins
-paperweight = "1.7.3"
 runPaper = "2.3.0"
 minotaur = "2.8.7"
 hangar = "0.1.2"
