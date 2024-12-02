@@ -12,6 +12,7 @@ import com.badbones69.crazyauctions.api.enums.ShopType;
 import com.badbones69.crazyauctions.api.events.AuctionBuyEvent;
 import com.badbones69.crazyauctions.api.events.AuctionCancelledEvent;
 import com.badbones69.crazyauctions.api.events.AuctionNewBidEvent;
+import com.badbones69.crazyauctions.currency.VaultSupport;
 import com.ryderbelserion.vital.paper.util.scheduler.FoliaRunnable;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -1182,11 +1183,15 @@ public class GuiListener implements Listener {
                                         return;
                                     }
 
-                                    if (plugin.getSupport().getMoney(player) < cost) {
+                                    final VaultSupport support = plugin.getSupport();
+
+                                    Map<String, String> placeholders = new HashMap<>();
+
+                                    if (support.getMoney(player) < cost) {
                                         playClick(player);
+
                                         player.closeInventory();
 
-                                        Map<String, String> placeholders = new HashMap<>();
                                         placeholders.put("%Money_Needed%", (cost - plugin.getSupport().getMoney(player)) + "");
                                         placeholders.put("%money_needed%", (cost - plugin.getSupport().getMoney(player)) + "");
 
@@ -1198,10 +1203,21 @@ public class GuiListener implements Listener {
                                     ItemStack i = Methods.fromBase64(data.getString("Items." + ID + ".Item"));
 
                                     plugin.getServer().getPluginManager().callEvent(new AuctionBuyEvent(player, i, cost));
-                                    plugin.getSupport().removeMoney(player, cost);
-                                    plugin.getSupport().addMoney(Methods.getOfflinePlayer(seller), cost);
 
-                                    Map<String, String> placeholders = new HashMap<>();
+                                    if (!support.removeMoney(player, cost)) {
+                                        playClick(player);
+
+                                        player.closeInventory();
+
+                                        placeholders.put("%Money_Needed%", (cost - support.getMoney(player)) + "");
+                                        placeholders.put("%money_needed%", (cost - support.getMoney(player)) + "");
+
+                                        player.sendMessage(Messages.NEED_MORE_MONEY.getMessage(player, placeholders));
+
+                                        return;
+                                    }
+
+                                    support.addMoney(Methods.getOfflinePlayer(seller), cost);
 
                                     String price = Methods.getPrice(ID, false);
 
