@@ -723,26 +723,20 @@ public class GuiListener implements Listener {
         FileConfiguration config = Files.config.getConfiguration();
 
         if (config.getBoolean("Settings.Sounds.Toggle", false)) {
-            String sound = config.getString("Settings.Sounds.Sound");
+            String sound = config.getString("Settings.Sounds.Sound", "UI_BUTTON_CLICK");
 
-            try {
-                player.playSound(player.getLocation(), Sound.valueOf(sound), 1, 1);
-            } catch (Exception e) {
-                player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, SoundCategory.PLAYERS, 1F, 1F);
-            }
+            player.playSound(player.getLocation(), Sound.valueOf(sound), 1, 1);
         }
     }
 
     private void playSoldSound(@NotNull Player player) {
         FileConfiguration config = Files.config.getConfiguration();
 
-        String sound = config.getString("Settings.Sold-Item-Sound", "");
+        String sound = config.getString("Settings.Sold-Item-Sound", "UI_BUTTON_CLICK");
 
         if (sound.isEmpty()) return;
 
-        try {
-            player.playSound(player.getLocation(), Sound.valueOf(sound), 1, 1);
-        } catch (Exception ignored) {}
+        player.playSound(player.getLocation(), Sound.valueOf(sound), 1, 1);
     }
 
     @EventHandler
