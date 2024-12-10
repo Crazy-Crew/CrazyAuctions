@@ -1228,7 +1228,8 @@ public class GuiListener implements Listener {
 
                                     player.sendMessage(Messages.BOUGHT_ITEM.getMessage(player, placeholders));
 
-                                    if (seller != null && Methods.isOnline(seller) && Methods.getPlayer(seller) != null) {
+                                    //if (seller != null && Methods.isOnline(seller) && Methods.getPlayer(seller) != null) {
+                                    if (seller != null && Methods.getPlayer(seller) != null) {
                                         Player sell = Methods.getPlayer(seller);
 
                                         if (sell != null) {
