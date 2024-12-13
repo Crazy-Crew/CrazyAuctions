@@ -544,6 +544,8 @@ public class GuiListener implements Listener {
         List<ItemStack> items = new ArrayList<>();
         List<Integer> ID = new ArrayList<>();
 
+        if (!Methods.isUUID(other)) other = String.valueOf(plugin.getServer().getPlayerUniqueId(other));
+
         if (!data.contains("Items")) {
             data.set("Items.Clear", null);
 

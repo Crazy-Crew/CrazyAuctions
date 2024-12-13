@@ -19,7 +19,10 @@ public class Methods {
     private final static CrazyAuctions plugin = CrazyAuctions.get();
 
     private final static Pattern HEX_PATTERN = Pattern.compile("#[a-fA-F0-9]{6}");
-    
+
+    private static final Pattern UUID_PATTERN = Pattern.compile("[a-f0-9]{8}(?:-[a-f0-9]{4}){4}[a-f0-9]{8}");
+
+
     public static String color(String message) {
         Matcher matcher = HEX_PATTERN.matcher(message);
         StringBuilder buffer = new StringBuilder();
@@ -85,6 +88,10 @@ public class Methods {
 
     public static OfflinePlayer getOfflinePlayer(String uuid) {
         return plugin.getServer().getOfflinePlayer(UUID.fromString(uuid));
+    }
+
+    public static boolean isUUID(String uuid) {
+        return UUID_PATTERN.matcher(uuid).find();
     }
 
     public static boolean isOnline(String name) {
