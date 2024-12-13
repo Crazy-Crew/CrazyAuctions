@@ -568,11 +568,11 @@ public class GuiListener implements Listener {
 
                     String bid = data.getString("Items." + i + ".TopBidder");
 
-                    if (bid != null) {
+                    if (bid != null && !bid.equals("None")) {
                         bidder = Methods.getOfflinePlayer(bid);
                     }
 
-                    ItemBuilder itemBuilder = ItemBuilder.convertItemStack(data.getString("Items." + ID + ".Item"));
+                    ItemBuilder itemBuilder = ItemBuilder.convertItemStack(data.getString("Items." + i + ".Item"));
 
                     List<String> lore = new ArrayList<>(itemBuilder.getUpdatedLore());
 
