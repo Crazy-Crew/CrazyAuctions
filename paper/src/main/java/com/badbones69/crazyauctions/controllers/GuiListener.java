@@ -568,7 +568,7 @@ public class GuiListener implements Listener {
 
                     String bid = data.getString("Items." + i + ".TopBidder");
 
-                    if (id != null) {
+                    if (bid != null) {
                         bidder = Methods.getOfflinePlayer(bid);
                     }
 
