@@ -83,8 +83,8 @@ public class Methods {
         return ItemStack.deserializeBytes(Base64.getDecoder().decode(base64));
     }
 
-    public static OfflinePlayer getOfflinePlayer(String name) {
-        return plugin.getServer().getOfflinePlayer(UUID.fromString(name));
+    public static OfflinePlayer getOfflinePlayer(String uuid) {
+        return plugin.getServer().getOfflinePlayer(UUID.fromString(uuid));
     }
 
     public static boolean isOnline(String name) {
