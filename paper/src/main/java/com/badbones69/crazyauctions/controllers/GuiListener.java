@@ -76,31 +76,19 @@ public class GuiListener implements Listener {
                 if (itemBuilder != null && data.contains("Items." + i + ".Item") && (cat.getItems().contains(itemBuilder.getItemStack().getType()) || cat == Category.NONE)) {
                     if (data.getBoolean("Items." + i + ".Biddable")) {
                         if (sell == ShopType.BID) {
-                            String seller = data.getString("Items." + i + ".Seller");
-
-                            OfflinePlayer target = null;
-
-                            if (seller != null) {
-                                target = Methods.getOfflinePlayer(seller);
-                            }
+                            String sellerName = data.getString("Items." + i + ".SellerName");
 
                             String price = Methods.getPrice(i, false);
                             String time = Methods.convertToTime(data.getLong("Items." + i + ".Time-Till-Expire"));
 
-                            OfflinePlayer bidder = null;
-
-                            String topbidder = data.getString("Items." + i + ".TopBidder");
-
-                            if (topbidder != null && !topbidder.equals("None")) {
-                                bidder = Methods.getOfflinePlayer(topbidder);
-                            }
+                            String topBidderName = data.getString("Items." + i + ".TopBidderName");
 
                             for (String key : config.getStringList("Settings.GUISettings.Bidding")) {
                                 String line = key.replace("%TopBid%", price).replace("%topbid%", price);
 
-                                line = target != null ? line.replace("%Seller%", target.getName()).replace("%seller%", target.getName()) : line.replace("%Seller%", "N/A").replace("%seller%", "N/A");
+                                line = sellerName != null ? line.replace("%Seller%", sellerName).replace("%seller%", sellerName) : line.replace("%Seller%", "N/A").replace("%seller%", "N/A");
 
-                                line = bidder != null ? line.replace("%TopBidder%", bidder.getName()).replace("%topbidder%", bidder.getName()) : line.replace("%TopBidder%", "N/A").replace("%topbidder%", "N/A");
+                                line = topBidderName != null ? line.replace("%TopBidder%", topBidderName).replace("%topbidder%", topBidderName) : line.replace("%TopBidder%", "N/A").replace("%topbidder%", "N/A");
 
                                 lore.add(line.replace("%Time%", time).replace("%time%", time));
                             }
@@ -113,13 +101,7 @@ public class GuiListener implements Listener {
                         }
                     } else {
                         if (sell == ShopType.SELL) {
-                            String seller = data.getString("Items." + i + ".Seller");
-
-                            OfflinePlayer target = null;
-
-                            if (seller != null) {
-                                target = Methods.getOfflinePlayer(seller);
-                            }
+                            String sellerName = data.getString("Items." + i + ".SellerName");
 
                             String price = Methods.getPrice(i, false);
                             String time = Methods.convertToTime(data.getLong("Items." + i + ".Time-Till-Expire"));
@@ -128,7 +110,7 @@ public class GuiListener implements Listener {
 
                             for (String l : config.getStringList("Settings.GUISettings.SellingItemLore")) {
                                 lore.add(l.replace("%Price%", format).replace("%price%", format)
-                                        .replace("%Seller%", target != null ? target.getName() : "N/A").replace("%seller%", target != null ? target.getName() : "N/A")
+                                        .replace("%Seller%", sellerName != null ? sellerName : "N/A").replace("%seller%", sellerName != null ? sellerName : "N/A")
                                         .replace("%Time%", time).replace("%time%", time));
                             }
 
