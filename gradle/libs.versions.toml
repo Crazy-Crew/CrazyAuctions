@@ -15,14 +15,12 @@ brigadier = "1.3.10"
 runPaper = "2.3.0"
 minotaur = "2.8.7"
 hangar = "0.1.2"
-shadow = "8.3.0"
+shadow = "9.0.0-beta4"
 
 # Bukkit Plugins
 itemsadder = "3.6.3-beta-14"
-decentholograms = "2.8.8"
 headdatabaseapi = "1.3.1"
 placeholderapi = "2.11.6"
-fancyholograms = "2.3.3"
 oraxen = "1.171.0"
 vault = "1.7.1"
 
@@ -52,10 +50,8 @@ kyori-text = { module = "net.kyori:adventure-text-minimessage", version.ref = "a
 kyori-api = { module = "net.kyori:adventure-api", version.ref = "adventure" }
 
 # Bukkit Plugins API
-decent-holograms = { module = "com.github.decentsoftware-eu:decentholograms", version.ref = "decentholograms" }
 headdatabaseapi = { module = "com.arcaniax:HeadDatabase-API", version.ref = "headdatabaseapi" }
 itemsadder = { module = "com.github.LoneDev6:api-itemsadder", version.ref = "itemsadder" }
-fancy-holograms = { module = "de.oliver:FancyHolograms", version.ref = "fancyholograms" }
 placeholderapi = { module = "me.clip:placeholderapi", version.ref = "placeholderapi" }
 vault = { module = "com.github.MilkBowl:VaultAPI", version.ref = "vault" }
 oraxen = { module = "io.th0rgal:oraxen", version.ref = "oraxen" }
@@ -72,7 +68,7 @@ jalu = { module = "ch.jalu:configme", version.ref = "jalu" }
 
 [bundles]
 # Soft Depends
-dependencies = ["decent-holograms", "fancy-holograms", "cmi-lib", "cmi-api"]
+dependencies = ["cmi-lib", "cmi-api"]
 
 # Shared with the git submodules
 shared = ["headdatabaseapi", "placeholderapi", "oraxen", "vault"]
