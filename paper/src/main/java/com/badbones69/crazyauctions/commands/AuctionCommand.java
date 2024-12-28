@@ -327,6 +327,7 @@ public class AuctionCommand implements CommandExecutor {
                         for (; data.contains("Items." + num); num++) ;
                         data.set("Items." + num + ".Price", price);
                         data.set("Items." + num + ".Seller", seller);
+                        data.set("Items." + num + ".SellerName", player.getName());
 
                         if (args[0].equalsIgnoreCase("bid")) {
                             data.set("Items." + num + ".Time-Till-Expire", Methods.convertToMill(config.getString("Settings.Bid-Time", "2m 30s")));
@@ -356,6 +357,7 @@ public class AuctionCommand implements CommandExecutor {
                         }
 
                         data.set("Items." + num + ".TopBidder", "None");
+                        data.set("Items." + num + ".TopBidderName", "None");
 
                         ItemStack stack = item.clone();
                         stack.setAmount(amount);

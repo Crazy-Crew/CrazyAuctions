@@ -816,6 +816,7 @@ public class GuiListener implements Listener {
 
                                     data.set("Items." + ID + ".Price", bid);
                                     data.set("Items." + ID + ".TopBidder", player.getUniqueId().toString());
+                                    data.set("Items." + ID + ".TopBidderName", player.getName());
 
                                     Map<String, String> placeholders = new HashMap<>();
                                     placeholders.put("%Bid%", bid + "");
