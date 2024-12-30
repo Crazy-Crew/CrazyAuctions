@@ -501,7 +501,7 @@ public class AuctionCommand implements CommandExecutor {
 
         Files.data.save();
 
-        player.sendMessage(Messages.ADMIN_FORCE_CANCELLED.getMessage(player));
+        player.sendMessage(Messages.ADMIN_FORCE_CANCELLED_ALL.getMessage(player));
 
     }
 
