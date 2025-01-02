@@ -29,6 +29,9 @@ permissions:
   crazyauctions.reload:
     default: op
 
+  crazyauctions.force-end-all:
+    default: op
+
   crazyauctions.bypass:
     default: false
 
@@ -52,3 +55,4 @@ permissions:
       crazyauctions.test: true
       crazyauctions.reload: true
       crazyauctions.bypass: true
+      crazyauctions.force-end-all: true

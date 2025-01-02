@@ -3,10 +3,8 @@ package com.badbones69.crazyauctions.commands;
 import com.badbones69.crazyauctions.CrazyAuctions;
 import com.badbones69.crazyauctions.Methods;
 import com.badbones69.crazyauctions.api.CrazyManager;
-import com.badbones69.crazyauctions.api.enums.Category;
-import com.badbones69.crazyauctions.api.enums.Files;
-import com.badbones69.crazyauctions.api.enums.Messages;
-import com.badbones69.crazyauctions.api.enums.ShopType;
+import com.badbones69.crazyauctions.api.enums.*;
+import com.badbones69.crazyauctions.api.events.AuctionCancelledEvent;
 import com.badbones69.crazyauctions.api.events.AuctionListEvent;
 import com.badbones69.crazyauctions.controllers.GuiListener;
 import com.ryderbelserion.vital.paper.api.files.FileManager;
@@ -88,6 +86,20 @@ public class AuctionCommand implements CommandExecutor {
                     this.crazyManager.load();
 
                     sender.sendMessage(Messages.RELOAD.getMessage(sender));
+
+                    return true;
+                }
+
+                case "force_end_all" -> {
+                    if (!Methods.hasPermission(sender, "force-end-all")) {
+                        return true;
+                    }
+                    if (!(sender instanceof Player player)) {
+                        sender.sendMessage(Messages.PLAYERS_ONLY.getMessage(sender));
+                        return true;
+                    }
+
+                    forceEndAll(player);
 
                     return true;
                 }
@@ -453,6 +465,44 @@ public class AuctionCommand implements CommandExecutor {
         ma.add(Material.FISHING_ROD);
 
         return ma;
+    }
+
+    /**
+     * Force ends all current listed items from the auction house.
+     * @param player The {@link Player} that initiated the cancellation.
+     * @see AuctionCancelledEvent
+     */
+    private void forceEndAll(Player player) {
+        FileConfiguration data = Files.data.getConfiguration();
+        int num = 1;
+
+        for (String i : data.getConfigurationSection("Items").getKeys(false)) {
+
+            while (data.contains("OutOfTime/Cancelled." + num)) num++;
+
+            String seller = data.getString("Items." + i + ".Seller");
+            Player sellerPlayer = Methods.getPlayer(seller);
+
+            if (Methods.isOnline(seller) && sellerPlayer != null) {
+                sellerPlayer.sendMessage(Messages.ADMIN_FORCE_CANCELLED_TO_PLAYER.getMessage(player));
+            }
+
+            AuctionCancelledEvent event = new AuctionCancelledEvent((sellerPlayer != null ? sellerPlayer : Methods.getOfflinePlayer(seller)), Methods.fromBase64(data.getString("Items." + i + ".Item")), Reasons.ADMIN_FORCE_CANCEL);
+            plugin.getServer().getPluginManager().callEvent(event);
+
+            data.set("OutOfTime/Cancelled." + num + ".Seller", data.getString("Items." + i + ".Seller"));
+            data.set("OutOfTime/Cancelled." + num + ".Full-Time", data.getLong("Items." + i + ".Full-Time"));
+            data.set("OutOfTime/Cancelled." + num + ".StoreID", data.getInt("Items." + i + ".StoreID"));
+            data.set("OutOfTime/Cancelled." + num + ".Item", data.getString("Items." + i + ".Item"));
+
+            data.set("Items." + i, null);
+
+        }
+
+        Files.data.save();
+
+        player.sendMessage(Messages.ADMIN_FORCE_CANCELLED_ALL.getMessage(player));
+
     }
 
     /*private boolean allowBook(ItemStack item) {

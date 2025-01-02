@@ -25,6 +25,7 @@ public enum Messages {
     CANCELLED_ITEM("Cancelled-Item", "&7You have cancelled an item on the auction list, return your items with /ah expired."),
     ITEM_HAS_EXPIRED("Item-Has-Expired", "&7An item you have in the Crazy Auctions has just expired."),
     ADMIN_FORCE_CANCELLED("Admin-Force-Cancelled", "&7You have just force cancelled a sale."),
+    ADMIN_FORCE_CANCELLED_ALL("Admin-Force-Cancelled-All", "&7You have just force cancelled all sales."),
     ADMIN_FORCE_CANCELLED_TO_PLAYER("Admin-Force-Cancelled-To-Player", "&cOne of your items was just force cancelled by an Admin."),
     ITEM_DOESNT_EXIST("Item-Doesnt-Exist", "&cThat item isnt in the crazy auctions any more."),
     MAX_ITEMS("Max-Items", "&cYou cant list any more items to the Crazy Auctions."),

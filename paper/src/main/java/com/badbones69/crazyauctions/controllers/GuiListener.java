@@ -17,7 +17,6 @@ import com.ryderbelserion.vital.paper.util.scheduler.FoliaRunnable;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Sound;
-import org.bukkit.SoundCategory;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
