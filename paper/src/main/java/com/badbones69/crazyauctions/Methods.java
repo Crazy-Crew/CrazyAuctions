@@ -70,9 +70,9 @@ public class Methods {
         return true;
     }
 
-    public static Player getPlayer(String name) {
+    public static Player getPlayer(String uuid) {
         try {
-            return plugin.getServer().getPlayer(UUID.fromString(name));
+            return plugin.getServer().getPlayer(UUID.fromString(uuid));
         } catch (Exception e) {
             return null;
         }
@@ -94,9 +94,9 @@ public class Methods {
         return UUID_PATTERN.matcher(uuid).find();
     }
 
-    public static boolean isOnline(String name) {
+    public static boolean isOnline(String uuid) {
         for (Player player : plugin.getServer().getOnlinePlayers()) {
-            if (player.getName().equalsIgnoreCase(name)) {
+            if (player.getUniqueId().toString().equals(uuid)) {
                 return true;
             }
         }
