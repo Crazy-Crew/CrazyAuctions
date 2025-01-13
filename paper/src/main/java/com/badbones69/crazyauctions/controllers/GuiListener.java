@@ -133,7 +133,7 @@ public class GuiListener implements Listener {
         options.add("SellingItems");
         options.add("Cancelled/ExpiredItems");
         options.add("PreviousPage");
-        options.add("Refesh");
+        options.add("Refresh");
         options.add("NextPage");
         options.add("Category1");
         options.add("Category2");
@@ -903,7 +903,7 @@ public class GuiListener implements Listener {
                                     return;
                                 }
 
-                                if (item.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.Refesh.Name")))) {
+                                if (item.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.Refresh.Name")))) {
                                     Methods.updateAuction();
 
                                     int page = Integer.parseInt(e.getView().getTitle().split("#")[1]);
