@@ -9,6 +9,7 @@ import com.badbones69.crazyauctions.commands.AuctionTab;
 import com.badbones69.crazyauctions.controllers.GuiListener;
 import com.badbones69.crazyauctions.controllers.MarcoListener;
 import com.badbones69.crazyauctions.currency.VaultSupport;
+import com.badbones69.crazyauctions.datafixer.ConfigFixer;
 import com.ryderbelserion.vital.paper.Vital;
 import com.ryderbelserion.vital.paper.util.scheduler.FoliaRunnable;
 import org.bukkit.OfflinePlayer;
@@ -128,6 +129,7 @@ public class CrazyAuctions extends Vital {
         }.runAtFixedRate(this, 0L, 5000L);
 
         Messages.addMissingMessages();
+        new ConfigFixer().onEnable();
 
         new MetricsWrapper(this, 4624);
     }
