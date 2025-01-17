@@ -721,7 +721,7 @@ public class GuiListener implements Listener {
 
     @EventHandler
     public void onInvClose(InventoryCloseEvent e) {
-        if (!(e.getInventory().getHolder() instanceof  AuctionMenu auctionMenu)) return;
+        if (!(e.getInventory().getHolder() instanceof  AuctionMenu)) return;
         FileConfiguration config = Files.config.getConfiguration();
 
         Player player = (Player) e.getPlayer();
@@ -732,6 +732,7 @@ public class GuiListener implements Listener {
     @EventHandler
     public void onInvClick(InventoryClickEvent e) {
         if (!(e.getInventory().getHolder() instanceof  AuctionMenu auctionMenu)) return;
+        e.setCancelled(true);
 
         FileConfiguration config = Files.config.getConfiguration();
         FileConfiguration data = Files.data.getConfiguration();
@@ -741,7 +742,6 @@ public class GuiListener implements Listener {
 
         if (inv != null) {
             if (auctionMenu.getTitle().contains(config.getString("Settings.Categories"))) {
-                e.setCancelled(true);
                 int slot = e.getRawSlot();
 
                 if (slot <= inv.getSize()) {
@@ -774,7 +774,6 @@ public class GuiListener implements Listener {
             }
 
             if (auctionMenu.getTitle().contains("Settings.Bidding-On-Item")) {
-                e.setCancelled(true);
                 int slot = e.getRawSlot();
 
                 if (slot <= inv.getSize()) {
@@ -868,7 +867,6 @@ public class GuiListener implements Listener {
             }
 
             if (auctionMenu.getTitle().contains(config.getString("Settings.GUIName"))) {
-                e.setCancelled(true);
                 final int slot = e.getRawSlot();
 
                 if (slot <= inv.getSize()) {
@@ -1128,7 +1126,6 @@ public class GuiListener implements Listener {
             }
 
             if (auctionMenu.getTitle().contains(config.getString("Settings.Buying-Item"))) {
-                e.setCancelled(true);
                 int slot = e.getRawSlot();
 
                 if (slot <= inv.getSize()) {
@@ -1240,8 +1237,6 @@ public class GuiListener implements Listener {
             }
 
             if (auctionMenu.getTitle().contains(config.getString("Settings.Players-Current-Items"))) {
-                e.setCancelled(true);
-
                 int slot = e.getRawSlot();
 
                 if (slot <= inv.getSize()) {
@@ -1310,8 +1305,6 @@ public class GuiListener implements Listener {
             }
 
             if (auctionMenu.getTitle().contains(config.getString("Settings.Cancelled/Expired-Items"))) {
-                e.setCancelled(true);
-
                 final int slot = e.getRawSlot();
 
                 if (slot <= inv.getSize()) {
