@@ -35,4 +35,8 @@ public class AuctionMenu implements InventoryHolder {
         return this.inventory;
     }
 
+    public Component getTitle() {
+        return this.title;
+    }
+
 }

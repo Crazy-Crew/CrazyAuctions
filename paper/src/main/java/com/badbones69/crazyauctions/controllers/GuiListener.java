@@ -124,10 +124,9 @@ public class GuiListener implements Listener {
             }
         }
 
-        int maxPage = Methods.getMaxPage(items);
-        for (; page > maxPage; page--);
+        page = Math.min(Methods.getMaxPage(items), page);
 
-        Inventory inv = plugin.getServer().createInventory(null, 54, Methods.color(config.getString("Settings.GUIName") + " #" + page));
+        Inventory inv = new AuctionMenu(54, Methods.color(config.getString("Settings.GUIName") + " #" + page)).getInventory();
         List<String> options = new ArrayList<>();
 
         options.add("SellingItems");
@@ -201,7 +200,7 @@ public class GuiListener implements Listener {
         Methods.updateAuction();
         FileConfiguration config = Files.config.getConfiguration();
 
-        Inventory inv = plugin.getServer().createInventory(null, 54, Methods.color(config.getString("Settings.Categories")));
+        Inventory inv = new AuctionMenu(54, Methods.color(config.getString("Settings.Categories"))).getInventory();
 
         List<String> options = new ArrayList<>();
 
@@ -249,7 +248,7 @@ public class GuiListener implements Listener {
         List<ItemStack> items = new ArrayList<>();
         List<Integer> ID = new ArrayList<>();
 
-        Inventory inv = plugin.getServer().createInventory(null, 54, Methods.color(config.getString("Settings.Players-Current-Items")));
+        Inventory inv = new AuctionMenu(54, Methods.color(config.getString("Settings.Players-Current-Items"))).getInventory();
 
         List<String> options = new ArrayList<>();
 
@@ -352,11 +351,9 @@ public class GuiListener implements Listener {
             }
         }
 
-        int maxPage = Methods.getMaxPage(items);
+        page = Math.min(Methods.getMaxPage(items), page);
 
-        for (; page > maxPage; page--);
-
-        Inventory inv = plugin.getServer().createInventory(null, 54, Methods.color(config.getString("Settings.Cancelled/Expired-Items") + " #" + page));
+        Inventory inv = new AuctionMenu(54, Methods.color(config.getString("Settings.Cancelled/Expired-Items") + " #" + page)).getInventory();
 
         List<String> options = new ArrayList<>();
         options.add("Back");
@@ -412,7 +409,7 @@ public class GuiListener implements Listener {
             return;
         }
 
-        Inventory inv = plugin.getServer().createInventory(null, 9, Methods.color(config.getString("Settings.Buying-Item")));
+        Inventory inv = new AuctionMenu(9, Methods.color(config.getString("Settings.Buying-Item"))).getInventory();
 
         List<String> options = new ArrayList<>();
 
@@ -494,7 +491,7 @@ public class GuiListener implements Listener {
             return;
         }
 
-        Inventory inv = plugin.getServer().createInventory(null, 27, Methods.color(config.getString("Settings.Bidding-On-Item")));
+        Inventory inv = new AuctionMenu(27, Methods.color(config.getString("Settings.Bidding-On-Item"))).getInventory();
 
         if (!bidding.containsKey(player.getUniqueId())) bidding.put(player.getUniqueId(), 0);
 
@@ -592,9 +589,9 @@ public class GuiListener implements Listener {
 
         int maxPage = Methods.getMaxPage(items);
 
-        for (; page > maxPage; page--);
+        page = Math.min(maxPage, page);
 
-        Inventory inv = plugin.getServer().createInventory(null, 54, Methods.color(config.getString("Settings.GUIName") + " #" + page));
+        Inventory inv = new AuctionMenu(54, Methods.color(config.getString("Settings.GUIName") + " #" + page)).getInventory();
 
         List<String> options = new ArrayList<>();
 
@@ -733,6 +730,8 @@ public class GuiListener implements Listener {
 
     @EventHandler
     public void onInvClick(InventoryClickEvent e) {
+        if (!(e.getInventory().getHolder() instanceof  AuctionMenu)) return;
+
         FileConfiguration config = Files.config.getConfiguration();
         FileConfiguration data = Files.data.getConfiguration();
 
