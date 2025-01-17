@@ -721,6 +721,7 @@ public class GuiListener implements Listener {
 
     @EventHandler
     public void onInvClose(InventoryCloseEvent e) {
+        if (!(e.getInventory().getHolder() instanceof  AuctionMenu auctionMenu)) return;
         FileConfiguration config = Files.config.getConfiguration();
 
         Player player = (Player) e.getPlayer();
@@ -739,7 +740,7 @@ public class GuiListener implements Listener {
         final Inventory inv = e.getClickedInventory();
 
         if (inv != null) {
-            if (auctionMenu.getTitle().equals(config.getString("Settings.Categories")) ) {
+            if (auctionMenu.getTitle().contains(config.getString("Settings.Categories"))) {
                 e.setCancelled(true);
                 int slot = e.getRawSlot();
 
@@ -772,7 +773,7 @@ public class GuiListener implements Listener {
                 }
             }
 
-            if (auctionMenu.getTitle().equals("Settings.Bidding-On-Item")) {
+            if (auctionMenu.getTitle().contains("Settings.Bidding-On-Item")) {
                 e.setCancelled(true);
                 int slot = e.getRawSlot();
 
@@ -866,7 +867,7 @@ public class GuiListener implements Listener {
                 }
             }
 
-            if (auctionMenu.getTitle().equals(config.getString("Settings.GUIName"))) {
+            if (auctionMenu.getTitle().contains(config.getString("Settings.GUIName"))) {
                 e.setCancelled(true);
                 final int slot = e.getRawSlot();
 
@@ -1126,7 +1127,7 @@ public class GuiListener implements Listener {
                 }
             }
 
-            if (auctionMenu.getTitle().equals(config.getString("Settings.Buying-Item"))) {
+            if (auctionMenu.getTitle().contains(config.getString("Settings.Buying-Item"))) {
                 e.setCancelled(true);
                 int slot = e.getRawSlot();
 
@@ -1238,7 +1239,7 @@ public class GuiListener implements Listener {
                 }
             }
 
-            if (auctionMenu.getTitle().equals(config.getString("Settings.Players-Current-Items"))) {
+            if (auctionMenu.getTitle().contains(config.getString("Settings.Players-Current-Items"))) {
                 e.setCancelled(true);
 
                 int slot = e.getRawSlot();
@@ -1308,7 +1309,7 @@ public class GuiListener implements Listener {
                 }
             }
 
-            if (auctionMenu.getTitle().equals(config.getString("Settings.Cancelled/Expired-Items"))) {
+            if (auctionMenu.getTitle().contains(config.getString("Settings.Cancelled/Expired-Items"))) {
                 e.setCancelled(true);
 
                 final int slot = e.getRawSlot();

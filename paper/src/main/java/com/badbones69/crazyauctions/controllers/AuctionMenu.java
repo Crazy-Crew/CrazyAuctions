@@ -15,7 +15,7 @@ public class AuctionMenu implements InventoryHolder {
     private final Inventory inventory;
 
     public  AuctionMenu(int size, String stringTitle) {
-        this.title = stringTitle;
+        this.title = stringTitle.replaceAll("§", "&");
 
         this.inventory = this.plugin.getServer().createInventory(this, size, Methods.legacyTranslateColourCodes(title));
     }
