@@ -1,7 +1,6 @@
 package com.badbones69.crazyauctions.controllers;
 
 import com.badbones69.crazyauctions.CrazyAuctions;
-import com.badbones69.crazyauctions.Methods;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -14,10 +13,10 @@ public class AuctionMenu implements InventoryHolder {
     private final String title;
     private final Inventory inventory;
 
-    public  AuctionMenu(int size, String stringTitle) {
-        this.title = stringTitle.replaceAll("§", "&");
+    public  AuctionMenu(int size, String title) {
+        this.title = title.replaceAll("§", "&");
 
-        this.inventory = this.plugin.getServer().createInventory(this, size, Methods.legacyTranslateColourCodes(title));
+        this.inventory = this.plugin.getServer().createInventory(this, size, title);
     }
 
     @Override
