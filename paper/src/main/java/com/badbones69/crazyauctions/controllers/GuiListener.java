@@ -773,7 +773,7 @@ public class GuiListener implements Listener {
                 }
             }
 
-            if (auctionMenu.getTitle().contains("Settings.Bidding-On-Item")) {
+            if (auctionMenu.getTitle().contains(config.getString("Settings.Bidding-On-Item"))) {
                 int slot = e.getRawSlot();
 
                 if (slot <= inv.getSize()) {
