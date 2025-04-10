@@ -7,6 +7,7 @@ import com.badbones69.crazyauctions.api.enums.*;
 import com.badbones69.crazyauctions.api.events.AuctionCancelledEvent;
 import com.badbones69.crazyauctions.api.events.AuctionListEvent;
 import com.badbones69.crazyauctions.controllers.GuiListener;
+import com.badbones69.crazyauctions.currency.VaultSupport;
 import com.ryderbelserion.vital.paper.api.files.FileManager;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -324,6 +325,21 @@ public class AuctionCommand implements CommandExecutor {
                                     }
                                 }
                             }
+                        }
+
+                        VaultSupport vaultSupport = plugin.getSupport();
+                        int listCost = config.getInt("Settings.Auction-List-Fee", 0);
+
+                        if (vaultSupport.getMoney(player) >= listCost) {
+                            vaultSupport.removeMoney(player, listCost);
+                        } else {
+                            Map<String, String> placeholders = new HashMap<>(){{
+                                put("%Money_Needed%", String.valueOf(listCost));
+                                put("%money_needed%", String.valueOf(listCost));
+                            }};
+
+                            player.sendMessage(Messages.NEED_MORE_MONEY.getMessage(sender, placeholders));
+                            return true;
                         }
 
                         /*if (!allowBook(item)) {
