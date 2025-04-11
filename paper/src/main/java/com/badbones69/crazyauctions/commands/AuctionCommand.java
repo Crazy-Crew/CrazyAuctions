@@ -21,6 +21,7 @@ import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -308,6 +309,14 @@ public class AuctionCommand implements CommandExecutor {
                         }
 
                         if (config.getStringList("Settings.BlackList").contains(item.getType().getKey().getKey())) {
+                            player.sendMessage(Messages.ITEM_BLACKLISTED.getMessage(sender));
+
+                            return true;
+                        }
+
+                        List<String> pdcBlacklist = config.getStringList("Settings.PDC-BlackList");
+
+                        if (item.getPersistentDataContainer().getKeys().stream().anyMatch(key -> pdcBlacklist.contains(key.asString()))) {
                             player.sendMessage(Messages.ITEM_BLACKLISTED.getMessage(sender));
 
                             return true;
