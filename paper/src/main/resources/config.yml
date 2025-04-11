@@ -305,3 +305,5 @@ Settings:
   BlackList:
     - 'BEDROCK'
     - 'END_PORTAL_FRAME'
+  PDC-BlackList:
+    - 'mcmmo:super_ability_boosted'
