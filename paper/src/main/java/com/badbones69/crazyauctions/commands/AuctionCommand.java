@@ -19,7 +19,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.jetbrains.annotations.NotNull;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -348,12 +347,6 @@ public class AuctionCommand implements CommandExecutor {
                         return true;
                     }
 
-                    /*if (!allowBook(item)) {
-                        player.sendMessage(Messages.BOOK_NOT_ALLOWED.getMessage(sender));
-
-                        return true;
-                    }*/
-
                     String seller = player.getUniqueId().toString();
 
                     int num = 1;
@@ -467,28 +460,4 @@ public class AuctionCommand implements CommandExecutor {
         player.sendMessage(Messages.ADMIN_FORCE_CANCELLED_ALL.getMessage(player));
 
     }
-
-    /*private boolean allowBook(ItemStack item) {
-        if (item != null && item.hasItemMeta() && item.getItemMeta() instanceof BookMeta bookMeta) {
-            this.plugin.getLogger().info("Checking " + item.getType() + " for illegal unicode.");
-
-            FileConfiguration file = Files.test_file.getConfiguration();
-
-            try {
-                file.set("Test", item);
-
-                Files.test_file.save();
-
-                this.plugin.getLogger().info(item.getType() + " has passed unicode checks.");
-            } catch (YAMLException exception) {
-                this.plugin.getLogger().log(Level.SEVERE, item.getType() + " has failed unicode checks and has been denied.", exception);
-
-                return false;
-            }
-
-            return bookMeta.getPages().stream().mapToInt(String :: length).sum() < 2000;
-        }
-
-        return true;
-    }*/
 }
