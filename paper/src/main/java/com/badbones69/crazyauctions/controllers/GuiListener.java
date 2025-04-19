@@ -1226,7 +1226,7 @@ public class GuiListener implements Listener {
             if (List.containsKey(player.getUniqueId())) {
                 if (List.get(player.getUniqueId()).size() >= slot) {
                     int id = List.get(player.getUniqueId()).get(slot);
-                    boolean T = false;
+
                     if (data.contains("Items")) {
                         for (String i : data.getConfigurationSection("Items").getKeys(false)) {
                             int ID = data.getInt("Items." + i + ".StoreID");
@@ -1237,7 +1237,7 @@ public class GuiListener implements Listener {
                                 plugin.getServer().getPluginManager().callEvent(event);
 
                                 int num = 1;
-                                for (; data.contains("OutOfTime/Cancelled." + num); num++) ;
+                                while (data.contains("OutOfTime/Cancelled." + num)) num++;
 
                                 data.set("OutOfTime/Cancelled." + num + ".Seller", data.getString("Items." + i + ".Seller"));
                                 data.set("OutOfTime/Cancelled." + num + ".Full-Time", data.getLong("Items." + i + ".Full-Time"));
@@ -1257,15 +1257,13 @@ public class GuiListener implements Listener {
                         }
                     }
 
-                    if (!T) {
-                        playClick(player);
+                    playClick(player);
 
-                        openShop(player, shopType.get(player.getUniqueId()), shopCategory.get(player.getUniqueId()), 1);
+                    openShop(player, shopType.get(player.getUniqueId()), shopCategory.get(player.getUniqueId()), 1);
 
-                        player.sendMessage(Messages.ITEM_DOESNT_EXIST.getMessage(player));
+                    player.sendMessage(Messages.ITEM_DOESNT_EXIST.getMessage(player));
 
-                        return;
-                    }
+                    return;
                 }
             }
         }
