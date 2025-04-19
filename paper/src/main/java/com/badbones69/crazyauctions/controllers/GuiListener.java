@@ -806,7 +806,7 @@ public class GuiListener implements Listener {
                         return;
                     }
 
-                    plugin.getServer().getPluginManager().callEvent(new AuctionNewBidEvent(player, Methods.fromBase64(data.getString("Items." + ID + ".Item")), bid));
+                    new AuctionNewBidEvent(player, Methods.fromBase64(data.getString("Items." + ID + ".Item")), bid).callEvent();
 
                     data.set("Items." + ID + ".Price", bid);
                     data.set("Items." + ID + ".TopBidder", player.getUniqueId().toString());
@@ -984,7 +984,7 @@ public class GuiListener implements Listener {
                                         }
 
                                         AuctionCancelledEvent event = new AuctionCancelledEvent((sellerPlayer != null ? sellerPlayer : Methods.getOfflinePlayer(seller)), Methods.fromBase64(data.getString("Items." + i + ".Item")), Reasons.ADMIN_FORCE_CANCEL);
-                                        plugin.getServer().getPluginManager().callEvent(event);
+                                        event.callEvent();
 
                                         data.set("OutOfTime/Cancelled." + num + ".Seller", data.getString("Items." + i + ".Seller"));
                                         data.set("OutOfTime/Cancelled." + num + ".Full-Time", data.getLong("Items." + i + ".Full-Time"));
@@ -1155,7 +1155,7 @@ public class GuiListener implements Listener {
 
                     ItemStack i = Methods.fromBase64(data.getString("Items." + ID + ".Item"));
 
-                    plugin.getServer().getPluginManager().callEvent(new AuctionBuyEvent(player, i, cost));
+                    new AuctionBuyEvent(player, i, cost).callEvent();
 
                     if (!support.removeMoney(player, cost)) {
                         playClick(player);
@@ -1234,7 +1234,7 @@ public class GuiListener implements Listener {
                                 player.sendMessage(Messages.CANCELLED_ITEM.getMessage(player));
 
                                 AuctionCancelledEvent event = new AuctionCancelledEvent(player, Methods.fromBase64(data.getString("Items." + i + ".Item")), Reasons.PLAYER_FORCE_CANCEL);
-                                plugin.getServer().getPluginManager().callEvent(event);
+                                event.callEvent();
 
                                 int num = 1;
                                 while (data.contains("OutOfTime/Cancelled." + num)) num++;

@@ -398,7 +398,7 @@ public class AuctionCommand implements CommandExecutor {
 
                     Files.data.save();
 
-                    this.plugin.getServer().getPluginManager().callEvent(new AuctionListEvent(player, type, stack, price));
+                    new AuctionListEvent(player, type, stack, price).callEvent();
 
                     Map<String, String> placeholders = new HashMap<>();
                     placeholders.put("%Price%", String.valueOf(price));
@@ -450,7 +450,7 @@ public class AuctionCommand implements CommandExecutor {
             }
 
             AuctionCancelledEvent event = new AuctionCancelledEvent((sellerPlayer != null ? sellerPlayer : Methods.getOfflinePlayer(seller)), Methods.fromBase64(data.getString("Items." + i + ".Item")), Reasons.ADMIN_FORCE_CANCEL);
-            plugin.getServer().getPluginManager().callEvent(event);
+            event.callEvent();
 
             data.set("OutOfTime/Cancelled." + num + ".Seller", data.getString("Items." + i + ".Seller"));
             data.set("OutOfTime/Cancelled." + num + ".Full-Time", data.getLong("Items." + i + ".Full-Time"));

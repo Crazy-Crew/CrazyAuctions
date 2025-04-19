@@ -297,7 +297,7 @@ public class Methods {
                         if (isOnline(winner) && getPlayer(winner) != null) {
                             Player player = getPlayer(winner);
 
-                            plugin.getServer().getPluginManager().callEvent(new AuctionWinBidEvent(player, Methods.fromBase64(data.getString("Items." + i + ".Item")), price));
+                            new AuctionWinBidEvent(player, Methods.fromBase64(data.getString("Items." + i + ".Item")), price).callEvent();
 
                             if (player != null) {
                                 player.sendMessage(Messages.WIN_BIDDING.getMessage(player, placeholders));
@@ -325,7 +325,7 @@ public class Methods {
                         }
 
                         AuctionExpireEvent event = new AuctionExpireEvent(player, Methods.fromBase64(data.getString("Items." + i + ".Item")));
-                        plugin.getServer().getPluginManager().callEvent(event);
+                        event.callEvent();
 
                         data.set("OutOfTime/Cancelled." + num + ".Seller", data.getString("Items." + i + ".Seller"));
                         data.set("OutOfTime/Cancelled." + num + ".Full-Time", fullExpireTime.getTimeInMillis());
