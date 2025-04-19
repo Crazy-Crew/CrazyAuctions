@@ -202,34 +202,34 @@ public class GuiListener implements Listener {
 
         Inventory inv = new AuctionMenu(54, Methods.color(config.getString("Settings.Categories"))).getInventory();
 
-        List<String> options = new ArrayList<>();
+        List<String> options = new ArrayList<>(){{
+            add("OtherSettings.Back");
+            add("OtherSettings.WhatIsThis.Categories");
+            add("Category-Settings.Armor");
+            add("Category-Settings.Weapons");
+            add("Category-Settings.Tools");
+            add("Category-Settings.Food");
+            add("Category-Settings.Potions");
+            add("Category-Settings.Blocks");
+            add("Category-Settings.Other");
+            add("Category-Settings.None");
+        }};
 
-        options.add("OtherSettings.Back");
-        options.add("OtherSettings.WhatIsThis.Categories");
-        options.add("Category-Settings.Armor");
-        options.add("Category-Settings.Weapons");
-        options.add("Category-Settings.Tools");
-        options.add("Category-Settings.Food");
-        options.add("Category-Settings.Potions");
-        options.add("Category-Settings.Blocks");
-        options.add("Category-Settings.Other");
-        options.add("Category-Settings.None");
-
-        for (String o : options) {
-            if (config.contains("Settings.GUISettings." + o + ".Toggle")) {
-                if (!config.getBoolean("Settings.GUISettings." + o + ".Toggle")) {
+        for (String option : options) {
+            if (config.contains("Settings.GUISettings." + option + ".Toggle")) {
+                if (!config.getBoolean("Settings.GUISettings." + option + ".Toggle")) {
                     continue;
                 }
             }
 
-            String id = config.getString("Settings.GUISettings." + o + ".Item");
-            String name = config.getString("Settings.GUISettings." + o + ".Name");
-            int slot = config.getInt("Settings.GUISettings." + o + ".Slot");
+            String id = config.getString("Settings.GUISettings." + option + ".Item");
+            String name = config.getString("Settings.GUISettings." + option + ".Name");
+            int slot = config.getInt("Settings.GUISettings." + option + ".Slot");
 
             ItemBuilder itemBuilder = new ItemBuilder().setMaterial(id).setName(name).setAmount(1);
 
-            if (config.contains("Settings.GUISettings." + o + ".Lore")) {
-                itemBuilder.setLore(config.getStringList("Settings.GUISettings." + o + ".Lore"));
+            if (config.contains("Settings.GUISettings." + option + ".Lore")) {
+                itemBuilder.setLore(config.getStringList("Settings.GUISettings." + option + ".Lore"));
             }
 
             inv.setItem(slot - 1, itemBuilder.build());
