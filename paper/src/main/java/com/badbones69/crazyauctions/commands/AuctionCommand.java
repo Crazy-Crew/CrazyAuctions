@@ -351,7 +351,8 @@ public class AuctionCommand implements CommandExecutor {
 
                     int num = 1;
 
-                    for (; data.contains("Items." + num); num++) ;
+                    while (data.contains("Items." + num)) num++;
+
                     data.set("Items." + num + ".Price", price);
                     data.set("Items." + num + ".Seller", seller);
                     data.set("Items." + num + ".SellerName", player.getName());
