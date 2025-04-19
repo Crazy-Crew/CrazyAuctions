@@ -127,15 +127,16 @@ public class GuiListener implements Listener {
         page = Math.min(Methods.getMaxPage(items), page);
 
         Inventory inv = new AuctionMenu(54, Methods.color(config.getString("Settings.GUIName") + " #" + page), page).getInventory();
-        List<String> options = new ArrayList<>();
 
-        options.add("SellingItems");
-        options.add("Cancelled/ExpiredItems");
-        options.add("PreviousPage");
-        options.add("Refresh");
-        options.add("NextPage");
-        options.add("Category1");
-        options.add("Category2");
+        List<String> options = new ArrayList<>(){{
+            add("SellingItems");
+            add("Cancelled/ExpiredItems");
+            add("PreviousPage");
+            add("Refresh");
+            add("NextPage");
+            add("Category1");
+            add("Category2");
+        }};
 
         if (sell == ShopType.SELL) {
             shopType.put(player.getUniqueId(), ShopType.SELL);
@@ -157,24 +158,24 @@ public class GuiListener implements Listener {
             options.add("WhatIsThis.BiddingShop");
         }
 
-        for (String o : options) {
-            if (config.contains("Settings.GUISettings.OtherSettings." + o + ".Toggle")) {
-                if (!config.getBoolean("Settings.GUISettings.OtherSettings." + o + ".Toggle")) {
+        for (String option : options) {
+            if (config.contains("Settings.GUISettings.OtherSettings." + option + ".Toggle")) {
+                if (!config.getBoolean("Settings.GUISettings.OtherSettings." + option + ".Toggle")) {
                     continue;
                 }
             }
 
-            String id = config.getString("Settings.GUISettings.OtherSettings." + o + ".Item");
-            String name = config.getString("Settings.GUISettings.OtherSettings." + o + ".Name");
-            int slot = config.getInt("Settings.GUISettings.OtherSettings." + o + ".Slot");
+            String id = config.getString("Settings.GUISettings.OtherSettings." + option + ".Item");
+            String name = config.getString("Settings.GUISettings.OtherSettings." + option + ".Name");
+            int slot = config.getInt("Settings.GUISettings.OtherSettings." + option + ".Slot");
             String cName = Methods.color(config.getString("Settings.GUISettings.Category-Settings." + shopCategory.get(player.getUniqueId()).getName() + ".Name"));
 
             ItemBuilder itemBuilder = new ItemBuilder().setMaterial(id).setName(name).setAmount(1);
 
             List<String> lore = new ArrayList<>(itemBuilder.getUpdatedLore());
 
-            if (config.contains("Settings.GUISettings.OtherSettings." + o + ".Lore")) {
-                for (String l : config.getStringList("Settings.GUISettings.OtherSettings." + o + ".Lore")) {
+            if (config.contains("Settings.GUISettings.OtherSettings." + option + ".Lore")) {
+                for (String l : config.getStringList("Settings.GUISettings.OtherSettings." + option + ".Lore")) {
                     lore.add(l.replace("%Category%", cName).replace("%category%", cName));
                 }
 
