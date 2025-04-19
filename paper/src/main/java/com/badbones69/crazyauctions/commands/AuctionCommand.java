@@ -324,15 +324,11 @@ public class AuctionCommand implements CommandExecutor {
                     }
 
                     if (!config.getBoolean("Settings.Allow-Damaged-Items", false)) {
-                        for (Material i : getDamageableItems()) {
-                            if (item.getType() == i) {
-                                if (item instanceof Damageable damageable) {
-                                    if (damageable.getDamage() > 0) {
-                                        player.sendMessage(Messages.ITEM_DAMAGED.getMessage(sender));
+                        if (item instanceof Damageable damageable) {
+                            if (damageable.getDamage() > 0) {
+                                player.sendMessage(Messages.ITEM_DAMAGED.getMessage(sender));
 
-                                        return true;
-                                    }
-                                }
+                                return true;
                             }
                         }
                     }
@@ -432,64 +428,6 @@ public class AuctionCommand implements CommandExecutor {
         }
 
         return true;
-    }
-
-    private ArrayList<Material> getDamageableItems() {
-        ArrayList<Material> materials = new ArrayList<>();
-
-        materials.add(Material.GOLDEN_HELMET);
-        materials.add(Material.GOLDEN_CHESTPLATE);
-        materials.add(Material.GOLDEN_LEGGINGS);
-        materials.add(Material.GOLDEN_BOOTS);
-        materials.add(Material.GOLDEN_HOE);
-        materials.add(Material.WOODEN_SWORD);
-        materials.add(Material.WOODEN_PICKAXE);
-        materials.add(Material.WOODEN_AXE);
-        materials.add(Material.WOODEN_SHOVEL);
-        materials.add(Material.WOODEN_HOE);
-        materials.add(Material.STONE_SHOVEL);
-        materials.add(Material.IRON_SHOVEL);
-        materials.add(Material.DIAMOND_SHOVEL);
-        materials.add(Material.CROSSBOW);
-        materials.add(Material.TRIDENT);
-        materials.add(Material.TURTLE_HELMET);
-        materials.add(Material.DIAMOND_HELMET);
-        materials.add(Material.DIAMOND_CHESTPLATE);
-        materials.add(Material.DIAMOND_LEGGINGS);
-        materials.add(Material.DIAMOND_BOOTS);
-        materials.add(Material.CHAINMAIL_HELMET);
-        materials.add(Material.CHAINMAIL_CHESTPLATE);
-        materials.add(Material.CHAINMAIL_LEGGINGS);
-        materials.add(Material.CHAINMAIL_BOOTS);
-        materials.add(Material.IRON_HELMET);
-        materials.add(Material.IRON_CHESTPLATE);
-        materials.add(Material.IRON_LEGGINGS);
-        materials.add(Material.IRON_BOOTS);
-        materials.add(Material.LEATHER_HELMET);
-        materials.add(Material.LEATHER_CHESTPLATE);
-        materials.add(Material.LEATHER_LEGGINGS);
-        materials.add(Material.LEATHER_BOOTS);
-        materials.add(Material.BOW);
-        materials.add(Material.STONE_SWORD);
-        materials.add(Material.IRON_SWORD);
-        materials.add(Material.DIAMOND_SWORD);
-        materials.add(Material.STONE_AXE);
-        materials.add(Material.IRON_AXE);
-        materials.add(Material.DIAMOND_AXE);
-        materials.add(Material.STONE_PICKAXE);
-        materials.add(Material.IRON_PICKAXE);
-        materials.add(Material.DIAMOND_PICKAXE);
-        materials.add(Material.STONE_AXE);
-        materials.add(Material.IRON_AXE);
-        materials.add(Material.DIAMOND_AXE);
-        materials.add(Material.STONE_HOE);
-        materials.add(Material.IRON_HOE);
-        materials.add(Material.DIAMOND_HOE);
-        materials.add(Material.FLINT_AND_STEEL);
-        materials.add(Material.ANVIL);
-        materials.add(Material.FISHING_ROD);
-
-        return materials;
     }
 
     /**
