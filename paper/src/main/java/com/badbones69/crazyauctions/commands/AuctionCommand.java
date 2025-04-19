@@ -19,6 +19,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.jetbrains.annotations.NotNull;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -338,7 +339,7 @@ public class AuctionCommand implements CommandExecutor {
                     if (vaultSupport.getMoney(player) >= listCost) {
                         vaultSupport.removeMoney(player, listCost);
                     } else {
-                        Map<String, String> placeholders = new HashMap<>(){{
+                        Map<String, String> placeholders = new HashMap<>() {{
                             put("%Money_Needed%", String.valueOf(listCost));
                             put("%money_needed%", String.valueOf(listCost));
                         }};
@@ -364,15 +365,18 @@ public class AuctionCommand implements CommandExecutor {
                     }
 
                     data.set("Items." + num + ".Full-Time", Methods.convertToMill(config.getString("Settings.Full-Expire-Time", "10d")));
-                    int id = ThreadLocalRandom.current().nextInt(999999);
+                    int id = ThreadLocalRandom.current().nextInt(Integer.MAX_VALUE);
 
                     // Runs 3x to check for same ID.
                     for (String i : data.getConfigurationSection("Items").getKeys(false))
-                        if (data.getInt("Items." + i + ".StoreID") == id) id = ThreadLocalRandom.current().nextInt(Integer.MAX_VALUE);
+                        if (data.getInt("Items." + i + ".StoreID") == id)
+                            id = ThreadLocalRandom.current().nextInt(Integer.MAX_VALUE);
                     for (String i : data.getConfigurationSection("Items").getKeys(false))
-                        if (data.getInt("Items." + i + ".StoreID") == id) id = ThreadLocalRandom.current().nextInt(Integer.MAX_VALUE);
+                        if (data.getInt("Items." + i + ".StoreID") == id)
+                            id = ThreadLocalRandom.current().nextInt(Integer.MAX_VALUE);
                     for (String i : data.getConfigurationSection("Items").getKeys(false))
-                        if (data.getInt("Items." + i + ".StoreID") == id) id = ThreadLocalRandom.current().nextInt(Integer.MAX_VALUE);
+                        if (data.getInt("Items." + i + ".StoreID") == id)
+                            id = ThreadLocalRandom.current().nextInt(Integer.MAX_VALUE);
 
                     data.set("Items." + num + ".StoreID", id);
                     ShopType type = ShopType.SELL;
@@ -426,6 +430,7 @@ public class AuctionCommand implements CommandExecutor {
 
     /**
      * Force ends all current listed items from the auction house.
+     *
      * @param player The {@link Player} that initiated the cancellation.
      * @see AuctionCancelledEvent
      */
