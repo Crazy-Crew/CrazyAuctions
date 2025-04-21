@@ -33,6 +33,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
+import java.util.Objects;
 
 public class GuiListener implements Listener {
 
@@ -278,7 +279,7 @@ public class GuiListener implements Listener {
 
         if (data.contains("Items")) {
             for (String i : data.getConfigurationSection("Items").getKeys(false)) {
-                if (data.getString("Items." + i + ".Seller").equals(player.getUniqueId().toString())) {
+                if (Objects.equals(data.getString("Items." + i + ".Seller"), player.getUniqueId().toString())) {
 
                     String price = Methods.getPrice(i, false);
                     String time = Methods.convertToTime(data.getLong("Items." + i + ".Time-Till-Expire"));
@@ -327,7 +328,7 @@ public class GuiListener implements Listener {
         if (data.contains("OutOfTime/Cancelled")) {
             for (String i : data.getConfigurationSection("OutOfTime/Cancelled").getKeys(false)) {
                 if (data.getString("OutOfTime/Cancelled." + i + ".Seller") != null) {
-                    if (data.getString("OutOfTime/Cancelled." + i + ".Seller").equals(player.getUniqueId().toString())) {
+                    if (Objects.equals(data.getString("OutOfTime/Cancelled." + i + ".Seller"), player.getUniqueId().toString())) {
                         String price = Methods.getPrice(i, true);
                         String time = Methods.convertToTime(data.getLong("OutOfTime/Cancelled." + i + ".Full-Time"));
 
@@ -534,7 +535,7 @@ public class GuiListener implements Listener {
 
         if (data.contains("Items")) {
             for (String i : data.getConfigurationSection("Items").getKeys(false)) {
-                if (data.getString("Items." + i + ".Seller").equalsIgnoreCase(other)) {
+                if (Objects.equals(data.getString("Items." + i + ".Seller"), other)) {
                     String price = Methods.getPrice(i, false);
                     String time = Methods.convertToTime(data.getLong("Items." + i + ".Time-Till-Expire"));
 
@@ -1008,7 +1009,7 @@ public class GuiListener implements Listener {
                                     }
                                 }
 
-                                if (data.getString("Items." + i + ".Seller").equalsIgnoreCase(player.getUniqueId().toString())) {
+                                if (Objects.equals(data.getString("Items." + i + ".Seller"), player.getUniqueId().toString())) {
                                     String itemName = config.getString("Settings.GUISettings.OtherSettings.Your-Item.Item");
                                     String name = config.getString("Settings.GUISettings.OtherSettings.Your-Item.Name");
 
