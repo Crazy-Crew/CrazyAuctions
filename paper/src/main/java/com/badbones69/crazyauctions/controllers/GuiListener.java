@@ -691,33 +691,33 @@ public class GuiListener implements Listener {
     }
 
     @EventHandler
-    public void onInvClose(InventoryCloseEvent e) {
-        if (!(e.getInventory().getHolder() instanceof  AuctionMenu auctionMenu)) return;
+    public void onInvClose(InventoryCloseEvent event) {
+        if (!(event.getInventory().getHolder() instanceof  AuctionMenu auctionMenu)) return;
         FileConfiguration config = Files.config.getConfiguration();
 
-        Player player = (Player) e.getPlayer();
+        Player player = (Player) event.getPlayer();
 
         if (auctionMenu.getTitle().contains(Methods.color(config.getString("Settings.Bidding-On-Item")))) bidding.remove(player);
     }
 
     @EventHandler
-    public void onInvClick(InventoryClickEvent e) {
-        if (!(e.getInventory().getHolder() instanceof  AuctionMenu auctionMenu)) return;
-        e.setCancelled(true);
+    public void onInvClick(InventoryClickEvent clickEvent) {
+        if (!(clickEvent.getInventory().getHolder() instanceof  AuctionMenu auctionMenu)) return;
+        clickEvent.setCancelled(true);
 
         FileConfiguration config = Files.config.getConfiguration();
         FileConfiguration data = Files.data.getConfiguration();
 
-        Player player = (Player) e.getWhoClicked();
-        final Inventory inv = e.getClickedInventory();
+        Player player = (Player) clickEvent.getWhoClicked();
+        final Inventory inv = clickEvent.getClickedInventory();
 
-        int slot = e.getRawSlot();
+        int slot = clickEvent.getRawSlot();
 
         if (inv == null) return;
 
         if (slot > inv.getSize()) return;
 
-        ItemStack item = e.getCurrentItem();
+        ItemStack item = clickEvent.getCurrentItem();
 
         if (item == null) return;
         
@@ -951,7 +951,7 @@ public class GuiListener implements Listener {
 
                             if (id == ID) {
                                 if (player.hasPermission("crazyauctions.admin") || player.hasPermission("crazyauctions.force-end")) {
-                                    if (e.getAction() == InventoryAction.MOVE_TO_OTHER_INVENTORY) {
+                                    if (clickEvent.getAction() == InventoryAction.MOVE_TO_OTHER_INVENTORY) {
                                         int num = 1;
                                         for (; data.contains("OutOfTime/Cancelled." + num); num++) ;
 
