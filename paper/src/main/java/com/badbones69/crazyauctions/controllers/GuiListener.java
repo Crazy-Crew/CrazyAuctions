@@ -257,25 +257,7 @@ public class GuiListener implements Listener {
             add("WhatIsThis.CurrentItems");
         }};
 
-        for (String option : options) {
-            if (config.contains("Settings.GUISettings.OtherSettings." + option + ".Toggle")) {
-                if (!config.getBoolean("Settings.GUISettings.OtherSettings." + option + ".Toggle")) {
-                    continue;
-                }
-            }
-
-            String id = config.getString("Settings.GUISettings.OtherSettings." + option + ".Item");
-            String name = config.getString("Settings.GUISettings.OtherSettings." + option + ".Name");
-            int slot = config.getInt("Settings.GUISettings.OtherSettings." + option + ".Slot");
-
-            ItemBuilder itemBuilder = new ItemBuilder().setMaterial(id).setName(name).setAmount(1);
-
-            if (config.contains("Settings.GUISettings.OtherSettings." + option + ".Lore")) {
-                itemBuilder.setLore(config.getStringList("Settings.GUISettings.OtherSettings." + option + ".Lore"));
-            }
-
-            inv.setItem(slot - 1, itemBuilder.build());
-        }
+        setOptions(options, config, inv);
 
         if (data.contains("Items")) {
             for (String i : data.getConfigurationSection("Items").getKeys(false)) {
@@ -365,25 +347,7 @@ public class GuiListener implements Listener {
             add("WhatIsThis.Cancelled/ExpiredItems");
         }};
 
-        for (String option : options) {
-            if (config.contains("Settings.GUISettings.OtherSettings." + option + ".Toggle")) {
-                if (!config.getBoolean("Settings.GUISettings.OtherSettings." + option + ".Toggle")) {
-                    continue;
-                }
-            }
-
-            String id = config.getString("Settings.GUISettings.OtherSettings." + option + ".Item");
-            String name = config.getString("Settings.GUISettings.OtherSettings." + option + ".Name");
-            int slot = config.getInt("Settings.GUISettings.OtherSettings." + option + ".Slot");
-
-            ItemBuilder itemBuilder = new ItemBuilder().setMaterial(id).setName(name).setAmount(1);
-
-            if (config.contains("Settings.GUISettings.OtherSettings." + option + ".Lore")) {
-                itemBuilder.setLore(config.getStringList("Settings.GUISettings.OtherSettings." + option + ".Lore"));
-            }
-
-            inv.setItem(slot - 1, itemBuilder.build());
-        }
+        setOptions(options, config, inv);
 
         for (ItemStack item : Methods.getPage(items, page)) {
             int slot = inv.firstEmpty();
@@ -600,6 +564,20 @@ public class GuiListener implements Listener {
 
         options.add("WhatIsThis.Viewing");
 
+        setOptions(options, config, inv);
+
+        for (ItemStack item : Methods.getPage(items, page)) {
+            int slot = inv.firstEmpty();
+
+            inv.setItem(slot, item);
+        }
+
+        List.put(player.getUniqueId(), new ArrayList<>(Methods.getPageInts(ID, page)));
+
+        player.openInventory(inv);
+    }
+
+    private static void setOptions(List<String> options, FileConfiguration config, Inventory inv) {
         for (String option : options) {
             if (config.contains("Settings.GUISettings.OtherSettings." + option + ".Toggle")) {
                 if (!config.getBoolean("Settings.GUISettings.OtherSettings." + option + ".Toggle")) {
@@ -619,16 +597,6 @@ public class GuiListener implements Listener {
 
             inv.setItem(slot - 1, itemBuilder.build());
         }
-
-        for (ItemStack item : Methods.getPage(items, page)) {
-            int slot = inv.firstEmpty();
-
-            inv.setItem(slot, item);
-        }
-
-        List.put(player.getUniqueId(), new ArrayList<>(Methods.getPageInts(ID, page)));
-
-        player.openInventory(inv);
     }
 
     private static ItemStack getBiddingGlass(Player player, String ID) {
