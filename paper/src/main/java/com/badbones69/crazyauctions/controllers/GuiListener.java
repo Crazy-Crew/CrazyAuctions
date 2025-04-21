@@ -251,10 +251,10 @@ public class GuiListener implements Listener {
 
         Inventory inv = new AuctionMenu(54, Methods.color(config.getString("Settings.Players-Current-Items"))).getInventory();
 
-        List<String> options = new ArrayList<>();
-
-        options.add("Back");
-        options.add("WhatIsThis.CurrentItems");
+        List<String> options = new ArrayList<>(){{
+            add("Back");
+            add("WhatIsThis.CurrentItems");
+        }};
 
         for (String o : options) {
             if (config.contains("Settings.GUISettings.OtherSettings." + o + ".Toggle")) {
