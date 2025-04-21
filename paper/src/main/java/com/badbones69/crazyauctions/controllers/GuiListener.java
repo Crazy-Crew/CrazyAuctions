@@ -26,7 +26,10 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.Registry;
+import org.bukkit.NamespacedKey;
 import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -61,11 +64,7 @@ public class GuiListener implements Listener {
             Files.data.save();
         }
 
-        if (cat != null) {
-            shopCategory.put(player.getUniqueId(), cat);
-        } else {
-            shopCategory.put(player.getUniqueId(), Category.NONE);
-        }
+        shopCategory.put(player.getUniqueId(), cat);
 
         if (data.contains("Items")) {
             for (String i : data.getConfigurationSection("Items").getKeys(false)) {
@@ -674,20 +673,26 @@ public class GuiListener implements Listener {
         FileConfiguration config = Files.config.getConfiguration();
 
         if (config.getBoolean("Settings.Sounds.Toggle", false)) {
-            String sound = config.getString("Settings.Sounds.Sound", "UI_BUTTON_CLICK");
+            String sound = config.getString("Settings.Sounds.Sound", "");
 
-            player.playSound(player.getLocation(), Sound.valueOf(sound), 1, 1);
+            Sound soundToPlay = Registry.SOUNDS.get(NamespacedKey.minecraft(sound));
+
+            if (soundToPlay == null) return;
+
+            player.playSound(player.getLocation(), soundToPlay, 1, 1);
         }
     }
 
     private void playSoldSound(@NotNull Player player) {
         FileConfiguration config = Files.config.getConfiguration();
 
-        String sound = config.getString("Settings.Sold-Item-Sound", "UI_BUTTON_CLICK");
+        String sound = config.getString("Settings.Sold-Item-Sound", "");
 
-        if (sound.isEmpty()) return;
+        Sound soundToPlay = Registry.SOUNDS.get(NamespacedKey.minecraft(sound));
 
-        player.playSound(player.getLocation(), Sound.valueOf(sound), 1, 1);
+        if (soundToPlay == null) return;
+
+        player.playSound(player.getLocation(), soundToPlay, 1, 1);
     }
 
     @EventHandler
