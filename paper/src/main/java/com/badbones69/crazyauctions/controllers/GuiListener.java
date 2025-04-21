@@ -26,6 +26,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -726,8 +727,11 @@ public class GuiListener implements Listener {
         if (auctionMenu.getTitle().contains(config.getString("Settings.Categories"))) {
 
             if (item.getItemMeta().hasDisplayName()) {
+
+                String displayName = item.getItemMeta().getDisplayName();
+
                 for (Category cat : Category.values()) {
-                    if (item.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.GUISettings.Category-Settings." + cat.getName() + ".Name")))) {
+                    if (displayName.equals(Methods.color(config.getString("Settings.GUISettings.Category-Settings." + cat.getName() + ".Name")))) {
                         openShop(player, shopType.get(player.getUniqueId()), cat, 1);
 
                         playClick(player);
@@ -735,7 +739,7 @@ public class GuiListener implements Listener {
                         return;
                     }
 
-                    if (item.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.Back.Name")))) {
+                    if (displayName.equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.Back.Name")))) {
                         openShop(player, shopType.get(player.getUniqueId()), shopCategory.get(player.getUniqueId()), 1);
 
                         playClick(player);
@@ -749,7 +753,10 @@ public class GuiListener implements Listener {
         if (auctionMenu.getTitle().contains(config.getString("Settings.Bidding-On-Item"))) {
 
             if (item.getItemMeta().hasDisplayName()) {
-                if (item.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.Bid.Name")))) {
+
+                String displayName = item.getItemMeta().getDisplayName();
+
+                if (displayName.equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.Bid.Name")))) {
                     String ID = biddingID.get(player.getUniqueId());
                     int bid = bidding.get(player.getUniqueId());
                     String topBidder = data.getString("Items." + ID + ".TopBidder");
@@ -807,7 +814,7 @@ public class GuiListener implements Listener {
                 priceEdits.put("&c-1000", -1000);
 
                 for (String price : priceEdits.keySet()) {
-                    if (item.getItemMeta().getDisplayName().equals(Methods.color(price))) {
+                    if (displayName.equals(Methods.color(price))) {
                         try {
                             bidding.put(player.getUniqueId(), (bidding.get(player.getUniqueId()) + priceEdits.get(price)));
 
@@ -833,7 +840,10 @@ public class GuiListener implements Listener {
         if (auctionMenu.getTitle().contains(config.getString("Settings.GUIName"))) {
 
             if (item.getItemMeta().hasDisplayName()) {
-                if (item.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.NextPage.Name")))) {
+
+                String displayName = item.getItemMeta().getDisplayName();
+
+                if (displayName.equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.NextPage.Name")))) {
                     Methods.updateAuction();
 
                     int page = auctionMenu.getPage();
@@ -845,7 +855,7 @@ public class GuiListener implements Listener {
                     return;
                 }
 
-                if (item.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.PreviousPage.Name")))) {
+                if (displayName.equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.PreviousPage.Name")))) {
                     Methods.updateAuction();
 
                     int page = auctionMenu.getPage();
@@ -859,7 +869,7 @@ public class GuiListener implements Listener {
                     return;
                 }
 
-                if (item.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.Refresh.Name")))) {
+                if (displayName.equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.Refresh.Name")))) {
                     Methods.updateAuction();
 
                     int page = auctionMenu.getPage();
@@ -871,7 +881,7 @@ public class GuiListener implements Listener {
                     return;
                 }
 
-                if (item.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.Bidding/Selling.Selling.Name")))) {
+                if (displayName.equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.Bidding/Selling.Selling.Name")))) {
                     openShop(player, ShopType.BID, shopCategory.get(player.getUniqueId()), 1);
 
                     playClick(player);
@@ -879,7 +889,7 @@ public class GuiListener implements Listener {
                     return;
                 }
 
-                if (item.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.Bidding/Selling.Bidding.Name")))) {
+                if (displayName.equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.Bidding/Selling.Bidding.Name")))) {
                     openShop(player, ShopType.SELL, shopCategory.get(player.getUniqueId()), 1);
 
                     playClick(player);
@@ -887,7 +897,7 @@ public class GuiListener implements Listener {
                     return;
                 }
 
-                if (item.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.Cancelled/ExpiredItems.Name")))) {
+                if (displayName.equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.Cancelled/ExpiredItems.Name")))) {
                     openPlayersExpiredList(player, 1);
 
                     playClick(player);
@@ -895,7 +905,7 @@ public class GuiListener implements Listener {
                     return;
                 }
 
-                if (item.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.SellingItems.Name")))) {
+                if (displayName.equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.SellingItems.Name")))) {
                     openPlayersCurrentList(player, 1);
 
                     playClick(player);
@@ -903,7 +913,7 @@ public class GuiListener implements Listener {
                     return;
                 }
 
-                if (item.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.Category1.Name")))) {
+                if (displayName.equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.Category1.Name")))) {
                     openCategories(player, shopType.get(player.getUniqueId()));
 
                     playClick(player);
@@ -911,7 +921,7 @@ public class GuiListener implements Listener {
                     return;
                 }
 
-                if (item.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.Category2.Name")))) {
+                if (displayName.equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.Category2.Name")))) {
                     openCategories(player, shopType.get(player.getUniqueId()));
 
                     playClick(player);
@@ -919,15 +929,15 @@ public class GuiListener implements Listener {
                     return;
                 }
 
-                if (item.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.Your-Item.Name")))) {
+                if (displayName.equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.Your-Item.Name")))) {
                     return;
                 }
 
-                if (item.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.Cant-Afford.Name")))) {
+                if (displayName.equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.Cant-Afford.Name")))) {
                     return;
                 }
 
-                if (item.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.Top-Bidder.Name")))) {
+                if (displayName.equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.Top-Bidder.Name")))) {
                     return;
                 }
             }
@@ -1083,7 +1093,10 @@ public class GuiListener implements Listener {
         if (auctionMenu.getTitle().contains(config.getString("Settings.Buying-Item"))) {
 
             if (item.getItemMeta().hasDisplayName()) {
-                if (item.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.Confirm.Name")))) {
+
+                String displayName = item.getItemMeta().getDisplayName();
+
+                if (displayName.equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.Confirm.Name")))) {
                     String ID = IDs.get(player.getUniqueId());
                     long cost = data.getLong("Items." + ID + ".Price");
                     String seller = data.getString("Items." + ID + ".Seller");
@@ -1172,7 +1185,7 @@ public class GuiListener implements Listener {
                     return;
                 }
 
-                if (item.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.Cancel.Name")))) {
+                if (displayName.equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.Cancel.Name")))) {
                     openShop(player, shopType.get(player.getUniqueId()), shopCategory.get(player.getUniqueId()), 1);
 
                     playClick(player);
@@ -1242,7 +1255,10 @@ public class GuiListener implements Listener {
         if (auctionMenu.getTitle().contains(config.getString("Settings.Cancelled/Expired-Items"))) {
 
             if (item.getItemMeta().hasDisplayName()) {
-                if (item.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.Back.Name")))) {
+
+                String displayName = item.getItemMeta().getDisplayName();
+
+                if (displayName.equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.Back.Name")))) {
                     Methods.updateAuction();
 
                     playClick(player);
@@ -1252,7 +1268,7 @@ public class GuiListener implements Listener {
                     return;
                 }
 
-                if (item.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.PreviousPage.Name")))) {
+                if (displayName.equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.PreviousPage.Name")))) {
                     Methods.updateAuction();
 
                     int page = auctionMenu.getPage();
@@ -1266,7 +1282,7 @@ public class GuiListener implements Listener {
                     return;
                 }
 
-                if (item.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.Return.Name")))) {
+                if (displayName.equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.Return.Name")))) {
                     Methods.updateAuction();
 
                     int page = auctionMenu.getPage();
@@ -1298,7 +1314,7 @@ public class GuiListener implements Listener {
                     return;
                 }
 
-                if (item.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.NextPage.Name")))) {
+                if (displayName.equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.NextPage.Name")))) {
                     Methods.updateAuction();
 
                     int page = auctionMenu.getPage();
