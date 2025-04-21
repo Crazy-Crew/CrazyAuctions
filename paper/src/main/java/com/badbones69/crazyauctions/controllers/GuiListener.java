@@ -945,7 +945,6 @@ public class GuiListener implements Listener {
             if (List.containsKey(player.getUniqueId())) {
                 if (List.get(player.getUniqueId()).size() >= slot) {
                     int id = List.get(player.getUniqueId()).get(slot);
-                    boolean T = false;
 
                     if (data.contains("Items")) {
                         for (String i : data.getConfigurationSection("Items").getKeys(false)) {
@@ -1077,15 +1076,13 @@ public class GuiListener implements Listener {
                         }
                     }
 
-                    if (!T) {
-                        playClick(player);
+                    playClick(player);
 
-                        openShop(player, shopType.get(player.getUniqueId()), shopCategory.get(player.getUniqueId()), 1);
+                    openShop(player, shopType.get(player.getUniqueId()), shopCategory.get(player.getUniqueId()), 1);
 
-                        player.sendMessage(Messages.ITEM_DOESNT_EXIST.getMessage(player));
+                    player.sendMessage(Messages.ITEM_DOESNT_EXIST.getMessage(player));
 
-                        return;
-                    }
+                    return;
                 }
             }
         }
