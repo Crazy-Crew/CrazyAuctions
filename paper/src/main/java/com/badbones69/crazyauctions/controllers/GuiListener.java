@@ -356,12 +356,13 @@ public class GuiListener implements Listener {
 
         Inventory inv = new AuctionMenu(54, Methods.color(config.getString("Settings.Cancelled/Expired-Items") + " #" + page), page).getInventory();
 
-        List<String> options = new ArrayList<>();
-        options.add("Back");
-        options.add("PreviousPage");
-        options.add("Return");
-        options.add("NextPage");
-        options.add("WhatIsThis.Cancelled/ExpiredItems");
+        List<String> options = new ArrayList<>(){{
+            add("Back");
+            add("PreviousPage");
+            add("Return");
+            add("NextPage");
+            add("WhatIsThis.Cancelled/ExpiredItems");
+        }};
 
         for (String o : options) {
             if (config.contains("Settings.GUISettings.OtherSettings." + o + ".Toggle")) {
@@ -412,10 +413,10 @@ public class GuiListener implements Listener {
 
         Inventory inv = new AuctionMenu(9, Methods.color(config.getString("Settings.Buying-Item"))).getInventory();
 
-        List<String> options = new ArrayList<>();
-
-        options.add("Confirm");
-        options.add("Cancel");
+        List<String> options = new ArrayList<>(){{
+            add("Confirm");
+            add("Cancel");
+        }};
 
         for (String o : options) {
             String id = config.getString("Settings.GUISettings.OtherSettings." + o + ".Item");
