@@ -26,7 +26,6 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -48,7 +47,7 @@ public class GuiListener implements Listener {
     private static final Map<UUID, List<Integer>> List = new HashMap<>();
     private static final Map<UUID, String> IDs = new HashMap<>();
 
-    public static void openShop(Player player, ShopType sell, Category cat, int page) {
+    public static void openShop(@NotNull Player player, @NotNull ShopType sell, @NotNull Category cat, int page) {
         Methods.updateAuction();
 
         FileConfiguration config = Files.config.getConfiguration();
@@ -199,7 +198,7 @@ public class GuiListener implements Listener {
         player.openInventory(inv);
     }
 
-    public static void openCategories(Player player, ShopType shop) {
+    public static void openCategories(@NotNull Player player, @NotNull ShopType shop) {
         Methods.updateAuction();
         FileConfiguration config = Files.config.getConfiguration();
 
@@ -242,7 +241,7 @@ public class GuiListener implements Listener {
         player.openInventory(inv);
     }
 
-    public static void openPlayersCurrentList(Player player, int page) {
+    public static void openPlayersCurrentList(@NotNull Player player, int page) {
         Methods.updateAuction();
 
         FileConfiguration config = Files.config.getConfiguration();
@@ -299,7 +298,7 @@ public class GuiListener implements Listener {
         player.openInventory(inv);
     }
 
-    public static void openPlayersExpiredList(Player player, int page) {
+    public static void openPlayersExpiredList(@NotNull Player player, int page) {
         Methods.updateAuction();
 
         FileConfiguration config = Files.config.getConfiguration();
@@ -363,7 +362,7 @@ public class GuiListener implements Listener {
         player.openInventory(inv);
     }
 
-    public static void openBuying(Player player, String ID) {
+    public static void openBuying(@NotNull Player player, @NotNull String ID) {
         Methods.updateAuction();
 
         FileConfiguration config = Files.config.getConfiguration();
@@ -445,7 +444,7 @@ public class GuiListener implements Listener {
         player.openInventory(inv);
     }
 
-    public static void openBidding(Player player, String ID) {
+    public static void openBidding(@NotNull Player player, @NotNull String ID) {
         Methods.updateAuction();
 
         FileConfiguration config = Files.config.getConfiguration();
@@ -481,7 +480,7 @@ public class GuiListener implements Listener {
         player.openInventory(inv);
     }
 
-    public static void openViewer(Player player, String other, int page) {
+    public static void openViewer(@NotNull Player player, @NotNull String other, int page) {
         Methods.updateAuction();
 
         FileConfiguration config = Files.config.getConfiguration();
@@ -578,7 +577,7 @@ public class GuiListener implements Listener {
         player.openInventory(inv);
     }
 
-    private static void setOptions(List<String> options, FileConfiguration config, Inventory inv) {
+    private static void setOptions(@NotNull List<String> options, @NotNull FileConfiguration config, @NotNull Inventory inv) {
         for (String option : options) {
             if (config.contains("Settings.GUISettings.OtherSettings." + option + ".Toggle")) {
                 if (!config.getBoolean("Settings.GUISettings.OtherSettings." + option + ".Toggle")) {
@@ -600,7 +599,7 @@ public class GuiListener implements Listener {
         }
     }
 
-    private static ItemStack getBiddingGlass(Player player, String ID) {
+    private static ItemStack getBiddingGlass(@NotNull Player player, @NotNull String ID) {
         FileConfiguration config = Files.config.getConfiguration();
 
         String id = config.getString("Settings.GUISettings.OtherSettings.Bidding.Item");
@@ -628,7 +627,7 @@ public class GuiListener implements Listener {
         return itemBuilder.build();
     }
 
-    private static ItemStack getBiddingItem(String ID) {
+    private static ItemStack getBiddingItem(@NotNull String ID) {
         FileConfiguration config = Files.config.getConfiguration();
         FileConfiguration data = Files.data.getConfiguration();
 
@@ -671,7 +670,7 @@ public class GuiListener implements Listener {
         return itemBuilder.build();
     }
 
-    private static void playClick(Player player) {
+    private static void playClick(@NotNull Player player) {
         FileConfiguration config = Files.config.getConfiguration();
 
         if (config.getBoolean("Settings.Sounds.Toggle", false)) {
