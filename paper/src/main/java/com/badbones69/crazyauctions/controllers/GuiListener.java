@@ -72,7 +72,7 @@ public class GuiListener implements Listener {
 
                 List<String> lore = new ArrayList<>(itemBuilder.getUpdatedLore());
 
-                if (itemBuilder != null && data.contains("Items." + i + ".Item") && (cat.getItems().contains(itemBuilder.getItemStack().getType()) || cat == Category.NONE)) {
+                if (data.contains("Items." + i + ".Item") && (cat.getItems().contains(itemBuilder.getItemStack().getType()) || cat == Category.NONE)) {
                     if (data.getBoolean("Items." + i + ".Biddable")) {
                         if (sell == ShopType.BID) {
                             String sellerName = data.getString("Items." + i + ".SellerName");
