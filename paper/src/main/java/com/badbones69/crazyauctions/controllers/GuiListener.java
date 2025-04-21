@@ -1027,7 +1027,7 @@ public class GuiListener implements Listener {
                                 }
 
                                 if (data.getBoolean("Items." + i + ".Biddable")) {
-                                    if (player.getUniqueId().toString().equalsIgnoreCase(data.getString("Items." + i + ".TopBidder"))) {
+                                    if (Objects.equals(player.getUniqueId().toString(), data.getString("Items." + i + ".TopBidder"))) {
                                         String itemName = config.getString("Settings.GUISettings.OtherSettings.Top-Bidder.Item");
                                         String name = config.getString("Settings.GUISettings.OtherSettings.Top-Bidder.Name");
 
@@ -1273,7 +1273,7 @@ public class GuiListener implements Listener {
 
                     if (data.contains("OutOfTime/Cancelled")) {
                         for (String i : data.getConfigurationSection("OutOfTime/Cancelled").getKeys(false)) {
-                            if (data.getString("OutOfTime/Cancelled." + i + ".Seller").equalsIgnoreCase(player.getUniqueId().toString())) {
+                            if (Objects.equals(data.getString("OutOfTime/Cancelled." + i + ".Seller"), player.getUniqueId().toString())) {
                                 if (Methods.isInvFull(player)) {
                                     player.sendMessage(Messages.INVENTORY_FULL.getMessage(player));
 
