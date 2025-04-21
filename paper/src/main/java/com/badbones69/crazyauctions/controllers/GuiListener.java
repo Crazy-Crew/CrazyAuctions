@@ -418,27 +418,27 @@ public class GuiListener implements Listener {
             add("Cancel");
         }};
 
-        for (String o : options) {
-            String id = config.getString("Settings.GUISettings.OtherSettings." + o + ".Item");
-            String name = config.getString("Settings.GUISettings.OtherSettings." + o + ".Name");
+        for (String option : options) {
+            String id = config.getString("Settings.GUISettings.OtherSettings." + option + ".Item");
+            String name = config.getString("Settings.GUISettings.OtherSettings." + option + ".Name");
             ItemStack item;
 
             ItemBuilder itemBuilder = new ItemBuilder().setMaterial(id).setName(name).setAmount(1);
 
-            if (config.contains("Settings.GUISettings.OtherSettings." + o + ".Lore")) {
-                itemBuilder.setLore(config.getStringList("Settings.GUISettings.OtherSettings." + o + ".Lore")).build();
+            if (config.contains("Settings.GUISettings.OtherSettings." + option + ".Lore")) {
+                itemBuilder.setLore(config.getStringList("Settings.GUISettings.OtherSettings." + option + ".Lore")).build();
             }
 
             item = itemBuilder.build();
 
-            if (o.equals("Confirm")) {
+            if (option.equals("Confirm")) {
                 inv.setItem(0, item);
                 inv.setItem(1, item);
                 inv.setItem(2, item);
                 inv.setItem(3, item);
             }
 
-            if (o.equals("Cancel")) {
+            if (option.equals("Cancel")) {
                 inv.setItem(5, item);
                 inv.setItem(6, item);
                 inv.setItem(7, item);
