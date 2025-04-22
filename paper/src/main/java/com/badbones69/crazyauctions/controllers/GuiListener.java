@@ -185,12 +185,16 @@ public class GuiListener implements Listener {
             }
         }
 
+        setPage(inv, page, items, ID, player);
+
+    }
+
+    private static void setPage(Inventory inv, int page, List<ItemStack> items, List<Integer> ID, Player player) {
         for (ItemStack item : Methods.getPage(items, page)) {
             int slot = inv.firstEmpty();
 
             inv.setItem(slot, item);
         }
-
         List<Integer> Id = new ArrayList<>(Methods.getPageInts(ID, page));
         List.put(player.getUniqueId(), Id);
 
@@ -285,16 +289,7 @@ public class GuiListener implements Listener {
             }
         }
 
-        for (ItemStack item : Methods.getPage(items, page)) {
-            int slot = inv.firstEmpty();
-            inv.setItem(slot, item);
-        }
-
-        List<Integer> Id = new ArrayList<>(Methods.getPageInts(ID, page));
-
-        List.put(player.getUniqueId(), Id);
-
-        player.openInventory(inv);
+        setPage(inv, page, items, ID, player);
     }
 
     public static void openPlayersExpiredList(@NotNull Player player, int page) {
@@ -348,17 +343,7 @@ public class GuiListener implements Listener {
 
         setOptions(options, config, inv);
 
-        for (ItemStack item : Methods.getPage(items, page)) {
-            int slot = inv.firstEmpty();
-
-            inv.setItem(slot, item);
-        }
-
-        List<Integer> Id = new ArrayList<>(Methods.getPageInts(ID, page));
-
-        List.put(player.getUniqueId(), Id);
-
-        player.openInventory(inv);
+        setPage(inv, page, items, ID, player);
     }
 
     public static void openBuying(@NotNull Player player, @NotNull String ID) {
@@ -565,15 +550,7 @@ public class GuiListener implements Listener {
 
         setOptions(options, config, inv);
 
-        for (ItemStack item : Methods.getPage(items, page)) {
-            int slot = inv.firstEmpty();
-
-            inv.setItem(slot, item);
-        }
-
-        List.put(player.getUniqueId(), new ArrayList<>(Methods.getPageInts(ID, page)));
-
-        player.openInventory(inv);
+        setPage(inv, page, items, ID, player);
     }
 
     private static void setOptions(@NotNull List<String> options, @NotNull FileConfiguration config, @NotNull Inventory inv) {
