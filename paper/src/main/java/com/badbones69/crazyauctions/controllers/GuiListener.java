@@ -822,12 +822,12 @@ public class GuiListener implements Listener {
 
             if (item.getItemMeta().hasDisplayName()) {
 
+                int page = auctionMenu.getPageNumber();
+
                 String displayName = item.getItemMeta().getDisplayName();
 
                 if (displayName.equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.NextPage.Name")))) {
                     Methods.updateAuction();
-
-                    int page = auctionMenu.getPageNumber();
 
                     openShop(player, shopType.get(player.getUniqueId()), shopCategory.get(player.getUniqueId()), page + 1);
 
@@ -838,8 +838,6 @@ public class GuiListener implements Listener {
 
                 if (displayName.equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.PreviousPage.Name")))) {
                     Methods.updateAuction();
-
-                    int page = auctionMenu.getPageNumber();
 
                     if (page == 1) page++;
 
@@ -852,8 +850,6 @@ public class GuiListener implements Listener {
 
                 if (displayName.equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.Refresh.Name")))) {
                     Methods.updateAuction();
-
-                    int page = auctionMenu.getPageNumber();
 
                     openShop(player, shopType.get(player.getUniqueId()), shopCategory.get(player.getUniqueId()), page);
 
