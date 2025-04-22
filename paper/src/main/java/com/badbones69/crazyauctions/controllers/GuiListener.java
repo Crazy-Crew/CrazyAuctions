@@ -827,7 +827,7 @@ public class GuiListener implements Listener {
                 if (displayName.equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.NextPage.Name")))) {
                     Methods.updateAuction();
 
-                    int page = auctionMenu.getPage();
+                    int page = auctionMenu.getPageNumber();
 
                     openShop(player, shopType.get(player.getUniqueId()), shopCategory.get(player.getUniqueId()), page + 1);
 
@@ -839,7 +839,7 @@ public class GuiListener implements Listener {
                 if (displayName.equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.PreviousPage.Name")))) {
                     Methods.updateAuction();
 
-                    int page = auctionMenu.getPage();
+                    int page = auctionMenu.getPageNumber();
 
                     if (page == 1) page++;
 
@@ -853,7 +853,7 @@ public class GuiListener implements Listener {
                 if (displayName.equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.Refresh.Name")))) {
                     Methods.updateAuction();
 
-                    int page = auctionMenu.getPage();
+                    int page = auctionMenu.getPageNumber();
 
                     openShop(player, shopType.get(player.getUniqueId()), shopCategory.get(player.getUniqueId()), page);
 
@@ -959,7 +959,7 @@ public class GuiListener implements Listener {
 
                                         playClick(player);
 
-                                        int page = auctionMenu.getPage();
+                                        int page = auctionMenu.getPageNumber();
 
                                         openShop(player, shopType.get(player.getUniqueId()), shopCategory.get(player.getUniqueId()), page);
 
@@ -1249,7 +1249,7 @@ public class GuiListener implements Listener {
                 if (displayName.equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.PreviousPage.Name")))) {
                     Methods.updateAuction();
 
-                    int page = auctionMenu.getPage();
+                    int page = auctionMenu.getPageNumber();
 
                     if (page == 1) page++;
 
@@ -1263,7 +1263,7 @@ public class GuiListener implements Listener {
                 if (displayName.equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.Return.Name")))) {
                     Methods.updateAuction();
 
-                    int page = auctionMenu.getPage();
+                    int page = auctionMenu.getPageNumber();
 
                     if (data.contains("OutOfTime/Cancelled")) {
                         for (String i : data.getConfigurationSection("OutOfTime/Cancelled").getKeys(false)) {
@@ -1295,7 +1295,7 @@ public class GuiListener implements Listener {
                 if (displayName.equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.NextPage.Name")))) {
                     Methods.updateAuction();
 
-                    int page = auctionMenu.getPage();
+                    int page = auctionMenu.getPageNumber();
 
                     playClick(player);
 

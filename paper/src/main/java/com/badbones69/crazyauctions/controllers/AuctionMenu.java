@@ -12,17 +12,17 @@ public class AuctionMenu implements InventoryHolder {
 
     private final String title;
     private final Inventory inventory;
-    private final int page;
+    private final int pageNumber;
 
     public AuctionMenu(int size, String title) {
         this.title = title.replaceAll("§", "&");
-        this.page = 1;
+        this.pageNumber = 1;
         this.inventory = this.plugin.getServer().createInventory(this, size, title);
     }
 
     public AuctionMenu(int size, String title, int page) {
         this.title = title.replaceAll("§", "&");
-        this.page = page;
+        this.pageNumber = page;
         this.inventory = this.plugin.getServer().createInventory(this, size, title);
     }
 
@@ -36,8 +36,8 @@ public class AuctionMenu implements InventoryHolder {
         return this.title;
     }
 
-    public int getPage() {
-        return this.page;
+    public int getPageNumber() {
+        return this.pageNumber;
     }
 
 }
