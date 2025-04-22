@@ -822,14 +822,14 @@ public class GuiListener implements Listener {
 
             if (item.getItemMeta().hasDisplayName()) {
 
-                int page = auctionMenu.getPageNumber();
+                int pageNumber = auctionMenu.getPageNumber();
 
                 String displayName = item.getItemMeta().getDisplayName();
 
                 if (displayName.equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.NextPage.Name")))) {
                     Methods.updateAuction();
 
-                    openShop(player, shopType.get(player.getUniqueId()), shopCategory.get(player.getUniqueId()), page + 1);
+                    openShop(player, shopType.get(player.getUniqueId()), shopCategory.get(player.getUniqueId()), pageNumber + 1);
 
                     playClick(player);
 
@@ -839,9 +839,9 @@ public class GuiListener implements Listener {
                 if (displayName.equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.PreviousPage.Name")))) {
                     Methods.updateAuction();
 
-                    if (page == 1) page++;
+                    if (pageNumber == 1) pageNumber++;
 
-                    openShop(player, shopType.get(player.getUniqueId()), shopCategory.get(player.getUniqueId()), page - 1);
+                    openShop(player, shopType.get(player.getUniqueId()), shopCategory.get(player.getUniqueId()), pageNumber - 1);
 
                     playClick(player);
 
@@ -851,7 +851,7 @@ public class GuiListener implements Listener {
                 if (displayName.equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.Refresh.Name")))) {
                     Methods.updateAuction();
 
-                    openShop(player, shopType.get(player.getUniqueId()), shopCategory.get(player.getUniqueId()), page);
+                    openShop(player, shopType.get(player.getUniqueId()), shopCategory.get(player.getUniqueId()), pageNumber);
 
                     playClick(player);
 
