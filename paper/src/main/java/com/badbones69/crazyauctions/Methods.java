@@ -10,6 +10,8 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -70,12 +72,8 @@ public class Methods {
         return true;
     }
 
-    public static Player getPlayer(String uuid) {
-        try {
-            return plugin.getServer().getPlayer(UUID.fromString(uuid));
-        } catch (Exception e) {
-            return null;
-        }
+    public static @Nullable Player getPlayer(String uuid) {
+        return plugin.getServer().getPlayer(UUID.fromString(uuid));
     }
 
     public static String toBase64(final ItemStack itemStack) {
