@@ -930,24 +930,14 @@ public class GuiListener implements Listener {
                             if (id == ID) {
                                 if (player.hasPermission("crazyauctions.admin") || player.hasPermission("crazyauctions.force-end")) {
                                     if (clickEvent.getAction() == InventoryAction.MOVE_TO_OTHER_INVENTORY) {
-                                        int num = 1;
-                                        for (; data.contains("OutOfTime/Cancelled." + num); num++) ;
 
-                                        String seller = data.getString("Items." + i + ".Seller");
-                                        Player sellerPlayer = Methods.getPlayer(seller);
+                                        OfflinePlayer seller = Methods.getOfflinePlayer(data.getString("Items." + i + ".Seller"));
 
-                                        if (Methods.isOnline(seller) && sellerPlayer != null) {
-                                            sellerPlayer.sendMessage(Messages.ADMIN_FORCE_CANCELLED_TO_PLAYER.getMessage(player));
+                                        if (seller.getPlayer() != null) {
+                                            seller.getPlayer().sendMessage(Messages.ADMIN_FORCE_CANCELLED_TO_PLAYER.getMessage(player));
                                         }
 
-                                        AuctionCancelledEvent event = new AuctionCancelledEvent((sellerPlayer != null ? sellerPlayer : Methods.getOfflinePlayer(seller)), Methods.fromBase64(data.getString("Items." + i + ".Item")), Reasons.ADMIN_FORCE_CANCEL);
-                                        event.callEvent();
-
-                                        data.set("OutOfTime/Cancelled." + num + ".Seller", data.getString("Items." + i + ".Seller"));
-                                        data.set("OutOfTime/Cancelled." + num + ".Full-Time", data.getLong("Items." + i + ".Full-Time"));
-                                        data.set("OutOfTime/Cancelled." + num + ".StoreID", data.getInt("Items." + i + ".StoreID"));
-                                        data.set("OutOfTime/Cancelled." + num + ".Item", data.getString("Items." + i + ".Item"));
-                                        data.set("Items." + i, null);
+                                        Methods.expireItem(1, seller, i, data, Reasons.ADMIN_FORCE_CANCEL);
 
                                         Files.data.save();
 
@@ -955,9 +945,7 @@ public class GuiListener implements Listener {
 
                                         playClick(player);
 
-                                        int page = auctionMenu.getPageNumber();
-
-                                        openShop(player, shopType.get(player.getUniqueId()), shopCategory.get(player.getUniqueId()), page);
+                                        openShop(player, shopType.get(player.getUniqueId()), shopCategory.get(player.getUniqueId()), auctionMenu.getPageNumber());
 
                                         return;
                                     }
@@ -1190,18 +1178,7 @@ public class GuiListener implements Listener {
                             if (id == ID) {
                                 player.sendMessage(Messages.CANCELLED_ITEM.getMessage(player));
 
-                                AuctionCancelledEvent event = new AuctionCancelledEvent(player, Methods.fromBase64(data.getString("Items." + i + ".Item")), Reasons.PLAYER_FORCE_CANCEL);
-                                event.callEvent();
-
-                                int num = 1;
-                                while (data.contains("OutOfTime/Cancelled." + num)) num++;
-
-                                data.set("OutOfTime/Cancelled." + num + ".Seller", data.getString("Items." + i + ".Seller"));
-                                data.set("OutOfTime/Cancelled." + num + ".Full-Time", data.getLong("Items." + i + ".Full-Time"));
-                                data.set("OutOfTime/Cancelled." + num + ".StoreID", data.getInt("Items." + i + ".StoreID"));
-                                data.set("OutOfTime/Cancelled." + num + ".Item", data.getString("Items." + i + ".Item"));
-
-                                data.set("Items." + i, null);
+                                Methods.expireItem(1, player, i, data, Reasons.PLAYER_FORCE_CANCEL);
 
                                 Files.data.save();
 

@@ -10,6 +10,7 @@ import com.badbones69.crazyauctions.controllers.GuiListener;
 import com.badbones69.crazyauctions.currency.VaultSupport;
 import com.ryderbelserion.vital.paper.api.files.FileManager;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -436,28 +437,18 @@ public class AuctionCommand implements CommandExecutor {
      */
     private void forceEndAll(Player player) {
         FileConfiguration data = Files.data.getConfiguration();
+
         int num = 1;
 
         for (String i : data.getConfigurationSection("Items").getKeys(false)) {
 
-            while (data.contains("OutOfTime/Cancelled." + num)) num++;
+            OfflinePlayer seller = Methods.getOfflinePlayer(data.getString("Items." + i + ".Seller"));
 
-            String seller = data.getString("Items." + i + ".Seller");
-            Player sellerPlayer = Methods.getPlayer(seller);
-
-            if (Methods.isOnline(seller) && sellerPlayer != null) {
-                sellerPlayer.sendMessage(Messages.ADMIN_FORCE_CANCELLED_TO_PLAYER.getMessage(player));
+            if (seller.getPlayer() != null) {
+                seller.getPlayer().sendMessage(Messages.ADMIN_FORCE_CANCELLED_TO_PLAYER.getMessage(player));
             }
 
-            AuctionCancelledEvent event = new AuctionCancelledEvent((sellerPlayer != null ? sellerPlayer : Methods.getOfflinePlayer(seller)), Methods.fromBase64(data.getString("Items." + i + ".Item")), Reasons.ADMIN_FORCE_CANCEL);
-            event.callEvent();
-
-            data.set("OutOfTime/Cancelled." + num + ".Seller", data.getString("Items." + i + ".Seller"));
-            data.set("OutOfTime/Cancelled." + num + ".Full-Time", data.getLong("Items." + i + ".Full-Time"));
-            data.set("OutOfTime/Cancelled." + num + ".StoreID", data.getInt("Items." + i + ".StoreID"));
-            data.set("OutOfTime/Cancelled." + num + ".Item", data.getString("Items." + i + ".Item"));
-
-            data.set("Items." + i, null);
+            num = Methods.expireItem(num, seller, i, data, Reasons.ADMIN_FORCE_CANCEL);
 
         }
 
@@ -466,4 +457,5 @@ public class AuctionCommand implements CommandExecutor {
         player.sendMessage(Messages.ADMIN_FORCE_CANCELLED_ALL.getMessage(player));
 
     }
+
 }

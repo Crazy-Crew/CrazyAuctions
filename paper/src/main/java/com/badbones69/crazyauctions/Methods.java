@@ -2,6 +2,8 @@ package com.badbones69.crazyauctions;
 
 import com.badbones69.crazyauctions.api.enums.Files;
 import com.badbones69.crazyauctions.api.enums.Messages;
+import com.badbones69.crazyauctions.api.enums.Reasons;
+import com.badbones69.crazyauctions.api.events.AuctionCancelledEvent;
 import com.badbones69.crazyauctions.api.events.AuctionExpireEvent;
 import com.badbones69.crazyauctions.api.events.AuctionWinBidEvent;
 import org.bukkit.*;
@@ -357,4 +359,31 @@ public class Methods {
 
         return String.valueOf(price);
     }
+
+    /**
+     * Moves an item from the auction house to the expired section.
+     *
+     * @param num The section the item is saved to under expired items.
+     * @param seller The {@link OfflinePlayer} that sold the item.
+     * @param i The section where the listed item was saved.
+     * @param data The file in which the data is saved.
+     * @return The section in which the item was saved.
+     */
+    public static int expireItem(int num, OfflinePlayer seller, String i, FileConfiguration data, Reasons reasons) {
+
+        while (data.contains("OutOfTime/Cancelled." + num)) num++;
+
+        AuctionCancelledEvent event = new AuctionCancelledEvent(seller, Methods.fromBase64(data.getString("Items." + i + ".Item")), reasons);
+        event.callEvent();
+
+        data.set("OutOfTime/Cancelled." + num + ".Seller", data.getString("Items." + i + ".Seller"));
+        data.set("OutOfTime/Cancelled." + num + ".Full-Time", data.getLong("Items." + i + ".Full-Time"));
+        data.set("OutOfTime/Cancelled." + num + ".StoreID", data.getInt("Items." + i + ".StoreID"));
+        data.set("OutOfTime/Cancelled." + num + ".Item", data.getString("Items." + i + ".Item"));
+
+        data.set("Items." + i, null);
+
+        return num;
+    }
+
 }
