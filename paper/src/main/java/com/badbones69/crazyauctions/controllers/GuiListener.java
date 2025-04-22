@@ -784,15 +784,16 @@ public class GuiListener implements Listener {
                     return;
                 }
 
-                Map<String, Integer> priceEdits = new HashMap<>();
-                priceEdits.put("&a+1", 1);
-                priceEdits.put("&a+10", 10);
-                priceEdits.put("&a+100", 100);
-                priceEdits.put("&a+1000", 1000);
-                priceEdits.put("&c-1", -1);
-                priceEdits.put("&c-10", -10);
-                priceEdits.put("&c-100", -100);
-                priceEdits.put("&c-1000", -1000);
+                Map<String, Integer> priceEdits = new HashMap<>(){{
+                    put("&a+1", 1);
+                    put("&a+10", 10);
+                    put("&a+100", 100);
+                    put("&a+1000", 1000);
+                    put("&c-1", -1);
+                    put("&c-10", -10);
+                    put("&c-100", -100);
+                    put("&c-1000", -1000);
+                }};
 
                 for (String price : priceEdits.keySet()) {
                     if (displayName.equals(Methods.color(price))) {
