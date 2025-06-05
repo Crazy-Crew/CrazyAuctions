@@ -11,6 +11,7 @@ Settings:
   Full-Expire-Time: 10d #The full time the item is in the crazy auctions.
   Bid-Winner-Time: 20d #The time the winner of a bid has to claim their prize.
   Auction-List-Fee: 0 # The amount the player has to pay to list an item.
+  Percent-Tax: 0.0 # The amount of tax the player has to pay when the item is purchased.
   Minimum-Sell-Price: 10 #Minimum amount you can sell an item for.
   Max-Beginning-Sell-Price: 1000000 #Max amount you can sell an item for.
   Minimum-Bid-Price: 100 #Minimum starting bid.
