@@ -399,13 +399,7 @@ public class GuiListener implements Listener {
         String price = Methods.getPrice(ID, false);
         String time = Methods.convertToTime(data.getLong("Items." + ID + ".Time-Till-Expire"));
 
-        OfflinePlayer target = null;
-
-        String id = data.getString("Items." + ID + ".Seller");
-
-        if (id != null) {
-            target = Methods.getOfflinePlayer(id);
-        }
+        String sellerName = data.getString("Items." + ID + ".Seller", "N/A");
 
         ItemBuilder itemBuilder = ItemBuilder.convertItemStack(data.getString("Items." + ID + ".Item"));
 
@@ -413,8 +407,8 @@ public class GuiListener implements Listener {
 
         for (String l : config.getStringList("Settings.GUISettings.SellingItemLore")) {
             lore.add(l.replace("%Price%", price).replace("%price%", price)
-                    .replace("%Seller%", target != null ? target.getName() : "N/A")
-                    .replace("%seller%", target != null ? target.getName() : "N/A")
+                    .replace("%Seller%", sellerName)
+                    .replace("%seller%", sellerName)
                     .replace("%Time%", time)
                     .replace("%time%", time));
         }
@@ -487,21 +481,9 @@ public class GuiListener implements Listener {
                     String price = Methods.getPrice(i, false);
                     String time = Methods.convertToTime(data.getLong("Items." + i + ".Time-Till-Expire"));
 
-                    OfflinePlayer target = null;
+                    String sellerName = data.getString("Items." + i + ".SellerName", "N/A");
 
-                    String id = data.getString("Items." + i + ".Seller");
-
-                    if (id != null) {
-                        target = Methods.getOfflinePlayer(id);
-                    }
-
-                    OfflinePlayer bidder = null;
-
-                    String bid = data.getString("Items." + i + ".TopBidder");
-
-                    if (bid != null && !bid.equals("None")) {
-                        bidder = Methods.getOfflinePlayer(bid);
-                    }
+                    String bidderName = data.getString("Items." + i + ".TopBidderName", "N/A");
 
                     ItemBuilder itemBuilder = ItemBuilder.convertItemStack(data.getString("Items." + i + ".Item"));
 
@@ -511,10 +493,10 @@ public class GuiListener implements Listener {
                         for (String l : config.getStringList("Settings.GUISettings.Bidding")) {
                             lore.add(l.replace("%TopBid%", price)
                                     .replace("%topbid%", price)
-                                    .replace("%Seller%", target != null ? target.getName() : "N/A")
-                                    .replace("%seller%", target != null ? target.getName() : "N/A")
-                                    .replace("%TopBidder%", bidder != null ? bidder.getName() : "N/A")
-                                    .replace("%topbidder%", bidder != null ? bidder.getName() : "N/A")
+                                    .replace("%Seller%", sellerName)
+                                    .replace("%seller%", sellerName)
+                                    .replace("%TopBidder%", bidderName)
+                                    .replace("%topbidder%", bidderName)
                                     .replace("%Time%", time)
                                     .replace("%time%", time));
                         }
@@ -522,8 +504,8 @@ public class GuiListener implements Listener {
                         for (String l : config.getStringList("Settings.GUISettings.SellingItemLore")) {
                             lore.add(l.replace("%Price%", price)
                                     .replace("%price%", price)
-                                    .replace("%Seller%", target != null ? target.getName() : "N/A")
-                                    .replace("%seller%", target != null ? target.getName() : "N/A")
+                                    .replace("%Seller%", sellerName)
+                                    .replace("%seller%", sellerName)
                                     .replace("%Time%", time)
                                     .replace("%time%", time));
                         }
@@ -612,21 +594,8 @@ public class GuiListener implements Listener {
         String price = Methods.getPrice(ID, false);
         String time = Methods.convertToTime(data.getLong("Items." + ID + ".Time-Till-Expire"));
 
-        OfflinePlayer target = null;
-
-        String id = data.getString("Items." + ID + ".Seller");
-
-        if (id != null) {
-            target = Methods.getOfflinePlayer(id);
-        }
-
-        OfflinePlayer bidder = null;
-
-        String bid = data.getString("Items." + ID + ".TopBidder");
-
-        if (bid != null && !bid.equals("None")) {
-            bidder = Methods.getOfflinePlayer(bid);
-        }
+        String sellerName = data.getString("Items." + ID + ".SellerName", "N/A");
+        String bidderName = data.getString("Items." + ID + ".TopBidderName", "N/A");
 
         ItemBuilder itemBuilder = ItemBuilder.convertItemStack(item);
 
@@ -635,8 +604,8 @@ public class GuiListener implements Listener {
         for (String l : config.getStringList("Settings.GUISettings.Bidding")) {
             lore.add(l.replace("%TopBid%", price)
                     .replace("%topbid%", price)
-                    .replace("%Seller%", target != null ? target.getName() : "N/A").replace("%seller%", target != null ? target.getName() : "N/A")
-                    .replace("%TopBidder%", bidder != null ? bidder.getName() : "N/A").replace("%topbidder%", bidder != null ? bidder.getName() : "N/A")
+                    .replace("%Seller%", sellerName).replace("%seller%", sellerName)
+                    .replace("%TopBidder%", bidderName).replace("%topbidder%", bidderName)
                     .replace("%Time%", time)
                     .replace("%time%", time));
         }
