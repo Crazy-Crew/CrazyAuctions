@@ -2,6 +2,8 @@ package com.badbones69.crazyauctions;
 
 import com.badbones69.crazyauctions.api.enums.Files;
 import com.badbones69.crazyauctions.api.enums.Messages;
+import com.badbones69.crazyauctions.api.enums.Reasons;
+import com.badbones69.crazyauctions.api.events.AuctionCancelledEvent;
 import com.badbones69.crazyauctions.api.events.AuctionExpireEvent;
 import com.badbones69.crazyauctions.api.events.AuctionWinBidEvent;
 import org.bukkit.*;
@@ -10,6 +12,8 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -70,12 +74,8 @@ public class Methods {
         return true;
     }
 
-    public static Player getPlayer(String uuid) {
-        try {
-            return plugin.getServer().getPlayer(UUID.fromString(uuid));
-        } catch (Exception e) {
-            return null;
-        }
+    public static @Nullable Player getPlayer(String uuid) {
+        return plugin.getServer().getPlayer(UUID.fromString(uuid));
     }
 
     public static String toBase64(final ItemStack itemStack) {
@@ -297,7 +297,7 @@ public class Methods {
                         if (isOnline(winner) && getPlayer(winner) != null) {
                             Player player = getPlayer(winner);
 
-                            plugin.getServer().getPluginManager().callEvent(new AuctionWinBidEvent(player, Methods.fromBase64(data.getString("Items." + i + ".Item")), price));
+                            new AuctionWinBidEvent(player, Methods.fromBase64(data.getString("Items." + i + ".Item")), price).callEvent();
 
                             if (player != null) {
                                 player.sendMessage(Messages.WIN_BIDDING.getMessage(player, placeholders));
@@ -325,7 +325,7 @@ public class Methods {
                         }
 
                         AuctionExpireEvent event = new AuctionExpireEvent(player, Methods.fromBase64(data.getString("Items." + i + ".Item")));
-                        plugin.getServer().getPluginManager().callEvent(event);
+                        event.callEvent();
 
                         data.set("OutOfTime/Cancelled." + num + ".Seller", data.getString("Items." + i + ".Seller"));
                         data.set("OutOfTime/Cancelled." + num + ".Full-Time", fullExpireTime.getTimeInMillis());
@@ -359,4 +359,31 @@ public class Methods {
 
         return String.valueOf(price);
     }
+
+    /**
+     * Moves an item from the auction house to the expired section.
+     *
+     * @param num The section the item is saved to under expired items.
+     * @param seller The {@link OfflinePlayer} that sold the item.
+     * @param i The section where the listed item was saved.
+     * @param data The file in which the data is saved.
+     * @return The section in which the item was saved.
+     */
+    public static int expireItem(int num, OfflinePlayer seller, String i, FileConfiguration data, Reasons reasons) {
+
+        while (data.contains("OutOfTime/Cancelled." + num)) num++;
+
+        AuctionCancelledEvent event = new AuctionCancelledEvent(seller, Methods.fromBase64(data.getString("Items." + i + ".Item")), reasons);
+        event.callEvent();
+
+        data.set("OutOfTime/Cancelled." + num + ".Seller", data.getString("Items." + i + ".Seller"));
+        data.set("OutOfTime/Cancelled." + num + ".Full-Time", data.getLong("Items." + i + ".Full-Time"));
+        data.set("OutOfTime/Cancelled." + num + ".StoreID", data.getInt("Items." + i + ".StoreID"));
+        data.set("OutOfTime/Cancelled." + num + ".Item", data.getString("Items." + i + ".Item"));
+
+        data.set("Items." + i, null);
+
+        return num;
+    }
+
 }
