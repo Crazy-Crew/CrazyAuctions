@@ -1086,6 +1086,10 @@ public class GuiListener implements Listener {
                         return;
                     }
 
+                    cost -= (long) (cost * config.getDouble("Settings.Percent-Tax", 0) / 100);
+
+                    cost = Math.max(0, cost);
+
                     support.addMoney(Methods.getOfflinePlayer(seller), cost);
 
                     String price = String.valueOf(cost);
