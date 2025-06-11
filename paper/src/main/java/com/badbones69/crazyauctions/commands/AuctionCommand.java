@@ -208,10 +208,16 @@ public class AuctionCommand implements CommandExecutor {
                         if (amount > item.getAmount()) amount = item.getAmount();
                     }
 
-                    if (!Methods.isLong(args[1])) {
+                    String stringPrice = args[1].toLowerCase()
+                            .replaceAll("tn", "000000000000")
+                            .replaceAll("bn", "000000000")
+                            .replaceAll("m", "000000")
+                            .replaceAll("k", "000");
+
+                    if (!Methods.isLong(stringPrice)) {
                         Map<String, String> placeholders = new HashMap<>();
-                        placeholders.put("%Arg%", args[1]);
-                        placeholders.put("%arg%", args[1]);
+                        placeholders.put("%Arg%", stringPrice);
+                        placeholders.put("%arg%", stringPrice);
 
                         player.sendMessage(Messages.NOT_A_NUMBER.getMessage(sender, placeholders));
 
@@ -224,7 +230,7 @@ public class AuctionCommand implements CommandExecutor {
                         return false;
                     }
 
-                    long price = Long.parseLong(args[1]);
+                    long price = Long.parseLong(stringPrice);
 
                     if (args[0].equalsIgnoreCase("bid")) {
                         if (price < config.getLong("Settings.Minimum-Bid-Price", 100)) {
