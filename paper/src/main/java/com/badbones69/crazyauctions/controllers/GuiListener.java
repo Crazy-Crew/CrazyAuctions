@@ -657,6 +657,7 @@ public class GuiListener implements Listener {
         clickEvent.setCancelled(true);
 
         FileConfiguration config = Files.config.getConfiguration();
+
         FileConfiguration data = Files.data.getConfiguration();
 
         Player player = (Player) clickEvent.getWhoClicked();
