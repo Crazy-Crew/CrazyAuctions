@@ -1090,7 +1090,8 @@ public class GuiListener implements Listener {
 
                     cost = Math.max(0, cost);
 
-                    support.addMoney(Methods.getOfflinePlayer(seller), cost);
+                    OfflinePlayer sellerPlayer = Methods.getOfflinePlayer(seller);
+                    support.addMoney(sellerPlayer, cost);
 
                     String price = String.valueOf(cost);
 
@@ -1098,6 +1099,8 @@ public class GuiListener implements Listener {
                     placeholders.put("%price%", price);
                     placeholders.put("%Player%", player.getName());
                     placeholders.put("%player%", player.getName());
+                    placeholders.put("%Seller%", sellerPlayer.getName());
+                    placeholders.put("%seller%", sellerPlayer.getName());
 
                     player.sendMessage(Messages.BOUGHT_ITEM.getMessage(player, placeholders));
 

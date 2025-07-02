@@ -288,11 +288,16 @@ public class Methods {
                         plugin.getSupport().addMoney(getOfflinePlayer(seller), price);
                         plugin.getSupport().removeMoney(getOfflinePlayer(winner), price);
 
+                        OfflinePlayer sellerPlayer = Methods.getOfflinePlayer(seller);
+                        OfflinePlayer winnerPlayer = Methods.getOfflinePlayer(winner);
+
                         HashMap<String, String> placeholders = new HashMap<>();
                         placeholders.put("%Price%", getPrice(i, false));
                         placeholders.put("%price%", getPrice(i, false));
-                        placeholders.put("%Player%", winner);
-                        placeholders.put("%player%", winner);
+                        placeholders.put("%Player%", winnerPlayer.getName());
+                        placeholders.put("%player%", winnerPlayer.getName());
+                        placeholders.put("%Seller%", sellerPlayer.getName());
+                        placeholders.put("%seller%", sellerPlayer.getName());
 
                         if (isOnline(winner) && getPlayer(winner) != null) {
                             Player player = getPlayer(winner);
