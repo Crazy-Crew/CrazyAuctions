@@ -288,8 +288,11 @@ public class Methods {
                         long taxAmount = (long) (price * config.getDouble("Settings.Percent-Tax", 0) / 100);
                         long taxedPriceAmount = Math.max(price - taxAmount, 0);
 
-                        plugin.getSupport().addMoney(getOfflinePlayer(seller), taxedPriceAmount);
-                        plugin.getSupport().removeMoney(getOfflinePlayer(winner), price);
+                        OfflinePlayer sellerPlayer = Methods.getOfflinePlayer(seller);
+                        OfflinePlayer winnerPlayer = Methods.getOfflinePlayer(winner);
+
+                        plugin.getSupport().addMoney(sellerPlayer, price);
+                        plugin.getSupport().removeMoney(winnerPlayer, price);
 
                         String tax = String.valueOf(taxAmount);
                         String taxedPrice = String.valueOf(taxedPriceAmount);
@@ -301,8 +304,10 @@ public class Methods {
                         placeholders.put("%tax%", tax);
                         placeholders.put("%Taxed_Price%", taxedPrice);
                         placeholders.put("%taxed_price%", taxedPrice);
-                        placeholders.put("%Player%", winner);
-                        placeholders.put("%player%", winner);
+                        placeholders.put("%Player%", winnerPlayer.getName());
+                        placeholders.put("%player%", winnerPlayer.getName());
+                        placeholders.put("%Seller%", sellerPlayer.getName());
+                        placeholders.put("%seller%", sellerPlayer.getName());
 
                         if (isOnline(winner) && getPlayer(winner) != null) {
                             Player player = getPlayer(winner);
