@@ -285,11 +285,11 @@ public class Methods {
                         String seller = data.getString("Items." + i + ".Seller");
                         long price = data.getLong("Items." + i + ".Price");
 
-                        plugin.getSupport().addMoney(getOfflinePlayer(seller), price);
-                        plugin.getSupport().removeMoney(getOfflinePlayer(winner), price);
-
                         OfflinePlayer sellerPlayer = Methods.getOfflinePlayer(seller);
                         OfflinePlayer winnerPlayer = Methods.getOfflinePlayer(winner);
+
+                        plugin.getSupport().addMoney(sellerPlayer, price);
+                        plugin.getSupport().removeMoney(winnerPlayer, price);
 
                         HashMap<String, String> placeholders = new HashMap<>();
                         placeholders.put("%Price%", getPrice(i, false));
