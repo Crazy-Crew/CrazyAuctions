@@ -671,7 +671,7 @@ public class GuiListener implements Listener {
         ItemStack item = clickEvent.getCurrentItem();
 
         if (item == null) return;
-        
+
         if (!item.hasItemMeta()) return;
 
         if (auctionMenu.getTitle().contains(config.getString("Settings.Categories"))) {
@@ -1086,17 +1086,25 @@ public class GuiListener implements Listener {
                         return;
                     }
 
-                    cost -= (long) (cost * config.getDouble("Settings.Percent-Tax", 0) / 100);
+                    String price = String.valueOf(cost);
+
+                    long taxAmount = (long) (cost * config.getDouble("Settings.Percent-Tax", 0) / 100);
+                    cost -= taxAmount;
 
                     cost = Math.max(0, cost);
 
                     OfflinePlayer sellerPlayer = Methods.getOfflinePlayer(seller);
                     support.addMoney(sellerPlayer, cost);
 
-                    String price = String.valueOf(cost);
+                    String tax = String.valueOf(taxAmount);
+                    String taxedPrice = String.valueOf(cost);
 
                     placeholders.put("%Price%", price);
                     placeholders.put("%price%", price);
+                    placeholders.put("%Tax%", tax);
+                    placeholders.put("%tax%", tax);
+                    placeholders.put("%Taxed_Price%", taxedPrice);
+                    placeholders.put("%taxed_price%", taxedPrice);
                     placeholders.put("%Player%", player.getName());
                     placeholders.put("%player%", player.getName());
                     placeholders.put("%Seller%", sellerPlayer.getName());

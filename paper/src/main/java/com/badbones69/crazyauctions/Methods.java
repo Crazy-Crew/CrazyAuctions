@@ -250,6 +250,7 @@ public class Methods {
     }
     
     public static void updateAuction() {
+        FileConfiguration config = Files.config.getConfiguration();
         FileConfiguration data = Files.data.getConfiguration();
 
         Calendar cal = Calendar.getInstance();
@@ -284,6 +285,8 @@ public class Methods {
                         String winner = data.getString("Items." + i + ".TopBidder");
                         String seller = data.getString("Items." + i + ".Seller");
                         long price = data.getLong("Items." + i + ".Price");
+                        long taxAmount = (long) (price * config.getDouble("Settings.Percent-Tax", 0) / 100);
+                        long taxedPriceAmount = Math.max(price - taxAmount, 0);
 
                         OfflinePlayer sellerPlayer = Methods.getOfflinePlayer(seller);
                         OfflinePlayer winnerPlayer = Methods.getOfflinePlayer(winner);
@@ -291,9 +294,16 @@ public class Methods {
                         plugin.getSupport().addMoney(sellerPlayer, price);
                         plugin.getSupport().removeMoney(winnerPlayer, price);
 
+                        String tax = String.valueOf(taxAmount);
+                        String taxedPrice = String.valueOf(taxedPriceAmount);
+
                         HashMap<String, String> placeholders = new HashMap<>();
                         placeholders.put("%Price%", getPrice(i, false));
                         placeholders.put("%price%", getPrice(i, false));
+                        placeholders.put("%Tax%", tax);
+                        placeholders.put("%tax%", tax);
+                        placeholders.put("%Taxed_Price%", taxedPrice);
+                        placeholders.put("%taxed_price%", taxedPrice);
                         placeholders.put("%Player%", winnerPlayer.getName());
                         placeholders.put("%player%", winnerPlayer.getName());
                         placeholders.put("%Seller%", sellerPlayer.getName());
