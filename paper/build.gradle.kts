@@ -1,39 +1,34 @@
 plugins {
+    id("paper-plugin")
+
     alias(libs.plugins.runPaper)
     alias(libs.plugins.shadow)
 }
 
+project.group = "${rootProject.group}.paper"
+project.version = rootProject.version
+project.description = "Auction off your items in style!"
+
 repositories {
-    maven("https://repo.extendedclip.com/content/repositories/placeholderapi")
-
-    maven("https://repo.papermc.io/repository/maven-public")
-
-    maven("https://repo.triumphteam.dev/snapshots")
-
-    maven("https://repo.fancyplugins.de/releases")
-
-    maven("https://repo.oraxen.com/releases")
-
-    maven("https://maven.enginehub.org/repo")
+    maven("https://repo.extendedclip.com/content/repositories/placeholderapi/")
 }
 
 dependencies {
-    implementation(libs.vital.paper) {
-        exclude("org.yaml")
-    }
+    implementation(libs.fusion.paper)
 
-    compileOnly(libs.bundles.shared)
-
-    compileOnly(libs.paper)
+    implementation(libs.triumph.cmds)
 }
 
 tasks {
-    runServer {
-        jvmArgs("-Dnet.kyori.ansi.colorLevel=truecolor")
+    shadowJar {
+        archiveBaseName.set(rootProject.name)
+        archiveClassifier.set("")
 
-        defaultCharacterEncoding = Charsets.UTF_8.name()
-
-        minecraftVersion(libs.versions.minecraft.get())
+        listOf(
+            "com.ryderbelserion.fusion"
+        ).forEach {
+            relocate(it, "libs.$it")
+        }
     }
 
     assemble {
@@ -47,28 +42,26 @@ tasks {
         }
     }
 
-    shadowJar {
-        archiveBaseName.set(rootProject.name)
-        archiveClassifier.set("")
-
-        listOf(
-            "com.ryderbelserion.vital"
-        ).forEach {
-            relocate(it, "libs.$it")
-        }
-    }
-
     processResources {
         inputs.properties("name" to rootProject.name)
         inputs.properties("version" to project.version)
         inputs.properties("group" to project.group)
         inputs.properties("apiVersion" to libs.versions.minecraft.get())
-        inputs.properties("description" to project.properties["description"])
-        inputs.properties("authors" to project.properties["authors"])
-        inputs.properties("website" to project.properties["website"])
+        inputs.properties("description" to project.description)
+        inputs.properties("website" to rootProject.properties["website"].toString())
 
-        filesMatching("plugin.yml") {
+        filesMatching("paper-plugin.yml") {
             expand(inputs.properties)
         }
+    }
+
+    runPaper.folia.registerTask()
+
+    runServer {
+        jvmArgs("-Dnet.kyori.ansi.colorLevel=truecolor")
+
+        defaultCharacterEncoding = Charsets.UTF_8.name()
+
+        minecraftVersion(libs.versions.minecraft.get())
     }
 }

@@ -1,11 +1,13 @@
 plugins {
+    id("root-plugin")
+
     alias(libs.plugins.minotaur)
     alias(libs.plugins.hangar)
 }
 
-val content: String = rootProject.file("CHANGELOG.md").readText(Charsets.UTF_8)
+val content: String = rootProject.file("changelog.md").readText(Charsets.UTF_8)
 
-val isBeta = false
+val isBeta = true
 val pluginName = rootProject.name
 val mcVersion = libs.versions.minecraft.get()
 
@@ -28,14 +30,10 @@ tasks {
 
         loaders.addAll(listOf("purpur", "paper", "folia"))
 
-        syncBodyFrom.set(rootProject.file("README.md").readText(Charsets.UTF_8))
+        syncBodyFrom.set(rootProject.file("description.md").readText(Charsets.UTF_8))
 
         autoAddDependsOn.set(false)
         detectLoaders.set(false)
-
-        /*dependencies {
-            optional.version("fancyholograms", "2.3.2")
-        }*/
     }
 
     hangarPublish {
@@ -57,7 +55,7 @@ tasks {
                     platformVersions.set(listOf(mcVersion))
 
                     dependencies {
-                        hangar("PlaceholderAPI") {
+                        url("PlaceholderAPI", "https://www.spigotmc.org/resources/placeholderapi.6245/") {
                             required = false
                         }
 
@@ -65,17 +63,13 @@ tasks {
                             required = false
                         }
 
-                        /*hangar("FancyHolograms") {
+                        url("Nexo", "https://polymart.org/resource/nexo.6901") {
                             required = false
                         }
 
-                        url("CMI", "https://www.spigotmc.org/resources/cmi-298-commands-insane-kits-portals-essentials-economy-mysql-sqlite-much-more.3742/") {
+                        url("ItemsAdder", "https://www.spigotmc.org/resources/%E2%9C%A8itemsadder%E2%AD%90emotes-mobs-items-armors-hud-gui-emojis-blocks-wings-hats-liquids.73355/") {
                             required = false
                         }
-
-                        url("DecentHolograms", "https://www.spigotmc.org/resources/decentholograms-1-8-1-20-4-papi-support-no-dependencies.96927/") {
-                            required = false
-                        }*/
                     }
                 }
             }
