@@ -1,2 +1,2 @@
-- Fixed an issue with filtering tiered prizes by using the correct symbol!
-  - This prevented properly getting prizes, [#842](https://github.com/Crazy-Crew/CrazyCrates/pull/842)
+### Update
+- Bumped required server version to 1.21.3
