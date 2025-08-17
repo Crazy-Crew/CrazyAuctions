@@ -3,7 +3,7 @@ package com.badbones69.crazyauctions.api.builders;
 import com.badbones69.crazyauctions.CrazyAuctions;
 import com.badbones69.crazyauctions.Methods;
 import com.badbones69.crazyauctions.api.support.SkullCreator;
-import com.ryderbelserion.vital.paper.api.enums.Support;
+import com.ryderbelserion.fusion.core.api.enums.Support;
 import io.th0rgal.oraxen.api.OraxenItems;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.*;
@@ -698,7 +698,7 @@ public class ItemBuilder {
     }
 
     /**
-     * Set the lore of the item in the builder. This will auto force color in all the lores that contains color code. (&a, &c, &7, etc...)
+     * Set the lore of the item in the builder. This will auto force color in all the lores that contains color code,
      *
      * @param lore the lore of the item in the builder.
      * @return the ItemBuilder with updated info.
@@ -716,7 +716,7 @@ public class ItemBuilder {
     }
 
     /**
-     * Set the lore of the item with papi support in the builder. This will auto force color in all the lores that contains color code. (&a, &c, &7, etc...)
+     * Set the lore of the item with papi support in the builder. This will auto force color in all the lores that contains color code.
      *
      * @param player the player viewing the button.
      * @param lore the lore of the item in the builder.
@@ -735,7 +735,7 @@ public class ItemBuilder {
     }
 
     /**
-     * Add a line to the current lore of the item. This will auto force color in the lore that contains color code. (&a, &c, &7, etc...)
+     * Add a line to the current lore of the item. This will auto force color in the lore that contains color code.
      *
      * @param lore the new line you wish to add.
      * @return the ItemBuilder with updated info.

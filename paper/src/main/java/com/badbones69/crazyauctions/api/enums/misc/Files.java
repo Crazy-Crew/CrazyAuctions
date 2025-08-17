@@ -1,9 +1,11 @@
 package com.badbones69.crazyauctions.api.enums.misc;
 
 import com.badbones69.crazyauctions.CrazyAuctions;
-import com.ryderbelserion.vital.paper.api.files.FileManager;
+import com.ryderbelserion.fusion.paper.files.FileManager;
+import com.ryderbelserion.fusion.paper.files.types.PaperCustomFile;
 import org.bukkit.configuration.file.YamlConfiguration;
-import java.io.File;
+import org.jetbrains.annotations.NotNull;
+import java.nio.file.Path;
 
 public enum Files {
 
@@ -12,40 +14,32 @@ public enum Files {
     //test_file("test-file.yml"),
     data("data.yml");
 
-    private final String fileName;
-    private final String strippedName;
+    private final Path path;
 
-    private final CrazyAuctions plugin = CrazyAuctions.get();
+    private @NotNull final CrazyAuctions plugin = CrazyAuctions.get();
 
-    private final FileManager fileManager = this.plugin.getFileManager();
+    private @NotNull final Path dataPath = this.plugin.getDataPath();
+
+    private @NotNull final FileManager fileManager = this.plugin.getFileManager();
 
     /**
      * A constructor to build a file
      *
      * @param fileName the name of the file
      */
-    Files(final String fileName) {
-        this.fileName = fileName;
-        this.strippedName = this.fileName.replace(".yml", "");
+    Files(@NotNull final String fileName) {
+        this.path = this.dataPath.resolve(fileName);
     }
 
     public final YamlConfiguration getConfiguration() {
-        return this.fileManager.getFile(this.fileName).getConfiguration();
+        return getCustomFile().getConfiguration();
     }
 
-    public final String getStrippedName() {
-        return this.strippedName;
-    }
-
-    public final String getFileName() {
-        return this.fileName;
-    }
-
-    public void reload() {
-        this.fileManager.addFile(new File(this.plugin.getDataFolder(), this.fileName));
+    public final PaperCustomFile getCustomFile() {
+        return this.fileManager.getPaperCustomFile(this.path);
     }
 
     public void save() {
-        this.fileManager.saveFile(this.fileName);
+        this.fileManager.saveFile(this.path);
     }
 }

@@ -4,11 +4,12 @@ import com.badbones69.crazyauctions.CrazyAuctions;
 import com.badbones69.crazyauctions.Methods;
 import com.badbones69.crazyauctions.api.CrazyManager;
 import com.badbones69.crazyauctions.api.enums.*;
+import com.badbones69.crazyauctions.api.enums.misc.Files;
 import com.badbones69.crazyauctions.api.events.AuctionCancelledEvent;
 import com.badbones69.crazyauctions.api.events.AuctionListEvent;
 import com.badbones69.crazyauctions.controllers.GuiListener;
 import com.badbones69.crazyauctions.currency.VaultSupport;
-import com.ryderbelserion.vital.paper.api.files.FileManager;
+import com.ryderbelserion.fusion.paper.files.FileManager;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
@@ -20,7 +21,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.jetbrains.annotations.NotNull;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -85,7 +85,7 @@ public class AuctionCommand implements CommandExecutor {
                     return true;
                 }
 
-                this.fileManager.reloadFiles().init();
+                this.fileManager.refresh(true);
 
                 this.crazyManager.load();
 
@@ -100,6 +100,7 @@ public class AuctionCommand implements CommandExecutor {
                 }
                 if (!(sender instanceof Player player)) {
                     sender.sendMessage(Messages.PLAYERS_ONLY.getMessage(sender));
+
                     return true;
                 }
 
@@ -463,5 +464,4 @@ public class AuctionCommand implements CommandExecutor {
         player.sendMessage(Messages.ADMIN_FORCE_CANCELLED_ALL.getMessage(player));
 
     }
-
 }

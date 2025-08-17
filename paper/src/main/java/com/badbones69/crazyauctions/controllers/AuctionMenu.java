@@ -39,5 +39,4 @@ public class AuctionMenu implements InventoryHolder {
     public int getPageNumber() {
         return this.pageNumber;
     }
-
 }

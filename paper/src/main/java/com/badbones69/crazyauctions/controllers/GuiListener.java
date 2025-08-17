@@ -5,15 +5,15 @@ import com.badbones69.crazyauctions.Methods;
 import com.badbones69.crazyauctions.api.*;
 import com.badbones69.crazyauctions.api.builders.ItemBuilder;
 import com.badbones69.crazyauctions.api.enums.Category;
-import com.badbones69.crazyauctions.api.enums.Files;
+import com.badbones69.crazyauctions.api.enums.misc.Files;
 import com.badbones69.crazyauctions.api.enums.Messages;
 import com.badbones69.crazyauctions.api.enums.Reasons;
 import com.badbones69.crazyauctions.api.enums.ShopType;
 import com.badbones69.crazyauctions.api.events.AuctionBuyEvent;
-import com.badbones69.crazyauctions.api.events.AuctionCancelledEvent;
 import com.badbones69.crazyauctions.api.events.AuctionNewBidEvent;
 import com.badbones69.crazyauctions.currency.VaultSupport;
-import com.ryderbelserion.vital.paper.util.scheduler.FoliaRunnable;
+import com.ryderbelserion.fusion.paper.api.enums.Scheduler;
+import com.ryderbelserion.fusion.paper.api.scheduler.FoliaScheduler;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Sound;
@@ -29,7 +29,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.Registry;
 import org.bukkit.NamespacedKey;
 import org.jetbrains.annotations.NotNull;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -935,12 +934,12 @@ public class GuiListener implements Listener {
 
                                     playClick(player);
 
-                                    new FoliaRunnable(plugin.getServer().getGlobalRegionScheduler()) {
+                                    new FoliaScheduler(plugin, Scheduler.global_scheduler) {
                                         @Override
                                         public void run() {
                                             inv.setItem(slot, item);
                                         }
-                                    }.runDelayed(plugin, 3 * 20);
+                                    }.runDelayed(3 * 20);
 
                                     return;
                                 }
@@ -960,12 +959,12 @@ public class GuiListener implements Listener {
                                     inv.setItem(slot, itemBuilder.build());
                                     playClick(player);
 
-                                    new FoliaRunnable(plugin.getServer().getGlobalRegionScheduler()) {
+                                    new FoliaScheduler(plugin, Scheduler.global_scheduler) {
                                         @Override
                                         public void run() {
                                             inv.setItem(slot, item);
                                         }
-                                    }.runDelayed(plugin, 3 * 20);
+                                    }.runDelayed(3 * 20);
 
                                     return;
                                 }
@@ -985,12 +984,12 @@ public class GuiListener implements Listener {
 
                                         playClick(player);
 
-                                        new FoliaRunnable(plugin.getServer().getGlobalRegionScheduler()) {
+                                        new FoliaScheduler(plugin, Scheduler.global_scheduler) {
                                             @Override
                                             public void run() {
                                                 inv.setItem(slot, item);
                                             }
-                                        }.runDelayed(plugin, 3 * 20);
+                                        }.runDelayed(3 * 20);
 
                                         return;
                                     }

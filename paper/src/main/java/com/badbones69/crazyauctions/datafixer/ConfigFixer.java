@@ -1,8 +1,7 @@
 package com.badbones69.crazyauctions.datafixer;
 
-import com.badbones69.crazyauctions.api.enums.Files;
+import com.badbones69.crazyauctions.api.enums.misc.Files;
 import org.bukkit.configuration.file.FileConfiguration;
-
 
 public class ConfigFixer {
 
@@ -22,5 +21,4 @@ public class ConfigFixer {
             Files.config.save();
         }
     }
-
 }

@@ -1,7 +1,7 @@
 package com.badbones69.crazyauctions;
 
 import com.badbones69.crazyauctions.api.CrazyManager;
-import com.badbones69.crazyauctions.api.enums.Files;
+import com.badbones69.crazyauctions.api.enums.misc.Files;
 import com.badbones69.crazyauctions.api.enums.Messages;
 import com.badbones69.crazyauctions.api.support.MetricsWrapper;
 import com.badbones69.crazyauctions.commands.AuctionCommand;
@@ -10,19 +10,26 @@ import com.badbones69.crazyauctions.controllers.GuiListener;
 import com.badbones69.crazyauctions.controllers.MarcoListener;
 import com.badbones69.crazyauctions.currency.VaultSupport;
 import com.badbones69.crazyauctions.datafixer.ConfigFixer;
-import com.ryderbelserion.vital.paper.Vital;
-import com.ryderbelserion.vital.paper.util.scheduler.FoliaRunnable;
+import com.ryderbelserion.fusion.core.api.enums.FileType;
+import com.ryderbelserion.fusion.paper.FusionPaper;
+import com.ryderbelserion.fusion.paper.api.enums.Scheduler;
+import com.ryderbelserion.fusion.paper.api.scheduler.FoliaScheduler;
+import com.ryderbelserion.fusion.paper.files.FileManager;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.Server;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
+
+import java.nio.file.Path;
 import java.util.Base64;
 
-public class CrazyAuctions extends Vital {
+public class CrazyAuctions extends JavaPlugin {
 
     @NotNull
     public static CrazyAuctions get() {
@@ -33,21 +40,31 @@ public class CrazyAuctions extends Vital {
 
     private VaultSupport support;
 
+    private FusionPaper fusion;
+    private FileManager fileManager;
+
     @Override
     public void onEnable() {
-        if (!getServer().getPluginManager().isPluginEnabled("Vault")) {
+        final Server server = getServer();
+        final PluginManager pluginManager = server.getPluginManager();
+
+        if (!pluginManager.isPluginEnabled("Vault")) {
             getLogger().severe("Vault was not found so the plugin will now disable.");
 
-            getServer().getPluginManager().disablePlugin(this);
+            pluginManager.disablePlugin(this);
 
             return;
         }
 
-        getFileManager().addFile("config.yml")
-                .addFile("data.yml")
-                .addFile("messages.yml")
-                //.addFile("test-file.yml")
-                .init();
+        this.fusion = new FusionPaper(this);
+
+        this.fileManager = this.fusion.getFileManager();
+
+        final Path path = getDataPath();
+
+        this.fileManager.addFile(path.resolve("config.yml"), FileType.PAPER)
+                .addFile(path.resolve("data.yml"), FileType.PAPER)
+                .addFile(path.resolve("messages.yml"), FileType.PAPER);
 
         this.crazyManager = new CrazyManager();
 
@@ -121,12 +138,12 @@ public class CrazyAuctions extends Vital {
         this.support = new VaultSupport();
         this.support.setupEconomy();
 
-        new FoliaRunnable(getServer().getGlobalRegionScheduler()) {
+        new FoliaScheduler(this, Scheduler.global_scheduler) {
             @Override
             public void run() {
                 Methods.updateAuction();
             }
-        }.runAtFixedRate(this, 0L, 5000L);
+        }.runAtFixedRate(0L, 5000L);
 
         Messages.addMissingMessages();
         new ConfigFixer().onEnable();
@@ -153,5 +170,13 @@ public class CrazyAuctions extends Vital {
 
     public final CrazyManager getCrazyManager() {
         return this.crazyManager;
+    }
+
+    public final FileManager getFileManager() {
+        return this.fileManager;
+    }
+
+    public final FusionPaper getFusion() {
+        return this.fusion;
     }
 }
