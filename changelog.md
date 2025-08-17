@@ -1,0 +1,1 @@
+- Fixed yet another issue with some messages not being converted to MiniMessage with the color migrator.
