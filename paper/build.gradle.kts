@@ -61,7 +61,7 @@ tasks {
         options.isDocFilesSubDirs = true
         options.windowTitle("$name ${rootProject.version} API Documentation")
         options.docTitle("<h1>$name ${rootProject.version} API</h1>")
-        options.header = """<img src="https://raw.githubusercontent.com/Crazy-Crew/Branding/refs/heads/main/crazyvouchers/png/64x64.png" style="height:100%">"""
+        options.header = """<img src="https://raw.githubusercontent.com/Crazy-Crew/Branding/refs/heads/main/crazyauctions/png/64x64.png" style="height:100%">"""
         options.bottom("Copyright © 2025 CrazyCrew")
         options.linkSource(true)
         options.addBooleanOption("html5", true)

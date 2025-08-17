@@ -14,9 +14,9 @@ val content: String = if (isSnapshot) "[$commitHash](https://github.com/Crazy-Cr
 val minecraft = libs.versions.minecraft.get()
 val versions = listOf(minecraft)
 
-rootProject.description = "Give your players as many rewards as you like in a compact form called a voucher!"
-rootProject.version = if (isSnapshot) "$minecraft-$commitHash" else libs.versions.crazyvouchers.get()
-rootProject.group = "com.badbones69.crazyvouchers"
+rootProject.description = "Auction off your items in style!"
+rootProject.version = if (isSnapshot) "$minecraft-$commitHash" else libs.versions.crazyauctions.get()
+rootProject.group = "com.badbones69.crazyauctions"
 
 feather {
     rootDirectory = rootProject.rootDir.toPath()
@@ -80,7 +80,7 @@ feather {
 
             avatar(user.avatar)
 
-            content("<@&1029922295210311681>")
+            content("<@&929463748438138880>")
 
             embeds {
                 embed {
