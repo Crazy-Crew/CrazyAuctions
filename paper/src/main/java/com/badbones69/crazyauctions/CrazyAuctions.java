@@ -116,10 +116,10 @@ public class CrazyAuctions extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new GuiListener(), this);
         getServer().getPluginManager().registerEvents(new MarcoListener(), this);
 
-        registerCommand(getCommand("crazyauctions"), new AuctionTab(), new AuctionCommand());
-
         this.support = new VaultSupport();
         this.support.setupEconomy();
+
+        new CommandHandler();
 
         new FoliaScheduler(this, Scheduler.global_scheduler) {
             @Override
@@ -129,17 +129,10 @@ public class CrazyAuctions extends JavaPlugin {
         }.runAtFixedRate(0L, 5000L);
 
         Messages.addMissingMessages();
+
         new ConfigFixer().onEnable();
 
         new MetricsWrapper(this, 4624);
-    }
-
-    private void registerCommand(PluginCommand pluginCommand, TabCompleter tabCompleter, CommandExecutor commandExecutor) {
-        if (pluginCommand != null) {
-            pluginCommand.setExecutor(commandExecutor);
-
-            if (tabCompleter != null) pluginCommand.setTabCompleter(tabCompleter);
-        }
     }
 
     @Override
