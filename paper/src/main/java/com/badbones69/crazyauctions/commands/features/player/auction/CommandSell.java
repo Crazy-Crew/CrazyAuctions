@@ -50,9 +50,11 @@ public class CommandSell extends BaseCommand {
             final ConfigurationSection section = data.getConfigurationSection("Items");
             final ConfigurationSection items = section == null ? data.createSection("Items") : section;
 
-            final int size = items.getKeys(false).size();
+            int size = 1;
 
-            final ConfigurationSection user = items.createSection(String.valueOf(size)); //todo() this isn't correct, it has to increment.
+            while (data.contains("Items." + size)) size++;
+
+            final ConfigurationSection user = items.createSection(String.valueOf(size));
 
             user.set("Price", price);
             user.set("Seller", player.getUniqueId().toString());
@@ -171,7 +173,9 @@ public class CommandSell extends BaseCommand {
         final ConfigurationSection section = data.getConfigurationSection("Items");
         final ConfigurationSection items = section == null ? data.createSection("Items") : section;
 
-        final int size = items.getKeys(false).size();
+        int size = 1;
+
+        while (data.contains("Items." + size)) size++;
 
         final ConfigurationSection user = items.createSection(String.valueOf(size));
 
