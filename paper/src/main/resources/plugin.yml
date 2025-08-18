@@ -1,7 +1,7 @@
 name: '${name}'
 main: '${group}.${name}'
 
-authors: ${authors}
+authors: [badbones69, ryderbelserion]
 
 version: '${version}'
 api-version: '${minecraft}'
