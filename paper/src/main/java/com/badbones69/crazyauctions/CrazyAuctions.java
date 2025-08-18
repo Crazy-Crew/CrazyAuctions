@@ -38,17 +38,6 @@ public class CrazyAuctions extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        final Server server = getServer();
-        final PluginManager pluginManager = server.getPluginManager();
-
-        if (!pluginManager.isPluginEnabled("Vault")) {
-            getLogger().severe("Vault was not found so the plugin will now disable.");
-
-            pluginManager.disablePlugin(this);
-
-            return;
-        }
-
         this.fusion = new FusionPaper(this);
 
         this.fileManager = this.fusion.getFileManager();

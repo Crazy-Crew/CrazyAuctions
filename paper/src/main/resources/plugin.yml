@@ -9,12 +9,7 @@ description: '${description}'
 website: '${website}'
 folia-supported: true
 
-softdepend: [Vault]
-
-commands:
-  crazyauctions:
-    description: Opens the Crazy Auctions GUI.
-    aliases: [crazyauction, ah, ca]
+depend: [Vault]
 
 permissions:
   crazyauctions.access:
