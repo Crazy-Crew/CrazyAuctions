@@ -52,7 +52,7 @@ public class CommandBid extends BaseCommand {
 
             final int size = items.getKeys(false).size();
 
-            final ConfigurationSection user = items.createSection(String.valueOf(size));
+            final ConfigurationSection user = items.createSection(String.valueOf(size)); //todo() this isn't correct, it has to increment.
 
             user.set("Price", price);
             user.set("Seller", player.getUniqueId().toString());
