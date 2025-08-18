@@ -7,6 +7,7 @@ import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -18,7 +19,12 @@ public enum Messages {
     RELOAD("Reload", "&7You have just reloaded the Crazy Auctions Files."),
     NEED_MORE_MONEY("Need-More-Money", "&cYou are in need of &a$%money_needed%&c."),
     INVENTORY_FULL("Inventory-Full", "&cYour inventory is too full. Please open up some space to buy that."),
-    NO_PERMISSION("No-Permission", "&cYou do not have permission to use that command!"),
+    NO_PERMISSION("No-Permission", "&cYou do not have the permission %permission% to use that command!"),
+
+    MUST_BE_CONSOLE_SENDER("Must-Be-Console-Sender", "&cYou must be using console to use this command."),
+    UNKNOWN_COMMAND("Unknown-Command", "&c{command} is not a known command."),
+    CORRECT_USAGE("Correct-Usage", "&cThe correct usage for this command is &e{usage}"),
+
     NOT_ONLINE("Not-Online", "&cThat player is not online at this time."),
     DOESNT_HAVE_ITEM_IN_HAND("Doesnt-Have-Item-In-Hand", "&cYou must have an item in your hand."),
     NOT_A_NUMBER("Not-A-Number", "&c%arg% is not a number."),
@@ -149,6 +155,20 @@ public enum Messages {
         }
 
         return message;
+    }
+
+    public void sendMessage(@NotNull final CommandSender sender, @NotNull final String placeholder, @NotNull final String value) {
+        sendMessage(sender, new HashMap<>() {{
+            put(placeholder, value);
+        }});
+    }
+
+    public void sendMessage(@NotNull final CommandSender sender, @NotNull final Map<String, String> placeholders) {
+        sender.sendMessage(getMessage(sender, placeholders));
+    }
+
+    public void sendMessage(@NotNull final CommandSender sender) {
+        sendMessage(sender, new HashMap<>());
     }
     
     private boolean exists() {
