@@ -39,6 +39,7 @@ public class CrazyAuctions extends JavaPlugin {
     @Override
     public void onEnable() {
         this.fusion = new FusionPaper(this);
+        this.fusion.enable(this);
 
         this.fileManager = this.fusion.getFileManager();
 
