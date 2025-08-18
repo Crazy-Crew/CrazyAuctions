@@ -12,29 +12,35 @@ folia-supported: true
 depend: [Vault]
 
 permissions:
+  crazyauctions.cancel:
+    default: true
+
   crazyauctions.access:
-    default: true
-
-  crazyauctions.test:
-    default: op
-
-  crazyauctions.view:
-    default: true
-
-  crazyauctions.reload:
-    default: op
-
-  crazyauctions.force-end-all:
-    default: op
-
-  crazyauctions.bypass:
-    default: false
-
-  crazyauctions.sell:
     default: true
 
   crazyauctions.bid:
     default: true
+
+  crazyauctions.sell:
+    default: true
+
+  crazyauctions.expired:
+    default: true
+
+  crazyauctions.listed:
+    default: true
+
+  crazyauctions.view:
+    default: true
+
+  crazyauctions.help:
+    default: op
+
+  crazyauctions.reload:
+    default: op
+
+  crazyauctions.bypass:
+    default: op
 
   crazyauctions.player.*:
     default: false
@@ -47,7 +53,6 @@ permissions:
   crazyauctions.admin:
     default: false
     children:
-      crazyauctions.test: true
       crazyauctions.reload: true
       crazyauctions.bypass: true
-      crazyauctions.force-end-all: true
+      crazyauctions.cancel: true
