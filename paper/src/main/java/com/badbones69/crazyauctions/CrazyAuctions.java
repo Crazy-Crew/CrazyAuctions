@@ -4,8 +4,7 @@ import com.badbones69.crazyauctions.api.CrazyManager;
 import com.badbones69.crazyauctions.api.enums.misc.Files;
 import com.badbones69.crazyauctions.api.enums.Messages;
 import com.badbones69.crazyauctions.api.support.MetricsWrapper;
-import com.badbones69.crazyauctions.commands.AuctionCommand;
-import com.badbones69.crazyauctions.commands.AuctionTab;
+import com.badbones69.crazyauctions.commands.features.CommandHandler;
 import com.badbones69.crazyauctions.controllers.GuiListener;
 import com.badbones69.crazyauctions.controllers.MarcoListener;
 import com.badbones69.crazyauctions.currency.VaultSupport;
@@ -16,16 +15,10 @@ import com.ryderbelserion.fusion.paper.api.enums.Scheduler;
 import com.ryderbelserion.fusion.paper.api.scheduler.FoliaScheduler;
 import com.ryderbelserion.fusion.paper.files.FileManager;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.Server;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.PluginCommand;
-import org.bukkit.command.TabCompleter;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
-
 import java.nio.file.Path;
 import java.util.Base64;
 
