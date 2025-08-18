@@ -457,7 +457,7 @@ public class GuiListener implements Listener {
         player.openInventory(inv);
     }
 
-    public static void openViewer(@NotNull Player player, @NotNull String other, int page) {
+    public static void openViewer(@NotNull Player player, @NotNull UUID uuid, int page) {
         Methods.updateAuction();
 
         FileConfiguration config = Files.config.getConfiguration();
@@ -466,17 +466,17 @@ public class GuiListener implements Listener {
         List<ItemStack> items = new ArrayList<>();
         List<Integer> ID = new ArrayList<>();
 
-        if (!Methods.isUUID(other)) other = String.valueOf(plugin.getServer().getPlayerUniqueId(other));
-
         if (!data.contains("Items")) {
             data.set("Items.Clear", null);
 
             Files.data.save();
         }
 
+        final String toString = uuid.toString();
+
         if (data.contains("Items")) {
             for (String i : data.getConfigurationSection("Items").getKeys(false)) {
-                if (Objects.equals(data.getString("Items." + i + ".Seller"), other)) {
+                if (Objects.equals(data.getString("Items." + i + ".Seller"), toString)) {
                     String price = Methods.getPrice(i, false);
                     String time = Methods.convertToTime(data.getLong("Items." + i + ".Time-Till-Expire"));
 
