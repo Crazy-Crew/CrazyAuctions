@@ -19,6 +19,7 @@ dependencies {
     implementation(libs.fusion.paper)
 
     implementation(libs.triumph.cmds)
+    implementation(libs.triumph.gui)
 
     implementation(libs.nbt.api)
 
@@ -34,6 +35,9 @@ tasks {
 
     shadowJar {
         listOf(
+            "dev.triumphteam.gui",
+            "dev.triumphteam.cmd",
+
             "org.bstats"
         ).forEach {
             relocate(it, "libs.$it")
