@@ -21,8 +21,6 @@ Settings:
   Feature-Toggle: #Toggle if a feature is on or off.
     Selling: true #Able to use the selling part of the auction house.
     Bidding: true #Able to use the bidding part of the auction house.
-  Patches:
-    Macro-Dupe: true #Turn to false if you have an issue, but it should patch the bug.
   Sounds:
     Toggle: false #Disable the clicking sound.
     Sound: 'UI_BUTTON_CLICK' #Make sure if you use 1.8 or lower you use the 1.8 sound and 1.9 and up use 1.9 sounds. The default sound is 1.8.

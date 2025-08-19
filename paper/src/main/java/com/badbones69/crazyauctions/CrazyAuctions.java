@@ -5,7 +5,6 @@ import com.badbones69.crazyauctions.api.enums.Messages;
 import com.badbones69.crazyauctions.api.support.MetricsWrapper;
 import com.badbones69.crazyauctions.commands.features.CommandHandler;
 import com.badbones69.crazyauctions.controllers.GuiListener;
-import com.badbones69.crazyauctions.controllers.MarcoListener;
 import com.badbones69.crazyauctions.currency.VaultSupport;
 import com.badbones69.crazyauctions.datafixer.ConfigFixer;
 import com.ryderbelserion.fusion.core.api.enums.FileType;
@@ -52,7 +51,6 @@ public class CrazyAuctions extends JavaPlugin {
         final PluginManager pluginManager = getServer().getPluginManager();
 
         pluginManager.registerEvents(new GuiListener(), this);
-        pluginManager.registerEvents(new MarcoListener(), this);
 
         this.support = new VaultSupport();
         this.support.setupEconomy();
