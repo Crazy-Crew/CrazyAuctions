@@ -7,7 +7,6 @@ import com.badbones69.crazyauctions.api.events.AuctionCancelledEvent;
 import com.badbones69.crazyauctions.api.events.AuctionExpireEvent;
 import com.badbones69.crazyauctions.api.events.AuctionWinBidEvent;
 import org.bukkit.*;
-import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -23,9 +22,6 @@ public class Methods {
 
     private final static Pattern HEX_PATTERN = Pattern.compile("#[a-fA-F0-9]{6}");
 
-    private static final Pattern UUID_PATTERN = Pattern.compile("[a-f0-9]{8}(?:-[a-f0-9]{4}){4}[a-f0-9]{8}");
-
-
     public static String color(String message) {
         Matcher matcher = HEX_PATTERN.matcher(message);
         StringBuilder buffer = new StringBuilder();
@@ -37,10 +33,6 @@ public class Methods {
         return ChatColor.translateAlternateColorCodes('&', matcher.appendTail(buffer).toString());
     }
     
-    public static String getPrefix() {
-        return color(Files.config.getConfiguration().getString("Settings.Prefix", ""));
-    }
-    
     public static String getPrefix(String msg) {
         return color(Files.config.getConfiguration().getString("Settings.Prefix", "") + msg);
     }
@@ -48,24 +40,10 @@ public class Methods {
     public static ItemStack getItemInHand(Player player) {
         return player.getInventory().getItemInMainHand();
     }
-
-    public static void setItemInHand(Player player, ItemStack item) {
-        player.getInventory().setItemInMainHand(item);
-    }
     
     public static boolean isInt(String s) {
         try {
             Integer.parseInt(s);
-        } catch (NumberFormatException nfe) {
-            return false;
-        }
-
-        return true;
-    }
-    
-    public static boolean isLong(String s) {
-        try {
-            Long.parseLong(s);
         } catch (NumberFormatException nfe) {
             return false;
         }
@@ -89,10 +67,6 @@ public class Methods {
         return plugin.getServer().getOfflinePlayer(UUID.fromString(uuid));
     }
 
-    public static boolean isUUID(String uuid) {
-        return UUID_PATTERN.matcher(uuid).find();
-    }
-
     public static boolean isOnline(String uuid) {
         for (Player player : plugin.getServer().getOnlinePlayers()) {
             if (player.getUniqueId().toString().equals(uuid)) {
@@ -101,41 +75,6 @@ public class Methods {
         }
 
         return false;
-    }
-    
-    public static boolean isOnline(String name, CommandSender p) {
-        for (Player player : plugin.getServer().getOnlinePlayers()) {
-            if (player.getName().equalsIgnoreCase(name)) {
-                return true;
-            }
-        }
-
-        p.sendMessage(Messages.NOT_ONLINE.getMessage(p));
-        return false;
-    }
-    
-    public static boolean hasPermission(Player player, String perm) {
-        if (!player.hasPermission("crazyauctions." + perm)) {
-            player.sendMessage(Messages.NO_PERMISSION.getMessage(player));
-
-            return false;
-        }
-
-        return true;
-    }
-    
-    public static boolean hasPermission(CommandSender sender, String perm) {
-        if (sender instanceof Player player) {
-            if (!player.hasPermission("crazyauctions." + perm)) {
-                player.sendMessage(Messages.NO_PERMISSION.getMessage(player));
-
-                return false;
-            }
-
-            return true;
-        }
-
-        return true;
     }
     
     public static List<ItemStack> getPage(List<ItemStack> list, Integer page) {
