@@ -13,6 +13,7 @@ import com.ryderbelserion.fusion.paper.FusionPaper;
 import com.ryderbelserion.fusion.paper.api.enums.Scheduler;
 import com.ryderbelserion.fusion.paper.api.scheduler.FoliaScheduler;
 import com.ryderbelserion.fusion.paper.files.FileManager;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import java.nio.file.Path;
@@ -48,8 +49,10 @@ public class CrazyAuctions extends JavaPlugin {
 
         this.crazyManager.load();
 
-        getServer().getPluginManager().registerEvents(new GuiListener(), this);
-        getServer().getPluginManager().registerEvents(new MarcoListener(), this);
+        final PluginManager pluginManager = getServer().getPluginManager();
+
+        pluginManager.registerEvents(new GuiListener(), this);
+        pluginManager.registerEvents(new MarcoListener(), this);
 
         this.support = new VaultSupport();
         this.support.setupEconomy();

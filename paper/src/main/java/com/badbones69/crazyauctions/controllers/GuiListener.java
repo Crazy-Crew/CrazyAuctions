@@ -194,7 +194,9 @@ public class GuiListener implements Listener {
 
             inv.setItem(slot, item);
         }
+
         List<Integer> Id = new ArrayList<>(Methods.getPageInts(ID, page));
+
         List.put(player.getUniqueId(), Id);
 
         player.openInventory(inv);

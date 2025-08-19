@@ -15,7 +15,6 @@ public class ConfigFixer {
         if (config.contains("Settings.GUISettings.OtherSettings.Refresh")) return;
 
         if (config.contains("Settings.GUISettings.OtherSettings.Refesh")) {
-
             config.set("Settings.GUISettings.OtherSettings.Refresh", config.get("Settings.GUISettings.OtherSettings.Refesh"));
 
             Files.config.save();
