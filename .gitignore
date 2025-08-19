@@ -1,11 +1,10 @@
-.gradle
+### Intellij
+.kotlin
 .idea
-build
+!.idea/icon.png
 
-buildSrc/.gradle
-buildSrc/build
-
-!run/eula.txt
-run
-
-jars
+### Gradle
+.gradle
+build/
+jars/
+run/
