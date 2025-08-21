@@ -1,13 +1,14 @@
-name: Release Build
+name: Snapshot Build
 on:
   workflow_dispatch:
-  release:
-    types: [ published ]
+  push:
+    branches:
+      - dev
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
+    if: "!contains(github.event.commits[0].message, '[ci-skip]')"
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
@@ -24,12 +25,14 @@ jobs:
         run: ./gradlew modrinth --stacktrace
         env:
           MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
+          COMMIT_MESSAGE: ${{ join(github.event.commits.*.message, '<br>') }}
       - name: Publish to Hangar
         run: ./gradlew publishAllPublicationsToHangar --stacktrace
         env:
           HANGAR_KEY: ${{ secrets.HANGAR_KEY }}
+          COMMIT_MESSAGE: ${{ join(github.event.commits.*.message, '<br>') }}
       - name: Notify Discord
         if: success()
-        run: ./gradlew release-build --stacktrace
+        run: ./gradlew dev-build --stacktrace
         env:
           BUILD_WEBHOOK: ${{ secrets.BUILD_WEBHOOK }}
