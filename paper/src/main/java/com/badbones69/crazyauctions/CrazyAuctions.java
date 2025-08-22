@@ -6,7 +6,6 @@ import com.badbones69.crazyauctions.api.support.MetricsWrapper;
 import com.badbones69.crazyauctions.commands.features.CommandHandler;
 import com.badbones69.crazyauctions.controllers.GuiListener;
 import com.badbones69.crazyauctions.currency.VaultSupport;
-import com.badbones69.crazyauctions.datafixer.ConfigFixer;
 import com.ryderbelserion.fusion.core.api.enums.FileType;
 import com.ryderbelserion.fusion.paper.FusionPaper;
 import com.ryderbelserion.fusion.paper.api.enums.Scheduler;
@@ -65,8 +64,6 @@ public class CrazyAuctions extends JavaPlugin {
         }.runAtFixedRate(0L, 5000L);
 
         Messages.addMissingMessages();
-
-        new ConfigFixer().onEnable();
 
         new MetricsWrapper(this, 4624);
     }

@@ -56,6 +56,33 @@ public enum Messages {
     CRAZYAUCTIONS_VIEW("CrazyAuctions-View", "&c/ah view <player>"),
     CRAZYAUCTIONS_SELL_BID("CrazyAuctions-Sell-Bid", "&c/ah sell/bid <price> [amount of items]"),
     BOOK_NOT_ALLOWED("Book-Not-Allowed", "&cThat book is not able to be sold in this auction house!"),
+
+    LACKING_FLAG("Lacking-Flag", "&c%flag% &eis not present in the command, expected format: &c%usage%"),
+
+    MIGRATION_NOT_AVAILABLE("Migration-Not-Available", "&aThis migration type is not available."),
+    MIGRATION_PLUGIN_NOT_AVAILABLE("Migration-Plugin-Not-Available", "&aThe plugin &c%name% &ais not enabled. Cannot use as migration!"),
+    MIGRATION_SUCCESS("Migration-Success", Arrays.asList(
+            "&6&l━━━━━━━━━━━━━━━━━━━ Migration Stats ━━━━━━━━━━━━━━━━━━━",
+            "&8» &aSuccessful Conversions: ",
+            " &a⤷ %succeeded_amount%",
+            "&8» &cFailed Conversions: ",
+            " &c⤷ %failed_amount%",
+            "",
+            "&cConversion Time: &e%time%",
+            "&cConversion Type: &e%type%",
+            "",
+            "&cConverted Files:",
+            "%files%",
+            "",
+            "%cConverted Auctions:",
+            "%auctions%",
+            "",
+            "&cRED -> failed",
+            "&aGREEN -> success",
+            "",
+            "&6&l━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    )),
+
     HELP("Help-Menu", Arrays.asList(
     "&e-- &6Crazy Auctions Help &e--",
     "&9/Ah - &eOpens the crazy auction.",

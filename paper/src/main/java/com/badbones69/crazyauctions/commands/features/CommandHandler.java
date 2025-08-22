@@ -4,6 +4,7 @@ import com.badbones69.crazyauctions.CrazyAuctions;
 import com.badbones69.crazyauctions.api.CrazyManager;
 import com.badbones69.crazyauctions.commands.features.admin.CommandCancel;
 import com.badbones69.crazyauctions.commands.features.admin.CommandReload;
+import com.badbones69.crazyauctions.commands.features.admin.migrate.CommandMigrate;
 import com.badbones69.crazyauctions.commands.features.player.CommandExpired;
 import com.badbones69.crazyauctions.commands.features.player.CommandHelp;
 import com.badbones69.crazyauctions.commands.features.player.CommandListed;
@@ -73,6 +74,7 @@ public class CommandHandler {
         this.commandManager.registerArgument(PlayerBuilder.class, (sender, context) -> new PlayerBuilder(server, context));
 
         List.of(
+                new CommandMigrate(),
                 new CommandReload(),
                 new CommandCancel(),
 
