@@ -5,6 +5,7 @@ import com.badbones69.crazyauctions.api.CrazyManager;
 import com.badbones69.crazyauctions.commands.features.admin.CommandCancel;
 import com.badbones69.crazyauctions.commands.features.admin.CommandReload;
 import com.badbones69.crazyauctions.commands.features.admin.migrate.CommandMigrate;
+import com.badbones69.crazyauctions.commands.features.admin.migrate.enums.MigrationType;
 import com.badbones69.crazyauctions.commands.features.player.CommandExpired;
 import com.badbones69.crazyauctions.commands.features.player.CommandHelp;
 import com.badbones69.crazyauctions.commands.features.player.CommandListed;
@@ -70,6 +71,18 @@ public class CommandHandler {
 
         this.commandManager.registerSuggestion(SuggestionKey.of("price"), sender -> List.of("50", "100", "250", "500", "1000", "2500", "5000", "10000"));
         this.commandManager.registerSuggestion(SuggestionKey.of("amount"), sender -> List.of("1", "2", "4", "8", "10", "20", "40", "64"));
+
+        this.commandManager.registerSuggestion(SuggestionKey.of("migrators"), sender -> {
+            final List<String> migrators = new ArrayList<>();
+
+            for (MigrationType value : MigrationType.values()) {
+                final String name = value.getName();
+
+                migrators.add(name);
+            }
+
+            return migrators;
+        });
 
         this.commandManager.registerArgument(PlayerBuilder.class, (sender, context) -> new PlayerBuilder(server, context));
 
