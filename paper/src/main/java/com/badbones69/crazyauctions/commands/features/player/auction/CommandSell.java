@@ -64,7 +64,7 @@ public class CommandSell extends BaseCommand {
 
             user.set("Full-Time", Methods.convertToMill(configuration.getString("Settings.Full-Expire-Time", "10d")));
 
-            user.set("StoreID", UUID.randomUUID());
+            user.set("StoreID", UUID.randomUUID().toString());
 
             user.set("Biddable", true);
 
@@ -189,7 +189,7 @@ public class CommandSell extends BaseCommand {
 
         user.set("Full-Time", Methods.convertToMill(configuration.getString("Settings.Full-Expire-Time", "10d")));
 
-        user.set("StoreID", UUID.randomUUID());
+        user.set("StoreID", UUID.randomUUID().toString());
 
         user.set("Biddable", false);
 
