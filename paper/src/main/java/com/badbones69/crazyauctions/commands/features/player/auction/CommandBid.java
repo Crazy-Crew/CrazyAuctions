@@ -81,6 +81,8 @@ public class CommandBid extends BaseCommand {
 
             user.set("Item", Methods.toBase64(itemStack));
 
+            Files.data.save();
+
             player.sendMessage(Messages.ADDED_ITEM_TO_AUCTION.getMessage(player, new HashMap<>() {{
                 put("%Price%", String.valueOf(price));
                 put("%price%", String.valueOf(price));
@@ -203,6 +205,8 @@ public class CommandBid extends BaseCommand {
         }
 
         user.set("Item", Methods.toBase64(itemStack));
+
+        Files.data.save();
 
         player.sendMessage(Messages.ADDED_ITEM_TO_AUCTION.getMessage(player, new HashMap<>() {{
             put("%Price%", String.valueOf(price));
