@@ -4,7 +4,8 @@ import org.jetbrains.annotations.NotNull;
 
 public enum MigrationType {
 
-    AUCTIONS_DEPRECATED("AuctionsDeprecated");
+    AUCTIONS_CONFIG("AuctionsConfig"),
+    AUCTIONS_DATA("AuctionsData");
 
     private final String name;
 

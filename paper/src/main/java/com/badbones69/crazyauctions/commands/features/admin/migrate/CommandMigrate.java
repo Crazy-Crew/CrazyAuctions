@@ -49,7 +49,7 @@ public class CommandMigrate extends BaseCommand {
         }
 
         switch (type) {
-            case AUCTIONS_DEPRECATED -> new AuctionsDeprecated(sender).run();
+            case AUCTIONS_CONFIG, AUCTIONS_DATA -> new AuctionsDeprecated(sender, type).run();
         }
     }
 }
