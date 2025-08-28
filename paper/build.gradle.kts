@@ -19,9 +19,6 @@ dependencies {
     implementation(libs.fusion.paper)
 
     implementation(libs.triumph.cmds)
-    implementation(libs.triumph.gui)
-
-    implementation(libs.nbt.api)
 
     implementation(libs.metrics)
 
@@ -35,7 +32,6 @@ tasks {
 
     shadowJar {
         listOf(
-            "dev.triumphteam.gui",
             "dev.triumphteam.cmd",
 
             "org.bstats"

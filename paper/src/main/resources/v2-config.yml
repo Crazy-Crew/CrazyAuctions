@@ -1,0 +1,112 @@
+# A list of available placeholders, Placeholders vary depending on the button action used.
+# 
+# available_categories
+# - %category%
+buttons:
+  next_page: # This is the identifier for other configuration files.
+    # Should the button be enabled?
+    toggle: true
+    # Pre-determined action for the button.
+    # 
+    # A list of available actions:
+    # - go_back
+    # - next_page
+    # - refresh
+    # - expired_items
+    # - your_active_items
+    # - your_sold_items
+    # - current_selling
+    # - current_bidding
+    # - available_categories
+    action: "next_page"
+    # Settings related to the item.
+    item:
+      # The material of the item.
+      type: "PAPER"
+      # The name of the item.
+      name: "&6Next Page"
+      # The lore of the item.
+      lore: []
+  back_page:
+    # Should the button be enabled?
+    toggle: true
+    # Pre-determined action for the button.
+    action: "go_back"
+    # Settings related to the item.
+    item:
+      # The material of the item.
+      type: "PAPER"
+      # The name of the item.
+      name: "&6Previous Page"
+      # The lore of the item.
+      lore: []
+  refresh:
+    # Should the button be enabled?
+    toggle: true
+    # Pre-determined action for the button.
+    action: "refresh"
+    # Settings related to the item.
+    item:
+      # The material of the item.
+      type: "SUNFLOWER"
+      # The name of the item.
+      name: "&6Refresh"
+      # The lore of the item.
+      lore: []
+  expired_page:
+    # Should the button be enabled?
+    toggle: true
+    # Pre-determined action for the button.
+    action: "expired_items"
+    # Settings related to the item.
+    item:
+      # The material of the item.
+      type: "POISONOUS_POTATO"
+      # The name of the item.
+      name: "&6Collect Expired / Cancelled Items"
+      # The lore of the item.
+      lore:
+        - "&aClick here to view and collect all of the"
+        - "&aitems you have canceled or has expired."
+  category_page:
+    # Should the button be enabled?
+    toggle: true
+    # Pre-determined action for the button.
+    action: "available_categories"
+    # Settings related to the item.
+    item:
+      # The material of the item.
+      type: "CHEST"
+      # The name of the item.
+      name: "&6Categories"
+      # The lore of the item.
+      lore:
+        - "&bCurrent Category: &6%category%"
+        - "&aWant to see items in specific categories?"
+        - "&aClick here to see all categories of items."
+  sell_page:
+    # Should the button be enabled?
+    toggle: true
+    # Pre-determined action for the button.
+    action: "current_selling"
+    # Settings related to the item.
+    item:
+      # The material of the item.
+      type: "PAPER"
+      # The name of the item.
+      name: "&6Previous Page"
+      # The lore of the item.
+      lore: []
+  bid_page:
+    # Should the button be enabled?
+    toggle: true
+    # Pre-determined action for the button.
+    action: "current_bidding"
+    # Settings related to the item.
+    item:
+      # The material of the item.
+      type: "PAPER"
+      # The name of the item.
+      name: "&6Previous Page"
+      # The lore of the item.
+      lore: []

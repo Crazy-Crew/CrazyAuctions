@@ -29,10 +29,9 @@ nexo = "1.6.0" # https://github.com/Nexo-MC
 
 ## Triumph Team
 triumph-cmds = "2.0.0-BETA-4" # https://github.com/TriumphTeam/triumph-cmds
-triumph-gui = "4.0.0-SNAPSHOT" # https://github.com/TriumphTeam/triumph-gui
 
 ## Fusion
-fusion = "1.22.7" # https://github.com/ryderbelserion/Fusion
+fusion = "1.22.9" # https://github.com/ryderbelserion/Fusion
 
 ## Metrics
 bStats = "3.1.0" # https://github.com/Bastian/bStats
@@ -94,11 +93,6 @@ kyori-api = { module = "net.kyori:adventure-api", version.ref = "adventure" }
 
 # https://github.com/TriumphTeam/triumph-cmds
 triumph-cmds = { module = "dev.triumphteam:triumph-cmd-bukkit", version.ref = "triumph-cmds" }
-# https://github.com/TriumphTeam/triumph-gui
-triumph-gui = { module = "dev.triumphteam:triumph-gui-paper", version.ref = "triumph-gui" }
-
-# Deprecated API
-nbt-api = { module = "de.tr7zw:item-nbt-api", version.ref = "nbtapi" }
 
 # https://github.com/ryderbelserion/Fusion
 fusion-paper = { module = "com.ryderbelserion.fusion:fusion-paper", version.ref = "fusion" }

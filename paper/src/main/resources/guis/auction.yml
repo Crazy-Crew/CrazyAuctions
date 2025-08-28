@@ -1,0 +1,20 @@
+settings:
+  # The name of the gui.
+  gui-name: "<red>Crazy<dark_blue>Auctions"
+  # The size of the auction gui
+  gui-rows: 4
+  # The items for the /crazyauctions main menu
+  items:
+    # This can be found in config.yml, This is a unique id.
+    bid_page:
+      # The slot in the inventory.
+      slot: 30
+    sell_page:
+      # The slot in the inventory.
+      slot: 31
+    expired_page:
+      # The slot in the inventory.
+      slot: 32
+    category_page:
+      # The slot in the inventory.
+      slot: 33
