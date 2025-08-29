@@ -39,7 +39,7 @@ public class AuctionGui {
 
         guiFiller.fill(ItemType.RED_STAINED_GLASS_PANE.createItemStack(), ItemType.GREEN_STAINED_GLASS_PANE.createItemStack());
 
-        this.gui.addItems(this.crazyManager.getItems().values().stream().map(auctionItem -> auctionItem.asGuiItem(player)).toList().toArray(new GuiItem[0]));
+        this.gui.addItems(this.crazyManager.getItems().values().stream().filter(item -> !item.isActive()).map(item -> item.asGuiItem(player)).toArray(GuiItem[]::new));
 
         this.gui.addSlotAction(0, action -> action.setCurrentItem(ItemType.CHEST.createItemStack()));
 
