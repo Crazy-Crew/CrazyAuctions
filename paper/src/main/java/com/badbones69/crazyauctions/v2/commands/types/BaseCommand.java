@@ -5,7 +5,6 @@ import com.ryderbelserion.fusion.paper.FusionPaper;
 import com.ryderbelserion.fusion.paper.files.FileManager;
 import dev.triumphteam.cmd.core.annotations.Command;
 import org.bukkit.plugin.java.JavaPlugin;
-
 import java.nio.file.Path;
 
 @Command(value = "crazyauctions", alias = {"ah", "ca"})

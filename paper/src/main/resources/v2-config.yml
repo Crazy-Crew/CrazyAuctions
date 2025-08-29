@@ -5,7 +5,7 @@
 buttons:
   next_page: # This is the identifier for other configuration files.
     # Should the button be enabled?
-    toggle: true
+    active: true
     # Pre-determined action for the button.
     # 
     # A list of available actions:
@@ -22,91 +22,91 @@ buttons:
     # Settings related to the item.
     item:
       # The material of the item.
-      type: "PAPER"
+      type: "paper"
       # The name of the item.
-      name: "&6Next Page"
+      name: "<gold>Next Page"
       # The lore of the item.
       lore: []
   back_page:
     # Should the button be enabled?
-    toggle: true
+    active: true
     # Pre-determined action for the button.
     action: "go_back"
     # Settings related to the item.
     item:
       # The material of the item.
-      type: "PAPER"
+      type: "paper"
       # The name of the item.
-      name: "&6Previous Page"
+      name: "<gold>Previous Page"
       # The lore of the item.
       lore: []
   refresh:
     # Should the button be enabled?
-    toggle: true
+    active: true
     # Pre-determined action for the button.
     action: "refresh"
     # Settings related to the item.
     item:
       # The material of the item.
-      type: "SUNFLOWER"
+      type: "sunflower"
       # The name of the item.
-      name: "&6Refresh"
+      name: "<gold>Refresh"
       # The lore of the item.
       lore: []
   expired_page:
     # Should the button be enabled?
-    toggle: true
+    active: true
     # Pre-determined action for the button.
     action: "expired_items"
     # Settings related to the item.
     item:
       # The material of the item.
-      type: "POISONOUS_POTATO"
+      type: "poisonous_potato"
       # The name of the item.
-      name: "&6Collect Expired / Cancelled Items"
+      name: "<gold>Collect Expired / Cancelled Items"
       # The lore of the item.
       lore:
-        - "&aClick here to view and collect all of the"
-        - "&aitems you have canceled or has expired."
+        - "<green>Click here to view and collect all of the"
+        - "<green>items you have canceled or has expired."
   category_page:
     # Should the button be enabled?
-    toggle: true
+    active: true
     # Pre-determined action for the button.
     action: "available_categories"
     # Settings related to the item.
     item:
       # The material of the item.
-      type: "CHEST"
+      type: "chest"
       # The name of the item.
-      name: "&6Categories"
+      name: "<gold>Categories"
       # The lore of the item.
       lore:
-        - "&bCurrent Category: &6%category%"
-        - "&aWant to see items in specific categories?"
-        - "&aClick here to see all categories of items."
+        - "<blue>Current Category: <gold>{category}"
+        - "<green>Want to see items in specific categories?"
+        - "<green>Click here to see all categories of items."
   sell_page:
     # Should the button be enabled?
-    toggle: true
+    active: true
     # Pre-determined action for the button.
     action: "current_selling"
     # Settings related to the item.
     item:
       # The material of the item.
-      type: "PAPER"
+      type: "paper"
       # The name of the item.
-      name: "&6Previous Page"
+      name: "<gold>Previous Page"
       # The lore of the item.
       lore: []
   bid_page:
     # Should the button be enabled?
-    toggle: true
+    active: true
     # Pre-determined action for the button.
     action: "current_bidding"
     # Settings related to the item.
     item:
       # The material of the item.
-      type: "PAPER"
+      type: "paper"
       # The name of the item.
-      name: "&6Previous Page"
+      name: "<gold>Previous Page"
       # The lore of the item.
       lore: []

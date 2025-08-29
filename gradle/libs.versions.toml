@@ -13,9 +13,6 @@ adventure = "4.22.0" # https://github.com/KyoriPowered/adventure
 ## Minecraft
 minecraft = "1.21.8" # https://minecraft.net
 
-## Deprecated API
-nbtapi = "2.15.1"
-
 ## Plugin Version
 crazyauctions = "5.0.3"
 

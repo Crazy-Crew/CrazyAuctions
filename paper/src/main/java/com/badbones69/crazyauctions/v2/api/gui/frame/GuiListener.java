@@ -1,5 +1,6 @@
 package com.badbones69.crazyauctions.v2.api.gui.frame;
 
+import com.badbones69.crazyauctions.v2.api.gui.frame.enums.ActionComponent;
 import com.badbones69.crazyauctions.v2.api.gui.frame.interfaces.IGui;
 import com.badbones69.crazyauctions.v2.api.gui.frame.interfaces.IGuiAction;
 import com.badbones69.crazyauctions.v2.api.gui.frame.items.GuiItem;
@@ -18,7 +19,9 @@ public class GuiListener implements Listener {
 
         if (inventory == null || !(inventory.getHolder(false) instanceof IGui gui)) return; // check if it's the base gui first.
 
-        event.setResult(Event.Result.DENY); // deny if we detect a click event.
+        if (gui.hasComponent(ActionComponent.DISABLE_ALL_INTERACTIONS)) {
+            event.setResult(Event.Result.DENY); // deny if we detect a click event.
+        }
 
         final InventoryType inventoryType = inventory.getType();
 

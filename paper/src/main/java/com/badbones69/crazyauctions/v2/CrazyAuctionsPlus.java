@@ -46,6 +46,10 @@ public class CrazyAuctionsPlus extends JavaPlugin {
 
     }
 
+    public @NotNull final CrazyManager getCrazyManager() {
+        return this.crazyManager;
+    }
+
     public @NotNull final FileManager getFileManager() {
         return this.fileManager;
     }

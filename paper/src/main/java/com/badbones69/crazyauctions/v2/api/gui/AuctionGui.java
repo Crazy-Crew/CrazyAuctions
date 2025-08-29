@@ -1,6 +1,10 @@
 package com.badbones69.crazyauctions.v2.api.gui;
 
+import com.badbones69.crazyauctions.v2.CrazyAuctionsPlus;
+import com.badbones69.crazyauctions.v2.api.CrazyManager;
+import com.badbones69.crazyauctions.v2.api.gui.frame.enums.ActionComponent;
 import com.badbones69.crazyauctions.v2.api.gui.frame.items.GuiFiller;
+import com.badbones69.crazyauctions.v2.api.gui.frame.items.GuiItem;
 import com.badbones69.crazyauctions.v2.api.gui.frame.types.SimpleGui;
 import com.badbones69.crazyauctions.v2.api.items.AuctionItem;
 import com.ryderbelserion.fusion.core.files.types.YamlCustomFile;
@@ -9,12 +13,17 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ItemType;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.CommentedConfigurationNode;
 import java.util.ArrayList;
 import java.util.List;
 
 public class AuctionGui {
+
+    private final CrazyAuctionsPlus plugin = JavaPlugin.getPlugin(CrazyAuctionsPlus.class);
+
+    private final CrazyManager crazyManager = this.plugin.getCrazyManager();
 
     private final List<AuctionItem> items = new ArrayList<>();
     private final SimpleGui gui;
@@ -29,6 +38,8 @@ public class AuctionGui {
         final GuiFiller guiFiller = this.gui.getGuiFiller();
 
         guiFiller.fill(ItemType.RED_STAINED_GLASS_PANE.createItemStack(), ItemType.GREEN_STAINED_GLASS_PANE.createItemStack());
+
+        this.gui.addItems(this.crazyManager.getItems().values().stream().map(auctionItem -> auctionItem.asGuiItem(player)).toList().toArray(new GuiItem[0]));
 
         this.gui.addSlotAction(0, action -> action.setCurrentItem(ItemType.CHEST.createItemStack()));
 
@@ -52,6 +63,8 @@ public class AuctionGui {
         this.gui.setOpenAction(action -> action.titleOverride(Component.text("This is an override!")));
 
         this.gui.setCloseAction(action -> action.getPlayer().sendMessage(Component.text("The inventory is closed!")));
+
+        this.gui.addComponent(ActionComponent.DISABLE_ALL_INTERACTIONS);
 
         this.gui.build(player);
     }

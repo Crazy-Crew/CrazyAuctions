@@ -38,4 +38,8 @@ public class CrazyManager {
             });
         }
     }
+
+    public Map<String, AuctionItem> getItems() {
+        return this.items;
+    }
 }
