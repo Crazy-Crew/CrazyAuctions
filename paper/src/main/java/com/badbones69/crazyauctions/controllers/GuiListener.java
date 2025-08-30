@@ -438,7 +438,7 @@ public class GuiListener implements Listener {
 
         Inventory inv = new AuctionMenu(27, Methods.color(config.getString("Settings.Bidding-On-Item"))).getInventory();
 
-        if (!bidding.containsKey(player.getUniqueId())) bidding.put(player.getUniqueId(), 0);
+        if (!bidding.containsKey(player.getUniqueId())) bidding.put(player.getUniqueId(), Integer.valueOf(Methods.getPrice(ID, false)));
 
         inv.setItem(9, new ItemBuilder().setMaterial(Material.LIME_STAINED_GLASS_PANE).setName("&a+1").setAmount(1).build());
         inv.setItem(10, new ItemBuilder().setMaterial(Material.LIME_STAINED_GLASS_PANE).setName("&a+10").setAmount(1).build());
