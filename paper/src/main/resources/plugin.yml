@@ -19,6 +19,9 @@ commands:
 permissions:
   crazyauctions.access:
     default: true
+    
+  crazyauctions.search:
+    default: true
 
   crazyauctions.test:
     default: op
