@@ -304,7 +304,7 @@ Settings:
         Lore:
           - '&7Click here to Bid Now.'
   BlackList:
-    - 'BEDROCK'
-    - 'END_PORTAL_FRAME'
+    - 'bedrock'
+    - 'end_portal_frame'
   PDC-BlackList:
     - 'mcmmo:super_ability_boosted'
