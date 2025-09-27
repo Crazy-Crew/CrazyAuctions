@@ -25,6 +25,7 @@ dependencies {
     }
 
     compileOnly(libs.bundles.shared)
+
     compileOnly(libs.paper)
 }
 
@@ -71,9 +72,5 @@ tasks {
         filesMatching("plugin.yml") {
             expand(inputs.properties)
         }
-    }
-
-    withType<JavaCompile> {
-        options.compilerArgs.add("-Xlint:-removal")
     }
 }

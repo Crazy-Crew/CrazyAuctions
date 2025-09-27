@@ -48,17 +48,5 @@ subprojects {
         processResources {
             filteringCharset = Charsets.UTF_8.name()
         }
-
-        named("build") {
-            dependsOn(":paper:shadowJar")
-
-            doLast {
-                val paperJar = project(":paper").tasks.named("shadowJar").get()
-                copy {
-                    from(paperJar.outputs.files)
-                    into(rootProject.projectDir.resolve("jars"))
-                }
-            }
-        }
     }
 }
