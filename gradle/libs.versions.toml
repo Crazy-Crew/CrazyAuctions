@@ -1,0 +1,79 @@
+[plugins]
+hangar = { id = "io.papermc.hangar-publish-plugin", version.ref = "hangar" }
+runPaper = { id = "xyz.jpenilla.run-paper", version.ref = "runPaper" }
+minotaur = { id = "com.modrinth.minotaur", version.ref = "minotaur" }
+shadow = { id = "com.gradleup.shadow", version.ref = "shadow" }
+
+[versions]
+# Paper API
+paper = "1.21.3-R0.1-SNAPSHOT"
+velocity = "3.3.0-SNAPSHOT"
+minecraft = "1.21.3"
+brigadier = "1.3.10"
+
+# Gradle Plugins
+runPaper = "2.3.0"
+minotaur = "2.8.7"
+hangar = "0.1.2"
+shadow = "9.0.0-beta4"
+
+# Bukkit Plugins
+itemsadder = "3.6.3-beta-14"
+headdatabaseapi = "1.3.1"
+placeholderapi = "2.11.6"
+oraxen = "1.171.0"
+vault = "1.7.1"
+coinsengine = "2.5.0"
+
+# Common API
+jetbrains = "24.1.0"
+adventure = "4.17.0"
+hikari = "4.0.3"
+gson = "2.10.1"
+jalu = "1.4.1"
+
+# Vital API
+vital-paper = "1.0.6"
+
+[libraries]
+# Velocity API
+velocity = { module = "com.velocitypowered:velocity-api", version.ref = "velocity" }
+
+# Mojang API
+brigadier = { module = "com.mojang:brigadier", version.ref = "brigadier" }
+
+# Paper API
+paper = { module = "io.papermc.paper:paper-api", version.ref = "paper" }
+
+# Kyori API
+kyori-logger = { module = "net.kyori:adventure-text-logger-slf4j", version.ref = "adventure" }
+kyori-text = { module = "net.kyori:adventure-text-minimessage", version.ref = "adventure" }
+kyori-api = { module = "net.kyori:adventure-api", version.ref = "adventure" }
+
+# Bukkit Plugins API
+headdatabaseapi = { module = "com.arcaniax:HeadDatabase-API", version.ref = "headdatabaseapi" }
+itemsadder = { module = "com.github.LoneDev6:api-itemsadder", version.ref = "itemsadder" }
+placeholderapi = { module = "me.clip:placeholderapi", version.ref = "placeholderapi" }
+vault = { module = "com.github.MilkBowl:VaultAPI", version.ref = "vault" }
+coinsengine = { module = "su.nightexpress.coinsengine:CoinsEngine", version.ref = "coinsengine" }
+oraxen = { module = "io.th0rgal:oraxen", version.ref = "oraxen" }
+cmi-api = { module = "CMI-API:CMI-API", version = "9.7.4.1" }
+cmi-lib = { module = "CMILib:CMILib", version = "1.5.1.4" }
+
+# Vital API
+vital-paper = { module = "com.ryderbelserion.vital:paper", version.ref = "vital-paper" }
+hikari-cp = { module = "com.zaxxer:HikariCP", version.ref = "hikari" }
+
+jetbrains = { module = "org.jetbrains:annotations", version.ref = "jetbrains" }
+gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
+jalu = { module = "ch.jalu:configme", version.ref = "jalu" }
+
+[bundles]
+# Soft Depends
+dependencies = ["cmi-lib", "cmi-api"]
+
+# Shared with the git submodules
+shared = ["headdatabaseapi", "placeholderapi", "oraxen", "vault", "coinsengine"]
+
+# Adventure API
+adventure = ["kyori-api", "kyori-text", "kyori-logger"]
