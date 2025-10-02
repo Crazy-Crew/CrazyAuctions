@@ -39,7 +39,7 @@ public class ItemSeller {
         double listPercent = config.getDouble("Settings.Auction-List-Percent-Tax", (double) 0);
         double listCost = (double) (price * listPercent) / 100;
 
-        if (session.getMoney(player) <= listCost) {
+        if (session.getMoney(player) < listCost) {
             String moneyNeeded = crazyManager.getPriceWithCurrency(String.valueOf(listCost), currency);
             Map<String, String> placeholders = new HashMap<>() {{
                 put("%Money_Needed%", moneyNeeded);

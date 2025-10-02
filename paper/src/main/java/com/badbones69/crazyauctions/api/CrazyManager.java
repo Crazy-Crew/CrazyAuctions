@@ -34,7 +34,7 @@ public class CrazyManager {
 
         this.biddingEnabled = config.getBoolean("Settings.Feature-Toggle.Bidding", true);
 
-        this.coinsEngineEnabled = config.getBoolean("Settings.CoinsEngineSupport.enable", false);
+        this.coinsEngineEnabled = plugin.isCoinsEngineEnabled();
 
         this.defaultCurrencySymbol = config.getString("Settings.defaultCurrencySymbol", "$");
         this.registeredCoinsEngineCurrencies = this.getValidCoinsEngineCurrencies(config);
@@ -142,18 +142,20 @@ public class CrazyManager {
     }
 
     private Map<String, CurrencyData> getValidCoinsEngineCurrencies(FileConfiguration config) {
-        List<String> currencies = config.getStringList("Settings.CoinsEngineSupport.currencies");
         Map<String, CurrencyData> validCurrencies = new HashMap<>();
+        if (this.coinsEngineEnabled) {
+            List<String> currencies = config.getStringList("Settings.CoinsEngineSupport.currencies");
 
-        if (currencies == null || currencies.isEmpty()) {
-            return validCurrencies;
-        }
+            if (currencies == null || currencies.isEmpty()) {
+                return validCurrencies;
+            }
 
-        CoinsEngineSupport coinsSupport = plugin.getCoinsEngineSupport();
-        for (String currencyId : currencies) {
-            CurrencyData currency = coinsSupport.getCurrency(currencyId);
-            if (currency != null) {
-                validCurrencies.put(currencyId, currency);
+            CoinsEngineSupport coinsSupport = plugin.getCoinsEngineSupport();
+            for (String currencyId : currencies) {
+                CurrencyData currency = coinsSupport.getCurrency(currencyId);
+                if (currency != null) {
+                    validCurrencies.put(currencyId, currency);
+                }
             }
         }
 

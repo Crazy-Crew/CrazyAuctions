@@ -32,9 +32,9 @@ public class CrazyAuctions extends Vital {
     }
 
     private CrazyManager crazyManager;
-
     private VaultSupport support;
-    private CoinsEngineSupport supportCoinsEngine;
+    private CoinsEngineSupport supportCoinsEngine;  // Usage only in CrazyManager with check isCoinsEngineEnabled
+    private boolean coinsEngineEnabled = false;
 
 
     @Override
@@ -52,6 +52,27 @@ public class CrazyAuctions extends Vital {
                 .addFile("messages.yml")
                 //.addFile("test-file.yml")
                 .init();
+
+        FileConfiguration config = Files.config.getConfiguration();
+        boolean configCoinsEnabled = config.getBoolean("Settings.CoinsEngineSupport.enable", false);
+
+        if (configCoinsEnabled) {
+            if (getServer().getPluginManager().isPluginEnabled("CoinsEngine")) {
+                try {
+                    this.supportCoinsEngine = new CoinsEngineSupport();
+                    this.coinsEngineEnabled = true;
+                    getLogger().info("CoinsEngine support enabled!");
+                } catch (NoClassDefFoundError | Exception e) {
+                    getLogger().warning("CoinsEngine found but failed to initialize: " + e.getMessage());
+                    this.coinsEngineEnabled = false;
+                }
+            } else {
+                getLogger().warning("CoinsEngine is enabled in config but plugin not found!");
+                this.coinsEngineEnabled = false;
+            }
+        } else {
+            this.coinsEngineEnabled = false;
+        }
 
         this.crazyManager = new CrazyManager();
         this.crazyManager.load();
@@ -122,8 +143,6 @@ public class CrazyAuctions extends Vital {
         this.support = new VaultSupport();
         this.support.setupEconomy();
 
-        this.supportCoinsEngine = new CoinsEngineSupport();
-
         new FoliaRunnable(getServer().getGlobalRegionScheduler()) {
             @Override
             public void run() {
@@ -155,8 +174,12 @@ public class CrazyAuctions extends Vital {
     }
 
     public final CoinsEngineSupport getCoinsEngineSupport() {
-            return this.supportCoinsEngine;
-        }
+        return this.supportCoinsEngine;
+    }
+
+    public final boolean isCoinsEngineEnabled() {
+        return coinsEngineEnabled;
+    }
 
     public final CrazyManager getCrazyManager() {
         return this.crazyManager;

@@ -9,7 +9,8 @@ description: '${description}'
 website: '${website}'
 folia-supported: true
 
-softdepend: [Vault]
+depend: [Vault]
+softdepend: [CoinsEngine]
 
 commands:
   crazyauctions:
