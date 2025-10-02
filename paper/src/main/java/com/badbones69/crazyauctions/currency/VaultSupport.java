@@ -26,6 +26,10 @@ public class VaultSupport {
         return this.vault != null;
     }
 
+    public double getMoney(@NotNull Player player) {
+        return (double) this.vault.getBalance(player);
+    }
+
     public double getMoney(@NotNull OfflinePlayer player) {
         return (double) this.vault.getBalance(player);
     }

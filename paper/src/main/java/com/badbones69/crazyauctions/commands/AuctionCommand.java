@@ -9,7 +9,6 @@ import com.badbones69.crazyauctions.api.events.AuctionListEvent;
 import com.badbones69.crazyauctions.controllers.GuiListener;
 import com.badbones69.crazyauctions.controllers.ItemSeller;
 import com.badbones69.crazyauctions.currency.EconomySession;
-import com.badbones69.crazyauctions.currency.EconomySessionFactory;
 import com.ryderbelserion.vital.paper.api.files.FileManager;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -17,6 +16,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
@@ -302,7 +302,7 @@ public class AuctionCommand implements CommandExecutor {
                         }
 
                         if (args[0].equalsIgnoreCase("sell")) {
-                            if (crazyManager.getItems(player, ShopType.SELL).size() >= SellLimit) {
+                            if (crazyManager.getPlayerItems(player.getUniqueId().toString(), ShopType.SELL).size() >= SellLimit) {
                                 player.sendMessage(Messages.MAX_ITEMS.getMessage(sender));
 
                                 return true;
@@ -310,7 +310,7 @@ public class AuctionCommand implements CommandExecutor {
                         }
 
                         if (args[0].equalsIgnoreCase("bid")) {
-                            if (crazyManager.getItems(player, ShopType.BID).size() >= BidLimit) {
+                            if (crazyManager.getPlayerItems(player.getUniqueId().toString(), ShopType.BID).size() >= BidLimit) {
                                 player.sendMessage(Messages.MAX_ITEMS.getMessage(sender));
 
                                 return true;
@@ -343,11 +343,11 @@ public class AuctionCommand implements CommandExecutor {
                     }
                     boolean isBid = args[0].equalsIgnoreCase("bid");
 
-                    if (config.getBoolean("Settings.CoinsEngineSupport.enable", false)) {
+                    if (crazyManager.isCurrencyEnabled()) {
                         GuiListener.openCurrency(player, item, amount, price, isBid);
                         return true;
                     }
-                    EconomySession session = EconomySessionFactory.create(plugin.getSupport());
+                    EconomySession session = crazyManager.getEconomySession();
                     return ItemSeller.sell(session, player, item, amount, price, isBid);
                 }
 
@@ -375,16 +375,13 @@ public class AuctionCommand implements CommandExecutor {
 
         int num = 1;
 
-        for (String i : data.getConfigurationSection("Items").getKeys(false)) {
-
-            OfflinePlayer seller = Methods.getOfflinePlayer(data.getString("Items." + i + ".Seller"));
-
+        for (ConfigurationSection itemSection : crazyManager.getItems()) {
+            OfflinePlayer seller = Methods.getOfflinePlayer(itemSection.getString("Seller"));
             if (seller.getPlayer() != null) {
                 seller.getPlayer().sendMessage(Messages.ADMIN_FORCE_CANCELLED_TO_PLAYER.getMessage(player));
             }
 
-            num = Methods.expireItem(num, seller, i, data, Reasons.ADMIN_FORCE_CANCEL);
-
+            num = Methods.expireItem(num, seller, itemSection, data, Reasons.ADMIN_FORCE_CANCEL);
         }
 
         Files.data.save();

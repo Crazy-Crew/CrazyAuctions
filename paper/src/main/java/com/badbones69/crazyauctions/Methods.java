@@ -1,5 +1,6 @@
 package com.badbones69.crazyauctions;
 
+import com.badbones69.crazyauctions.api.CrazyManager;
 import com.badbones69.crazyauctions.api.enums.Files;
 import com.badbones69.crazyauctions.api.enums.Messages;
 import com.badbones69.crazyauctions.api.enums.Reasons;
@@ -7,11 +8,11 @@ import com.badbones69.crazyauctions.api.events.AuctionCancelledEvent;
 import com.badbones69.crazyauctions.api.events.AuctionExpireEvent;
 import com.badbones69.crazyauctions.api.events.AuctionWinBidEvent;
 import com.badbones69.crazyauctions.currency.EconomySession;
-import com.badbones69.crazyauctions.currency.EconomySessionFactory;
 import com.badbones69.crazyauctions.controllers.GuiListener;
 import org.bukkit.*;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -24,6 +25,7 @@ import java.util.regex.Pattern;
 public class Methods {
 
     private final static CrazyAuctions plugin = CrazyAuctions.get();
+    private static final CrazyManager crazyManager = plugin.getCrazyManager();
 
     private final static Pattern HEX_PATTERN = Pattern.compile("#[a-fA-F0-9]{6}");
 
@@ -262,131 +264,114 @@ public class Methods {
 
         boolean shouldSave = false;
 
-        if (data.contains("OutOfTime/Cancelled")) {
-            for (String i : data.getConfigurationSection("OutOfTime/Cancelled").getKeys(false)) {
-                fullExpireTime.setTimeInMillis(data.getLong("OutOfTime/Cancelled." + i + ".Full-Time"));
+        for (ConfigurationSection itemSection : crazyManager.getExpiredItems()) {
+            fullExpireTime.setTimeInMillis(itemSection.getLong("Full-Time"));
+            if (cal.after(fullExpireTime)) {
+                data.set(itemSection.getCurrentPath(), null);
 
-                if (cal.after(fullExpireTime)) {
-                    data.set("OutOfTime/Cancelled." + i, null);
-
-                    shouldSave = true;
-                }
+                shouldSave = true;
             }
         }
 
-        if (data.contains("Items")) {
-            for (String i : data.getConfigurationSection("Items").getKeys(false)) {
-                expireTime.setTimeInMillis(data.getLong("Items." + i + ".Time-Till-Expire"));
-                fullExpireTime.setTimeInMillis(data.getLong("Items." + i + ".Full-Time"));
+        double taxPercent = config.getDouble("Settings.Percent-Tax", (double) 0);
 
-                if (cal.after(expireTime)) {
-                    int num = 1;
+        for (ConfigurationSection itemSection : crazyManager.getItems()) {
+            expireTime.setTimeInMillis(itemSection.getLong("Time-Till-Expire"));
+            fullExpireTime.setTimeInMillis(itemSection.getLong("Full-Time"));
+            if (cal.after(expireTime)) {
+                int num = 1;
 
-                    for (; data.contains("OutOfTime/Cancelled." + num); num++) ;
+                for (; data.contains("OutOfTime/Cancelled." + num); num++) ;
 
-                    String winner = data.getString("Items." + i + ".TopBidder");
-                    if (data.getBoolean("Items." + i + ".Biddable") && winner != null && plugin.getSupport().getMoney(getOfflinePlayer(winner)) >= data.getInt("Items." + i + ".Price")) {
-                        String seller = data.getString("Items." + i + ".Seller");
-                        double price = data.getDouble("Items." + i + ".Price");
-                        String currency = data.getString("Items." + i + ".Currency", "");
+                String winner = itemSection.getString("TopBidder");
+                String currency = itemSection.getString("Currency");
 
-                        double taxAmount = (price * config.getDouble("Settings.Percent-Tax", (double) 0) / 100);
-                        double taxedPriceAmount = Math.max(price - taxAmount, 0);
+                EconomySession session = crazyManager.getEconomySession(currency);
 
-                        OfflinePlayer sellerPlayer = Methods.getOfflinePlayer(seller);
-                        OfflinePlayer winnerPlayer = Methods.getOfflinePlayer(winner);
+                if (itemSection.getBoolean("Biddable") && winner != null && session.getMoney(getOfflinePlayer(winner)) >= itemSection.getDouble("Price")) {
+                    String seller = itemSection.getString("Seller");
+                    double price = itemSection.getDouble("Price");
 
-                        EconomySession session;
-                        if (config.getBoolean("Settings.CoinsEngineSupport.enable", false) && !currency.isEmpty()) {
-                            session = EconomySessionFactory.create(plugin.getCoinsEngineSupport(), currency);
-                        } else {
-                            session = EconomySessionFactory.create(plugin.getSupport());
+                    double taxAmount = (price * taxPercent / 100);
+                    double taxedPriceAmount = Math.max(price - taxAmount, 0);
+
+                    OfflinePlayer sellerPlayer = Methods.getOfflinePlayer(seller);
+                    OfflinePlayer winnerPlayer = Methods.getOfflinePlayer(winner);
+
+                    session.addMoney(sellerPlayer, price);
+                    session.removeMoney(winnerPlayer, price);
+
+                    String priceWithCurrency = crazyManager.getPriceWithCurrency(String.valueOf(price), currency);
+                    String taxedPrice = crazyManager.getPriceWithCurrency(String.valueOf(taxedPriceAmount), currency);
+                    String tax = String.valueOf(taxAmount);
+
+                    HashMap<String, String> placeholders = new HashMap<>();
+
+                    placeholders.put("%Price%", priceWithCurrency);
+                    placeholders.put("%price%", priceWithCurrency);
+                    placeholders.put("%Tax%", tax);
+                    placeholders.put("%tax%", tax);
+                    placeholders.put("%Taxed_Price%", taxedPrice);
+                    placeholders.put("%taxed_price%", taxedPrice);
+                    placeholders.put("%Player%", winnerPlayer.getName());
+                    placeholders.put("%player%", winnerPlayer.getName());
+                    placeholders.put("%Seller%", sellerPlayer.getName());
+                    placeholders.put("%seller%", sellerPlayer.getName());
+
+                    if (isOnline(winner) && getPlayer(winner) != null) {
+                        Player player = getPlayer(winner);
+
+                        new AuctionWinBidEvent(player, Methods.fromBase64(itemSection.getString("Item")), price, currency).callEvent();
+
+                        if (player != null) {
+                            player.sendMessage(Messages.WIN_BIDDING.getMessage(player, placeholders));
                         }
-
-                        session.addMoney(sellerPlayer, price);
-                        session.removeMoney(winnerPlayer, price);
-
-                        String priceWithCurrency = GuiListener.formatPriceWithCurrency(config, data, i, String.valueOf(price));
-                        String taxedPrice = GuiListener.formatPriceWithCurrency(config, data, i, String.valueOf(taxedPriceAmount));
-                        String tax = String.valueOf(taxAmount);
-
-                        HashMap<String, String> placeholders = new HashMap<>();
-
-                        placeholders.put("%Price%", priceWithCurrency);
-                        placeholders.put("%price%", priceWithCurrency);
-                        placeholders.put("%Tax%", tax);
-                        placeholders.put("%tax%", tax);
-                        placeholders.put("%Taxed_Price%", taxedPrice);
-                        placeholders.put("%taxed_price%", taxedPrice);
-                        placeholders.put("%Player%", winnerPlayer.getName());
-                        placeholders.put("%player%", winnerPlayer.getName());
-                        placeholders.put("%Seller%", sellerPlayer.getName());
-                        placeholders.put("%seller%", sellerPlayer.getName());
-
-                        if (isOnline(winner) && getPlayer(winner) != null) {
-                            Player player = getPlayer(winner);
-
-                            new AuctionWinBidEvent(player, Methods.fromBase64(data.getString("Items." + i + ".Item")), price, currency).callEvent();
-
-                            if (player != null) {
-                                player.sendMessage(Messages.WIN_BIDDING.getMessage(player, placeholders));
-                            }
-                        }
-
-                        if (isOnline(seller) && getPlayer(seller) != null) {
-                            Player player = getPlayer(seller);
-
-                            if (player != null) {
-                                player.sendMessage(Messages.SOMEONE_WON_PLAYERS_BID.getMessage(player, placeholders));
-                            }
-                        }
-
-                        data.set("OutOfTime/Cancelled." + num + ".Seller", winner);
-                        data.set("OutOfTime/Cancelled." + num + ".Full-Time", fullExpireTime.getTimeInMillis());
-                        data.set("OutOfTime/Cancelled." + num + ".StoreID", data.getInt("Items." + i + ".StoreID"));
-                        data.set("OutOfTime/Cancelled." + num + ".Item", data.getString("Items." + i + ".Item"));
-                    } else {
-                        String seller = data.getString("Items." + i + ".Seller");
-                        Player player = getPlayer(seller);
-
-                        if (isOnline(seller) && player != null) {
-                            player.sendMessage(Messages.ITEM_HAS_EXPIRED.getMessage(player));
-                        }
-
-                        AuctionExpireEvent event = new AuctionExpireEvent(player, Methods.fromBase64(data.getString("Items." + i + ".Item")));
-                        event.callEvent();
-
-                        data.set("OutOfTime/Cancelled." + num + ".Seller", data.getString("Items." + i + ".Seller"));
-                        data.set("OutOfTime/Cancelled." + num + ".Full-Time", fullExpireTime.getTimeInMillis());
-                        data.set("OutOfTime/Cancelled." + num + ".StoreID", data.getInt("Items." + i + ".StoreID"));
-                        data.set("OutOfTime/Cancelled." + num + ".Item", data.getString("Items." + i + ".Item"));
                     }
 
-                    data.set("Items." + i, null);
-                    shouldSave = true;
+                    if (isOnline(seller) && getPlayer(seller) != null) {
+                        Player player = getPlayer(seller);
+
+                        if (player != null) {
+                            player.sendMessage(Messages.SOMEONE_WON_PLAYERS_BID.getMessage(player, placeholders));
+                        }
+                    }
+
+                    data.set("OutOfTime/Cancelled." + num + ".Seller", winner);
+                    data.set("OutOfTime/Cancelled." + num + ".Full-Time", fullExpireTime.getTimeInMillis());
+                    data.set("OutOfTime/Cancelled." + num + ".StoreID", itemSection.getInt("StoreID"));
+                    data.set("OutOfTime/Cancelled." + num + ".Item", itemSection.getString("Item"));
+                } else {
+                    String seller = itemSection.getString("Seller");
+                    Player player = getPlayer(seller);
+
+                    if (isOnline(seller) && player != null) {
+                        player.sendMessage(Messages.ITEM_HAS_EXPIRED.getMessage(player));
+                    }
+
+                    AuctionExpireEvent event = new AuctionExpireEvent(player, Methods.fromBase64(itemSection.getString("Item")));
+                    event.callEvent();
+
+                    data.set("OutOfTime/Cancelled." + num + ".Seller", itemSection.getString("Seller"));
+                    data.set("OutOfTime/Cancelled." + num + ".Full-Time", fullExpireTime.getTimeInMillis());
+                    data.set("OutOfTime/Cancelled." + num + ".StoreID", itemSection.getInt("StoreID"));
+                    data.set("OutOfTime/Cancelled." + num + ".Item", itemSection.getString("Item"));
                 }
+
+                data.set(itemSection.getCurrentPath(), null);
+                shouldSave = true;
             }
         }
 
         if (shouldSave) Files.data.save();
     }
     
-    public static String getPrice(String ID, Boolean Expired) {
-        double price = 0D;
-
-        FileConfiguration configuration = Files.data.getConfiguration();
-
-        if (Expired) {
-            if (configuration.contains("OutOfTime/Cancelled." + ID + ".Price")) {
-                price = configuration.getDouble("OutOfTime/Cancelled." + ID + ".Price");
-            }
-        } else {
-            if (configuration.contains("Items." + ID + ".Price")) {
-                price = configuration.getDouble("Items." + ID + ".Price");
-            }
-        }
-
+    public static String getPrice(ConfigurationSection itemSection) {
+        double price = itemSection.getDouble("Price", 0D);
         return String.valueOf(price);
+    }
+
+    public static String getCurrency(ConfigurationSection itemSection) {
+        return itemSection.getString("Currency", "");
     }
 
     /**
@@ -398,19 +383,19 @@ public class Methods {
      * @param data The file in which the data is saved.
      * @return The section in which the item was saved.
      */
-    public static int expireItem(int num, OfflinePlayer seller, String i, FileConfiguration data, Reasons reasons) {
+    public static int expireItem(int num, OfflinePlayer seller, ConfigurationSection itemSection, FileConfiguration data, Reasons reasons) {
 
         while (data.contains("OutOfTime/Cancelled." + num)) num++;
 
-        AuctionCancelledEvent event = new AuctionCancelledEvent(seller, Methods.fromBase64(data.getString("Items." + i + ".Item")), reasons);
+        AuctionCancelledEvent event = new AuctionCancelledEvent(seller, Methods.fromBase64(itemSection.getString("Item")), reasons);
         event.callEvent();
 
-        data.set("OutOfTime/Cancelled." + num + ".Seller", data.getString("Items." + i + ".Seller"));
-        data.set("OutOfTime/Cancelled." + num + ".Full-Time", data.getLong("Items." + i + ".Full-Time"));
-        data.set("OutOfTime/Cancelled." + num + ".StoreID", data.getInt("Items." + i + ".StoreID"));
-        data.set("OutOfTime/Cancelled." + num + ".Item", data.getString("Items." + i + ".Item"));
+        data.set("OutOfTime/Cancelled." + num + ".Seller", itemSection.getString("Seller"));
+        data.set("OutOfTime/Cancelled." + num + ".Full-Time", itemSection.getLong("Full-Time"));
+        data.set("OutOfTime/Cancelled." + num + ".StoreID", itemSection.getInt("StoreID"));
+        data.set("OutOfTime/Cancelled." + num + ".Item", itemSection.getString("Item"));
 
-        data.set("Items." + i, null);
+        data.set(itemSection.getCurrentPath(), null);
 
         return num;
     }

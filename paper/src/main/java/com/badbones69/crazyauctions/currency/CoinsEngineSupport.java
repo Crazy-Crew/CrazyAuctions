@@ -12,6 +12,10 @@ public class CoinsEngineSupport {
 
     private final CrazyAuctions plugin = CrazyAuctions.get();
 
+    public double getMoney(@NotNull Player player, @NotNull String currencyName) {
+        return CoinsEngineAPI.getBalance(player.getUniqueId(), currencyName);
+    }
+
     public double getMoney(@NotNull OfflinePlayer player, @NotNull String currencyName) {
         return CoinsEngineAPI.getBalance(player.getUniqueId(), currencyName);
     }
@@ -42,10 +46,5 @@ public class CoinsEngineSupport {
             currency.getSymbol(),
             currency.getIcon()
         );
-    }
-
-    public static String getCurrencySymbol(String currencyName) {
-        Currency cur = CoinsEngineAPI.getCurrency(currencyName);
-        return (cur == null) ? "" : cur.getSymbol();
     }
 }

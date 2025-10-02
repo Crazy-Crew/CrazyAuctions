@@ -7,7 +7,7 @@ import com.badbones69.crazyauctions.api.support.MetricsWrapper;
 import com.badbones69.crazyauctions.commands.AuctionCommand;
 import com.badbones69.crazyauctions.commands.AuctionTab;
 import com.badbones69.crazyauctions.controllers.GuiListener;
-import com.badbones69.crazyauctions.controllers.MarcoListener;
+import com.badbones69.crazyauctions.controllers.MacroListener;
 import com.badbones69.crazyauctions.currency.VaultSupport;
 import com.badbones69.crazyauctions.currency.CoinsEngineSupport;
 import com.badbones69.crazyauctions.datafixer.ConfigFixer;
@@ -117,7 +117,7 @@ public class CrazyAuctions extends Vital {
         this.crazyManager.load();
 
         getServer().getPluginManager().registerEvents(new GuiListener(), this);
-        getServer().getPluginManager().registerEvents(new MarcoListener(), this);
+        getServer().getPluginManager().registerEvents(new MacroListener(), this);
 
         registerCommand(getCommand("crazyauctions"), new AuctionTab(), new AuctionCommand());
 

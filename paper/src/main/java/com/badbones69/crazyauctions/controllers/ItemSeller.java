@@ -1,24 +1,29 @@
 package com.badbones69.crazyauctions.controllers;
 
 import org.bukkit.Material;
+import com.badbones69.crazyauctions.CrazyAuctions;
+import com.badbones69.crazyauctions.api.CrazyManager;
 import com.badbones69.crazyauctions.api.enums.ShopType;
 import com.badbones69.crazyauctions.api.enums.Files;
 import com.badbones69.crazyauctions.api.events.AuctionListEvent;
 import com.badbones69.crazyauctions.api.enums.Messages;
-import com.badbones69.crazyauctions.controllers.GuiListener;
+import com.badbones69.crazyauctions.api.CrazyManager;
 import com.badbones69.crazyauctions.Methods;
 import com.badbones69.crazyauctions.currency.EconomySession;
-import com.badbones69.crazyauctions.currency.EconomySessionFactory;
-import com.badbones69.crazyauctions.currency.CoinsEngineSupport;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class ItemSeller {
+
+    private static final CrazyAuctions plugin = CrazyAuctions.get();
+    private static final CrazyManager crazyManager = plugin.getCrazyManager();
+
     public static boolean sell(EconomySession session, Player player, ItemStack item, int amount, double price, boolean isBid) {
         return sellItems(session, player, item, amount, price, isBid, "");
     }
@@ -35,9 +40,10 @@ public class ItemSeller {
         double listCost = (double) (price * listPercent) / 100;
 
         if (session.getMoney(player) <= listCost) {
+            String moneyNeeded = crazyManager.getPriceWithCurrency(String.valueOf(listCost), currency);
             Map<String, String> placeholders = new HashMap<>() {{
-                put("%Money_Needed%", String.valueOf(listCost) + " " + CoinsEngineSupport.getCurrencySymbol(currency));
-                put("%money_needed%", String.valueOf(listCost) + " " + CoinsEngineSupport.getCurrencySymbol(currency));
+                put("%Money_Needed%", moneyNeeded);
+                put("%money_needed%", moneyNeeded);
             }};
             player.sendMessage(Messages.NEED_MORE_MONEY.getMessage(player, placeholders));
             return false;
@@ -86,8 +92,8 @@ public class ItemSeller {
 
         Map<String, String> placeholders = new HashMap<>();
 
-        String priceWithCurrency = GuiListener.formatPriceWithCurrency(config, data, String.valueOf(num), String.valueOf(price));
-        String listCostWithCurrency = GuiListener.formatPriceWithCurrency(config, data, String.valueOf(num), String.valueOf(listCost));
+        String priceWithCurrency = crazyManager.getPriceWithCurrency(String.valueOf(price), currency);
+        String listCostWithCurrency = crazyManager.getPriceWithCurrency(String.valueOf(listCost), currency);
         placeholders.put("%Price%", priceWithCurrency);
         placeholders.put("%price%", priceWithCurrency);
         placeholders.put("%listpercent%", String.valueOf(listPercent));

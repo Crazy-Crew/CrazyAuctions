@@ -14,6 +14,11 @@ public class EconomySessionFactory {
                 }
 
                 @Override
+                public double getMoney(OfflinePlayer player) {
+                    return coinsSupport.getMoney(player, currency);
+                }
+
+                @Override
                 public boolean removeMoney(Player player, double amount) {
                     return coinsSupport.removeMoney(player, amount, currency);
                 }
@@ -37,6 +42,11 @@ public class EconomySessionFactory {
             return new EconomySession() {
                 @Override
                 public double getMoney(Player player) {
+                    return vaultSupport.getMoney(player);
+                }
+
+                @Override
+                public double getMoney(OfflinePlayer player) {
                     return vaultSupport.getMoney(player);
                 }
 

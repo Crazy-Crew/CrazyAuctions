@@ -30,13 +30,9 @@ Settings:
     #Sounds are found here: https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Sound.html
   CoinsEngineSupport:
     enable: false  # Enable if you want use CurrentEngine currencies instead Vault.
-    SelectionName: '&6Chose currency'
     currencies:
       - 'money'
       - 'coins'
-    ChoseLore:
-      - '&9Currency: &e%currency%'
-      - '&9Price: &e%price%'
   defaultCurrencySymbol: '$' # Currency symbol displayed next to %price% by default (if CoinsEngine is not enabled or currency is not found)
   GUISettings: #Settings for things in the gui.
     SellingItemLore: #The lore on items that are being sold.
@@ -45,13 +41,6 @@ Settings:
       - ''
       - '&9Price: &e%price%'
       - '&9Seller: &e%seller%'
-      - '&7-------------------------'
-    CurrentLore: #Lore on items that are in your current items GUI.
-      - '&7-------------------------'
-      - '&aClick here to cancel.'
-      - ''
-      - '&9Price: &e%price%'
-      - '&9Expire: &e%time%'
       - '&7-------------------------'
     Cancelled/ExpiredLore: #Lore on items that are in your canceled/expired GUI.
       - '&7-------------------------'
@@ -68,6 +57,11 @@ Settings:
       - '&9Top Bidder: &e%topbidder%'
       - '&9Time Left: &e%time%'
       - '&7-------------------------'
+    Currency: # Currency selection page (if CoinsEngineSupport enabled)
+      Title: '&6Chose currency'
+      Lore:
+        - '&9Currency: &e%currency%'
+        - '&9Price: &e%price%'
     Category-Settings:
       Armor:
         Item: 'GOLDEN_CHESTPLATE'
