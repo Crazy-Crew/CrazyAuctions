@@ -24,15 +24,7 @@ public class ItemSeller {
     private static final CrazyAuctions plugin = CrazyAuctions.get();
     private static final CrazyManager crazyManager = plugin.getCrazyManager();
 
-    public static boolean sell(EconomySession session, Player player, ItemStack item, int amount, double price, boolean isBid) {
-        return sellItems(session, player, item, amount, price, isBid, "");
-    }
-
     public static boolean sell(EconomySession session, Player player, ItemStack item, int amount, double price, boolean isBid, String currency) {
-        return sellItems(session, player, item, amount, price, isBid, currency);
-    }
-
-    public static boolean sellItems(EconomySession session, Player player, ItemStack item, int amount, double price, boolean isBid, String currency) {
         FileConfiguration data = Files.data.getConfiguration();
         FileConfiguration config = Files.config.getConfiguration();
 
@@ -109,5 +101,9 @@ public class ItemSeller {
             item.setAmount(item.getAmount() - amount);
         }
         return true;
+    }
+
+    public static boolean sell(EconomySession session, Player player, ItemStack item, int amount, double price, boolean isBid) {
+        return sell(session, player, item, amount, price, isBid, "");
     }
 }

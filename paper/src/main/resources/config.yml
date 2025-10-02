@@ -42,18 +42,18 @@ Settings:
       - '&9Price: &e%price%'
       - '&9Seller: &e%seller%'
       - '&7-------------------------'
-    Cancelled/ExpiredLore: #Lore on items that are in your canceled/expired GUI.
-      - '&7-------------------------'
-      - '&aClick here to return to you.'
-      - ''
-      - '&9Full Expire: &e%time%'
-      - '&7-------------------------'
     CurrentLore: #Lore on items that are in your current items GUI.
       - '&7-------------------------'
       - '&aClick here to cancel.'
       - ''
       - '&9Price: &e%price%'
       - '&9Expire: &e%time%'
+      - '&7-------------------------'
+    Cancelled/ExpiredLore: #Lore on items that are in your canceled/expired GUI.
+      - '&7-------------------------'
+      - '&aClick here to return to you.'
+      - ''
+      - '&9Full Expire: &e%time%'
       - '&7-------------------------'
     Bidding: #Lore on Bidding Items.
       - '&7-------------------------'

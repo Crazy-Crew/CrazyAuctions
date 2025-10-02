@@ -5,7 +5,6 @@ import com.badbones69.crazyauctions.Methods;
 import com.badbones69.crazyauctions.api.CrazyManager;
 import com.badbones69.crazyauctions.api.enums.*;
 import com.badbones69.crazyauctions.api.events.AuctionCancelledEvent;
-import com.badbones69.crazyauctions.api.events.AuctionListEvent;
 import com.badbones69.crazyauctions.controllers.GuiListener;
 import com.badbones69.crazyauctions.controllers.ItemSeller;
 import com.badbones69.crazyauctions.currency.EconomySession;
@@ -26,7 +25,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ThreadLocalRandom;
 
 public class AuctionCommand implements CommandExecutor {
 

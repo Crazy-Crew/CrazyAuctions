@@ -8,7 +8,6 @@ import com.badbones69.crazyauctions.api.events.AuctionCancelledEvent;
 import com.badbones69.crazyauctions.api.events.AuctionExpireEvent;
 import com.badbones69.crazyauctions.api.events.AuctionWinBidEvent;
 import com.badbones69.crazyauctions.currency.EconomySession;
-import com.badbones69.crazyauctions.controllers.GuiListener;
 import org.bukkit.*;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -379,7 +378,7 @@ public class Methods {
      *
      * @param num The section the item is saved to under expired items.
      * @param seller The {@link OfflinePlayer} that sold the item.
-     * @param i The section where the listed item was saved.
+     * @param itemSection The ConfigurationSection where the listed item was saved.
      * @param data The file in which the data is saved.
      * @return The section in which the item was saved.
      */

@@ -11,7 +11,6 @@ import com.badbones69.crazyauctions.currency.EconomySessionFactory;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 
 import java.util.HashMap;
