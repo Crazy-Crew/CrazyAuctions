@@ -18,6 +18,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
@@ -53,68 +54,65 @@ public class CrazyAuctions extends Vital {
                 .init();
 
         this.crazyManager = new CrazyManager();
-
-        FileConfiguration configuration = Files.data.getConfiguration();
-
-        if (configuration.contains("OutOfTime/Cancelled")) {
-            for (String key : configuration.getConfigurationSection("OutOfTime/Cancelled").getKeys(false)) {
-                final ItemStack itemStack = configuration.getItemStack("OutOfTime/Cancelled." + key + ".Item");
-
-                if (itemStack != null) {
-                    configuration.set("OutOfTime/Cancelled." + key + ".Item", Base64.getEncoder().encodeToString(itemStack.serializeAsBytes()));
-
-                    Files.data.save();
-                }
-
-                final String uuid = configuration.getString("OutOfTime/Cancelled." + key + ".Seller");
-
-                if (uuid != null) {
-                    OfflinePlayer player = Methods.getOfflinePlayer(uuid);
-
-                    configuration.set("OutOfTime/Cancelled." + key + ".Seller", player.getUniqueId().toString());
-
-                    Files.data.save();
-                }
-            }
-        }
-
-        if (configuration.contains("Items")) {
-            for (String key : configuration.getConfigurationSection("Items").getKeys(false)) {
-                final ItemStack itemStack = configuration.getItemStack("Items." + key + ".Item");
-
-                if (itemStack != null) {
-                    configuration.set("Items." + key + ".Item", Base64.getEncoder().encodeToString(itemStack.serializeAsBytes()));
-
-                    Files.data.save();
-                }
-
-                final String uuid = configuration.getString("Items." + key + ".Seller");
-
-                if (uuid != null) {
-                    OfflinePlayer player = Methods.getOfflinePlayer(uuid);
-
-                    if (!uuid.equals(player.getUniqueId().toString())) {
-                        configuration.set("Items." + key + ".Seller", player.getUniqueId().toString());
-
-                        Files.data.save();
-                    }
-                }
-
-                final String bidder = configuration.getString("Items." + key + ".TopBidder");
-
-                if (bidder != null && !bidder.equals("None")) {
-                    OfflinePlayer player = Methods.getOfflinePlayer(bidder);
-
-                    if (!bidder.equals(player.getUniqueId().toString())) {
-                        configuration.set("Items." + key + ".TopBidder", player.getUniqueId().toString());
-
-                        Files.data.save();
-                    }
-                }
-            }
-        }
-
         this.crazyManager.load();
+
+        FileConfiguration data = Files.data.getConfiguration();
+
+        for (ConfigurationSection itemSection : this.crazyManager.getExpiredItems()) {
+            final ItemStack itemStack = itemSection.getItemStack("Item");
+
+            if (itemStack != null) {
+                itemSection.set("Item", Base64.getEncoder().encodeToString(itemStack.serializeAsBytes()));
+
+                Files.data.save();
+            }
+
+            final String uuid = itemSection.getString("Seller");
+
+            if (uuid != null) {
+                OfflinePlayer player = Methods.getOfflinePlayer(uuid);
+
+                if (!uuid.equals(player.getUniqueId().toString())) {
+                    itemSection.set("Seller", player.getUniqueId().toString());
+
+                    Files.data.save();
+                }
+            }
+        }
+
+        for (ConfigurationSection itemSection : this.crazyManager.getItems()) {
+            final ItemStack itemStack = itemSection.getItemStack("Item");
+
+            if (itemStack != null) {
+                itemSection.set("Item", Base64.getEncoder().encodeToString(itemStack.serializeAsBytes()));
+
+                Files.data.save();
+            }
+
+            final String uuid = itemSection.getString("Seller");
+
+            if (uuid != null) {
+                OfflinePlayer player = Methods.getOfflinePlayer(uuid);
+
+                if (!uuid.equals(player.getUniqueId().toString())) {
+                    itemSection.set("Seller", player.getUniqueId().toString());
+
+                    Files.data.save();
+                }
+            }
+
+            final String bidder = itemSection.getString("TopBidder");
+
+            if (bidder != null) {
+                OfflinePlayer player = Methods.getOfflinePlayer(bidder);
+
+                if (!bidder.equals(player.getUniqueId().toString())) {
+                    itemSection.set("TopBidder", player.getUniqueId().toString());
+
+                    Files.data.save();
+                }
+            }
+        }
 
         getServer().getPluginManager().registerEvents(new GuiListener(), this);
         getServer().getPluginManager().registerEvents(new MacroListener(), this);

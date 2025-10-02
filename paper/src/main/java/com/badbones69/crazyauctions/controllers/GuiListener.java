@@ -67,10 +67,8 @@ public class GuiListener implements Listener {
         for (ConfigurationSection itemSection : crazyManager.getItems(shop)) {
             ItemBuilder itemBuilder = ItemBuilder.convertItemStack(itemSection.getString("Item"));
             if (cat == Category.NONE || cat.getItems().contains(itemBuilder.getItemStack().getType())) {
-                if (shop == (itemSection.getBoolean("Biddable") ? ShopType.BID : ShopType.SELL)) {
-                    items.add(buildAuctionDisplay(itemSection));
-                    itemsId.add(itemSection.getInt("StoreID"));
-                }
+                items.add(buildAuctionDisplay(itemSection));
+                itemsId.add(itemSection.getInt("StoreID"));
             }
         }
 
@@ -159,7 +157,24 @@ public class GuiListener implements Listener {
         List<Integer> itemsId = new ArrayList<>();
         
         for (ConfigurationSection itemSection : crazyManager.getPlayerItems(player.getUniqueId().toString())) {
-            items.add(buildAuctionDisplay(itemSection));
+            String price = crazyManager.getPriceWithCurrency(Methods.getPrice(itemSection), Methods.getCurrency(itemSection));
+            String time = Methods.convertToTime(itemSection.getLong("Time-Till-Expire"));
+
+            ItemBuilder itemBuilder = ItemBuilder.convertItemStack(itemSection.getString("Item"));
+
+            List<String> lore = new ArrayList<>(itemBuilder.getUpdatedLore());
+
+            for (String l : config.getStringList("Settings.GUISettings.CurrentLore")) {
+                lore.add(l.replace("%Price%", price)
+                        .replace("%price%", price)
+                        .replace("%Time%", time)
+                        .replace("%time%", time));
+            }
+
+            itemBuilder.setLore(lore);
+
+            items.add(itemBuilder.build());
+
             itemsId.add(itemSection.getInt("StoreID"));
         }
 
@@ -399,8 +414,8 @@ public class GuiListener implements Listener {
                 } else {
                     // support openShop
                     List<String> lore = new ArrayList<>(itemBuilder.getUpdatedLore());
-                    if (config.contains("Settings.GUISettings.OtherSettings." + option + ".Lore")) {
-                        for (String l : config.getStringList("Settings.GUISettings.OtherSettings." + option + ".Lore")) {
+                    if (config.contains("Settings.GUISettings." + option + ".Lore")) {
+                        for (String l : config.getStringList("Settings.GUISettings." + option + ".Lore")) {
                             lore.add(l.replace("%Category%", categoryName).replace("%category%", categoryName));
                         }
                     }
@@ -1102,7 +1117,7 @@ public class GuiListener implements Listener {
                         } else {
                             player.getInventory().addItem(Methods.fromBase64(itemSection.getString("Item")));
 
-                            data.set(itemSection.getName(), null);
+                            data.set(itemSection.getCurrentPath(), null);
                         }
                     }
 

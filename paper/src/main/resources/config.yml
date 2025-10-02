@@ -48,6 +48,13 @@ Settings:
       - ''
       - '&9Full Expire: &e%time%'
       - '&7-------------------------'
+    CurrentLore: #Lore on items that are in your current items GUI.
+      - '&7-------------------------'
+      - '&aClick here to cancel.'
+      - ''
+      - '&9Price: &e%price%'
+      - '&9Expire: &e%time%'
+      - '&7-------------------------'
     Bidding: #Lore on Bidding Items.
       - '&7-------------------------'
       - '&aClick here to bid.'

@@ -92,7 +92,7 @@ public class CrazyManager {
             ConfigurationSection itemsSection = data.getConfigurationSection(section);
             for (String id : itemsSection.getKeys(false)) {
                 ConfigurationSection item = itemsSection.getConfigurationSection(id);
-                if (!playerId.isEmpty() && item.getString("Seller", "").equalsIgnoreCase(playerId)) {
+                if (!playerId.isEmpty() && !item.getString("Seller", "").equalsIgnoreCase(playerId)) {
                     continue;
                 }
                 if (shop == null || shop == (item.getBoolean("Biddable") ? ShopType.BID : ShopType.SELL)) {
@@ -128,7 +128,7 @@ public class CrazyManager {
             ConfigurationSection itemsSection = data.getConfigurationSection(section);
             for (String id : itemsSection.getKeys(false)) {
                 ConfigurationSection item = itemsSection.getConfigurationSection(id);
-                if (!playerId.isEmpty() && item.getString("Seller", "").equalsIgnoreCase(playerId)) {
+                if (!playerId.isEmpty() && !item.getString("Seller", "").equalsIgnoreCase(playerId)) {
                     continue;
                 }
                 items.add(item);
