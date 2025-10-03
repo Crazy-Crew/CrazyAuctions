@@ -1,15 +1,18 @@
 name: '${name}'
 main: '${group}.${name}'
 
-authors: ${authors}
+authors:
+  - ryderbelserion
+  - BadBones69
 
 version: '${version}'
-api-version: '${apiVersion}'
+api-version: '${minecraft}'
 description: '${description}'
 website: '${website}'
+
 folia-supported: true
 
-softdepend: [Vault]
+softdepend: [Vault, ItemsAdder, Oraxen, Nexo, PlaceholderAPI, HeadDatabaseAPI]
 
 commands:
   crazyauctions:

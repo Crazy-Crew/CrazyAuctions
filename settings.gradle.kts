@@ -1,3 +1,3 @@
 rootProject.name = "CrazyAuctions"
 
-include("publish" ,"paper")
+include("paper", "api")
