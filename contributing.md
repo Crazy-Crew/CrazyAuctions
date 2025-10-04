@@ -1,4 +1,4 @@
-# Contributing to CrazyCrates
+# Contributing to CrazyAuctions
 Contributions to the project are always welcome, Pull Requests do have some guidelines before being approved.
 
 ## You should always create the fork as a personal repository not in an organization.

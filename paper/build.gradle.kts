@@ -19,6 +19,8 @@ dependencies {
         exclude("org.yaml")
     }
 
+    implementation(libs.fusion.paper)
+
     compileOnly(libs.bundles.shared)
 }
 

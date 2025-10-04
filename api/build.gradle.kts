@@ -9,6 +9,10 @@ project.group = "us.crazycrew.crazyauctions"
 project.description = "The official API for CrazyAuctions!"
 project.version = "0.1.0"
 
+dependencies {
+    compileOnly(libs.fusion.paper)
+}
+
 java {
     withSourcesJar()
     withJavadocJar()

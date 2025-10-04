@@ -10,8 +10,10 @@ import com.badbones69.crazyauctions.controllers.GuiListener;
 import com.badbones69.crazyauctions.controllers.MarcoListener;
 import com.badbones69.crazyauctions.currency.VaultSupport;
 import com.badbones69.crazyauctions.datafixer.ConfigFixer;
-import com.ryderbelserion.vital.paper.Vital;
+import com.ryderbelserion.fusion.paper.FusionPaper;
+import com.ryderbelserion.fusion.paper.files.PaperFileManager;
 import com.ryderbelserion.vital.paper.util.scheduler.FoliaRunnable;
+import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.PluginCommand;
@@ -22,7 +24,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import java.util.Base64;
 
-public class CrazyAuctions extends Vital {
+public class CrazyAuctions extends JavaPlugin {
 
     @NotNull
     public static CrazyAuctions get() {
@@ -30,24 +32,25 @@ public class CrazyAuctions extends Vital {
     }
 
     private CrazyManager crazyManager;
+    private FusionPaper fusion;
+    private CrazyPlugin plugin;
 
     private VaultSupport support;
 
     @Override
     public void onEnable() {
         if (!getServer().getPluginManager().isPluginEnabled("Vault")) {
-            getLogger().severe("Vault was not found so the plugin will now disable.");
+            getComponentLogger().error("Vault was not found, so the plugin will now disable.");
 
             getServer().getPluginManager().disablePlugin(this);
 
             return;
         }
 
-        getFileManager().addFile("config.yml")
-                .addFile("data.yml")
-                .addFile("messages.yml")
-                //.addFile("test-file.yml")
-                .init();
+        this.plugin = new CrazyPlugin(this);
+        this.plugin.init();
+
+        this.fusion = this.plugin.getFusion();
 
         this.crazyManager = new CrazyManager();
 
@@ -147,11 +150,23 @@ public class CrazyAuctions extends Vital {
         if (this.crazyManager != null) this.crazyManager.unload();
     }
 
-    public final VaultSupport getSupport() {
-        return this.support;
+    public final PaperFileManager getFileManager() {
+        return this.plugin.getFileManager();
     }
 
     public final CrazyManager getCrazyManager() {
         return this.crazyManager;
+    }
+
+    public final VaultSupport getSupport() {
+        return this.support;
+    }
+
+    public final CrazyPlugin getPlugin() {
+        return this.plugin;
+    }
+
+    public final FusionPaper getFusion() {
+        return this.fusion;
     }
 }
