@@ -2,7 +2,7 @@ plugins {
     alias(libs.plugins.fix.javadoc)
 
     `maven-publish`
-    `config-paper`
+    `config-java`
 }
 
 project.group = "us.crazycrew.crazyauctions"
@@ -10,7 +10,7 @@ project.description = "The official API for CrazyAuctions!"
 project.version = "0.1.0"
 
 dependencies {
-    compileOnly(libs.fusion.paper)
+    compileOnly(libs.fusion.core)
 }
 
 java {

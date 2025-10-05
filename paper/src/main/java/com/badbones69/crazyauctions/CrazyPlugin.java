@@ -5,6 +5,7 @@ import com.ryderbelserion.fusion.paper.files.PaperFileManager;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
+import us.crazycrew.crazyauctions.AuctionsProvider;
 import us.crazycrew.crazyauctions.objects.ICrazyAuctions;
 import java.nio.file.Path;
 
@@ -27,6 +28,8 @@ public class CrazyPlugin implements ICrazyAuctions {
         this.fileManager.addPaperFile(this.path.resolve("config.yml"))
                 .addPaperFile(this.path.resolve("data.yml"))
                 .addPaperFile(this.path.resolve("messages.yml"));
+
+        AuctionsProvider.register(this);
     }
 
     @ApiStatus.Internal

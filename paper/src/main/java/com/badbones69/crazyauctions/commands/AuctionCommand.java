@@ -8,6 +8,7 @@ import com.badbones69.crazyauctions.api.events.AuctionCancelledEvent;
 import com.badbones69.crazyauctions.api.events.AuctionListEvent;
 import com.badbones69.crazyauctions.controllers.GuiListener;
 import com.badbones69.crazyauctions.currency.VaultSupport;
+import com.ryderbelserion.fusion.paper.files.PaperFileManager;
 import com.ryderbelserion.vital.paper.api.files.FileManager;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -20,7 +21,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.jetbrains.annotations.NotNull;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,7 +32,7 @@ public class AuctionCommand implements CommandExecutor {
 
     private final CrazyManager crazyManager = this.plugin.getCrazyManager();
 
-    private final FileManager fileManager = this.plugin.getFileManager();
+    private final PaperFileManager fileManager = this.plugin.getFileManager();
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String commandLabel, String[] args) {
@@ -85,7 +85,7 @@ public class AuctionCommand implements CommandExecutor {
                     return true;
                 }
 
-                this.fileManager.reloadFiles().init();
+                this.fileManager.refresh(true);
 
                 this.crazyManager.load();
 

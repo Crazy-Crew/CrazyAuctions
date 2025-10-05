@@ -1,4 +1,6 @@
 plugins {
+    id("com.ryderbelserion.feather.core")
+    id("com.modrinth.minotaur")
     id("com.gradleup.shadow")
 
     `java-library`
@@ -22,6 +24,20 @@ repositories {
 
 java {
     toolchain.languageVersion.set(JavaLanguageVersion.of(21))
+}
+
+modrinth {
+    token = System.getenv("MODRINTH_TOKEN")
+
+    projectId = rootProject.name
+
+    versionName = "${rootProject.version}"
+    versionNumber = "${rootProject.version}"
+
+    syncBodyFrom = rootProject.file("description.md").readText(Charsets.UTF_8)
+
+    autoAddDependsOn = false
+    detectLoaders = false
 }
 
 tasks {

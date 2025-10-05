@@ -1,7 +1,7 @@
 plugins {
-    alias(libs.plugins.minotaur)
-    alias(libs.plugins.feather)
-    alias(libs.plugins.hangar)
+    //alias(libs.plugins.minotaur)
+    //alias(libs.plugins.feather)
+    //alias(libs.plugins.hangar)
 
     `config-java`
 }
@@ -12,7 +12,6 @@ val commitHash: String = git.getCurrentCommitHash().subSequence(0, 7).toString()
 val isSnapshot: Boolean = git.getCurrentBranch() == "dev"
 val content: String = if (isSnapshot) "[$commitHash](https://github.com/Crazy-Crew/${rootProject.name}/commit/$commitHash) ${git.getCurrentCommit()}" else rootProject.file("changelog.md").readText(Charsets.UTF_8)
 val minecraft = libs.versions.minecraft.get()
-val versions = listOf(minecraft)
 
 rootProject.description = "Auction off your items in style!"
 rootProject.version = if (isSnapshot) "$minecraft-$commitHash" else libs.versions.crazyauctions.get()
@@ -122,67 +121,4 @@ fun List<String>.convertList(): String {
     }
 
     return builder.toString()
-}
-
-modrinth {
-    token = System.getenv("MODRINTH_TOKEN")
-
-    projectId = rootProject.name
-
-    versionName = "${rootProject.version}"
-    versionNumber = "${rootProject.version}"
-    versionType = if (isSnapshot) "beta" else "release"
-
-    changelog = content
-
-    gameVersions.addAll(versions)
-
-    uploadFile = rootProject.layout.buildDirectory.file("libs/${rootProject.name}-${rootProject.version}.jar").get()
-
-    loaders.addAll(listOf("paper", "folia", "purpur"))
-
-    syncBodyFrom = rootProject.file("description.md").readText(Charsets.UTF_8)
-
-    autoAddDependsOn = false
-    detectLoaders = false
-}
-
-hangarPublish {
-    publications.register("plugin") {
-        apiKey.set(System.getenv("HANGAR_KEY"))
-
-        id.set(rootProject.name)
-
-        version.set("${rootProject.version}")
-
-        channel.set(if (isSnapshot) "Beta" else "Release")
-
-        changelog.set(content)
-
-        platforms {
-            paper {
-                jar = rootProject.layout.buildDirectory.file("${rootProject.name}-${rootProject.version}.jar").get()
-
-                platformVersions.set(versions)
-
-                dependencies {
-                    hangar("PlaceholderAPI") {
-                        required = false
-                    }
-
-                    url("ItemsAdder", "https://polymart.org/product/1851/itemsadder") {
-                        required = false
-                    }
-
-                    url("Oraxen", "https://polymart.org/product/629/oraxen") {
-                        required = false
-                    }
-
-                    url("Nexo", "https://polymart.org/resource/nexo.6901") {
-                        required = false
-                    }
-                }
-            }
-        }
-    }
 }

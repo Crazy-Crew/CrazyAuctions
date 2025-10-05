@@ -1,4 +1,4 @@
-package com.badbones69.crazyauctions.api.enums.misc;
+package com.badbones69.crazyauctions.api.enums;
 
 import com.badbones69.crazyauctions.CrazyAuctions;
 import org.bukkit.NamespacedKey;

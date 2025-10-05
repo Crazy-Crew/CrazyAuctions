@@ -39,7 +39,7 @@ public class AuctionsProvider {
      * Creates {@link ICrazyAuctions} instance.
      *
      * @param api the {@link ICrazyAuctions} instance
-     * @since 0.4
+     * @since 0.1.0
      */
     @ApiStatus.Internal
     public static void register(@NotNull final ICrazyAuctions api) {
@@ -57,7 +57,7 @@ public class AuctionsProvider {
     /**
      * Unregisters {@link ICrazyAuctions} instance.
      *
-     * @since 0.4
+     * @since 0.1.0
      */
     @ApiStatus.Internal
     public static void unregister() {
