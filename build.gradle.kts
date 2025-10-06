@@ -1,8 +1,6 @@
-plugins {
-    //alias(libs.plugins.minotaur)
-    //alias(libs.plugins.feather)
-    //alias(libs.plugins.hangar)
+import io.papermc.hangarpublishplugin.model.Platforms
 
+plugins {
     `config-java`
 }
 
@@ -12,10 +10,95 @@ val commitHash: String = git.getCurrentCommitHash().subSequence(0, 7).toString()
 val isSnapshot: Boolean = git.getCurrentBranch() == "dev"
 val content: String = if (isSnapshot) "[$commitHash](https://github.com/Crazy-Crew/${rootProject.name}/commit/$commitHash) ${git.getCurrentCommit()}" else rootProject.file("changelog.md").readText(Charsets.UTF_8)
 val minecraft = libs.versions.minecraft.get()
+val versions = listOf(minecraft)
 
 rootProject.description = "Auction off your items in style!"
-rootProject.version = if (isSnapshot) "$minecraft-$commitHash" else libs.versions.crazyauctions.get()
+rootProject.version = if (isSnapshot) "$minecraft-$commitHash" else rootProject.property("plugin_version").toString()
 rootProject.group = "com.badbones69.crazyauctions"
+
+allprojects {
+    apply(plugin = "java-library")
+}
+
+tasks {
+    withType<Jar> {
+        subprojects {
+            dependsOn(project.tasks.build)
+        }
+
+        // get subproject's built jars
+        val jars = subprojects.map { zipTree(it.tasks.jar.get().archiveFile.get().asFile) }
+
+        // merge them into main jar (except their manifests)
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+        from(jars) {
+            exclude("META-INF/MANIFEST.MF")
+        }
+
+        // put behind an action because files don't exist at configuration time
+        doFirst {
+            // merge all subproject's manifests into main manifest
+            jars.forEach { jar ->
+                jar.matching { include("META-INF/MANIFEST.MF") }
+                    .files.forEach { file ->
+                        manifest.from(file)
+                    }
+            }
+        }
+    }
+}
+
+modrinth {
+    versionType = if (isSnapshot) "beta" else "release"
+
+    changelog = content
+
+    gameVersions.addAll(versions)
+
+    uploadFile = tasks.jar.get().archiveFile.get()
+
+    loaders.addAll(listOf("paper", "folia", "purpur"))
+}
+
+hangarPublish {
+    publications["plugin"].changelog = content
+    publications["plugin"].channel = if (isSnapshot) "Beta" else "Release"
+
+    publications["plugin"].platforms {
+        register(Platforms.PAPER) {
+            jar = tasks.jar.flatMap { it.archiveFile }
+
+            platformVersions.set(versions)
+
+            dependencies {
+                hangar("PlaceholderAPI") {
+                    required = false
+                }
+
+                hangar("FancyHolograms") {
+                    required = false
+                }
+
+                url("DecentHolograms", "https://modrinth.com/plugin/decentholograms") {
+                    required = false
+                }
+
+                url("ItemsAdder", "https://polymart.org/product/1851/itemsadder") {
+                    required = false
+                }
+
+                url("Oraxen", "https://polymart.org/product/629/oraxen") {
+                    required = false
+                }
+
+                url("Nexo", "https://polymart.org/resource/nexo.6901") {
+                    required = false
+                }
+            }
+        }
+    }
+}
 
 feather {
     rootDirectory = rootProject.rootDir.toPath()

@@ -7,7 +7,8 @@ plugins {
 
 project.group = "us.crazycrew.crazyauctions"
 project.description = "The official API for CrazyAuctions!"
-project.version = "0.1.0"
+
+val projectVersion = rootProject.property("api_version").toString()
 
 dependencies {
     compileOnly(libs.fusion.core)
@@ -27,8 +28,8 @@ tasks {
         options.overview("src/main/javadoc/overview.html")
         options.use()
         options.isDocFilesSubDirs = true
-        options.windowTitle("$name ${rootProject.version} API Documentation")
-        options.docTitle("<h1>$name ${rootProject.version} API</h1>")
+        options.windowTitle("$name $projectVersion API Documentation")
+        options.docTitle("<h1>$name $projectVersion API</h1>")
         options.header = """<img src="https://raw.githubusercontent.com/Crazy-Crew/Branding/refs/heads/main/crazyauctions/png/64x64.png" style="height:100%">"""
         options.bottom("Copyright © 2025 CrazyCrew")
         options.linkSource(true)
@@ -57,7 +58,7 @@ publishing {
         create<MavenPublication>("mavenJava") {
             groupId = "${project.group}" // us.crazycrew.crazyauctions
             artifactId = project.name
-            version = "${project.version}"
+            version = projectVersion
 
             from(components["java"])
         }

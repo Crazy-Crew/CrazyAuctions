@@ -1,4 +1,5 @@
 plugins {
+    id("io.papermc.hangar-publish-plugin")
     id("com.ryderbelserion.feather.core")
     id("com.modrinth.minotaur")
     id("com.gradleup.shadow")
@@ -40,6 +41,16 @@ modrinth {
     detectLoaders = false
 }
 
+hangarPublish {
+    publications.register("plugin") {
+        apiKey.set(System.getenv("HANGAR_KEY"))
+
+        id.set(rootProject.name)
+
+        version.set("${rootProject.version}")
+    }
+}
+
 tasks {
     shadowJar {
         archiveClassifier.set("")
@@ -67,7 +78,7 @@ tasks {
         )
 
         with(copySpec {
-            include("*plugin.yml")
+            include("*paper-plugin.yml", "*plugin.yml")
 
             from("src/main/resources") {
                 expand(inputs.properties)
