@@ -2,7 +2,6 @@ plugins {
     id("io.papermc.hangar-publish-plugin")
     id("com.ryderbelserion.feather.core")
     id("com.modrinth.minotaur")
-    id("com.gradleup.shadow")
 
     `java-library`
 }
@@ -14,7 +13,6 @@ repositories {
 
     maven("https://repo.triumphteam.dev/snapshots/")
 
-    maven("https://repo.crazycrew.us/libraries/")
     maven("https://repo.crazycrew.us/releases/")
 
     maven("https://jitpack.io/")
@@ -27,37 +25,7 @@ java {
     toolchain.languageVersion.set(JavaLanguageVersion.of(21))
 }
 
-modrinth {
-    token = System.getenv("MODRINTH_TOKEN")
-
-    projectId = rootProject.name
-
-    versionName = "${rootProject.version}"
-    versionNumber = "${rootProject.version}"
-
-    syncBodyFrom = rootProject.file("description.md").readText(Charsets.UTF_8)
-
-    autoAddDependsOn = false
-    detectLoaders = false
-}
-
-hangarPublish {
-    publications.register("plugin") {
-        apiKey.set(System.getenv("HANGAR_KEY"))
-
-        id.set(rootProject.name)
-
-        version.set("${rootProject.version}")
-    }
-}
-
 tasks {
-    shadowJar {
-        archiveClassifier.set("")
-
-        exclude("META-INF/**")
-    }
-
     compileJava {
         options.encoding = Charsets.UTF_8.name()
         options.release.set(21)

@@ -33,12 +33,6 @@ vital-paper = "1.0.6"
 [plugins]
 # https://github.com/mfnalex/gradle-fix-javadoc-plugin
 fix-javadoc = { id = "com.jeff-media.fix-javadoc-plugin", version.ref = "fix-javadoc" }
-# https://github.com/ryderbelserion/Feather
-feather = { id = "com.ryderbelserion.feather.core", version.ref = "feather" }
-# https://github.com/HangarMC/hangar-publish-plugin
-hangar = { id = "io.papermc.hangar-publish-plugin", version.ref = "hangar" }
-# https://github.com/modrinth/minotaur
-minotaur = { id = "com.modrinth.minotaur", version.ref = "minotaur" }
 
 [libraries]
 # https://minecraft.net
@@ -68,6 +62,7 @@ headdatabaseapi = { module = "com.arcaniax:HeadDatabase-API", version.ref = "hea
 placeholderapi = { module = "me.clip:placeholderapi", version.ref = "placeholderapi" }
 # https://github.com/ItemsAdder
 itemsadder = { module = "dev.lone:api-itemsadder", version.ref = "itemsadder" }
+# Never Updates: https://github.com/milkbowl/Vault
 vault = { module = "com.github.MilkBowl:VaultAPI", version.ref = "vault" }
 # https://github.com/oraxen
 oraxen = { module = "io.th0rgal:oraxen", version.ref = "oraxen" }

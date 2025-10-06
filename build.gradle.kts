@@ -12,9 +12,9 @@ val content: String = if (isSnapshot) "[$commitHash](https://github.com/Crazy-Cr
 val minecraft = libs.versions.minecraft.get()
 val versions = listOf(minecraft)
 
-rootProject.description = "Auction off your items in style!"
+rootProject.description = rootProject.property("project_description").toString()
 rootProject.version = if (isSnapshot) "$minecraft-$commitHash" else rootProject.property("plugin_version").toString()
-rootProject.group = "com.badbones69.crazyauctions"
+rootProject.group = rootProject.property("project_group").toString()
 
 allprojects {
     apply(plugin = "java-library")
@@ -50,6 +50,18 @@ tasks {
 }
 
 modrinth {
+    token = System.getenv("MODRINTH_TOKEN")
+
+    projectId = rootProject.name
+
+    versionName = "${rootProject.version}"
+    versionNumber = "${rootProject.version}"
+
+    syncBodyFrom = rootProject.file("description.md").readText(Charsets.UTF_8)
+
+    autoAddDependsOn = false
+    detectLoaders = false
+
     versionType = if (isSnapshot) "beta" else "release"
 
     changelog = content
@@ -62,38 +74,47 @@ modrinth {
 }
 
 hangarPublish {
-    publications["plugin"].changelog = content
-    publications["plugin"].channel = if (isSnapshot) "Beta" else "Release"
+    publications.register("plugin") {
+        apiKey.set(System.getenv("HANGAR_KEY"))
 
-    publications["plugin"].platforms {
-        register(Platforms.PAPER) {
-            jar = tasks.jar.flatMap { it.archiveFile }
+        id.set(rootProject.name)
 
-            platformVersions.set(versions)
+        version.set("${rootProject.version}")
 
-            dependencies {
-                hangar("PlaceholderAPI") {
-                    required = false
-                }
+        changelog = content
 
-                hangar("FancyHolograms") {
-                    required = false
-                }
+        channel = if (isSnapshot) "Beta" else "Release"
 
-                url("DecentHolograms", "https://modrinth.com/plugin/decentholograms") {
-                    required = false
-                }
+        platforms {
+            register(Platforms.PAPER) {
+                jar = tasks.jar.flatMap { it.archiveFile }
 
-                url("ItemsAdder", "https://polymart.org/product/1851/itemsadder") {
-                    required = false
-                }
+                platformVersions.set(versions)
 
-                url("Oraxen", "https://polymart.org/product/629/oraxen") {
-                    required = false
-                }
+                dependencies {
+                    hangar("PlaceholderAPI") {
+                        required = false
+                    }
 
-                url("Nexo", "https://polymart.org/resource/nexo.6901") {
-                    required = false
+                    hangar("FancyHolograms") {
+                        required = false
+                    }
+
+                    url("DecentHolograms", "https://modrinth.com/plugin/decentholograms") {
+                        required = false
+                    }
+
+                    url("ItemsAdder", "https://polymart.org/product/1851/itemsadder") {
+                        required = false
+                    }
+
+                    url("Oraxen", "https://polymart.org/product/629/oraxen") {
+                        required = false
+                    }
+
+                    url("Nexo", "https://polymart.org/resource/nexo.6901") {
+                        required = false
+                    }
                 }
             }
         }

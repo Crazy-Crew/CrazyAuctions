@@ -13,13 +13,16 @@ repositories {
 }
 
 dependencies {
-    implementation(project(":crazyauctions-api"))
+    implementation(project(":api"))
 
     implementation(libs.vital.paper) {
+        exclude("ch.jalu", "configme")
         exclude("org.yaml")
     }
 
-    implementation(libs.fusion.paper)
+    implementation(libs.fusion.paper) {
+        exclude("ch.jalu", "configme")
+    }
 
     compileOnly(libs.bundles.shared)
 }
