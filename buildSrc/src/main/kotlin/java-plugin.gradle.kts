@@ -1,5 +1,5 @@
 plugins {
-    id("com.gradleup.shadow")
+    id("com.ryderbelserion.feather.core")
 
     `java-library`
 }
@@ -25,12 +25,6 @@ java {
 }
 
 tasks {
-    shadowJar {
-        archiveClassifier.set("")
-
-        exclude("META-INF/**")
-    }
-
     compileJava {
         options.encoding = Charsets.UTF_8.name()
         options.release.set(21)
@@ -46,12 +40,12 @@ tasks {
             "version" to rootProject.version,
             "description" to rootProject.description.toString(),
             "minecraft" to libs.findVersion("minecraft").get(),
-            "website" to "https://github.com/Crazy-Crew/${rootProject.name}",
+            "website" to "https://github.com/${rootProject.property("repository_owner")}/${rootProject.name}",
             "group" to project.group
         )
 
         with(copySpec {
-            include("*plugin.yml")
+            include("*paper-plugin.yml", "*plugin.yml")
 
             from("src/main/resources") {
                 expand(inputs.properties)

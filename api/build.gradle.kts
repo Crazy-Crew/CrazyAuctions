@@ -2,7 +2,7 @@ plugins {
     alias(libs.plugins.fix.javadoc)
 
     `maven-publish`
-    `config-paper`
+    `paper-plugin`
 }
 
 project.group = "us.crazycrew.crazyauctions"
