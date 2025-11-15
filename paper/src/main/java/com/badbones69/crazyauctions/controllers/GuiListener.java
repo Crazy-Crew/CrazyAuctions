@@ -128,15 +128,15 @@ public class GuiListener implements Listener {
 
         Inventory inv = new AuctionMenu(54, Methods.color(config.getString("Settings.GUIName") + " #" + page), page).getInventory();
 
-        List<String> options = new ArrayList<>(){{
-            add("SellingItems");
-            add("Cancelled/ExpiredItems");
-            add("PreviousPage");
-            add("Refresh");
-            add("NextPage");
-            add("Category1");
-            add("Category2");
-        }};
+        List<String> options = new ArrayList<>();
+
+        options.add("SellingItems");
+        options.add("Cancelled/ExpiredItems");
+        options.add("PreviousPage");
+        options.add("Refresh");
+        options.add("NextPage");
+        options.add("Category1");
+        options.add("Category2");
 
         if (sell == ShopType.SELL) {
             shopType.put(player.getUniqueId(), ShopType.SELL);
@@ -207,18 +207,18 @@ public class GuiListener implements Listener {
 
         Inventory inv = new AuctionMenu(54, Methods.color(config.getString("Settings.Categories"))).getInventory();
 
-        List<String> options = new ArrayList<>(){{
-            add("OtherSettings.Back");
-            add("OtherSettings.WhatIsThis.Categories");
-            add("Category-Settings.Armor");
-            add("Category-Settings.Weapons");
-            add("Category-Settings.Tools");
-            add("Category-Settings.Food");
-            add("Category-Settings.Potions");
-            add("Category-Settings.Blocks");
-            add("Category-Settings.Other");
-            add("Category-Settings.None");
-        }};
+        List<String> options = new ArrayList<>();
+
+        options.add("OtherSettings.Back");
+        options.add("OtherSettings.WhatIsThis.Categories");
+        options.add("Category-Settings.Armor");
+        options.add("Category-Settings.Weapons");
+        options.add("Category-Settings.Tools");
+        options.add("Category-Settings.Food");
+        options.add("Category-Settings.Potions");
+        options.add("Category-Settings.Blocks");
+        options.add("Category-Settings.Other");
+        options.add("Category-Settings.None");
 
         for (String option : options) {
             if (config.contains("Settings.GUISettings." + option + ".Toggle")) {
@@ -255,10 +255,10 @@ public class GuiListener implements Listener {
 
         Inventory inv = new AuctionMenu(54, Methods.color(config.getString("Settings.Players-Current-Items"))).getInventory();
 
-        List<String> options = new ArrayList<>(){{
-            add("Back");
-            add("WhatIsThis.CurrentItems");
-        }};
+        List<String> options = new ArrayList<>();
+
+        options.add("WhatIsThis.CurrentItems");
+        options.add("Back");
 
         setOptions(options, config, inv);
 
@@ -333,13 +333,13 @@ public class GuiListener implements Listener {
 
         Inventory inv = new AuctionMenu(54, Methods.color(config.getString("Settings.Cancelled/Expired-Items") + " #" + page), page).getInventory();
 
-        List<String> options = new ArrayList<>(){{
-            add("Back");
-            add("PreviousPage");
-            add("Return");
-            add("NextPage");
-            add("WhatIsThis.Cancelled/ExpiredItems");
-        }};
+        List<String> options = new ArrayList<>();
+
+        options.add("Back");
+        options.add("PreviousPage");
+        options.add("Return");
+        options.add("NextPage");
+        options.add("WhatIsThis.Cancelled/ExpiredItems");
 
         setOptions(options, config, inv);
 
@@ -362,10 +362,10 @@ public class GuiListener implements Listener {
 
         Inventory inv = new AuctionMenu(9, Methods.color(config.getString("Settings.Buying-Item"))).getInventory();
 
-        List<String> options = new ArrayList<>(){{
-            add("Confirm");
-            add("Cancel");
-        }};
+        List<String> options = new ArrayList<>();
+
+        options.add("Confirm");
+        options.add("Cancel");
 
         for (String option : options) {
             String id = config.getString("Settings.GUISettings.OtherSettings." + option + ".Item");
@@ -753,16 +753,16 @@ public class GuiListener implements Listener {
                     return;
                 }
 
-                Map<String, Integer> priceEdits = new HashMap<>(){{
-                    put("&a+1", 1);
-                    put("&a+10", 10);
-                    put("&a+100", 100);
-                    put("&a+1000", 1000);
-                    put("&c-1", -1);
-                    put("&c-10", -10);
-                    put("&c-100", -100);
-                    put("&c-1000", -1000);
-                }};
+                Map<String, Integer> priceEdits = new HashMap<>();
+
+                priceEdits.put("&a+1", 1);
+                priceEdits.put("&a+10", 10);
+                priceEdits.put("&a+100", 100);
+                priceEdits.put("&a+1000", 1000);
+                priceEdits.put("&c-1", -1);
+                priceEdits.put("&c-10", -10);
+                priceEdits.put("&c-100", -100);
+                priceEdits.put("&c-1000", -1000);
 
                 for (String price : priceEdits.keySet()) {
                     if (displayName.equals(Methods.color(price))) {

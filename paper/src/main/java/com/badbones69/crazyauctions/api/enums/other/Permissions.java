@@ -23,19 +23,19 @@ public enum Permissions {
 
     access("access", "Access other portions of the plugin", PermissionDefault.TRUE, true),
 
-    player_wildcard("player.*", "Access multiple player based commands", PermissionDefault.FALSE, new HashMap<>() {{
-        put("crazyauctions.bid", true);
-        put("crazyauctions.sell", true);
-        put("crazyauctions.access", true);
-        put("crazyauctions.view", true);
-    }}, true),
+    player_wildcard("player.*", "Access multiple player based commands", PermissionDefault.FALSE, Map.ofEntries(
+            Map.entry("crazyauctions.bid", true),
+            Map.entry("crazyauctions.sell", true),
+            Map.entry("crazyauctions.access", true),
+            Map.entry("crazyauctions.view", true)
+    ), true),
 
-    admin_wildcard("admin", "Access multiple admin based commands", PermissionDefault.FALSE, new HashMap<>() {{
-        put("crazyauctions.player.*", true);
-        put("crazyauctions.reload", true);
-        put("crazyauctions.bypass", true);
-        put("crazyauctions.view", true);
-    }}, true);
+    admin_wildcard("admin", "Access multiple admin based commands", PermissionDefault.FALSE, Map.ofEntries(
+            Map.entry("crazyauctions.player.*", true),
+            Map.entry("crazyauctions.reload", true),
+            Map.entry("crazyauctions.bypass", true),
+            Map.entry("crazyauctions.view", true)
+    ), true);
 
     private final String node;
     private final String description;

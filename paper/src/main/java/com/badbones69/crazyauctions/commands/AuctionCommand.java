@@ -346,10 +346,10 @@ public class AuctionCommand implements CommandExecutor {
                     if (vaultSupport.getMoney(player) >= listCost) {
                         vaultSupport.removeMoney(player, listCost);
                     } else {
-                        Map<String, String> placeholders = new HashMap<>() {{
-                            put("%Money_Needed%", String.valueOf(listCost));
-                            put("%money_needed%", String.valueOf(listCost));
-                        }};
+                        Map<String, String> placeholders = new HashMap<>();
+
+                        placeholders.put("%Money_Needed%", String.valueOf(listCost));
+                        placeholders.put("%money_needed%", String.valueOf(listCost));
 
                         player.sendMessage(Messages.NEED_MORE_MONEY.getMessage(sender, placeholders));
                         return true;
