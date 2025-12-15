@@ -1,0 +1,14 @@
+name: Release Build
+
+on:
+  workflow_dispatch:
+
+  release:
+    types: [ published ]
+
+jobs:
+  build:
+    uses: Crazy-Crew/.github/.github/workflows/build.yml@main
+
+    secrets:
+      webhook: ${{ secrets.BUILD_WEBHOOK }}

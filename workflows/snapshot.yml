@@ -1,0 +1,15 @@
+name: Snapshot Build
+
+on:
+  workflow_dispatch:
+
+  push:
+    branches:
+      - dev
+
+jobs:
+  build:
+    uses: Crazy-Crew/.github/.github/workflows/build.yml@main
+
+    secrets:
+      webhook: ${{ secrets.CA_WEBHOOK }}
