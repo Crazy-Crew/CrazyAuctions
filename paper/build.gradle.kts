@@ -2,6 +2,8 @@ plugins {
     `paper-plugin`
 }
 
+project.group = "${rootProject.group}.paper"
+
 repositories {
     maven("https://repo.nexomc.com/releases/")
 
