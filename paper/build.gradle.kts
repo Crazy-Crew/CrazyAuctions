@@ -2,8 +2,6 @@ plugins {
     `paper-plugin`
 }
 
-project.group = "${rootProject.group}"
-
 repositories {
     maven("https://repo.nexomc.com/releases/")
 
@@ -13,7 +11,7 @@ repositories {
 }
 
 dependencies {
-    implementation(project(path = ":api", configuration = "shadow"))
+    implementation(project(":api"))
 
     implementation(libs.vital.paper) {
         exclude("org.yaml")
@@ -23,20 +21,16 @@ dependencies {
 }
 
 tasks {
+    build {
+        dependsOn(shadowJar)
+    }
+
     shadowJar {
         listOf(
             "org.bstats"
         ).forEach {
             relocate(it, "libs.$it")
         }
-
-        archiveBaseName.set("${rootProject.name}-${rootProject.version}")
-
-        destinationDirectory.set(rootProject.layout.buildDirectory.dir("libs"))
-    }
-
-    compileJava {
-        dependsOn(":api:jar")
     }
 
     runPaper.folia.registerTask()

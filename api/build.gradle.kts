@@ -2,7 +2,7 @@ plugins {
     alias(libs.plugins.fix.javadoc)
 
     `maven-publish`
-    `paper-plugin`
+    `java-plugin`
 }
 
 project.description = "The official API for CrazyAuctions!"
