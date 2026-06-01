@@ -146,6 +146,70 @@ public class AuctionCommand implements CommandExecutor {
                 return true;
             }
 
+case "search" -> {
+    if (!(sender instanceof Player player)) {
+        sender.sendMessage(Messages.PLAYERS_ONLY.getMessage(sender));
+        return true;
+    }
+
+    if (!Methods.hasPermission(sender, "search")) return true;
+
+    if (args.length < 2) {
+        player.sendMessage(Methods.getPrefix("&cUsage: /ah search <item> [player]"));
+        return true;
+    }
+
+    // Combine args[1..n-1] into itemName in case quotes are used
+    String itemName = args[1];
+    if (args.length > 2) {
+        StringBuilder sb = new StringBuilder(itemName);
+        for (int i = 2; i < args.length; i++) {
+            if (!args[i].startsWith("\"") && !args[i].endsWith("\"")) {
+                sb.append(" ").append(args[i]);
+            } else {
+                sb.append(args[i]);
+            }
+        }
+        itemName = sb.toString().replace("\"", "");
+    }
+
+    String playerFilter = null;
+    if (args.length >= 3) {
+        playerFilter = args[2];
+    }
+
+    FileConfiguration data = Files.data.getConfiguration();
+    List<String> results = new ArrayList<>();
+
+    for (String key : data.getConfigurationSection("Items").getKeys(false)) {
+        String sellerName = data.getString("Items." + key + ".SellerName", "");
+        String itemBase64 = data.getString("Items." + key + ".Item", "");
+
+        ItemStack item = Methods.fromBase64(itemBase64);
+        if (item == null) continue;
+
+        // Check item name
+        String displayName = item.hasItemMeta() && item.getItemMeta().hasDisplayName() ?
+                item.getItemMeta().getDisplayName() : item.getType().name();
+
+        if (displayName.toLowerCase().contains(itemName.toLowerCase())) {
+            // Check optional player filter
+            if (playerFilter == null || sellerName.equalsIgnoreCase(playerFilter)) {
+                results.add(displayName + " | Seller: " + sellerName + " | Price: " + data.getLong("Items." + key + ".Price"));
+            }
+        }
+    }
+
+    if (results.isEmpty()) {
+        player.sendMessage(Methods.getPrefix("&cNo matching items found."));
+    } else {
+        player.sendMessage(Methods.getPrefix("&aSearch results:"));
+        results.forEach(line -> player.sendMessage("  " + line));
+    }
+
+    return true;
+}
+
             case "listed" -> {
                 if (!Methods.hasPermission(sender, "access")) return true;
 

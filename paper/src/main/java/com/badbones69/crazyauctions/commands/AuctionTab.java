@@ -7,6 +7,7 @@ import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -19,7 +20,7 @@ public class AuctionTab implements TabCompleter {
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String commandLabel, String[] args) {
         List<String> completions = new ArrayList<>();
 
-        if (args.length == 1) { // /voucher
+        if (args.length == 1) { // /ah <arg0>
             if (hasPermission(sender, "access")) {
                 completions.add("help");
                 completions.add("collect");
@@ -33,18 +34,24 @@ public class AuctionTab implements TabCompleter {
             if (hasPermission(sender, "view")) completions.add("view");
             if (hasPermission(sender, "sell")) completions.add("sell");
             if (hasPermission(sender, "bid")) completions.add("bid");
+            if (hasPermission(sender, "search")) completions.add("search"); // NEW
 
             return StringUtil.copyPartialMatches(args[0], completions, new ArrayList<>());
-        } else if (args.length == 2) { // /crazyauctions arg0
+        } else if (args.length == 2) { // /ah <arg0> <arg1>
             switch (args[0].toLowerCase()) {
                 case "bid", "sell" -> completions.addAll(Arrays.asList("50", "100", "250", "500", "1000", "2500", "5000", "10000"));
                 case "view" -> completions.addAll(this.plugin.getServer().getOnlinePlayers().stream().map(Player::getName).toList());
+                case "search" -> {
+                    // Suggest example item names
+                    completions.addAll(Arrays.asList("diamond", "sword", "pickaxe", "\"enchanted book\""));
+                }
             }
 
             return StringUtil.copyPartialMatches(args[1], completions, new ArrayList<>());
-        } else if (args.length == 3) { // /crazyauctions arg0 arg1
+        } else if (args.length == 3) { // /ah <arg0> <arg1> <arg2>
             switch (args[0].toLowerCase()) {
                 case "bid", "sell" -> completions.addAll(Arrays.asList("1", "2", "4", "8", "10", "20", "40", "64"));
+                case "search" -> completions.addAll(this.plugin.getServer().getOnlinePlayers().stream().map(Player::getName).toList()); // player filter
             }
 
             return StringUtil.copyPartialMatches(args[2], completions, new ArrayList<>());
