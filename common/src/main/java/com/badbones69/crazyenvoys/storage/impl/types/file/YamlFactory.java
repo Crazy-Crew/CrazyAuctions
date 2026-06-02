@@ -1,6 +1,7 @@
 package com.badbones69.crazyenvoys.storage.impl.types.file;
 
 import com.badbones69.crazyenvoys.enums.Files;
+import com.badbones69.crazyenvoys.utils.TimeUtils;
 import com.ryderbelserion.fusion.core.api.FusionProvider;
 import com.ryderbelserion.fusion.core.api.enums.Level;
 import com.ryderbelserion.fusion.paper.FusionPaper;
@@ -8,11 +9,13 @@ import com.ryderbelserion.fusion.paper.utils.ItemUtils;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Server;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ItemType;
 import org.jspecify.annotations.NonNull;
 import us.crazycrew.api.storage.IStorageHolder;
+import us.crazycrew.api.enums.ShopType;
 import java.util.UUID;
 
 public class YamlFactory extends IStorageHolder {
@@ -131,6 +134,59 @@ public class YamlFactory extends IStorageHolder {
     @Override
     public void reload() {
         this.configuration = Files.data.getConfiguration();
+    }
+
+    @Override
+    public void addItem(
+            @NonNull final UUID uuid,
+            @NonNull final String name,
+            @NonNull final String base64,
+            final long price,
+            @NonNull final ShopType shopType
+    ) {
+        int number = 1;
+
+        final ConfigurationSection section = this.configuration.getConfigurationSection("Items");
+
+        if (section == null) {
+            return;
+        }
+
+        while (section.contains("%s".formatted(number))) number++;
+
+        final ConfigurationSection item = section.createSection("%s".formatted(number));
+
+        final FileConfiguration config = Files.config.getConfiguration();
+
+        item.set("Seller", uuid.toString());
+        item.set("SellerName", name);
+
+        switch (shopType) {
+            case BID -> {
+                item.set("Time-Till-Expire", TimeUtils.convertToMill(config.getString("Settings.Bid-Time", "2m 30s")));
+
+                item.set("Biddable", true);
+            }
+
+            case SELL -> {
+                item.set("Time-Till-Expire", TimeUtils.convertToMill(config.getString("Settings.Sell-Time", "2d")));
+
+                item.set("Biddable", false);
+            }
+        }
+
+        item.set("StoreID", UUID.randomUUID().toString().substring(0, 8));
+
+        item.set("Full-Time", TimeUtils.convertToMill(config.getString("Settings.Full-Expire-Time", "10d")));
+
+        item.set("TopBidder", "None");
+        item.set("TopBidderName", "None");
+
+        item.set("Item", base64);
+
+        section.set("%s".formatted(item), item);
+
+        Files.data.save();
     }
 
     @Override

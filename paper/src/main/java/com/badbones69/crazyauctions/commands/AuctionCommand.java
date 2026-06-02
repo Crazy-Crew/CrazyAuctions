@@ -10,31 +10,39 @@ import com.badbones69.crazyauctions.api.events.AuctionListEvent;
 import com.badbones69.crazyauctions.controllers.GuiListener;
 import com.badbones69.crazyauctions.currency.VaultSupport;
 import org.bukkit.Material;
-import org.bukkit.OfflinePlayer;
+import org.bukkit.Server;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
+import us.crazycrew.api.enums.ShopType;
+import us.crazycrew.api.storage.IStorageHolder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ThreadLocalRandom;
+import java.util.UUID;
 
 public class AuctionCommand implements CommandExecutor {
 
     private final CrazyAuctions plugin = CrazyAuctions.get();
 
+    private final Server server = this.plugin.getServer();
+
     private final CrazyPlatform platform = this.plugin.getPlatform();
+
+    private final IStorageHolder holder = this.platform.getStorageHolder();
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String commandLabel, String[] args) {
         final FileConfiguration config = Files.config.getConfiguration();
-        final FileConfiguration data = Files.data.getConfiguration();
 
         if (args.length == 0) {
             if (!(sender instanceof Player player)) {
@@ -93,12 +101,14 @@ public class AuctionCommand implements CommandExecutor {
                 if (!Methods.hasPermission(sender, "force-end-all")) {
                     return true;
                 }
+
                 if (!(sender instanceof Player player)) {
                     sender.sendMessage(Messages.PLAYERS_ONLY.getMessage(sender));
+
                     return true;
                 }
 
-                forceEndAll(player);
+                end(player);
 
                 return true;
             }
@@ -183,7 +193,8 @@ public class AuctionCommand implements CommandExecutor {
                         if (!Methods.hasPermission(player, "bid")) return true;
                     }
 
-                    ItemStack item = Methods.getItemInHand(player);
+                    final ItemStack item = Methods.getItemInHand(player);
+
                     int amount = item.getAmount();
 
                     if (args.length >= 3) {
@@ -200,6 +211,7 @@ public class AuctionCommand implements CommandExecutor {
                         amount = Integer.parseInt(args[2]);
 
                         if (amount <= 0) amount = 1;
+
                         if (amount > item.getAmount()) amount = item.getAmount();
                     }
 
@@ -339,7 +351,8 @@ public class AuctionCommand implements CommandExecutor {
                         }
                     }
 
-                    VaultSupport vaultSupport = plugin.getSupport();
+                    final VaultSupport vaultSupport = plugin.getSupport();
+
                     int listCost = config.getInt("Settings.Auction-List-Fee", 0);
 
                     if (vaultSupport.getMoney(player) >= listCost) {
@@ -351,58 +364,23 @@ public class AuctionCommand implements CommandExecutor {
                         placeholders.put("%money_needed%", String.valueOf(listCost));
 
                         player.sendMessage(Messages.NEED_MORE_MONEY.getMessage(sender, placeholders));
+
                         return true;
                     }
 
-                    String seller = player.getUniqueId().toString();
+                    final ShopType type = args[0].equalsIgnoreCase("bid") ? ShopType.BID : ShopType.SELL;
 
-                    int num = 1;
+                    final ItemStack stack = item.clone();
 
-                    while (data.contains("Items." + num)) num++;
-
-                    data.set("Items." + num + ".Price", price);
-                    data.set("Items." + num + ".Seller", seller);
-                    data.set("Items." + num + ".SellerName", player.getName());
-
-                    if (args[0].equalsIgnoreCase("bid")) {
-                        data.set("Items." + num + ".Time-Till-Expire", Methods.convertToMill(config.getString("Settings.Bid-Time", "2m 30s")));
-                    } else {
-                        data.set("Items." + num + ".Time-Till-Expire", Methods.convertToMill(config.getString("Settings.Sell-Time", "2d")));
-                    }
-
-                    data.set("Items." + num + ".Full-Time", Methods.convertToMill(config.getString("Settings.Full-Expire-Time", "10d")));
-                    int id = ThreadLocalRandom.current().nextInt(Integer.MAX_VALUE);
-
-                    // Runs 3x to check for same ID.
-                    for (String i : data.getConfigurationSection("Items").getKeys(false))
-                        if (data.getInt("Items." + i + ".StoreID") == id)
-                            id = ThreadLocalRandom.current().nextInt(Integer.MAX_VALUE);
-                    for (String i : data.getConfigurationSection("Items").getKeys(false))
-                        if (data.getInt("Items." + i + ".StoreID") == id)
-                            id = ThreadLocalRandom.current().nextInt(Integer.MAX_VALUE);
-                    for (String i : data.getConfigurationSection("Items").getKeys(false))
-                        if (data.getInt("Items." + i + ".StoreID") == id)
-                            id = ThreadLocalRandom.current().nextInt(Integer.MAX_VALUE);
-
-                    data.set("Items." + num + ".StoreID", id);
-                    ShopType type = ShopType.SELL;
-
-                    if (args[0].equalsIgnoreCase("bid")) {
-                        data.set("Items." + num + ".Biddable", true);
-                        type = ShopType.BID;
-                    } else {
-                        data.set("Items." + num + ".Biddable", false);
-                    }
-
-                    data.set("Items." + num + ".TopBidder", "None");
-                    data.set("Items." + num + ".TopBidderName", "None");
-
-                    ItemStack stack = item.clone();
                     stack.setAmount(amount);
 
-                    data.set("Items." + num + ".Item", Methods.toBase64(stack));
-
-                    Files.data.save();
+                    this.holder.addItem(
+                            player.getUniqueId(),
+                            player.getName(),
+                            Methods.toBase64(stack),
+                            price,
+                            args[0].equalsIgnoreCase("bid") ? ShopType.BID : ShopType.SELL
+                    );
 
                     new AuctionListEvent(player, type, stack, price).callEvent();
 
@@ -440,27 +418,39 @@ public class AuctionCommand implements CommandExecutor {
      * @param player The {@link Player} that initiated the cancellation.
      * @see AuctionCancelledEvent
      */
-    private void forceEndAll(Player player) {
-        FileConfiguration data = Files.data.getConfiguration();
+    private void end(@NonNull final Player player) {
+        final YamlConfiguration data = Files.data.getConfiguration();
 
-        int num = 1;
+        int number = 1;
 
-        for (String i : data.getConfigurationSection("Items").getKeys(false)) {
+        final ConfigurationSection section = data.getConfigurationSection("Items");
 
-            OfflinePlayer seller = Methods.getOfflinePlayer(data.getString("Items." + i + ".Seller"));
+        if (section == null) {
+            return;
+        }
 
-            if (seller.getPlayer() != null) {
-                seller.getPlayer().sendMessage(Messages.ADMIN_FORCE_CANCELLED_TO_PLAYER.getMessage(player));
+        for (final String id : section.getKeys(false)) {
+            final ConfigurationSection item = section.getConfigurationSection(id);
+
+            if (item == null) continue;
+
+            final String seller = item.getString("Seller", "");
+
+            if (seller.isBlank()) continue;
+
+            final UUID uuid = UUID.fromString(seller);
+
+            final Player entity = this.server.getPlayer(uuid);
+
+            if (entity != null) {
+                entity.sendMessage(Messages.ADMIN_FORCE_CANCELLED_TO_PLAYER.getMessage(player));
             }
 
-            num = Methods.expireItem(num, seller, i, data, Reasons.ADMIN_FORCE_CANCEL);
-
+            number = Methods.expireItem(number, this.server.getOfflinePlayer(uuid), id, data, Reasons.ADMIN_FORCE_CANCEL);
         }
 
         Files.data.save();
 
         player.sendMessage(Messages.ADMIN_FORCE_CANCELLED_ALL.getMessage(player));
-
     }
-
 }

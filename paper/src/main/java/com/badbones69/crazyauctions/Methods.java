@@ -25,7 +25,6 @@ public class Methods {
 
     private static final Pattern UUID_PATTERN = Pattern.compile("[a-f0-9]{8}(?:-[a-f0-9]{4}){4}[a-f0-9]{8}");
 
-
     public static String color(String message) {
         Matcher matcher = HEX_PATTERN.matcher(message);
         StringBuilder buffer = new StringBuilder();
@@ -220,30 +219,6 @@ public class Methods {
         return D + "d " + H + "h " + M + "m " + S + "s ";
     }
     
-    public static long convertToMill(String time) {
-        Calendar cal = Calendar.getInstance();
-
-        for (String i : time.split(" ")) {
-            if (i.contains("D") || i.contains("d")) {
-                cal.add(Calendar.DATE, Integer.parseInt(i.replace("D", "").replace("d", "")));
-            }
-
-            if (i.contains("H") || i.contains("h")) {
-                cal.add(Calendar.HOUR, Integer.parseInt(i.replace("H", "").replace("h", "")));
-            }
-
-            if (i.contains("M") || i.contains("m")) {
-                cal.add(Calendar.MINUTE, Integer.parseInt(i.replace("M", "").replace("m", "")));
-            }
-
-            if (i.contains("S") || i.contains("s")) {
-                cal.add(Calendar.SECOND, Integer.parseInt(i.replace("S", "").replace("s", "")));
-            }
-        }
-
-        return cal.getTimeInMillis();
-    }
-    
     public static boolean isInvFull(Player player) {
         return player.getInventory().firstEmpty() == -1;
     }
@@ -384,7 +359,6 @@ public class Methods {
      * @return The section in which the item was saved.
      */
     public static int expireItem(int num, OfflinePlayer seller, String i, FileConfiguration data, Reasons reasons) {
-
         while (data.contains("OutOfTime/Cancelled." + num)) num++;
 
         AuctionCancelledEvent event = new AuctionCancelledEvent(seller, Methods.fromBase64(data.getString("Items." + i + ".Item")), reasons);

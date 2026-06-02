@@ -7,7 +7,7 @@ import com.badbones69.crazyauctions.api.builders.ItemBuilder;
 import com.badbones69.crazyauctions.api.enums.Category;
 import com.badbones69.crazyauctions.api.enums.Messages;
 import com.badbones69.crazyauctions.api.enums.Reasons;
-import com.badbones69.crazyauctions.api.enums.ShopType;
+import us.crazycrew.api.enums.ShopType;
 import com.badbones69.crazyenvoys.enums.Files;
 import com.badbones69.crazyauctions.api.events.AuctionBuyEvent;
 import com.badbones69.crazyauctions.api.events.AuctionNewBidEvent;
