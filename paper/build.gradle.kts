@@ -13,7 +13,7 @@ repositories {
 }
 
 dependencies {
-    implementation(project(":api"))
+    api(project(":common"))
 
     implementation(libs.fusion.paper)
 

@@ -2,7 +2,8 @@ package com.badbones69.crazyauctions.controllers;
 
 import com.badbones69.crazyauctions.CrazyAuctions;
 import com.badbones69.crazyauctions.Methods;
-import com.badbones69.crazyauctions.api.enums.misc.Files;
+import com.badbones69.crazyauctions.api.CrazyPlatform;
+import com.badbones69.crazyenvoys.enums.Files;
 import com.ryderbelserion.fusion.core.api.enums.Level;
 import com.ryderbelserion.fusion.paper.FusionPaper;
 import com.ryderbelserion.fusion.paper.builders.folia.FoliaScheduler;
@@ -13,13 +14,17 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.jetbrains.annotations.NotNull;
+import us.crazycrew.api.storage.IStorageHolder;
 
 public class TrafficListener implements Listener {
 
     private final CrazyAuctions plugin = CrazyAuctions.get();
 
     private final FusionPaper fusion = this.plugin.getFusion();
+
+    private final CrazyPlatform platform = this.plugin.getPlatform();
+
+    private final IStorageHolder holder = this.platform.getStorageHolder();
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
@@ -55,7 +60,7 @@ public class TrafficListener implements Listener {
             return;
         }
 
-        boolean hasPlayer = hasPlayer(section, player.getUniqueId().toString());
+        boolean hasPlayer = this.holder.hasExpiredItem(player.getUniqueId());
 
         if (!hasPlayer) return;
 
@@ -63,7 +68,7 @@ public class TrafficListener implements Listener {
             new FoliaScheduler(this.plugin, Scheduler.global_scheduler) {
                 @Override
                 public void run() {
-                    if (!hasPlayer(section, player.getUniqueId().toString())) {
+                    if (!holder.hasExpiredItem(player.getUniqueId())) {
                         cancel();
 
                         return;
@@ -82,35 +87,5 @@ public class TrafficListener implements Listener {
                 player.sendMessage(Methods.color(message));
             }
         }.runNextTick();
-    }
-
-    public final boolean hasPlayer(@NotNull final ConfigurationSection section, @NotNull final String uuid) {
-        boolean hasPlayer = false;
-
-        for (final String id : section.getKeys(false)) {
-            final ConfigurationSection item = section.getConfigurationSection(id);
-
-            if (item == null) {
-                this.fusion.log(Level.WARNING, "Item cannot be null for id %s!", id);
-
-                continue;
-            }
-
-            final String seller = item.getString("Seller", "");
-
-            if (seller.isBlank()) {
-                this.fusion.log(Level.WARNING, "The seller for id %s cannot be blank!", id);
-
-                continue;
-            }
-
-            hasPlayer = seller.equals(uuid);
-
-            if (hasPlayer) {
-                break;
-            }
-        }
-
-        return hasPlayer;
     }
 }

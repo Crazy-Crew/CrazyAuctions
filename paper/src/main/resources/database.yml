@@ -1,0 +1,6 @@
+# Configuration options related to the plugin database!
+database: # The type of database which we store data in!
+  # Available Types:
+  #  ⤷ SQLITE
+  #  ⤷ YAML (DEFAULT)
+  type: "YAML"

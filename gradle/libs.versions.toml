@@ -24,6 +24,10 @@ bstats = "3.2.1" # https://bstats.org/docs
 ## Other API
 fusion = "4.26.0" # https://github.com/ryderbelserion/Fusion
 
+## Database API
+postgres = "42.7.10" # https://jdbc.postgresql.org/
+hikari = "7.0.2" # https://github.com/brettwooldridge/HikariCP
+
 ## Gradle Plugins
 fix-javadoc = "1.19" # https://github.com/mfnalex/gradle-fix-javadoc-plugin
 run-paper = "3.0.2" # https://github.com/jpenilla/run-task
@@ -79,9 +83,13 @@ triumph-cmds = { module = "dev.triumphteam:triumph-cmd-bukkit", version.ref = "t
 
 # https://github.com/ryderbelserion/Fusion
 fusion-paper = { module = "com.ryderbelserion.fusion:fusion-paper", version.ref = "fusion" }
+fusion-kyori = { module = "com.ryderbelserion.fusion:fusion-kyori", version.ref = "fusion" }
 
 # https://bstats.org
 bstats-paper = { module = "org.bstats:bstats-bukkit", version.ref = "bstats" }
+
+# https://github.com/brettwooldridge/HikariCP
+hikari-cp = { module = "com.zaxxer:HikariCP", version.ref = "hikari" }
 
 [bundles]
 adventure = [

@@ -2,14 +2,13 @@ package com.badbones69.crazyauctions.commands;
 
 import com.badbones69.crazyauctions.CrazyAuctions;
 import com.badbones69.crazyauctions.Methods;
-import com.badbones69.crazyauctions.api.CrazyManager;
+import com.badbones69.crazyauctions.api.CrazyPlatform;
 import com.badbones69.crazyauctions.api.enums.*;
-import com.badbones69.crazyauctions.api.enums.misc.Files;
+import com.badbones69.crazyenvoys.enums.Files;
 import com.badbones69.crazyauctions.api.events.AuctionCancelledEvent;
 import com.badbones69.crazyauctions.api.events.AuctionListEvent;
 import com.badbones69.crazyauctions.controllers.GuiListener;
 import com.badbones69.crazyauctions.currency.VaultSupport;
-import com.ryderbelserion.fusion.paper.files.PaperFileManager;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
@@ -30,9 +29,7 @@ public class AuctionCommand implements CommandExecutor {
 
     private final CrazyAuctions plugin = CrazyAuctions.get();
 
-    private final CrazyManager crazyManager = this.plugin.getCrazyManager();
-
-    private final PaperFileManager fileManager = this.plugin.getFileManager();
+    private final CrazyPlatform platform = this.plugin.getPlatform();
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String commandLabel, String[] args) {
@@ -58,9 +55,9 @@ public class AuctionCommand implements CommandExecutor {
                 }
             }
 
-            if (this.crazyManager.isSellingEnabled()) {
+            if (this.platform.isSellModuleEnabled()) {
                 GuiListener.openShop(player, ShopType.SELL, Category.NONE, 1);
-            } else if (crazyManager.isBiddingEnabled()) {
+            } else if (this.platform.isBidModuleEnabled()) {
                 GuiListener.openShop(player, ShopType.BID, Category.NONE, 1);
             } else {
                 player.sendMessage(Methods.getPrefix() + Methods.color("&cThe bidding and selling options are both disabled. Please contact the admin about this."));
@@ -85,9 +82,7 @@ public class AuctionCommand implements CommandExecutor {
                     return true;
                 }
 
-                this.fileManager.refresh(false);
-
-                this.crazyManager.load();
+                this.platform.reload();
 
                 sender.sendMessage(Messages.RELOAD.getMessage(sender));
 
@@ -169,7 +164,7 @@ public class AuctionCommand implements CommandExecutor {
 
                 if (args.length >= 2) {
                     if (args[0].equalsIgnoreCase("sell")) {
-                        if (!crazyManager.isSellingEnabled()) {
+                        if (!this.platform.isSellModuleEnabled()) {
                             player.sendMessage(Messages.SELLING_DISABLED.getMessage(sender));
 
                             return true;
@@ -179,7 +174,7 @@ public class AuctionCommand implements CommandExecutor {
                     }
 
                     if (args[0].equalsIgnoreCase("bid")) {
-                        if (!crazyManager.isBiddingEnabled()) {
+                        if (!this.platform.isBidModuleEnabled()) {
                             player.sendMessage(Messages.BIDDING_DISABLED.getMessage(sender));
 
                             return true;
@@ -300,7 +295,9 @@ public class AuctionCommand implements CommandExecutor {
                         }
 
                         if (args[0].equalsIgnoreCase("sell")) {
-                            if (crazyManager.getItems(player).size() >= SellLimit) {
+                            final List<ItemStack> items = this.platform.getItems(player);
+
+                            if (items.size() >= SellLimit) {
                                 player.sendMessage(Messages.MAX_ITEMS.getMessage(sender));
 
                                 return true;
@@ -308,7 +305,9 @@ public class AuctionCommand implements CommandExecutor {
                         }
 
                         if (args[0].equalsIgnoreCase("bid")) {
-                            if (crazyManager.getItems(player).size() >= BidLimit) {
+                            final List<ItemStack> items = this.platform.getItems(player);
+
+                            if (items.size() >= BidLimit) {
                                 player.sendMessage(Messages.MAX_ITEMS.getMessage(sender));
 
                                 return true;

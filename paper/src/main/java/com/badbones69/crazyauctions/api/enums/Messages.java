@@ -2,7 +2,7 @@ package com.badbones69.crazyauctions.api.enums;
 
 import com.badbones69.crazyauctions.CrazyAuctions;
 import com.badbones69.crazyauctions.Methods;
-import com.badbones69.crazyauctions.api.enums.misc.Files;
+import com.badbones69.crazyenvoys.enums.Files;
 import com.ryderbelserion.fusion.core.api.constants.ModSupport;
 import com.ryderbelserion.fusion.paper.FusionPaper;
 import me.clip.placeholderapi.PlaceholderAPI;

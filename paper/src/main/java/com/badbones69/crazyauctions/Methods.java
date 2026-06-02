@@ -2,7 +2,7 @@ package com.badbones69.crazyauctions;
 
 import com.badbones69.crazyauctions.api.enums.Messages;
 import com.badbones69.crazyauctions.api.enums.Reasons;
-import com.badbones69.crazyauctions.api.enums.misc.Files;
+import com.badbones69.crazyenvoys.enums.Files;
 import com.badbones69.crazyauctions.api.events.AuctionCancelledEvent;
 import com.badbones69.crazyauctions.api.events.AuctionExpireEvent;
 import com.badbones69.crazyauctions.api.events.AuctionWinBidEvent;

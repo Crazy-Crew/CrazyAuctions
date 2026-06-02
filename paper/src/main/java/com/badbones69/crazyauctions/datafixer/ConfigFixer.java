@@ -1,6 +1,6 @@
 package com.badbones69.crazyauctions.datafixer;
 
-import com.badbones69.crazyauctions.api.enums.misc.Files;
+import com.badbones69.crazyenvoys.enums.Files;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 public class ConfigFixer {

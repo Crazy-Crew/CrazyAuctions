@@ -8,7 +8,7 @@ import com.badbones69.crazyauctions.api.enums.Category;
 import com.badbones69.crazyauctions.api.enums.Messages;
 import com.badbones69.crazyauctions.api.enums.Reasons;
 import com.badbones69.crazyauctions.api.enums.ShopType;
-import com.badbones69.crazyauctions.api.enums.misc.Files;
+import com.badbones69.crazyenvoys.enums.Files;
 import com.badbones69.crazyauctions.api.events.AuctionBuyEvent;
 import com.badbones69.crazyauctions.api.events.AuctionNewBidEvent;
 import com.badbones69.crazyauctions.currency.VaultSupport;
@@ -40,7 +40,7 @@ import java.util.Objects;
 public class GuiListener implements Listener {
 
     private static final CrazyAuctions plugin = CrazyAuctions.get();
-    private static final CrazyManager crazyManager = plugin.getCrazyManager();
+    private static final CrazyPlatform platform = plugin.getPlatform();
 
     private static final Map<UUID, Integer> bidding = new HashMap<>();
     private static final Map<UUID, String> biddingID = new HashMap<>();
@@ -140,7 +140,7 @@ public class GuiListener implements Listener {
         if (sell == ShopType.SELL) {
             shopType.put(player.getUniqueId(), ShopType.SELL);
 
-            if (crazyManager.isBiddingEnabled()) {
+            if (platform.isBidModuleEnabled()) {
                 options.add("Bidding/Selling.Selling");
             }
 
@@ -150,7 +150,7 @@ public class GuiListener implements Listener {
         if (sell == ShopType.BID) {
             shopType.put(player.getUniqueId(), ShopType.BID);
 
-            if (crazyManager.isSellingEnabled()) {
+            if (platform.isSellModuleEnabled()) {
                 options.add("Bidding/Selling.Bidding");
             }
 
