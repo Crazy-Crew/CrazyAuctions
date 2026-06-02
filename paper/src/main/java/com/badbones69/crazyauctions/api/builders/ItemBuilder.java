@@ -3,7 +3,8 @@ package com.badbones69.crazyauctions.api.builders;
 import com.badbones69.crazyauctions.CrazyAuctions;
 import com.badbones69.crazyauctions.Methods;
 import com.badbones69.crazyauctions.api.support.SkullCreator;
-import com.ryderbelserion.vital.paper.api.enums.Support;
+import com.ryderbelserion.fusion.core.api.constants.ModSupport;
+import com.ryderbelserion.fusion.paper.FusionPaper;
 import io.th0rgal.oraxen.api.OraxenItems;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.*;
@@ -46,6 +47,8 @@ public class ItemBuilder {
 
     @NotNull
     private static final CrazyAuctions plugin = CrazyAuctions.get();
+
+    private static final FusionPaper fusion = plugin.getFusion();
 
     // Items
     private Material material = Material.STONE;
@@ -266,7 +269,7 @@ public class ItemBuilder {
     public ItemBuilder() {}
 
     private String parse(String message) {
-        if (Support.placeholder_api.isEnabled() && this.target != null) {
+        if (fusion.isModReady(ModSupport.placeholder_api) && this.target != null) {
             return Methods.color(PlaceholderAPI.setPlaceholders(this.target, message));
         }
 
@@ -280,7 +283,7 @@ public class ItemBuilder {
      */
     public ItemStack build() {
         // Check if oraxen is enabled.
-        if (Support.oraxen.isEnabled()) {
+        if (fusion.isModReady(ModSupport.oraxen)) {
             // Get the item.
             io.th0rgal.oraxen.items.ItemBuilder oraxenItem = OraxenItems.getItemById(this.customMaterial);
 
@@ -588,7 +591,7 @@ public class ItemBuilder {
 
             this.material = this.itemStack.getType();
         } else {
-            if (Support.oraxen.isEnabled()) {
+            if (fusion.isModReady(ModSupport.oraxen)) {
                 io.th0rgal.oraxen.items.ItemBuilder oraxenItem = OraxenItems.getItemById(this.customMaterial);
 
                 if (oraxenItem != null) {

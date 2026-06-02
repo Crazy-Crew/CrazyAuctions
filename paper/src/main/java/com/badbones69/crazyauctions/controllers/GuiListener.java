@@ -5,19 +5,19 @@ import com.badbones69.crazyauctions.Methods;
 import com.badbones69.crazyauctions.api.*;
 import com.badbones69.crazyauctions.api.builders.ItemBuilder;
 import com.badbones69.crazyauctions.api.enums.Category;
-import com.badbones69.crazyauctions.api.enums.Files;
 import com.badbones69.crazyauctions.api.enums.Messages;
 import com.badbones69.crazyauctions.api.enums.Reasons;
 import com.badbones69.crazyauctions.api.enums.ShopType;
+import com.badbones69.crazyauctions.api.enums.misc.Files;
 import com.badbones69.crazyauctions.api.events.AuctionBuyEvent;
-import com.badbones69.crazyauctions.api.events.AuctionCancelledEvent;
 import com.badbones69.crazyauctions.api.events.AuctionNewBidEvent;
 import com.badbones69.crazyauctions.currency.VaultSupport;
-import com.ryderbelserion.vital.paper.util.scheduler.FoliaRunnable;
+import com.ryderbelserion.fusion.paper.builders.folia.FoliaScheduler;
+import com.ryderbelserion.fusion.paper.builders.folia.Scheduler;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Sound;
-import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -29,7 +29,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.Registry;
 import org.bukkit.NamespacedKey;
 import org.jetbrains.annotations.NotNull;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -53,8 +52,8 @@ public class GuiListener implements Listener {
     public static void openShop(@NotNull Player player, @NotNull ShopType sell, @NotNull Category cat, int page) {
         Methods.updateAuction();
 
-        FileConfiguration config = Files.config.getConfiguration();
-        FileConfiguration data = Files.data.getConfiguration();
+        YamlConfiguration config = Files.config.getConfiguration();
+        YamlConfiguration data = Files.data.getConfiguration();
         List<ItemStack> items = new ArrayList<>();
         List<Integer> ID = new ArrayList<>();
 
@@ -203,7 +202,7 @@ public class GuiListener implements Listener {
 
     public static void openCategories(@NotNull Player player, @NotNull ShopType shop) {
         Methods.updateAuction();
-        FileConfiguration config = Files.config.getConfiguration();
+        YamlConfiguration config = Files.config.getConfiguration();
 
         Inventory inv = new AuctionMenu(54, Methods.color(config.getString("Settings.Categories"))).getInventory();
 
@@ -247,8 +246,8 @@ public class GuiListener implements Listener {
     public static void openPlayersCurrentList(@NotNull Player player, int page) {
         Methods.updateAuction();
 
-        FileConfiguration config = Files.config.getConfiguration();
-        FileConfiguration data = Files.data.getConfiguration();
+        YamlConfiguration config = Files.config.getConfiguration();
+        YamlConfiguration data = Files.data.getConfiguration();
 
         List<ItemStack> items = new ArrayList<>();
         List<Integer> ID = new ArrayList<>();
@@ -295,8 +294,8 @@ public class GuiListener implements Listener {
     public static void openPlayersExpiredList(@NotNull Player player, int page) {
         Methods.updateAuction();
 
-        FileConfiguration config = Files.config.getConfiguration();
-        FileConfiguration data = Files.data.getConfiguration();
+        YamlConfiguration config = Files.config.getConfiguration();
+        YamlConfiguration data = Files.data.getConfiguration();
 
         List<ItemStack> items = new ArrayList<>();
         List<Integer> ID = new ArrayList<>();
@@ -349,8 +348,8 @@ public class GuiListener implements Listener {
     public static void openBuying(@NotNull Player player, @NotNull String ID) {
         Methods.updateAuction();
 
-        FileConfiguration config = Files.config.getConfiguration();
-        FileConfiguration data = Files.data.getConfiguration();
+        YamlConfiguration config = Files.config.getConfiguration();
+        YamlConfiguration data = Files.data.getConfiguration();
 
         if (!data.contains("Items." + ID)) {
             openShop(player, ShopType.SELL, shopCategory.get(player.getUniqueId()), 1);
@@ -425,8 +424,8 @@ public class GuiListener implements Listener {
     public static void openBidding(@NotNull Player player, @NotNull String ID) {
         Methods.updateAuction();
 
-        FileConfiguration config = Files.config.getConfiguration();
-        FileConfiguration data = Files.data.getConfiguration();
+        YamlConfiguration config = Files.config.getConfiguration();
+        YamlConfiguration data = Files.data.getConfiguration();
 
         if (!data.contains("Items." + ID)) {
             openShop(player, ShopType.BID, shopCategory.get(player.getUniqueId()), 1);
@@ -461,8 +460,8 @@ public class GuiListener implements Listener {
     public static void openViewer(@NotNull Player player, @NotNull String other, int page) {
         Methods.updateAuction();
 
-        FileConfiguration config = Files.config.getConfiguration();
-        FileConfiguration data = Files.data.getConfiguration();
+        YamlConfiguration config = Files.config.getConfiguration();
+        YamlConfiguration data = Files.data.getConfiguration();
 
         List<ItemStack> items = new ArrayList<>();
         List<Integer> ID = new ArrayList<>();
@@ -535,7 +534,7 @@ public class GuiListener implements Listener {
         setPage(inv, page, items, ID, player);
     }
 
-    private static void setOptions(@NotNull List<String> options, @NotNull FileConfiguration config, @NotNull Inventory inv) {
+    private static void setOptions(@NotNull List<String> options, @NotNull YamlConfiguration config, @NotNull Inventory inv) {
         for (String option : options) {
             if (config.contains("Settings.GUISettings.OtherSettings." + option + ".Toggle")) {
                 if (!config.getBoolean("Settings.GUISettings.OtherSettings." + option + ".Toggle")) {
@@ -558,7 +557,7 @@ public class GuiListener implements Listener {
     }
 
     private static ItemStack getBiddingGlass(@NotNull Player player, @NotNull String ID) {
-        FileConfiguration config = Files.config.getConfiguration();
+        YamlConfiguration config = Files.config.getConfiguration();
 
         String id = config.getString("Settings.GUISettings.OtherSettings.Bidding.Item");
         String name = config.getString("Settings.GUISettings.OtherSettings.Bidding.Name");
@@ -586,8 +585,8 @@ public class GuiListener implements Listener {
     }
 
     private static ItemStack getBiddingItem(@NotNull String ID) {
-        FileConfiguration config = Files.config.getConfiguration();
-        FileConfiguration data = Files.data.getConfiguration();
+        YamlConfiguration config = Files.config.getConfiguration();
+        YamlConfiguration data = Files.data.getConfiguration();
 
         ItemStack item = Methods.fromBase64(data.getString("Items." + ID + ".Item"));
 
@@ -616,7 +615,7 @@ public class GuiListener implements Listener {
     }
 
     private static void playClick(@NotNull Player player) {
-        FileConfiguration config = Files.config.getConfiguration();
+        YamlConfiguration config = Files.config.getConfiguration();
 
         if (config.getBoolean("Settings.Sounds.Toggle", false)) {
             String sound = config.getString("Settings.Sounds.Sound", "");
@@ -630,7 +629,7 @@ public class GuiListener implements Listener {
     }
 
     private void playSoldSound(@NotNull Player player) {
-        FileConfiguration config = Files.config.getConfiguration();
+        YamlConfiguration config = Files.config.getConfiguration();
 
         String sound = config.getString("Settings.Sold-Item-Sound", "");
 
@@ -644,7 +643,7 @@ public class GuiListener implements Listener {
     @EventHandler
     public void onInvClose(InventoryCloseEvent event) {
         if (!(event.getInventory().getHolder() instanceof  AuctionMenu auctionMenu)) return;
-        FileConfiguration config = Files.config.getConfiguration();
+        YamlConfiguration config = Files.config.getConfiguration();
 
         Player player = (Player) event.getPlayer();
 
@@ -656,8 +655,8 @@ public class GuiListener implements Listener {
         if (!(clickEvent.getInventory().getHolder() instanceof  AuctionMenu auctionMenu)) return;
         clickEvent.setCancelled(true);
 
-        FileConfiguration config = Files.config.getConfiguration();
-        FileConfiguration data = Files.data.getConfiguration();
+        YamlConfiguration config = Files.config.getConfiguration();
+        YamlConfiguration data = Files.data.getConfiguration();
 
         Player player = (Player) clickEvent.getWhoClicked();
         final Inventory inv = clickEvent.getClickedInventory();
@@ -935,12 +934,12 @@ public class GuiListener implements Listener {
 
                                     playClick(player);
 
-                                    new FoliaRunnable(plugin.getServer().getGlobalRegionScheduler()) {
+                                    new FoliaScheduler(plugin, Scheduler.global_scheduler) {
                                         @Override
                                         public void run() {
                                             inv.setItem(slot, item);
                                         }
-                                    }.runDelayed(plugin, 3 * 20);
+                                    }.runDelayed(3 * 20);
 
                                     return;
                                 }
@@ -960,12 +959,12 @@ public class GuiListener implements Listener {
                                     inv.setItem(slot, itemBuilder.build());
                                     playClick(player);
 
-                                    new FoliaRunnable(plugin.getServer().getGlobalRegionScheduler()) {
+                                    new FoliaScheduler(plugin, Scheduler.global_scheduler) {
                                         @Override
                                         public void run() {
                                             inv.setItem(slot, item);
                                         }
-                                    }.runDelayed(plugin, 3 * 20);
+                                    }.runDelayed(3 * 20);
 
                                     return;
                                 }
@@ -985,12 +984,12 @@ public class GuiListener implements Listener {
 
                                         playClick(player);
 
-                                        new FoliaRunnable(plugin.getServer().getGlobalRegionScheduler()) {
+                                        new FoliaScheduler(plugin, Scheduler.global_scheduler) {
                                             @Override
                                             public void run() {
                                                 inv.setItem(slot, item);
                                             }
-                                        }.runDelayed(plugin, 3 * 20);
+                                        }.runDelayed(3 * 20);
 
                                         return;
                                     }

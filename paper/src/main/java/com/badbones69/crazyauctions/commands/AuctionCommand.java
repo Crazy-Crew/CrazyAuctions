@@ -4,11 +4,12 @@ import com.badbones69.crazyauctions.CrazyAuctions;
 import com.badbones69.crazyauctions.Methods;
 import com.badbones69.crazyauctions.api.CrazyManager;
 import com.badbones69.crazyauctions.api.enums.*;
+import com.badbones69.crazyauctions.api.enums.misc.Files;
 import com.badbones69.crazyauctions.api.events.AuctionCancelledEvent;
 import com.badbones69.crazyauctions.api.events.AuctionListEvent;
 import com.badbones69.crazyauctions.controllers.GuiListener;
 import com.badbones69.crazyauctions.currency.VaultSupport;
-import com.ryderbelserion.vital.paper.api.files.FileManager;
+import com.ryderbelserion.fusion.paper.files.PaperFileManager;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
@@ -20,7 +21,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.jetbrains.annotations.NotNull;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,12 +32,12 @@ public class AuctionCommand implements CommandExecutor {
 
     private final CrazyManager crazyManager = this.plugin.getCrazyManager();
 
-    private final FileManager fileManager = this.plugin.getFileManager();
+    private final PaperFileManager fileManager = this.plugin.getFileManager();
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String commandLabel, String[] args) {
-        FileConfiguration config = Files.config.getConfiguration();
-        FileConfiguration data = Files.data.getConfiguration();
+        final FileConfiguration config = Files.config.getConfiguration();
+        final FileConfiguration data = Files.data.getConfiguration();
 
         if (args.length == 0) {
             if (!(sender instanceof Player player)) {
@@ -58,7 +58,7 @@ public class AuctionCommand implements CommandExecutor {
                 }
             }
 
-            if (crazyManager.isSellingEnabled()) {
+            if (this.crazyManager.isSellingEnabled()) {
                 GuiListener.openShop(player, ShopType.SELL, Category.NONE, 1);
             } else if (crazyManager.isBiddingEnabled()) {
                 GuiListener.openShop(player, ShopType.BID, Category.NONE, 1);
@@ -85,7 +85,7 @@ public class AuctionCommand implements CommandExecutor {
                     return true;
                 }
 
-                this.fileManager.reloadFiles().init();
+                this.fileManager.refresh(false);
 
                 this.crazyManager.load();
 
@@ -300,7 +300,7 @@ public class AuctionCommand implements CommandExecutor {
                         }
 
                         if (args[0].equalsIgnoreCase("sell")) {
-                            if (crazyManager.getItems(player, ShopType.SELL).size() >= SellLimit) {
+                            if (crazyManager.getItems(player).size() >= SellLimit) {
                                 player.sendMessage(Messages.MAX_ITEMS.getMessage(sender));
 
                                 return true;
@@ -308,7 +308,7 @@ public class AuctionCommand implements CommandExecutor {
                         }
 
                         if (args[0].equalsIgnoreCase("bid")) {
-                            if (crazyManager.getItems(player, ShopType.BID).size() >= BidLimit) {
+                            if (crazyManager.getItems(player).size() >= BidLimit) {
                                 player.sendMessage(Messages.MAX_ITEMS.getMessage(sender));
 
                                 return true;

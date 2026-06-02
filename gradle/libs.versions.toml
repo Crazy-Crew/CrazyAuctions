@@ -15,10 +15,14 @@ oraxen = "1.211.0" # https://github.com/oraxen
 vault = "1.7.1" # https://github.com/MilkBowl/Vault
 nexo = "1.21.0" # https://github.com/Nexo-MC
 
-## Other
+## Triumph API
 triumph-cmds = "2.0.0-BETA-4" # https://github.com/TriumphTeam/triumph-cmds
-bStats = "3.2.1" # https://github.com/Bastian/bStats
-fusion = "2.9.14" # https://github.com/ryderbelserion/Fusion
+
+## Metrics API
+bstats = "3.2.1" # https://bstats.org/docs
+
+## Other API
+fusion = "4.26.0" # https://github.com/ryderbelserion/Fusion
 
 ## Gradle Plugins
 fix-javadoc = "1.19" # https://github.com/mfnalex/gradle-fix-javadoc-plugin
@@ -27,9 +31,6 @@ minotaur = "2.9.0" # https://github.com/modrinth/minotaur
 feather = "0.6.1" # https://github.com/ryderbelserion/Feather
 hangar = "0.1.4" # https://github.com/HangarMC/hangar-publish-plugin
 shadow = "9.4.1" # https://github.com/GradleUp/shadow
-
-# Vital API
-vital-paper = "1.0.6"
 
 [plugins]
 # https://github.com/mfnalex/gradle-fix-javadoc-plugin
@@ -76,14 +77,11 @@ kyori-api = { module = "net.kyori:adventure-api", version.ref = "adventure" }
 # https://github.com/TriumphTeam/triumph-cmds
 triumph-cmds = { module = "dev.triumphteam:triumph-cmd-bukkit", version.ref = "triumph-cmds" }
 
-# Vital API
-vital-paper = { module = "com.ryderbelserion.vital:paper", version.ref = "vital-paper" }
-
 # https://github.com/ryderbelserion/Fusion
 fusion-paper = { module = "com.ryderbelserion.fusion:fusion-paper", version.ref = "fusion" }
 
-# https://github.com/Bastian/bStats
-metrics = { module = "org.bstats:bstats-bukkit", version.ref = "bStats" }
+# https://bstats.org
+bstats-paper = { module = "org.bstats:bstats-bukkit", version.ref = "bstats" }
 
 [bundles]
 adventure = [

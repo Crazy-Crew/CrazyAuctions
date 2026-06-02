@@ -21,6 +21,13 @@ Settings:
   Feature-Toggle: #Toggle if a feature is on or off.
     Selling: true #Able to use the selling part of the auction house.
     Bidding: true #Able to use the bidding part of the auction house.
+  Repeating-Message:
+    # If true, a message is sent if a player has an item in Expired/Canceled Inventory
+    Toggle: true
+    # The message to send.
+    Message: ""
+    # The interval, if set to 0 will only send once when they join.
+    Interval: 0
   Patches:
     Macro-Dupe: true #Turn to false if you have an issue, but it should patch the bug.
   Sounds:

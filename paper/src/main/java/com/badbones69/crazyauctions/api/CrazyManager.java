@@ -1,12 +1,13 @@
 package com.badbones69.crazyauctions.api;
 
 import com.badbones69.crazyauctions.Methods;
-import com.badbones69.crazyauctions.api.enums.Files;
-import com.badbones69.crazyauctions.api.enums.ShopType;
-import org.bukkit.configuration.file.FileConfiguration;
+import com.badbones69.crazyauctions.api.enums.misc.Files;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
+import java.util.List;
 
 public class CrazyManager {
 
@@ -14,9 +15,11 @@ public class CrazyManager {
     private boolean biddingEnabled;
 
     public void load() {
-        this.sellingEnabled = Files.config.getConfiguration().getBoolean("Settings.Feature-Toggle.Selling", true);
+        final YamlConfiguration configuration = Files.config.getConfiguration();
 
-        this.biddingEnabled = Files.config.getConfiguration().getBoolean("Settings.Feature-Toggle.Bidding", true);
+        this.sellingEnabled = configuration.getBoolean("Settings.Feature-Toggle.Selling", true);
+
+        this.biddingEnabled = configuration.getBoolean("Settings.Feature-Toggle.Bidding", true);
     }
 
     public void unload() {
@@ -31,24 +34,33 @@ public class CrazyManager {
         return this.biddingEnabled;
     }
     
-    public ArrayList<ItemStack> getItems(Player player, ShopType type) {
-        FileConfiguration data = Files.data.getConfiguration();
-        ArrayList<ItemStack> items = new ArrayList<>();
+    public List<ItemStack> getItems(Player player) {
+        final YamlConfiguration data = Files.data.getConfiguration();
 
-        if (data.contains("Items")) {
-            for (String i : data.getConfigurationSection("Items").getKeys(false)) {
-                if (data.getString("Items." + i + ".Seller").equalsIgnoreCase(player.getUniqueId().toString())) {
-                    if (data.getBoolean("Items." + i + ".Biddable")) {
-                        if (type == ShopType.BID) {
-                            items.add(Methods.fromBase64(data.getString("Items." + i + ".Item")));
-                        }
-                    } else {
-                        if (type == ShopType.SELL) {
-                            items.add(Methods.fromBase64(data.getString("Items." + i + ".Item")));
-                        }
-                    }
-                }
-            }
+        List<ItemStack> items = new ArrayList<>();
+
+        final ConfigurationSection section = data.getConfigurationSection("Items");
+
+        if (section == null) return items;
+
+        final String uuid = player.getUniqueId().toString();
+
+        for (final String id : section.getKeys(false)) {
+            final ConfigurationSection item = section.getConfigurationSection(id);
+
+            if (item == null) continue;
+
+            final String seller = item.getString("Seller", "");
+
+            if (seller.isBlank()) continue;
+
+            if (!seller.equals(uuid)) continue;
+
+            final String base64 = item.getString("Item", "");
+
+            if (base64.isBlank()) continue;
+
+            items.add(Methods.fromBase64(base64));
         }
 
         return items;

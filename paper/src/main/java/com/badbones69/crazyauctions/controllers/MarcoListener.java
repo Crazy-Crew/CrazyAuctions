@@ -1,6 +1,6 @@
 package com.badbones69.crazyauctions.controllers;
 
-import com.badbones69.crazyauctions.api.enums.Files;
+import com.badbones69.crazyauctions.api.enums.misc.Files;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;

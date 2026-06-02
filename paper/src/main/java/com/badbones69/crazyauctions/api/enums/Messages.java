@@ -1,7 +1,10 @@
 package com.badbones69.crazyauctions.api.enums;
 
+import com.badbones69.crazyauctions.CrazyAuctions;
 import com.badbones69.crazyauctions.Methods;
-import com.ryderbelserion.vital.paper.api.enums.Support;
+import com.badbones69.crazyauctions.api.enums.misc.Files;
+import com.ryderbelserion.fusion.core.api.constants.ModSupport;
+import com.ryderbelserion.fusion.paper.FusionPaper;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -72,7 +75,11 @@ public enum Messages {
         this.defaultListMessage = defaultListMessage;
     }
 
-    public static final FileConfiguration messages = Files.messages.getConfiguration();
+    private final CrazyAuctions plugin = CrazyAuctions.get();
+
+    private final FusionPaper fusion = this.plugin.getFusion();
+
+    private static final FileConfiguration messages = Files.messages.getConfiguration();
     
     public static String convertList(final List<String> list) {
         StringBuilder message = new StringBuilder();
@@ -135,7 +142,7 @@ public enum Messages {
             }
 
             if (sender instanceof Player player) {
-                if (Support.placeholder_api.isEnabled()) {
+                if (this.fusion.isModReady(ModSupport.placeholder_api)) {
                     message = PlaceholderAPI.setPlaceholders(player, message);
                 }
             }

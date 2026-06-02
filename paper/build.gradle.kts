@@ -15,9 +15,9 @@ repositories {
 dependencies {
     implementation(project(":api"))
 
-    implementation(libs.vital.paper) {
-        exclude("org.yaml")
-    }
+    implementation(libs.fusion.paper)
+
+    implementation(libs.bstats.paper)
 
     compileOnly(libs.bundles.shared)
 }
@@ -29,11 +29,12 @@ tasks {
 
     shadowJar {
         listOf(
-            "com.ryderbelserion.vital",
-            "org.bstats"
+            "com.ryderbelserion.fusion"
         ).forEach {
             relocate(it, "libs.$it")
         }
+
+        relocate("org.bstats", project.group.toString())
     }
 
     runPaper.folia.registerTask()

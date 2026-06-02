@@ -1,28 +1,38 @@
 package com.badbones69.crazyauctions;
 
 import com.badbones69.crazyauctions.api.CrazyManager;
-import com.badbones69.crazyauctions.api.enums.Files;
 import com.badbones69.crazyauctions.api.enums.Messages;
-import com.badbones69.crazyauctions.api.support.MetricsWrapper;
+import com.badbones69.crazyauctions.api.enums.misc.Files;
 import com.badbones69.crazyauctions.commands.AuctionCommand;
 import com.badbones69.crazyauctions.commands.AuctionTab;
 import com.badbones69.crazyauctions.controllers.GuiListener;
 import com.badbones69.crazyauctions.controllers.MarcoListener;
 import com.badbones69.crazyauctions.currency.VaultSupport;
 import com.badbones69.crazyauctions.datafixer.ConfigFixer;
-import com.ryderbelserion.vital.paper.Vital;
-import com.ryderbelserion.vital.paper.util.scheduler.FoliaRunnable;
+import com.ryderbelserion.fusion.core.api.enums.Level;
+import com.ryderbelserion.fusion.paper.FusionPaper;
+import com.ryderbelserion.fusion.paper.builders.folia.FoliaScheduler;
+import com.ryderbelserion.fusion.paper.builders.folia.Scheduler;
+import com.ryderbelserion.fusion.paper.files.PaperFileManager;
+import com.ryderbelserion.fusion.paper.utils.ItemUtils;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.Server;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.command.TabCompleter;
-import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.ItemType;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
+import java.nio.file.Path;
 import java.util.Base64;
+import java.util.List;
 
-public class CrazyAuctions extends Vital {
+public class CrazyAuctions extends JavaPlugin {
 
     @NotNull
     public static CrazyAuctions get() {
@@ -33,28 +43,35 @@ public class CrazyAuctions extends Vital {
 
     private VaultSupport support;
 
+    private FusionPaper fusion;
+
     @Override
     public void onEnable() {
-        if (!getServer().getPluginManager().isPluginEnabled("Vault")) {
-            getLogger().severe("Vault was not found so the plugin will now disable.");
+        this.fusion = new FusionPaper(this);
+        this.fusion.init();
 
-            getServer().getPluginManager().disablePlugin(this);
+        if (this.fusion.isPluginEnabled("Vault")) {
+            this.fusion.log(Level.ERROR, "Vault was not found on the server, so the plugin will not function!");
 
             return;
         }
 
-        getFileManager().addFile("config.yml")
-                .addFile("data.yml")
-                .addFile("messages.yml")
-                //.addFile("test-file.yml")
-                .init();
+        final PaperFileManager fileManager = this.fusion.getFileManager();
+
+        final Path path = getDataPath();
+
+        fileManager.addPaperFile(path.resolve("config.yml"))
+                .addPaperFile(path.resolve("data.yml"))
+                .addPaperFile(path.resolve("messages.yml"));
 
         this.crazyManager = new CrazyManager();
 
-        FileConfiguration configuration = Files.data.getConfiguration();
+        YamlConfiguration configuration = Files.data.getConfiguration();
 
-        if (configuration.contains("OutOfTime/Cancelled")) {
-            for (String key : configuration.getConfigurationSection("OutOfTime/Cancelled").getKeys(false)) {
+        final ConfigurationSection cancelled = configuration.getConfigurationSection("OutOfTime/Cancelled");
+
+        if (cancelled != null) {
+            for (String key : cancelled.getKeys(false)) {
                 final ItemStack itemStack = configuration.getItemStack("OutOfTime/Cancelled." + key + ".Item");
 
                 if (itemStack != null) {
@@ -75,63 +92,87 @@ public class CrazyAuctions extends Vital {
             }
         }
 
-        if (configuration.contains("Items")) {
-            for (String key : configuration.getConfigurationSection("Items").getKeys(false)) {
-                final ItemStack itemStack = configuration.getItemStack("Items." + key + ".Item");
+        final ConfigurationSection items = configuration.getConfigurationSection("Items");
 
-                if (itemStack != null) {
-                    configuration.set("Items." + key + ".Item", Base64.getEncoder().encodeToString(itemStack.serializeAsBytes()));
+        if (items != null) {
+            for (String key : items.getKeys(false)) {
+                final ConfigurationSection section = items.getConfigurationSection(key);
 
+                if (section == null) continue;
+
+                final String item = section.getString("Item", "");
+
+                if (item.isBlank()) continue;
+
+                final ItemStack itemStack = configuration.getItemStack("Item", ItemType.AIR.createItemStack());
+
+                boolean isSaving = false;
+
+                if (!itemStack.isEmpty()) {
+                    section.set("Item", ItemUtils.toBase64(itemStack));
+
+                    isSaving = true;
+                }
+
+                final String seller = section.getString("Seller", "");
+
+                if (!seller.isBlank()) {
+                    final OfflinePlayer player = Methods.getOfflinePlayer(seller);
+                    final String id = player.getUniqueId().toString();
+
+                    if (!seller.equals(id)) {
+                        section.set("Seller", id);
+
+                        isSaving = true;
+                    }
+                }
+
+                final String bidder = section.getString("TopBidder", "None");
+
+                if (!bidder.isBlank() && !bidder.equalsIgnoreCase("None")) {
+                    final OfflinePlayer player = Methods.getOfflinePlayer(bidder);
+                    final String id = player.getUniqueId().toString();
+
+                    if (!bidder.equals(id)) {
+                        section.set("TopBidder", id);
+
+                        isSaving = true;
+                    }
+                }
+
+                if (isSaving) {
                     Files.data.save();
-                }
-
-                final String uuid = configuration.getString("Items." + key + ".Seller");
-
-                if (uuid != null) {
-                    OfflinePlayer player = Methods.getOfflinePlayer(uuid);
-
-                    if (!uuid.equals(player.getUniqueId().toString())) {
-                        configuration.set("Items." + key + ".Seller", player.getUniqueId().toString());
-
-                        Files.data.save();
-                    }
-                }
-
-                final String bidder = configuration.getString("Items." + key + ".TopBidder");
-
-                if (bidder != null && !bidder.equals("None")) {
-                    OfflinePlayer player = Methods.getOfflinePlayer(bidder);
-
-                    if (!bidder.equals(player.getUniqueId().toString())) {
-                        configuration.set("Items." + key + ".TopBidder", player.getUniqueId().toString());
-
-                        Files.data.save();
-                    }
                 }
             }
         }
 
         this.crazyManager.load();
 
-        getServer().getPluginManager().registerEvents(new GuiListener(), this);
-        getServer().getPluginManager().registerEvents(new MarcoListener(), this);
+        final Server server = getServer();
+        final PluginManager pluginManager = server.getPluginManager();
+
+        List.of(
+                new GuiListener(),
+                new MarcoListener()
+        ).forEach(listener -> pluginManager.registerEvents(listener, this));
 
         registerCommand(getCommand("crazyauctions"), new AuctionTab(), new AuctionCommand());
 
         this.support = new VaultSupport();
         this.support.setupEconomy();
 
-        new FoliaRunnable(getServer().getGlobalRegionScheduler()) {
+        new FoliaScheduler(this, Scheduler.global_scheduler) {
             @Override
             public void run() {
                 Methods.updateAuction();
             }
-        }.runAtFixedRate(this, 0L, 5000L);
+        }.runAtFixedRate(0L, 5000L);
 
         Messages.addMissingMessages();
+
         new ConfigFixer().onEnable();
 
-        new MetricsWrapper(this, 4624);
+        new Metrics(this, 4624);
     }
 
     private void registerCommand(PluginCommand pluginCommand, TabCompleter tabCompleter, CommandExecutor commandExecutor) {
@@ -153,5 +194,13 @@ public class CrazyAuctions extends Vital {
 
     public final CrazyManager getCrazyManager() {
         return this.crazyManager;
+    }
+
+    public final PaperFileManager getFileManager() {
+        return this.fusion.getFileManager();
+    }
+
+    public final FusionPaper getFusion() {
+        return this.fusion;
     }
 }

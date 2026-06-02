@@ -1,9 +1,13 @@
 package com.badbones69.crazyauctions.api.enums.misc;
 
 import com.badbones69.crazyauctions.CrazyAuctions;
-import com.ryderbelserion.vital.paper.api.files.FileManager;
+import com.ryderbelserion.fusion.files.FileException;
+import com.ryderbelserion.fusion.paper.files.PaperFileManager;
+import com.ryderbelserion.fusion.paper.files.types.PaperCustomFile;
 import org.bukkit.configuration.file.YamlConfiguration;
-import java.io.File;
+import org.jetbrains.annotations.NotNull;
+import java.nio.file.Path;
+import java.util.Optional;
 
 public enum Files {
 
@@ -12,40 +16,44 @@ public enum Files {
     //test_file("test-file.yml"),
     data("data.yml");
 
-    private final String fileName;
-    private final String strippedName;
-
     private final CrazyAuctions plugin = CrazyAuctions.get();
+    private final PaperFileManager fileManager = this.plugin.getFileManager();
+    private final Path path = this.plugin.getDataPath();
 
-    private final FileManager fileManager = this.plugin.getFileManager();
+    private final Path location;
 
     /**
      * A constructor to build a file
      *
      * @param fileName the name of the file
      */
-    Files(final String fileName) {
-        this.fileName = fileName;
-        this.strippedName = this.fileName.replace(".yml", "");
+    Files(@NotNull final String fileName) {
+        this.location = this.path.resolve(fileName);
     }
 
-    public final YamlConfiguration getConfiguration() {
-        return this.fileManager.getFile(this.fileName).getConfiguration();
+    public @NotNull final YamlConfiguration getConfiguration() {
+        return getYamlCustomFile().getConfiguration();
     }
 
-    public final String getStrippedName() {
-        return this.strippedName;
+    public @NotNull final PaperCustomFile getYamlCustomFile() {
+        @NotNull final Optional<PaperCustomFile> customFile = this.fileManager.getPaperFile(this.location);
+
+        if (customFile.isEmpty()) {
+            throw new FileException("Could not find custom file for " + this.location);
+        }
+
+        return customFile.get();
     }
 
-    public final String getFileName() {
-        return this.fileName;
-    }
-
-    public void reload() {
-        this.fileManager.addFile(new File(this.plugin.getDataFolder(), this.fileName));
+    public @NotNull final Path getPath() {
+        return this.location;
     }
 
     public void save() {
-        this.fileManager.saveFile(this.fileName);
+        getYamlCustomFile().save();
+    }
+
+    public void load() {
+        getYamlCustomFile().load();
     }
 }
