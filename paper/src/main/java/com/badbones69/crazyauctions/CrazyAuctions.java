@@ -51,7 +51,7 @@ public class CrazyAuctions extends JavaPlugin {
         this.fusion = new FusionPaper(this);
         this.fusion.init();
 
-        if (this.fusion.isPluginEnabled("Vault")) {
+        if (!this.fusion.isPluginEnabled("Vault")) {
             this.fusion.log(Level.ERROR, "Vault was not found on the server, so the plugin will not function!");
 
             return;
