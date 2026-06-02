@@ -66,7 +66,7 @@ public class TrafficListener implements Listener {
                 public void run() {
                     player.sendMessage(Methods.color(message));
                 }
-            }.runNextTick();
+            }.runAtFixedRate(0, interval);
 
             return;
         }
@@ -76,6 +76,6 @@ public class TrafficListener implements Listener {
             public void run() {
                 player.sendMessage(Methods.color(message));
             }
-        }.runAtFixedRate(0, interval);
+        }.runNextTick();
     }
 }
