@@ -7,6 +7,7 @@ import com.badbones69.crazyauctions.api.builders.ItemBuilder;
 import com.badbones69.crazyauctions.api.enums.Category;
 import com.badbones69.crazyauctions.api.enums.Messages;
 import com.badbones69.crazyauctions.api.enums.Reasons;
+import com.badbones69.crazyauctions.api.enums.other.Permissions;
 import us.crazycrew.api.enums.ShopType;
 import com.badbones69.crazyenvoys.enums.Files;
 import com.badbones69.crazyauctions.api.events.AuctionBuyEvent;
@@ -42,7 +43,7 @@ public class GuiListener implements Listener {
     private static final CrazyAuctions plugin = CrazyAuctions.get();
     private static final CrazyPlatform platform = plugin.getPlatform();
 
-    private static final Map<UUID, Integer> bidding = new HashMap<>();
+    private static final Map<UUID, Double> bidding = new HashMap<>();
     private static final Map<UUID, String> biddingID = new HashMap<>();
     private static final Map<UUID, ShopType> shopType = new HashMap<>(); // Shop Type
     private static final Map<UUID, Category> shopCategory = new HashMap<>(); // Category Type
@@ -185,7 +186,6 @@ public class GuiListener implements Listener {
         }
 
         setPage(inv, page, items, ID, player);
-
     }
 
     private static void setPage(Inventory inv, int page, List<ItemStack> items, List<Integer> ID, Player player) {
@@ -437,7 +437,7 @@ public class GuiListener implements Listener {
 
         Inventory inv = new AuctionMenu(27, Methods.color(config.getString("Settings.Bidding-On-Item"))).getInventory();
 
-        if (!bidding.containsKey(player.getUniqueId())) bidding.put(player.getUniqueId(), Integer.valueOf(Methods.getPrice(ID, false)));
+        if (!bidding.containsKey(player.getUniqueId())) bidding.put(player.getUniqueId(), Double.valueOf(Methods.getPrice(ID, false)));
 
         inv.setItem(9, new ItemBuilder().setMaterial(Material.LIME_STAINED_GLASS_PANE).setName("&a+1").setAmount(1).build());
         inv.setItem(10, new ItemBuilder().setMaterial(Material.LIME_STAINED_GLASS_PANE).setName("&a+10").setAmount(1).build());
@@ -457,7 +457,7 @@ public class GuiListener implements Listener {
         player.openInventory(inv);
     }
 
-    public static void openViewer(@NotNull Player player, @NotNull String other, int page) {
+    public static void openViewer(@NotNull Player player, int page) {
         Methods.updateAuction();
 
         YamlConfiguration config = Files.config.getConfiguration();
@@ -466,7 +466,8 @@ public class GuiListener implements Listener {
         List<ItemStack> items = new ArrayList<>();
         List<Integer> ID = new ArrayList<>();
 
-        if (!Methods.isUUID(other)) other = String.valueOf(plugin.getServer().getPlayerUniqueId(other));
+        final UUID uuid = player.getUniqueId();
+        final String asString = uuid.toString();
 
         if (!data.contains("Items")) {
             data.set("Items.Clear", null);
@@ -476,7 +477,7 @@ public class GuiListener implements Listener {
 
         if (data.contains("Items")) {
             for (String i : data.getConfigurationSection("Items").getKeys(false)) {
-                if (Objects.equals(data.getString("Items." + i + ".Seller"), other)) {
+                if (Objects.equals(data.getString("Items." + i + ".Seller"), asString)) {
                     String price = Methods.getPrice(i, false);
                     String time = Methods.convertToTime(data.getLong("Items." + i + ".Time-Till-Expire"));
 
@@ -564,7 +565,7 @@ public class GuiListener implements Listener {
 
         ItemBuilder itemBuilder = new ItemBuilder().setMaterial(id).setName(name).setAmount(1);
 
-        int bid = bidding.get(player.getUniqueId());
+        double bid = bidding.get(player.getUniqueId());
 
         String price = Methods.getPrice(ID, false);
 
@@ -707,7 +708,7 @@ public class GuiListener implements Listener {
 
                 if (displayName.equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.Bid.Name")))) {
                     String ID = biddingID.get(player.getUniqueId());
-                    int bid = bidding.get(player.getUniqueId());
+                    double bid = bidding.get(player.getUniqueId());
                     String topBidder = data.getString("Items." + ID + ".TopBidder");
 
                     if (plugin.getSupport().getMoney(player) < bid) {
@@ -721,13 +722,13 @@ public class GuiListener implements Listener {
                         return;
                     }
 
-                    if (data.getLong("Items." + ID + ".Price") > bid) {
+                    if (data.getDouble("Items." + ID + ".Price") > bid) {
                         player.sendMessage(Messages.BID_MORE_MONEY.getMessage(player));
 
                         return;
                     }
 
-                    if (data.getLong("Items." + ID + ".Price") >= bid && !topBidder.equalsIgnoreCase("None")) {
+                    if (data.getDouble("Items." + ID + ".Price") >= bid && !topBidder.equalsIgnoreCase("None")) {
                         player.sendMessage(Messages.BID_MORE_MONEY.getMessage(player));
 
                         return;
@@ -746,7 +747,7 @@ public class GuiListener implements Listener {
 
                     Files.data.save();
 
-                    bidding.put(player.getUniqueId(), 0);
+                    bidding.put(player.getUniqueId(), 0.0);
                     player.closeInventory();
                     playClick(player);
                     return;
@@ -897,7 +898,7 @@ public class GuiListener implements Listener {
                             int ID = data.getInt("Items." + i + ".StoreID");
 
                             if (id == ID) {
-                                if (player.hasPermission("crazyauctions.admin") || player.hasPermission("crazyauctions.force-end")) {
+                                if (Permissions.admin_wildcard.hasPermission(player) || Permissions.force_end.hasPermission(player)) {
                                     if (clickEvent.getAction() == InventoryAction.MOVE_TO_OTHER_INVENTORY) {
 
                                         OfflinePlayer seller = Methods.getOfflinePlayer(data.getString("Items." + i + ".Seller"));
@@ -944,7 +945,7 @@ public class GuiListener implements Listener {
                                     return;
                                 }
 
-                                long cost = data.getLong("Items." + i + ".Price");
+                                double cost = data.getDouble("Items." + i + ".Price");
 
                                 if (plugin.getSupport().getMoney(player) < cost) {
                                     String itemName = config.getString("Settings.GUISettings.OtherSettings.Cant-Afford.Item");
@@ -1029,7 +1030,7 @@ public class GuiListener implements Listener {
 
                 if (displayName.equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.Confirm.Name")))) {
                     String ID = IDs.get(player.getUniqueId());
-                    long cost = data.getLong("Items." + ID + ".Price");
+                    double cost = data.getDouble("Items." + ID + ".Price");
                     String seller = data.getString("Items." + ID + ".Seller");
 
                     if (!data.contains("Items." + ID)) {

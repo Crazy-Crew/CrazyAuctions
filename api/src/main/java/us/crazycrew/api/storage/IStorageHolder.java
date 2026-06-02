@@ -16,7 +16,7 @@ public abstract class IStorageHolder {
             @NonNull final UUID uuid,
             @NonNull final String name,
             @NonNull final String base64,
-            final long price,
+            final double price,
             @NonNull final ShopType shopType
     );
 

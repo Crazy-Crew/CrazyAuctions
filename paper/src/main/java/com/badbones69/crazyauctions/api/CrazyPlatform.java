@@ -1,17 +1,34 @@
 package com.badbones69.crazyauctions.api;
 
+import com.badbones69.crazyauctions.CrazyAuctions;
 import com.badbones69.crazyauctions.Methods;
+import com.badbones69.crazyauctions.api.enums.other.Permissions;
+import com.badbones69.crazyauctions.commands.AuctionCommand;
+import com.badbones69.crazyauctions.commands.admin.ReloadCommand;
+import com.badbones69.crazyauctions.commands.admin.auction.ForceCancelCommand;
+import com.badbones69.crazyauctions.commands.player.CollectCommand;
+import com.badbones69.crazyauctions.commands.player.ExpiredCommand;
+import com.badbones69.crazyauctions.commands.player.HelpCommand;
+import com.badbones69.crazyauctions.commands.player.ListCommand;
+import com.badbones69.crazyauctions.commands.player.ViewCommand;
+import com.badbones69.crazyauctions.commands.player.auction.BidCommand;
+import com.badbones69.crazyauctions.commands.player.auction.SellCommand;
 import com.badbones69.crazyenvoys.CrazyPlugin;
 import com.badbones69.crazyenvoys.enums.Files;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.ryderbelserion.fusion.paper.FusionPaper;
+import io.papermc.paper.command.brigadier.CommandSourceStack;
+import io.papermc.paper.plugin.lifecycle.event.LifecycleEventManager;
+import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.Plugin;
 import org.jspecify.annotations.NonNull;
-
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class CrazyPlatform extends CrazyPlugin<CommandSender> {
@@ -19,8 +36,12 @@ public class CrazyPlatform extends CrazyPlugin<CommandSender> {
     private boolean isSellingModuleEnabled;
     private boolean isBiddingModuleEnabled;
 
-    public CrazyPlatform(@NonNull final FusionPaper fusion) {
+    private final CrazyAuctions plugin;
+
+    public CrazyPlatform(@NonNull final CrazyAuctions plugin, @NonNull final FusionPaper fusion) {
         super(fusion);
+
+        this.plugin = plugin;
     }
 
     @Override
@@ -32,6 +53,36 @@ public class CrazyPlatform extends CrazyPlugin<CommandSender> {
         this.isSellingModuleEnabled = configuration.getBoolean("Settings.Feature-Toggle.Selling", true);
 
         this.isBiddingModuleEnabled = configuration.getBoolean("Settings.Feature-Toggle.Bidding", true);
+
+        Arrays.stream(Permissions.values()).forEach(Permissions::registerPermission);
+
+        final LifecycleEventManager<Plugin> eventManager = this.plugin.getLifecycleManager();
+
+        // Register commands.
+        eventManager.registerEventHandler(LifecycleEvents.COMMANDS, event -> {
+            final AuctionCommand root = new AuctionCommand();
+
+            root.registerPermissions();
+
+            LiteralArgumentBuilder<CommandSourceStack> literal = root.literal().createBuilder();
+
+            List.of(
+                    new ForceCancelCommand(),
+                    new ReloadCommand(),
+
+                    new CollectCommand(),
+                    new ExpiredCommand(),
+
+                    new BidCommand(),
+                    new SellCommand(),
+
+                    new ViewCommand(),
+                    new HelpCommand(),
+                    new ListCommand()
+            ).forEach(command -> literal.then(command.registerPermissions().literal()));
+
+            event.registrar().register(literal.build(), "The base command for CrazyAuctions!", root.getAliases());
+        });
     }
 
     @Override

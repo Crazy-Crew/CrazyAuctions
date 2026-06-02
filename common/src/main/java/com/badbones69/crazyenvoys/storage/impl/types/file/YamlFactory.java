@@ -141,7 +141,7 @@ public class YamlFactory extends IStorageHolder {
             @NonNull final UUID uuid,
             @NonNull final String name,
             @NonNull final String base64,
-            final long price,
+            final double price,
             @NonNull final ShopType shopType
     ) {
         int number = 1;
@@ -182,9 +182,9 @@ public class YamlFactory extends IStorageHolder {
         item.set("TopBidder", "None");
         item.set("TopBidderName", "None");
 
-        item.set("Item", base64);
+        item.set("Price", price);
 
-        section.set("%s".formatted(item), item);
+        item.set("Item", base64);
 
         Files.data.save();
     }

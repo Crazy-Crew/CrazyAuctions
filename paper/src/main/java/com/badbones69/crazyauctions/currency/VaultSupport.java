@@ -26,26 +26,26 @@ public class VaultSupport {
         return this.vault != null;
     }
 
-    public long getMoney(@NotNull OfflinePlayer player) {
-        return (long) this.vault.getBalance(player);
+    public double getMoney(@NotNull OfflinePlayer player) {
+        return this.vault.getBalance(player);
     }
 
-    public boolean removeMoney(@NotNull Player player, long amount) {
+    public boolean removeMoney(@NotNull Player player, double amount) {
         EconomyResponse result = this.vault.withdrawPlayer(player, amount);
         return result.transactionSuccess();
     }
 
-    public boolean removeMoney(@NotNull OfflinePlayer player, long amount) {
+    public boolean removeMoney(@NotNull OfflinePlayer player, double amount) {
         EconomyResponse result = this.vault.withdrawPlayer(player, amount);
         return result.transactionSuccess();
     }
 
-    public boolean addMoney(Player player, long amount) {
+    public boolean addMoney(Player player, double amount) {
         EconomyResponse result = this.vault.depositPlayer(player, amount);
         return result.transactionSuccess();
     }
 
-    public boolean addMoney(OfflinePlayer player, long amount) {
+    public boolean addMoney(OfflinePlayer player, double amount) {
         EconomyResponse result = this.vault.depositPlayer(player, amount);
         return result.transactionSuccess();
     }

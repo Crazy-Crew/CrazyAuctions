@@ -1,10 +1,12 @@
 package com.badbones69.crazyauctions.api.enums.other;
 
-import com.badbones69.crazyauctions.CrazyAuctions;
+import com.ryderbelserion.fusion.core.api.FusionProvider;
+import com.ryderbelserion.fusion.kyori.permissions.PermissionContext;
+import com.ryderbelserion.fusion.kyori.permissions.enums.PermissionType;
+import com.ryderbelserion.fusion.paper.FusionPaper;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
-import org.bukkit.plugin.PluginManager;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,16 +16,19 @@ public enum Permissions {
     help("help", "Access to /crazyauctions help", PermissionDefault.TRUE, false),
     view("view", "Access to /crazyauctions view", PermissionDefault.TRUE, false),
     expired("expired", "Access to /crazyauctions expired", PermissionDefault.TRUE, false),
+    collect("collect", "Access to /crazyauctions collect", PermissionDefault.TRUE, false),
     listed("listed", "Access to /crazyauctions listed", PermissionDefault.TRUE, false),
     sell("sell", "Access to /crazyauctions sell", PermissionDefault.TRUE, false),
     bid("bid", "Access to /crazyauctions bid", PermissionDefault.TRUE, false),
     use("use", "Access to /crazyauctions", PermissionDefault.TRUE, false),
 
-    bypass("bypass", "Bypasses most plugin restrictions", PermissionDefault.OP, true),
+    force_end("force-end-all", "Access to /crazyauctions force-end-all", PermissionDefault.OP, false),
+
+    bypass("bypass", "Bypasses most plugin restrictions", PermissionDefault.FALSE, true),
 
     access("access", "Access other portions of the plugin", PermissionDefault.TRUE, true),
 
-    player_wildcard("player.*", "Access multiple player based commands", PermissionDefault.FALSE, Map.ofEntries(
+    player_wildcard("player", "Access multiple player based commands", PermissionDefault.FALSE, Map.ofEntries(
             Map.entry("crazyauctions.bid", true),
             Map.entry("crazyauctions.sell", true),
             Map.entry("crazyauctions.access", true),
@@ -44,7 +49,7 @@ public enum Permissions {
 
     private final boolean register;
 
-    private final PluginManager manager = CrazyAuctions.get().getServer().getPluginManager();
+    private final FusionPaper fusion = (FusionPaper) FusionProvider.getInstance();
 
     Permissions(String node, String description, PermissionDefault isDefault, Map<String, Boolean> children, boolean register) {
         this.node = node;
@@ -69,7 +74,7 @@ public enum Permissions {
         return "crazyauctions." + this.node;
     }
 
-    public final boolean shouldRegister() {
+    public final boolean isRegister() {
         return this.register;
     }
 
@@ -77,7 +82,7 @@ public enum Permissions {
         return this.description;
     }
 
-    public final PermissionDefault isDefault() {
+    public final PermissionDefault getDefault() {
         return this.isDefault;
     }
 
@@ -89,23 +94,30 @@ public enum Permissions {
         return player.hasPermission(getNode());
     }
 
-    public final boolean isValid() {
-        return this.manager.getPermission(getNode()) != null;
+    public final Permission getPermission() {
+        return new Permission(getNode(), getDescription(), getDefault(), getChildren().isEmpty() ? null : getChildren());
     }
 
-    public final Permission getPermission() {
-        return new Permission(getNode(), getDescription(), isDefault(), getChildren().isEmpty() ? null : getChildren());
+    public final PermissionContext getContext() {
+        final PermissionContext context = new PermissionContext(
+                getNode(),
+                getDescription(),
+                switch (getDefault()) {
+                    case TRUE -> PermissionType.TRUE;
+                    case FALSE -> PermissionType.FALSE;
+                    case OP -> PermissionType.OP;
+                    case NOT_OP -> PermissionType.NOT_OP;
+                }
+        );
+
+        getChildren().forEach(context::addPermission);
+
+        return context;
     }
 
     public void registerPermission() {
-        if (isValid()) return;
+        if (!this.register) return;
 
-        this.manager.addPermission(getPermission());
-    }
-
-    public void unregisterPermission() {
-        if (!isValid()) return;
-
-        this.manager.removePermission(getNode());
+        this.fusion.registerPermission(getContext());
     }
 }

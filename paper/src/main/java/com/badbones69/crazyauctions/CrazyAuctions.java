@@ -3,8 +3,6 @@ package com.badbones69.crazyauctions;
 import com.badbones69.crazyauctions.api.CrazyManager;
 import com.badbones69.crazyauctions.api.CrazyPlatform;
 import com.badbones69.crazyauctions.api.enums.Messages;
-import com.badbones69.crazyauctions.commands.AuctionCommand;
-import com.badbones69.crazyauctions.commands.AuctionTab;
 import com.badbones69.crazyauctions.controllers.GuiListener;
 import com.badbones69.crazyauctions.controllers.MarcoListener;
 import com.badbones69.crazyauctions.controllers.TrafficListener;
@@ -15,9 +13,6 @@ import com.ryderbelserion.fusion.paper.builders.folia.FoliaScheduler;
 import com.ryderbelserion.fusion.paper.builders.folia.Scheduler;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Server;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.PluginCommand;
-import org.bukkit.command.TabCompleter;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
@@ -38,7 +33,7 @@ public class CrazyAuctions extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        this.platform = new CrazyPlatform(new FusionPaper(this));
+        this.platform = new CrazyPlatform(this, new FusionPaper(this));
         this.platform.init();
 
         this.fusion = this.platform.getFusion();
@@ -55,8 +50,6 @@ public class CrazyAuctions extends JavaPlugin {
                 new TrafficListener()
         ).forEach(listener -> pluginManager.registerEvents(listener, this));
 
-        registerCommand(getCommand("crazyauctions"), new AuctionTab(), new AuctionCommand());
-
         this.support = new VaultSupport();
         this.support.setupEconomy();
 
@@ -72,14 +65,6 @@ public class CrazyAuctions extends JavaPlugin {
         new ConfigFixer().onEnable();
 
         new Metrics(this, 4624);
-    }
-
-    private void registerCommand(PluginCommand pluginCommand, TabCompleter tabCompleter, CommandExecutor commandExecutor) {
-        if (pluginCommand != null) {
-            pluginCommand.setExecutor(commandExecutor);
-
-            if (tabCompleter != null) pluginCommand.setTabCompleter(tabCompleter);
-        }
     }
 
     @Override

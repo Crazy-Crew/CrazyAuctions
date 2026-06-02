@@ -14,7 +14,7 @@ public class AuctionNewBidEvent extends Event {
     
     private static final HandlerList handlers = new HandlerList();
     private final Player player;
-    private final long bid;
+    private final double bid;
     private final ItemStack item;
     
     /**
@@ -23,7 +23,7 @@ public class AuctionNewBidEvent extends Event {
      * @param item The item that was bid on.
      * @param bid The amount of money that was bid.
      */
-    public AuctionNewBidEvent(Player player, ItemStack item, long bid) {
+    public AuctionNewBidEvent(Player player, ItemStack item, double bid) {
         this.player = player;
         this.item = item;
         this.bid = bid;
@@ -45,7 +45,7 @@ public class AuctionNewBidEvent extends Event {
         return this.item;
     }
     
-    public long getBid() {
+    public double getBid() {
         return this.bid;
     }
 }

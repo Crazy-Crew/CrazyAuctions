@@ -49,7 +49,7 @@ public class ConnectionStorage extends IStorageHolder {
     }
 
     @Override
-    public void addItem(@NonNull final UUID uuid, @NonNull final String name, @NonNull final String base64, final long price, @NonNull final ShopType shopType) {}
+    public void addItem(@NonNull final UUID uuid, @NonNull final String name, @NonNull final String base64, final double price, @NonNull final ShopType shopType) {}
 
     @Override
     public boolean hasUser(@NonNull final UUID uuid) {

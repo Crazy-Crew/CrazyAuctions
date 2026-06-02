@@ -7,7 +7,6 @@ import com.badbones69.crazyauctions.api.events.AuctionCancelledEvent;
 import com.badbones69.crazyauctions.api.events.AuctionExpireEvent;
 import com.badbones69.crazyauctions.api.events.AuctionWinBidEvent;
 import org.bukkit.*;
-import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -22,8 +21,6 @@ public class Methods {
     private final static CrazyAuctions plugin = CrazyAuctions.get();
 
     private final static Pattern HEX_PATTERN = Pattern.compile("#[a-fA-F0-9]{6}");
-
-    private static final Pattern UUID_PATTERN = Pattern.compile("[a-f0-9]{8}(?:-[a-f0-9]{4}){4}[a-f0-9]{8}");
 
     public static String color(String message) {
         Matcher matcher = HEX_PATTERN.matcher(message);
@@ -51,26 +48,6 @@ public class Methods {
     public static void setItemInHand(Player player, ItemStack item) {
         player.getInventory().setItemInMainHand(item);
     }
-    
-    public static boolean isInt(String s) {
-        try {
-            Integer.parseInt(s);
-        } catch (NumberFormatException nfe) {
-            return false;
-        }
-
-        return true;
-    }
-    
-    public static boolean isLong(String s) {
-        try {
-            Long.parseLong(s);
-        } catch (NumberFormatException nfe) {
-            return false;
-        }
-
-        return true;
-    }
 
     public static @Nullable Player getPlayer(String uuid) {
         return plugin.getServer().getPlayer(UUID.fromString(uuid));
@@ -88,10 +65,6 @@ public class Methods {
         return plugin.getServer().getOfflinePlayer(UUID.fromString(uuid));
     }
 
-    public static boolean isUUID(String uuid) {
-        return UUID_PATTERN.matcher(uuid).find();
-    }
-
     public static boolean isOnline(String uuid) {
         for (Player player : plugin.getServer().getOnlinePlayers()) {
             if (player.getUniqueId().toString().equals(uuid)) {
@@ -100,41 +73,6 @@ public class Methods {
         }
 
         return false;
-    }
-    
-    public static boolean isOnline(String name, CommandSender p) {
-        for (Player player : plugin.getServer().getOnlinePlayers()) {
-            if (player.getName().equalsIgnoreCase(name)) {
-                return true;
-            }
-        }
-
-        p.sendMessage(Messages.NOT_ONLINE.getMessage(p));
-        return false;
-    }
-    
-    public static boolean hasPermission(Player player, String perm) {
-        if (!player.hasPermission("crazyauctions." + perm)) {
-            player.sendMessage(Messages.NO_PERMISSION.getMessage(player));
-
-            return false;
-        }
-
-        return true;
-    }
-    
-    public static boolean hasPermission(CommandSender sender, String perm) {
-        if (sender instanceof Player player) {
-            if (!player.hasPermission("crazyauctions." + perm)) {
-                player.sendMessage(Messages.NO_PERMISSION.getMessage(player));
-
-                return false;
-            }
-
-            return true;
-        }
-
-        return true;
     }
     
     public static List<ItemStack> getPage(List<ItemStack> list, Integer page) {
@@ -150,7 +88,7 @@ public class Methods {
             if (index < list.size()) items.add(list.get(index));
         }
 
-        for (; items.size() == 0; page--) {
+        for (; items.isEmpty(); page--) {
             if (page <= 0) break;
             index = page * max - max;
             endIndex = index >= list.size() ? list.size() - 1 : index + max;
@@ -255,12 +193,12 @@ public class Methods {
 
                     for (; data.contains("OutOfTime/Cancelled." + num); num++) ;
 
-                    if (data.getBoolean("Items." + i + ".Biddable") && !data.getString("Items." + i + ".TopBidder").equalsIgnoreCase("None") && plugin.getSupport().getMoney(getOfflinePlayer(data.getString("Items." + i + ".TopBidder"))) >= data.getInt("Items." + i + ".Price")) {
+                    if (data.getBoolean("Items." + i + ".Biddable") && !data.getString("Items." + i + ".TopBidder").equalsIgnoreCase("None") && plugin.getSupport().getMoney(getOfflinePlayer(data.getString("Items." + i + ".TopBidder"))) >= data.getDouble("Items." + i + ".Price")) {
                         String winner = data.getString("Items." + i + ".TopBidder");
                         String seller = data.getString("Items." + i + ".Seller");
-                        long price = data.getLong("Items." + i + ".Price");
-                        long taxAmount = (long) (price * config.getDouble("Settings.Percent-Tax", 0) / 100);
-                        long taxedPriceAmount = Math.max(price - taxAmount, 0);
+                        double price = data.getDouble("Items." + i + ".Price");
+                        double taxAmount = (long) (price * config.getDouble("Settings.Percent-Tax", 0) / 100);
+                        double taxedPriceAmount = Math.max(price - taxAmount, 0);
 
                         OfflinePlayer sellerPlayer = Methods.getOfflinePlayer(seller);
                         OfflinePlayer winnerPlayer = Methods.getOfflinePlayer(winner);
@@ -332,17 +270,17 @@ public class Methods {
     }
     
     public static String getPrice(String ID, Boolean Expired) {
-        long price = 0L;
+        double price = 0.0;
 
         FileConfiguration configuration = Files.data.getConfiguration();
 
         if (Expired) {
             if (configuration.contains("OutOfTime/Cancelled." + ID + ".Price")) {
-                price = configuration.getLong("OutOfTime/Cancelled." + ID + ".Price");
+                price = configuration.getDouble("OutOfTime/Cancelled." + ID + ".Price");
             }
         } else {
             if (configuration.contains("Items." + ID + ".Price")) {
-                price = configuration.getLong("Items." + ID + ".Price");
+                price = configuration.getDouble("Items." + ID + ".Price");
             }
         }
 
