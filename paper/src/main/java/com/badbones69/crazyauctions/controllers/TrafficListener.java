@@ -13,6 +13,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.jetbrains.annotations.NotNull;
 
 public class TrafficListener implements Listener {
 
@@ -54,9 +55,37 @@ public class TrafficListener implements Listener {
             return;
         }
 
-        boolean hasPlayer = false;
+        boolean hasPlayer = hasPlayer(section, player.getUniqueId().toString());
 
-        final String uuid = player.getUniqueId().toString();
+        if (!hasPlayer) return;
+
+        if (interval > 0) {
+            new FoliaScheduler(this.plugin, Scheduler.global_scheduler) {
+                @Override
+                public void run() {
+                    if (!hasPlayer(section, player.getUniqueId().toString())) {
+                        cancel();
+
+                        return;
+                    }
+
+                    player.sendMessage(Methods.color(message));
+                }
+            }.runAtFixedRate(0, interval);
+
+            return;
+        }
+
+        new FoliaScheduler(this.plugin, Scheduler.global_scheduler) {
+            @Override
+            public void run() {
+                player.sendMessage(Methods.color(message));
+            }
+        }.runNextTick();
+    }
+
+    public final boolean hasPlayer(@NotNull final ConfigurationSection section, @NotNull final String uuid) {
+        boolean hasPlayer = false;
 
         for (final String id : section.getKeys(false)) {
             final ConfigurationSection item = section.getConfigurationSection(id);
@@ -82,24 +111,6 @@ public class TrafficListener implements Listener {
             }
         }
 
-        if (!hasPlayer) return;
-
-        if (interval > 0) {
-            new FoliaScheduler(this.plugin, Scheduler.global_scheduler) {
-                @Override
-                public void run() {
-                    player.sendMessage(Methods.color(message));
-                }
-            }.runAtFixedRate(0, interval);
-
-            return;
-        }
-
-        new FoliaScheduler(this.plugin, Scheduler.global_scheduler) {
-            @Override
-            public void run() {
-                player.sendMessage(Methods.color(message));
-            }
-        }.runNextTick();
+        return hasPlayer;
     }
 }
