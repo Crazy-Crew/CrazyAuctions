@@ -7,6 +7,7 @@ import com.badbones69.crazyauctions.commands.AuctionCommand;
 import com.badbones69.crazyauctions.commands.AuctionTab;
 import com.badbones69.crazyauctions.controllers.GuiListener;
 import com.badbones69.crazyauctions.controllers.MarcoListener;
+import com.badbones69.crazyauctions.controllers.TrafficListener;
 import com.badbones69.crazyauctions.currency.VaultSupport;
 import com.badbones69.crazyauctions.datafixer.ConfigFixer;
 import com.ryderbelserion.fusion.core.api.enums.Level;
@@ -153,7 +154,9 @@ public class CrazyAuctions extends JavaPlugin {
 
         List.of(
                 new GuiListener(),
-                new MarcoListener()
+                new MarcoListener(),
+
+                new TrafficListener()
         ).forEach(listener -> pluginManager.registerEvents(listener, this));
 
         registerCommand(getCommand("crazyauctions"), new AuctionTab(), new AuctionCommand());

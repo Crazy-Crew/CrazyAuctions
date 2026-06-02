@@ -25,8 +25,8 @@ Settings:
     # If true, a message is sent if a player has an item in Expired/Canceled Inventory
     Toggle: true
     # The message to send.
-    Message: ""
-    # The interval, if set to 0 will only send once when they join.
+    Message: "You have some expired items from you auction! Collect them by using /ah collect"
+    # The interval in ticks(20 ticks = 1 second), if set to 0 will only send once when they join.
     Interval: 0
   Patches:
     Macro-Dupe: true #Turn to false if you have an issue, but it should patch the bug.
