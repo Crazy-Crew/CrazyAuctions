@@ -3,6 +3,7 @@ package com.badbones69.crazyauctions.api;
 import com.badbones69.crazyauctions.CrazyAuctions;
 import com.badbones69.crazyauctions.Methods;
 import com.badbones69.crazyauctions.api.enums.other.Permissions;
+import com.badbones69.crazyauctions.api.objects.items.PaperAuctionItem;
 import com.badbones69.crazyauctions.api.registry.PaperUserRegistry;
 import com.badbones69.crazyauctions.api.registry.adapters.PaperSenderAdapter;
 import com.badbones69.crazyauctions.commands.AuctionCommand;
@@ -35,7 +36,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class CrazyPlatform extends CrazyPlugin<CommandSender> {
+public class CrazyPlatform extends CrazyPlugin<CommandSender, ItemStack> {
 
     private boolean isSellingModuleEnabled;
     private boolean isBiddingModuleEnabled;
@@ -150,6 +151,11 @@ public class CrazyPlatform extends CrazyPlugin<CommandSender> {
     @Override
     public @NotNull final PaperSenderAdapter getSenderAdapter() {
         return this.userAdapter;
+    }
+
+    @Override
+    public @NonNull PaperAuctionItem getItem(@NonNull final ItemStack itemStack) {
+        return new PaperAuctionItem(itemStack);
     }
 
     @Override

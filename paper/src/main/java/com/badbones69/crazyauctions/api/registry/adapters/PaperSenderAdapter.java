@@ -5,7 +5,6 @@ import com.badbones69.crazyauctions.api.registry.PaperUserRegistry;
 import com.badbones69.crazyauctions.common.registry.adapters.sender.ISenderAdapter;
 import com.badbones69.crazyauctions.api.CrazyPlatform;
 import com.ryderbelserion.fusion.core.api.FusionKey;
-import com.ryderbelserion.fusion.core.api.enums.Level;
 import com.ryderbelserion.fusion.core.api.registry.message.MessageRegistry;
 import com.ryderbelserion.fusion.paper.FusionPaper;
 import net.kyori.adventure.text.Component;
@@ -13,7 +12,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-import us.crazycrew.api.constants.Messages;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -81,7 +79,7 @@ public class PaperSenderAdapter extends ISenderAdapter<Component, CommandSender>
             return this.fusion.asComponent(sender, reference.get(), map);
         }
 
-        final Optional<PaperUserAdapter> optional = this.userRegistry.getUser(player.getUniqueId());
+        final Optional<PaperPlayerAdapter> optional = this.userRegistry.getUser(player.getUniqueId());
 
         if (optional.isEmpty()) {
             this.messageRegistry.getMessage(id).ifPresent(value -> reference.set(value.getValue()));
@@ -89,7 +87,7 @@ public class PaperSenderAdapter extends ISenderAdapter<Component, CommandSender>
             return this.fusion.asComponent(player, reference.get(), map);
         }
 
-        final PaperUserAdapter user = optional.get();
+        final PaperPlayerAdapter user = optional.get();
 
         this.messageRegistry.getMessageByLocale(user.getLocaleKey(), id).ifPresent(value -> reference.set(value.getValue()));
 

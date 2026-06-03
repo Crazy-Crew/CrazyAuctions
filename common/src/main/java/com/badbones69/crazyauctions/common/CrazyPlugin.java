@@ -16,7 +16,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-public abstract class CrazyPlugin<S extends Audience> extends CrazyAuctions<S, FusionPaper> {
+public abstract class CrazyPlugin<S extends Audience, I> extends CrazyAuctions<S, FusionPaper, I> {
 
     protected MessageRegistry messageRegistry;
     protected IStorageHolder storageHolder;

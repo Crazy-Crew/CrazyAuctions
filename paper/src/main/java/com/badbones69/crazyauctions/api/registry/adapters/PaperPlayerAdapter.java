@@ -1,27 +1,31 @@
 package com.badbones69.crazyauctions.api.registry.adapters;
 
+import com.badbones69.crazyauctions.api.objects.items.PaperAuctionItem;
 import com.ryderbelserion.fusion.core.api.FusionKey;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
 import us.crazycrew.api.CrazyAuctions;
 import us.crazycrew.api.constants.Messages;
-import us.crazycrew.api.user.IUser;
+import us.crazycrew.api.user.IPlayer;
 import java.util.UUID;
 
-public class PaperUserAdapter implements IUser {
+public class PaperPlayerAdapter extends IPlayer<ItemStack, PaperAuctionItem> {
 
     protected FusionKey locale;
     protected Player player;
 
-    public PaperUserAdapter(@Nullable final CommandSender sender) {
+    public PaperPlayerAdapter(@Nullable final CommandSender sender) {
         if (sender instanceof Player reference) {
             this.player = reference;
         }
     }
 
-    public PaperUserAdapter() {
+    public PaperPlayerAdapter() {
         this(null);
     }
 
@@ -39,6 +43,17 @@ public class PaperUserAdapter implements IUser {
     public @NotNull final FusionKey getLocaleKey() {
         //return this.player == null ? Messages.default_locale : this.locale;
         return Messages.default_locale;
+    }
+
+    @Override
+    public void takeItem(@NonNull final PaperAuctionItem item) {
+        final ItemStack itemStack = item.getItem();
+
+        if (itemStack.isEmpty()) return;
+
+        final PlayerInventory inventory = this.player.getInventory();
+
+        inventory.remove(itemStack);
     }
 
     @Override
