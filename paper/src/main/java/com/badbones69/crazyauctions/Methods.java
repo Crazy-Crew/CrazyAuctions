@@ -1,17 +1,20 @@
 package com.badbones69.crazyauctions;
 
-import com.badbones69.crazyauctions.api.enums.Messages;
+import com.badbones69.crazyauctions.api.CrazyPlatform;
 import com.badbones69.crazyauctions.api.enums.Reasons;
-import com.badbones69.crazyenvoys.enums.Files;
+import com.badbones69.crazyauctions.api.registry.adapters.PaperSenderAdapter;
+import com.badbones69.crazyauctions.common.enums.FileKeys;
 import com.badbones69.crazyauctions.api.events.AuctionCancelledEvent;
 import com.badbones69.crazyauctions.api.events.AuctionExpireEvent;
 import com.badbones69.crazyauctions.api.events.AuctionWinBidEvent;
+import com.ryderbelserion.fusion.core.utils.StringUtils;
 import org.bukkit.*;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import us.crazycrew.api.constants.Messages;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -19,6 +22,10 @@ import java.util.regex.Pattern;
 public class Methods {
 
     private final static CrazyAuctions plugin = CrazyAuctions.get();
+
+    private final static CrazyPlatform platform = plugin.getPlatform();
+
+    private final static PaperSenderAdapter adapter = platform.getSenderAdapter();
 
     private final static Pattern HEX_PATTERN = Pattern.compile("#[a-fA-F0-9]{6}");
 
@@ -34,11 +41,11 @@ public class Methods {
     }
     
     public static String getPrefix() {
-        return color(Files.config.getConfiguration().getString("Settings.Prefix", ""));
+        return color(FileKeys.config.getConfiguration().getString("Settings.Prefix", ""));
     }
     
     public static String getPrefix(String msg) {
-        return color(Files.config.getConfiguration().getString("Settings.Prefix", "") + msg);
+        return color(FileKeys.config.getConfiguration().getString("Settings.Prefix", "") + msg);
     }
 
     public static ItemStack getItemInHand(Player player) {
@@ -162,8 +169,8 @@ public class Methods {
     }
     
     public static void updateAuction() {
-        FileConfiguration config = Files.config.getConfiguration();
-        FileConfiguration data = Files.data.getConfiguration();
+        FileConfiguration config = FileKeys.config.getConfiguration();
+        FileConfiguration data = FileKeys.data.getConfiguration();
 
         Calendar cal = Calendar.getInstance();
         Calendar expireTime = Calendar.getInstance();
@@ -210,8 +217,12 @@ public class Methods {
                         String taxedPrice = String.valueOf(taxedPriceAmount);
 
                         HashMap<String, String> placeholders = new HashMap<>();
-                        placeholders.put("%Price%", getPrice(i, false));
-                        placeholders.put("%price%", getPrice(i, false));
+
+                        final String placeholder = StringUtils.formatNumber(getPrice(i, false));
+
+                        placeholders.put("%Price%", placeholder);
+                        placeholders.put("%price%", placeholder);
+
                         placeholders.put("%Tax%", tax);
                         placeholders.put("%tax%", tax);
                         placeholders.put("%Taxed_Price%", taxedPrice);
@@ -227,7 +238,7 @@ public class Methods {
                             new AuctionWinBidEvent(player, Methods.fromBase64(data.getString("Items." + i + ".Item")), price).callEvent();
 
                             if (player != null) {
-                                player.sendMessage(Messages.WIN_BIDDING.getMessage(player, placeholders));
+                                adapter.sendMessage(player, Messages.win_bidding, placeholders);
                             }
                         }
 
@@ -235,7 +246,7 @@ public class Methods {
                             Player player = getPlayer(seller);
 
                             if (player != null) {
-                                player.sendMessage(Messages.SOMEONE_WON_PLAYERS_BID.getMessage(player, placeholders));
+                                adapter.sendMessage(player, Messages.someone_won_players_bid, placeholders);
                             }
                         }
 
@@ -248,7 +259,7 @@ public class Methods {
                         Player player = getPlayer(seller);
 
                         if (isOnline(seller) && player != null) {
-                            player.sendMessage(Messages.ITEM_HAS_EXPIRED.getMessage(player));
+                            adapter.sendMessage(player, Messages.item_has_expired);
                         }
 
                         AuctionExpireEvent event = new AuctionExpireEvent(player, Methods.fromBase64(data.getString("Items." + i + ".Item")));
@@ -266,13 +277,13 @@ public class Methods {
             }
         }
 
-        if (shouldSave) Files.data.save();
+        if (shouldSave) FileKeys.data.save();
     }
     
-    public static String getPrice(String ID, Boolean Expired) {
+    public static double getPrice(String ID, Boolean Expired) {
         double price = 0.0;
 
-        FileConfiguration configuration = Files.data.getConfiguration();
+        FileConfiguration configuration = FileKeys.data.getConfiguration();
 
         if (Expired) {
             if (configuration.contains("OutOfTime/Cancelled." + ID + ".Price")) {
@@ -284,7 +295,7 @@ public class Methods {
             }
         }
 
-        return String.valueOf(price);
+        return price;
     }
 
     /**

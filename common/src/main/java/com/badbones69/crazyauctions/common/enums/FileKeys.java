@@ -1,4 +1,4 @@
-package com.badbones69.crazyenvoys.enums;
+package com.badbones69.crazyauctions.common.enums;
 
 import com.ryderbelserion.fusion.core.api.FusionProvider;
 import com.ryderbelserion.fusion.core.api.exceptions.FusionException;
@@ -11,17 +11,16 @@ import com.ryderbelserion.fusion.paper.files.types.PaperCustomFile;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.CommentedConfigurationNode;
-
 import java.nio.file.Path;
 import java.util.Optional;
 
-public enum Files {
+public enum FileKeys {
 
     config("config.yml", FileType.PAPER_YAML),
-    messages("messages.yml", FileType.PAPER_YAML),
     //test_file("test-file.yml"),
     data("data.yml", FileType.PAPER_YAML),
 
+    messages("messages.yml", FileType.YAML),
     database("database.yml", FileType.YAML);
 
     private final FusionPaper fusion = (FusionPaper) FusionProvider.getInstance();
@@ -38,7 +37,7 @@ public enum Files {
      *
      * @param fileName the name of the file
      */
-    Files(@NotNull final String fileName, @NotNull final FileType fileType) {
+    FileKeys(@NotNull final String fileName, @NotNull final FileType fileType) {
         this.location = this.path.resolve(fileName);
         this.fileType = fileType;
     }

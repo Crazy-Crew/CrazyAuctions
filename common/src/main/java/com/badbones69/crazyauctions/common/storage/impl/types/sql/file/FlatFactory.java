@@ -1,6 +1,6 @@
-package com.badbones69.crazyenvoys.storage.impl.types.sql.file;
+package com.badbones69.crazyauctions.common.storage.impl.types.sql.file;
 
-import com.badbones69.crazyenvoys.storage.impl.types.sql.ConnectionFactory;
+import com.badbones69.crazyauctions.common.storage.impl.types.sql.ConnectionFactory;
 import com.ryderbelserion.fusion.core.api.exceptions.FusionException;
 import com.zaxxer.hikari.HikariDataSource;
 import org.jetbrains.annotations.NotNull;

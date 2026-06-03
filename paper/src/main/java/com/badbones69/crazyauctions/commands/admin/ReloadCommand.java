@@ -1,6 +1,5 @@
 package com.badbones69.crazyauctions.commands.admin;
 
-import com.badbones69.crazyauctions.api.enums.Messages;
 import com.badbones69.crazyauctions.api.enums.other.Permissions;
 import com.badbones69.crazyauctions.commands.BaseCommand;
 import com.mojang.brigadier.Command;
@@ -9,8 +8,8 @@ import com.ryderbelserion.fusion.kyori.permissions.PermissionContext;
 import com.ryderbelserion.fusion.paper.builders.commands.context.PaperCommandContext;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
-import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
+import us.crazycrew.api.constants.Messages;
 import java.util.List;
 
 public class ReloadCommand extends BaseCommand {
@@ -19,9 +18,7 @@ public class ReloadCommand extends BaseCommand {
     public void run(@NotNull final PaperCommandContext context) {
         this.platform.reload();
 
-        final CommandSender sender = context.getSender();
-
-        sender.sendMessage(Messages.RELOAD.getMessage(sender));
+        this.adapter.sendMessage(context.getSender(), Messages.reload);
     }
 
     @Override

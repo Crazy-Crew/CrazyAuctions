@@ -1,13 +1,25 @@
 package us.crazycrew.api;
 
+import com.ryderbelserion.fusion.core.api.registry.message.MessageRegistry;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NonNull;
+import us.crazycrew.api.registry.IUserRegistry;
 import us.crazycrew.api.storage.IStorageHolder;
 import java.nio.file.Path;
+import java.util.UUID;
 
 public abstract class CrazyAuctions<S, K> {
 
+    public static final UUID CONSOLE_UUID = new UUID(0, 0);
+    public static final String CONSOLE_NAME = "Console";
+
+    public static final String namespace = "crazyauctions";
+
+    public abstract @NonNull MessageRegistry getMessageRegistry();
+
     public abstract @NonNull IStorageHolder getStorageHolder();
+
+    public abstract @NonNull IUserRegistry getUserRegistry();
 
     public abstract @NonNull Path getDataPath();
 

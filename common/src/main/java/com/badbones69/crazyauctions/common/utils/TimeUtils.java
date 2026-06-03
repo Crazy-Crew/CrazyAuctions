@@ -1,4 +1,4 @@
-package com.badbones69.crazyenvoys.utils;
+package com.badbones69.crazyauctions.common.utils;
 
 import java.util.Calendar;
 

@@ -1,8 +1,8 @@
-package com.badbones69.crazyenvoys.storage;
+package com.badbones69.crazyauctions.common.storage;
 
-import com.badbones69.crazyenvoys.CrazyPlugin;
-import com.badbones69.crazyenvoys.enums.Files;
-import com.badbones69.crazyenvoys.storage.impl.types.file.YamlFactory;
+import com.badbones69.crazyauctions.common.CrazyPlugin;
+import com.badbones69.crazyauctions.common.enums.FileKeys;
+import com.badbones69.crazyauctions.common.storage.impl.types.file.YamlFactory;
 import com.ryderbelserion.fusion.core.api.exceptions.FusionException;
 import com.ryderbelserion.fusion.paper.FusionPaper;
 import com.ryderbelserion.fusion.paper.files.PaperFileManager;
@@ -25,7 +25,7 @@ public class StorageManager {
     }
 
     public IStorageHolder init() {
-        final CommentedConfigurationNode configuration = Files.database.getYamlConfig();
+        final CommentedConfigurationNode configuration = FileKeys.database.getYamlConfig();
 
         final String type = configuration.node("database", "type").getString("YAML").toLowerCase();
 
@@ -35,13 +35,13 @@ public class StorageManager {
             case "sqlite" -> { // temporarily only enabled yaml for now
                 this.fileManager.addPaperFile(this.dataPath.resolve("data.yml"));
 
-                yield new YamlFactory(Files.data.getConfiguration()).init();
+                yield new YamlFactory(FileKeys.data.getConfiguration()).init();
             }
 
             case "yaml" -> {
                 this.fileManager.addPaperFile(this.dataPath.resolve("data.yml"));
 
-                yield new YamlFactory(Files.data.getConfiguration()).init();
+                yield new YamlFactory(FileKeys.data.getConfiguration()).init();
             }
 
             default -> throw new FusionException("Unknown Database Type: %s".formatted(type));

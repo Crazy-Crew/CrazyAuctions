@@ -1,7 +1,7 @@
-package com.badbones69.crazyenvoys.storage.impl.types.file;
+package com.badbones69.crazyauctions.common.storage.impl.types.file;
 
-import com.badbones69.crazyenvoys.enums.Files;
-import com.badbones69.crazyenvoys.utils.TimeUtils;
+import com.badbones69.crazyauctions.common.enums.FileKeys;
+import com.badbones69.crazyauctions.common.utils.TimeUtils;
 import com.ryderbelserion.fusion.core.api.FusionProvider;
 import com.ryderbelserion.fusion.core.api.enums.Level;
 import com.ryderbelserion.fusion.paper.FusionPaper;
@@ -67,7 +67,7 @@ public class YamlFactory extends IStorageHolder {
                 }
 
                 if (isSaving) {
-                    Files.data.save();
+                    FileKeys.data.save();
                 }
             }
         }
@@ -123,7 +123,7 @@ public class YamlFactory extends IStorageHolder {
                 }
 
                 if (isSaving) {
-                    Files.data.save();
+                    FileKeys.data.save();
                 }
             }
         }
@@ -133,7 +133,7 @@ public class YamlFactory extends IStorageHolder {
 
     @Override
     public void reload() {
-        this.configuration = Files.data.getConfiguration();
+        this.configuration = FileKeys.data.getConfiguration();
     }
 
     @Override
@@ -156,7 +156,7 @@ public class YamlFactory extends IStorageHolder {
 
         final ConfigurationSection item = section.createSection("%s".formatted(number));
 
-        final FileConfiguration config = Files.config.getConfiguration();
+        final FileConfiguration config = FileKeys.config.getConfiguration();
 
         item.set("Seller", uuid.toString());
         item.set("SellerName", name);
@@ -186,7 +186,7 @@ public class YamlFactory extends IStorageHolder {
 
         item.set("Item", base64);
 
-        Files.data.save();
+        FileKeys.data.save();
     }
 
     @Override

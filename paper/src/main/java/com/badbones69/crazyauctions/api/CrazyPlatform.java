@@ -3,9 +3,12 @@ package com.badbones69.crazyauctions.api;
 import com.badbones69.crazyauctions.CrazyAuctions;
 import com.badbones69.crazyauctions.Methods;
 import com.badbones69.crazyauctions.api.enums.other.Permissions;
+import com.badbones69.crazyauctions.api.registry.PaperUserRegistry;
+import com.badbones69.crazyauctions.api.registry.adapters.PaperSenderAdapter;
 import com.badbones69.crazyauctions.commands.AuctionCommand;
 import com.badbones69.crazyauctions.commands.admin.ReloadCommand;
 import com.badbones69.crazyauctions.commands.admin.auction.ForceCancelCommand;
+import com.badbones69.crazyauctions.commands.admin.migrate.MigrateCommand;
 import com.badbones69.crazyauctions.commands.player.CollectCommand;
 import com.badbones69.crazyauctions.commands.player.ExpiredCommand;
 import com.badbones69.crazyauctions.commands.player.HelpCommand;
@@ -13,8 +16,8 @@ import com.badbones69.crazyauctions.commands.player.ListCommand;
 import com.badbones69.crazyauctions.commands.player.ViewCommand;
 import com.badbones69.crazyauctions.commands.player.auction.BidCommand;
 import com.badbones69.crazyauctions.commands.player.auction.SellCommand;
-import com.badbones69.crazyenvoys.CrazyPlugin;
-import com.badbones69.crazyenvoys.enums.Files;
+import com.badbones69.crazyauctions.common.CrazyPlugin;
+import com.badbones69.crazyauctions.common.enums.FileKeys;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.ryderbelserion.fusion.paper.FusionPaper;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
@@ -26,6 +29,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NonNull;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -44,11 +48,19 @@ public class CrazyPlatform extends CrazyPlugin<CommandSender> {
         this.plugin = plugin;
     }
 
+    private PaperUserRegistry userRegistry;
+    private PaperSenderAdapter userAdapter;
+
     @Override
     public void init() {
         super.init();
 
-        final YamlConfiguration configuration = Files.config.getConfiguration();
+        this.userRegistry = new PaperUserRegistry();
+        this.userRegistry.init();
+
+        this.userAdapter = new PaperSenderAdapter(this);
+
+        final YamlConfiguration configuration = FileKeys.config.getConfiguration();
 
         this.isSellingModuleEnabled = configuration.getBoolean("Settings.Feature-Toggle.Selling", true);
 
@@ -70,6 +82,8 @@ public class CrazyPlatform extends CrazyPlugin<CommandSender> {
                     new ForceCancelCommand(),
                     new ReloadCommand(),
 
+                    new MigrateCommand(),
+
                     new CollectCommand(),
                     new ExpiredCommand(),
 
@@ -89,7 +103,7 @@ public class CrazyPlatform extends CrazyPlugin<CommandSender> {
     public void reload() {
         super.reload();
 
-        final YamlConfiguration configuration = Files.config.getConfiguration();
+        final YamlConfiguration configuration = FileKeys.config.getConfiguration();
 
         this.isSellingModuleEnabled = configuration.getBoolean("Settings.Feature-Toggle.Selling", true);
 
@@ -98,11 +112,11 @@ public class CrazyPlatform extends CrazyPlugin<CommandSender> {
 
     @Override
     public void stop() {
-        Files.data.save();
+        FileKeys.data.save();
     }
 
     public @NonNull final List<ItemStack> getItems(@NonNull final Player player) {
-        final YamlConfiguration data = Files.data.getConfiguration();
+        final YamlConfiguration data = FileKeys.data.getConfiguration();
 
         final List<ItemStack> items = new ArrayList<>();
 
@@ -131,6 +145,16 @@ public class CrazyPlatform extends CrazyPlugin<CommandSender> {
         }
 
         return items;
+    }
+
+    @Override
+    public @NotNull final PaperSenderAdapter getSenderAdapter() {
+        return this.userAdapter;
+    }
+
+    @Override
+    public @NotNull final PaperUserRegistry getUserRegistry() {
+        return this.userRegistry;
     }
 
     @Override

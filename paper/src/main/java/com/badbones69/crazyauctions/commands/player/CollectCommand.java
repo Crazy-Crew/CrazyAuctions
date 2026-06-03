@@ -1,6 +1,5 @@
 package com.badbones69.crazyauctions.commands.player;
 
-import com.badbones69.crazyauctions.api.enums.Messages;
 import com.badbones69.crazyauctions.api.enums.other.Permissions;
 import com.badbones69.crazyauctions.commands.BaseCommand;
 import com.badbones69.crazyauctions.controllers.GuiListener;
@@ -12,6 +11,7 @@ import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
+import us.crazycrew.api.constants.Messages;
 import java.util.List;
 
 public class CollectCommand extends BaseCommand {
@@ -21,7 +21,7 @@ public class CollectCommand extends BaseCommand {
         final CommandSender sender = context.getSender();
 
         if (!context.isPlayer()) {
-            sender.sendMessage(Messages.PLAYERS_ONLY.getMessage(sender));
+            this.adapter.sendMessage(sender, Messages.players_only);
 
             return;
         }

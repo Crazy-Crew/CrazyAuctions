@@ -1,4 +1,4 @@
-package com.badbones69.crazyenvoys.storage.impl.types.sql;
+package com.badbones69.crazyauctions.common.storage.impl.types.sql;
 
 import org.jspecify.annotations.NonNull;
 

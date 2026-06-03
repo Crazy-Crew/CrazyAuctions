@@ -22,7 +22,7 @@ triumph-cmds = "2.0.0-BETA-4" # https://github.com/TriumphTeam/triumph-cmds
 bstats = "3.2.1" # https://bstats.org/docs
 
 ## Other API
-fusion = "4.26.1" # https://github.com/ryderbelserion/Fusion
+fusion = "4.27.0" # https://github.com/ryderbelserion/Fusion
 
 ## Database API
 postgres = "42.7.10" # https://jdbc.postgresql.org/

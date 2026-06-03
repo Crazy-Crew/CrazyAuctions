@@ -1,11 +1,10 @@
 package com.badbones69.crazyauctions.commands.admin.auction;
 
 import com.badbones69.crazyauctions.Methods;
-import com.badbones69.crazyauctions.api.enums.Messages;
 import com.badbones69.crazyauctions.api.enums.Reasons;
 import com.badbones69.crazyauctions.api.enums.other.Permissions;
 import com.badbones69.crazyauctions.commands.BaseCommand;
-import com.badbones69.crazyenvoys.enums.Files;
+import com.badbones69.crazyauctions.common.enums.FileKeys;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import com.ryderbelserion.fusion.kyori.permissions.PermissionContext;
@@ -17,6 +16,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import us.crazycrew.api.constants.Messages;
 import java.util.List;
 import java.util.UUID;
 
@@ -26,7 +26,7 @@ public class ForceCancelCommand extends BaseCommand {
     public void run(@NotNull final PaperCommandContext context) {
         final CommandSender sender = context.getSender();
 
-        final YamlConfiguration data = Files.data.getConfiguration();
+        final YamlConfiguration data = FileKeys.data.getConfiguration();
 
         int number = 1;
 
@@ -50,15 +50,15 @@ public class ForceCancelCommand extends BaseCommand {
             final Player entity = this.server.getPlayer(uuid);
 
             if (entity != null) {
-                entity.sendMessage(Messages.ADMIN_FORCE_CANCELLED_TO_PLAYER.getMessage(sender));
+                this.adapter.sendMessage(entity, Messages.admin_force_cancelled_to_player);
             }
 
             number = Methods.expireItem(number, this.server.getOfflinePlayer(uuid), id, data, Reasons.ADMIN_FORCE_CANCEL);
         }
 
-        Files.data.save();
+        FileKeys.data.save();
 
-        sender.sendMessage(Messages.ADMIN_FORCE_CANCELLED_ALL.getMessage(sender));
+        this.adapter.sendMessage(sender, Messages.admin_force_cancelled_all);
     }
 
     @Override

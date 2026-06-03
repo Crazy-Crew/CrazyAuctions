@@ -1,7 +1,10 @@
-package com.badbones69.crazyenvoys;
+package com.badbones69.crazyauctions.common;
 
-import com.badbones69.crazyenvoys.storage.StorageManager;
+import com.badbones69.crazyauctions.common.registry.MessageImpl;
+import com.badbones69.crazyauctions.common.registry.adapters.sender.ISenderAdapter;
+import com.badbones69.crazyauctions.common.storage.StorageManager;
 import com.ryderbelserion.fusion.core.api.enums.Level;
+import com.ryderbelserion.fusion.core.api.registry.message.MessageRegistry;
 import com.ryderbelserion.fusion.files.enums.FileType;
 import com.ryderbelserion.fusion.paper.FusionPaper;
 import com.ryderbelserion.fusion.paper.files.PaperFileManager;
@@ -12,13 +15,10 @@ import us.crazycrew.api.storage.IStorageHolder;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.UUID;
 
 public abstract class CrazyPlugin<S extends Audience> extends CrazyAuctions<S, FusionPaper> {
 
-    public static final UUID CONSOLE_UUID = new UUID(0, 0);
-    public static final String CONSOLE_NAME = "Console";
-
+    protected MessageRegistry messageRegistry;
     protected IStorageHolder storageHolder;
     protected final FusionPaper fusion;
     protected final long startTime;
@@ -28,7 +28,10 @@ public abstract class CrazyPlugin<S extends Audience> extends CrazyAuctions<S, F
         this.fusion = fusion;
     }
 
+    public abstract ISenderAdapter getSenderAdapter();
+
     protected PaperFileManager fileManager;
+    protected MessageImpl messageImpl;
 
     @Override
     public void init() {
@@ -48,10 +51,13 @@ public abstract class CrazyPlugin<S extends Audience> extends CrazyAuctions<S, F
             Files.createDirectories(path);
         } catch (final IOException ignored) {}
 
-        this.fileManager.addFile(path.resolve("database.yml"), FileType.YAML);
+        this.fileManager.addFile(path.resolve("database.yml"), FileType.YAML)
+                .addFile(path.resolve("messages.yml"), FileType.YAML);
 
-        this.fileManager.addPaperFile(path.resolve("config.yml"))
-                .addPaperFile(path.resolve("messages.yml"));
+        this.messageImpl = new MessageImpl(this.messageRegistry = this.fusion.getMessageRegistry());
+        this.messageImpl.init();
+
+        this.fileManager.addPaperFile(path.resolve("config.yml"));
 
         try {
             this.storageHolder = new StorageManager(this).init();
@@ -69,21 +75,32 @@ public abstract class CrazyPlugin<S extends Audience> extends CrazyAuctions<S, F
     public void reload() {
         this.fileManager.refresh(false);
 
+        this.messageImpl.reload();
+
         this.storageHolder.reload();
     }
 
     @Override
-    public @NonNull IStorageHolder getStorageHolder() {
+    public @NonNull final MessageRegistry getMessageRegistry() {
+        return this.messageRegistry;
+    }
+
+    @Override
+    public @NonNull final IStorageHolder getStorageHolder() {
         return this.storageHolder;
     }
 
     @Override
-    public @NonNull Path getDataPath() {
-        return this.fusion.getDataPath();
+    public @NonNull final FusionPaper getFusion() {
+        return this.fusion;
     }
 
     @Override
-    public @NonNull FusionPaper getFusion() {
-        return this.fusion;
+    public @NonNull final Path getDataPath() {
+        return this.fusion.getDataPath();
+    }
+
+    public @NonNull final MessageImpl getMessageImpl() {
+        return this.messageImpl;
     }
 }

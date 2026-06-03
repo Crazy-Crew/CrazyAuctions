@@ -1,6 +1,5 @@
 package com.badbones69.crazyauctions.commands.player;
 
-import com.badbones69.crazyauctions.api.enums.Messages;
 import com.badbones69.crazyauctions.api.enums.other.Permissions;
 import com.badbones69.crazyauctions.commands.BaseCommand;
 import com.mojang.brigadier.Command;
@@ -11,6 +10,7 @@ import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
+import us.crazycrew.api.constants.Messages;
 import java.util.List;
 
 public class HelpCommand extends BaseCommand {
@@ -19,7 +19,7 @@ public class HelpCommand extends BaseCommand {
     public void run(@NotNull final PaperCommandContext context) {
         final CommandSender sender = context.getSender();
 
-        sender.sendMessage(Messages.HELP.getMessage(sender));
+        this.adapter.sendMessage(sender, Messages.help_menu);
     }
 
     @Override

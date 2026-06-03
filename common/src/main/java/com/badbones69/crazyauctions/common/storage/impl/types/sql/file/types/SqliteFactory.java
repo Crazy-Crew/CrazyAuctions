@@ -1,6 +1,6 @@
-package com.badbones69.crazyenvoys.storage.impl.types.sql.file.types;
+package com.badbones69.crazyauctions.common.storage.impl.types.sql.file.types;
 
-import com.badbones69.crazyenvoys.storage.impl.types.sql.file.FlatFactory;
+import com.badbones69.crazyauctions.common.storage.impl.types.sql.file.FlatFactory;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.jetbrains.annotations.NotNull;

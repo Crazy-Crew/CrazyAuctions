@@ -2,7 +2,7 @@ package com.badbones69.crazyauctions;
 
 import com.badbones69.crazyauctions.api.CrazyManager;
 import com.badbones69.crazyauctions.api.CrazyPlatform;
-import com.badbones69.crazyauctions.api.enums.Messages;
+import com.badbones69.crazyauctions.controllers.CacheListener;
 import com.badbones69.crazyauctions.controllers.GuiListener;
 import com.badbones69.crazyauctions.controllers.MarcoListener;
 import com.badbones69.crazyauctions.controllers.TrafficListener;
@@ -47,7 +47,9 @@ public class CrazyAuctions extends JavaPlugin {
                 new GuiListener(),
                 new MarcoListener(),
 
-                new TrafficListener()
+                new TrafficListener(),
+
+                new CacheListener()
         ).forEach(listener -> pluginManager.registerEvents(listener, this));
 
         this.support = new VaultSupport();
@@ -59,8 +61,6 @@ public class CrazyAuctions extends JavaPlugin {
                 Methods.updateAuction();
             }
         }.runAtFixedRate(0L, 5000L);
-
-        Messages.addMissingMessages();
 
         new ConfigFixer().onEnable();
 
