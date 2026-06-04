@@ -14,7 +14,7 @@ import org.spongepowered.configurate.CommentedConfigurationNode;
 import java.nio.file.Path;
 import java.util.Optional;
 
-public enum FileKeys {
+public enum FileKey {
 
     config("config.yml", FileType.PAPER_YAML),
     //test_file("test-file.yml"),
@@ -37,7 +37,7 @@ public enum FileKeys {
      *
      * @param fileName the name of the file
      */
-    FileKeys(@NotNull final String fileName, @NotNull final FileType fileType) {
+    FileKey(@NotNull final String fileName, @NotNull final FileType fileType) {
         this.location = this.path.resolve(fileName);
         this.fileType = fileType;
     }

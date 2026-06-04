@@ -8,12 +8,11 @@ import com.badbones69.crazyauctions.api.enums.Category;
 import com.badbones69.crazyauctions.api.enums.Reasons;
 import com.badbones69.crazyauctions.api.enums.other.Permissions;
 import com.badbones69.crazyauctions.api.registry.adapters.PaperSenderAdapter;
-import com.ryderbelserion.fusion.core.api.registry.message.MessageRegistry;
 import com.ryderbelserion.fusion.core.utils.StringUtils;
 import com.ryderbelserion.fusion.paper.FusionPaper;
 import us.crazycrew.api.constants.Messages;
 import us.crazycrew.api.enums.ShopType;
-import com.badbones69.crazyauctions.common.enums.FileKeys;
+import com.badbones69.crazyauctions.common.enums.FileKey;
 import com.badbones69.crazyauctions.api.events.AuctionBuyEvent;
 import com.badbones69.crazyauctions.api.events.AuctionNewBidEvent;
 import com.badbones69.crazyauctions.currency.VaultSupport;
@@ -61,15 +60,15 @@ public class GuiListener implements Listener {
     public static void openShop(@NotNull Player player, @NotNull ShopType sell, @NotNull Category cat, int page) {
         Methods.updateAuction();
 
-        YamlConfiguration config = FileKeys.config.getConfiguration();
-        YamlConfiguration data = FileKeys.data.getConfiguration();
+        YamlConfiguration config = FileKey.config.getConfiguration();
+        YamlConfiguration data = FileKey.data.getConfiguration();
         List<ItemStack> items = new ArrayList<>();
         List<Integer> ID = new ArrayList<>();
 
         if (!data.contains("Items")) {
             data.set("Items.Clear", null);
 
-            FileKeys.data.save();
+            FileKey.data.save();
         }
 
         shopCategory.put(player.getUniqueId(), cat);
@@ -209,7 +208,7 @@ public class GuiListener implements Listener {
 
     public static void openCategories(@NotNull Player player, @NotNull ShopType shop) {
         Methods.updateAuction();
-        YamlConfiguration config = FileKeys.config.getConfiguration();
+        YamlConfiguration config = FileKey.config.getConfiguration();
 
         Inventory inv = new AuctionMenu(54, Methods.color(config.getString("Settings.Categories"))).getInventory();
 
@@ -253,8 +252,8 @@ public class GuiListener implements Listener {
     public static void openPlayersCurrentList(@NotNull Player player, int page) {
         Methods.updateAuction();
 
-        YamlConfiguration config = FileKeys.config.getConfiguration();
-        YamlConfiguration data = FileKeys.data.getConfiguration();
+        YamlConfiguration config = FileKey.config.getConfiguration();
+        YamlConfiguration data = FileKey.data.getConfiguration();
 
         List<ItemStack> items = new ArrayList<>();
         List<Integer> ID = new ArrayList<>();
@@ -301,8 +300,8 @@ public class GuiListener implements Listener {
     public static void openPlayersExpiredList(@NotNull Player player, int page) {
         Methods.updateAuction();
 
-        YamlConfiguration config = FileKeys.config.getConfiguration();
-        YamlConfiguration data = FileKeys.data.getConfiguration();
+        YamlConfiguration config = FileKey.config.getConfiguration();
+        YamlConfiguration data = FileKey.data.getConfiguration();
 
         List<ItemStack> items = new ArrayList<>();
         List<Integer> ID = new ArrayList<>();
@@ -355,8 +354,8 @@ public class GuiListener implements Listener {
     public static void openBuying(@NotNull Player player, @NotNull String ID) {
         Methods.updateAuction();
 
-        YamlConfiguration config = FileKeys.config.getConfiguration();
-        YamlConfiguration data = FileKeys.data.getConfiguration();
+        YamlConfiguration config = FileKey.config.getConfiguration();
+        YamlConfiguration data = FileKey.data.getConfiguration();
 
         if (!data.contains("Items." + ID)) {
             openShop(player, ShopType.SELL, shopCategory.get(player.getUniqueId()), 1);
@@ -431,8 +430,8 @@ public class GuiListener implements Listener {
     public static void openBidding(@NotNull Player player, @NotNull String ID) {
         Methods.updateAuction();
 
-        YamlConfiguration config = FileKeys.config.getConfiguration();
-        YamlConfiguration data = FileKeys.data.getConfiguration();
+        YamlConfiguration config = FileKey.config.getConfiguration();
+        YamlConfiguration data = FileKey.data.getConfiguration();
 
         if (!data.contains("Items." + ID)) {
             openShop(player, ShopType.BID, shopCategory.get(player.getUniqueId()), 1);
@@ -467,8 +466,8 @@ public class GuiListener implements Listener {
     public static void openViewer(@NotNull Player player, int page) {
         Methods.updateAuction();
 
-        YamlConfiguration config = FileKeys.config.getConfiguration();
-        YamlConfiguration data = FileKeys.data.getConfiguration();
+        YamlConfiguration config = FileKey.config.getConfiguration();
+        YamlConfiguration data = FileKey.data.getConfiguration();
 
         List<ItemStack> items = new ArrayList<>();
         List<Integer> ID = new ArrayList<>();
@@ -479,7 +478,7 @@ public class GuiListener implements Listener {
         if (!data.contains("Items")) {
             data.set("Items.Clear", null);
 
-            FileKeys.data.save();
+            FileKey.data.save();
         }
 
         if (data.contains("Items")) {
@@ -565,7 +564,7 @@ public class GuiListener implements Listener {
     }
 
     private static ItemStack getBiddingGlass(@NotNull Player player, @NotNull String ID) {
-        YamlConfiguration config = FileKeys.config.getConfiguration();
+        YamlConfiguration config = FileKey.config.getConfiguration();
 
         String id = config.getString("Settings.GUISettings.OtherSettings.Bidding.Item");
         String name = config.getString("Settings.GUISettings.OtherSettings.Bidding.Name");
@@ -593,8 +592,8 @@ public class GuiListener implements Listener {
     }
 
     private static ItemStack getBiddingItem(@NotNull String ID) {
-        YamlConfiguration config = FileKeys.config.getConfiguration();
-        YamlConfiguration data = FileKeys.data.getConfiguration();
+        YamlConfiguration config = FileKey.config.getConfiguration();
+        YamlConfiguration data = FileKey.data.getConfiguration();
 
         ItemStack item = Methods.fromBase64(data.getString("Items." + ID + ".Item"));
 
@@ -623,7 +622,7 @@ public class GuiListener implements Listener {
     }
 
     private static void playClick(@NotNull Player player) {
-        YamlConfiguration config = FileKeys.config.getConfiguration();
+        YamlConfiguration config = FileKey.config.getConfiguration();
 
         if (config.getBoolean("Settings.Sounds.Toggle", false)) {
             String sound = config.getString("Settings.Sounds.Sound", "");
@@ -637,7 +636,7 @@ public class GuiListener implements Listener {
     }
 
     private void playSoldSound(@NotNull Player player) {
-        YamlConfiguration config = FileKeys.config.getConfiguration();
+        YamlConfiguration config = FileKey.config.getConfiguration();
 
         String sound = config.getString("Settings.Sold-Item-Sound", "");
 
@@ -651,7 +650,7 @@ public class GuiListener implements Listener {
     @EventHandler
     public void onInvClose(InventoryCloseEvent event) {
         if (!(event.getInventory().getHolder() instanceof  AuctionMenu auctionMenu)) return;
-        YamlConfiguration config = FileKeys.config.getConfiguration();
+        YamlConfiguration config = FileKey.config.getConfiguration();
 
         Player player = (Player) event.getPlayer();
 
@@ -663,8 +662,8 @@ public class GuiListener implements Listener {
         if (!(clickEvent.getInventory().getHolder() instanceof  AuctionMenu auctionMenu)) return;
         clickEvent.setCancelled(true);
 
-        YamlConfiguration config = FileKeys.config.getConfiguration();
-        YamlConfiguration data = FileKeys.data.getConfiguration();
+        YamlConfiguration config = FileKey.config.getConfiguration();
+        YamlConfiguration data = FileKey.data.getConfiguration();
 
         Player player = (Player) clickEvent.getWhoClicked();
         final Inventory inv = clickEvent.getClickedInventory();
@@ -752,7 +751,7 @@ public class GuiListener implements Listener {
 
                     adapter.sendMessage(player, Messages.bid_msg, placeholders);
 
-                    FileKeys.data.save();
+                    FileKey.data.save();
 
                     bidding.put(player.getUniqueId(), 0.0);
                     player.closeInventory();
@@ -916,7 +915,7 @@ public class GuiListener implements Listener {
 
                                         Methods.expireItem(1, seller, i, data, Reasons.ADMIN_FORCE_CANCEL);
 
-                                        FileKeys.data.save();
+                                        FileKey.data.save();
 
                                         adapter.sendMessage(player, Messages.admin_force_cancelled);
 
@@ -1131,7 +1130,7 @@ public class GuiListener implements Listener {
                     player.getInventory().addItem(i);
 
                     data.set("Items." + ID, null);
-                    FileKeys.data.save();
+                    FileKey.data.save();
 
                     playClick(player);
 
@@ -1174,7 +1173,7 @@ public class GuiListener implements Listener {
 
                                 Methods.expireItem(1, player, i, data, Reasons.PLAYER_FORCE_CANCEL);
 
-                                FileKeys.data.save();
+                                FileKey.data.save();
 
                                 playClick(player);
 
@@ -1249,7 +1248,7 @@ public class GuiListener implements Listener {
 
                     adapter.sendMessage(player, Messages.got_item_back);
 
-                    FileKeys.data.save();
+                    FileKey.data.save();
 
                     playClick(player);
 
@@ -1287,7 +1286,7 @@ public class GuiListener implements Listener {
 
                                     data.set("OutOfTime/Cancelled." + i, null);
 
-                                    FileKeys.data.save();
+                                    FileKey.data.save();
 
                                     playClick(player);
 

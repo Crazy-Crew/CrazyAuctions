@@ -3,7 +3,7 @@ package com.badbones69.crazyauctions.controllers;
 import com.badbones69.crazyauctions.CrazyAuctions;
 import com.badbones69.crazyauctions.Methods;
 import com.badbones69.crazyauctions.api.CrazyPlatform;
-import com.badbones69.crazyauctions.common.enums.FileKeys;
+import com.badbones69.crazyauctions.common.enums.FileKey;
 import com.ryderbelserion.fusion.core.api.enums.Level;
 import com.ryderbelserion.fusion.paper.FusionPaper;
 import com.ryderbelserion.fusion.paper.builders.folia.FoliaScheduler;
@@ -30,7 +30,7 @@ public class TrafficListener implements Listener {
     public void onPlayerJoin(PlayerJoinEvent event) {
         final Player player = event.getPlayer();
 
-        final YamlConfiguration configuration = FileKeys.config.getConfiguration();
+        final YamlConfiguration configuration = FileKey.config.getConfiguration();
 
         final boolean isRepeatingMessage = configuration.getBoolean("Settings.Repeating-Message.Toggle", false);
 
@@ -50,7 +50,7 @@ public class TrafficListener implements Listener {
 
         final int interval = configuration.getInt("Settings.Repeating-Message.Interval", 0);
 
-        final YamlConfiguration data = FileKeys.data.getConfiguration();
+        final YamlConfiguration data = FileKey.data.getConfiguration();
 
         final ConfigurationSection section = data.getConfigurationSection("OutOfTime/Cancelled");
 

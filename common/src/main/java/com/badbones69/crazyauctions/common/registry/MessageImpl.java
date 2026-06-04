@@ -1,6 +1,6 @@
 package com.badbones69.crazyauctions.common.registry;
 
-import com.badbones69.crazyauctions.common.enums.FileKeys;
+import com.badbones69.crazyauctions.common.enums.FileKey;
 import com.ryderbelserion.fusion.core.api.registry.message.MessageRegistry;
 import com.ryderbelserion.fusion.core.api.registry.message.adapter.YamlMessageAdapter;
 import com.ryderbelserion.fusion.core.utils.StringUtils;
@@ -24,7 +24,7 @@ public class MessageImpl {
 
     public void init() {
         this.registry.init(action -> {
-            final CommentedConfigurationNode configuration = FileKeys.messages.getYamlConfig();
+            final CommentedConfigurationNode configuration = FileKey.messages.getYamlConfig();
 
             action.addKey(default_locale, Messages.players_only, new YamlMessageAdapter(configuration, "<red>Only players can use this command.", "Messages", "Players-Only"));
 

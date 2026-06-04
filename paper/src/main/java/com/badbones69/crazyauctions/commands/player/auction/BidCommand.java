@@ -4,7 +4,7 @@ import com.badbones69.crazyauctions.Methods;
 import com.badbones69.crazyauctions.api.enums.other.Permissions;
 import com.badbones69.crazyauctions.api.events.AuctionListEvent;
 import com.badbones69.crazyauctions.commands.BaseCommand;
-import com.badbones69.crazyauctions.common.enums.FileKeys;
+import com.badbones69.crazyauctions.common.enums.FileKey;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.arguments.DoubleArgumentType;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
@@ -53,7 +53,7 @@ public class BidCommand extends BaseCommand {
             return;
         }
 
-        final YamlConfiguration configuration = FileKeys.config.getConfiguration();
+        final YamlConfiguration configuration = FileKey.config.getConfiguration();
 
         final double minimumPrice = configuration.getDouble("Settings.Minimum-Bid-Price", 100.0);
 

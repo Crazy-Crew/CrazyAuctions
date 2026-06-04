@@ -4,7 +4,7 @@ import com.badbones69.crazyauctions.Methods;
 import com.badbones69.crazyauctions.api.enums.Reasons;
 import com.badbones69.crazyauctions.api.enums.other.Permissions;
 import com.badbones69.crazyauctions.commands.BaseCommand;
-import com.badbones69.crazyauctions.common.enums.FileKeys;
+import com.badbones69.crazyauctions.common.enums.FileKey;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import com.ryderbelserion.fusion.kyori.permissions.PermissionContext;
@@ -26,7 +26,7 @@ public class ForceCancelCommand extends BaseCommand {
     public void run(@NotNull final PaperCommandContext context) {
         final CommandSender sender = context.getSender();
 
-        final YamlConfiguration data = FileKeys.data.getConfiguration();
+        final YamlConfiguration data = FileKey.data.getConfiguration();
 
         int number = 1;
 
@@ -56,7 +56,7 @@ public class ForceCancelCommand extends BaseCommand {
             number = Methods.expireItem(number, this.server.getOfflinePlayer(uuid), id, data, Reasons.ADMIN_FORCE_CANCEL);
         }
 
-        FileKeys.data.save();
+        FileKey.data.save();
 
         this.adapter.sendMessage(sender, Messages.admin_force_cancelled_all);
     }

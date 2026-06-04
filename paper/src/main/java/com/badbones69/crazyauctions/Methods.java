@@ -3,7 +3,7 @@ package com.badbones69.crazyauctions;
 import com.badbones69.crazyauctions.api.CrazyPlatform;
 import com.badbones69.crazyauctions.api.enums.Reasons;
 import com.badbones69.crazyauctions.api.registry.adapters.PaperSenderAdapter;
-import com.badbones69.crazyauctions.common.enums.FileKeys;
+import com.badbones69.crazyauctions.common.enums.FileKey;
 import com.badbones69.crazyauctions.api.events.AuctionCancelledEvent;
 import com.badbones69.crazyauctions.api.events.AuctionExpireEvent;
 import com.badbones69.crazyauctions.api.events.AuctionWinBidEvent;
@@ -41,11 +41,11 @@ public class Methods {
     }
     
     public static String getPrefix() {
-        return color(FileKeys.config.getConfiguration().getString("Settings.Prefix", ""));
+        return color(FileKey.config.getConfiguration().getString("Settings.Prefix", ""));
     }
     
     public static String getPrefix(String msg) {
-        return color(FileKeys.config.getConfiguration().getString("Settings.Prefix", "") + msg);
+        return color(FileKey.config.getConfiguration().getString("Settings.Prefix", "") + msg);
     }
 
     public static ItemStack getItemInHand(Player player) {
@@ -169,8 +169,8 @@ public class Methods {
     }
     
     public static void updateAuction() {
-        FileConfiguration config = FileKeys.config.getConfiguration();
-        FileConfiguration data = FileKeys.data.getConfiguration();
+        FileConfiguration config = FileKey.config.getConfiguration();
+        FileConfiguration data = FileKey.data.getConfiguration();
 
         Calendar cal = Calendar.getInstance();
         Calendar expireTime = Calendar.getInstance();
@@ -277,13 +277,13 @@ public class Methods {
             }
         }
 
-        if (shouldSave) FileKeys.data.save();
+        if (shouldSave) FileKey.data.save();
     }
     
     public static double getPrice(String ID, Boolean Expired) {
         double price = 0.0;
 
-        FileConfiguration configuration = FileKeys.data.getConfiguration();
+        FileConfiguration configuration = FileKey.data.getConfiguration();
 
         if (Expired) {
             if (configuration.contains("OutOfTime/Cancelled." + ID + ".Price")) {

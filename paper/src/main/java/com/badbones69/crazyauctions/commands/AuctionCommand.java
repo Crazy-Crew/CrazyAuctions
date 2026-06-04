@@ -4,7 +4,7 @@ import com.badbones69.crazyauctions.Methods;
 import com.badbones69.crazyauctions.api.enums.Category;
 import com.badbones69.crazyauctions.api.enums.other.Permissions;
 import com.badbones69.crazyauctions.controllers.GuiListener;
-import com.badbones69.crazyauctions.common.enums.FileKeys;
+import com.badbones69.crazyauctions.common.enums.FileKey;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import com.ryderbelserion.fusion.kyori.permissions.PermissionContext;
@@ -32,7 +32,7 @@ public class AuctionCommand extends BaseCommand {
             return;
         }
 
-        final FileConfiguration config = FileKeys.config.getConfiguration();
+        final FileConfiguration config = FileKey.config.getConfiguration();
 
         final Player player = context.getPlayer();
 
