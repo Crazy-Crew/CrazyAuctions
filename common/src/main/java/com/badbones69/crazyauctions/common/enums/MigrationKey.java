@@ -2,7 +2,7 @@ package com.badbones69.crazyauctions.common.enums;
 
 import org.jspecify.annotations.NonNull;
 
-public enum MigrationKeys {
+public enum MigrationKey {
 
     legacy_messages("legacy_messages", "<red>Converts messages in messages.yml from legacy color codes to MiniMessage!"),
     legacy_config("legacy_config", "<red>Converts config options in config.yml from legacy color codes to MiniMessage!"),
@@ -11,15 +11,15 @@ public enum MigrationKeys {
     private final String desc;
     private final String name;
 
-    MigrationKeys(@NonNull final String name, @NonNull final String desc) {
+    MigrationKey(@NonNull final String name, @NonNull final String desc) {
         this.desc = desc;
         this.name = name;
     }
 
-    public static MigrationKeys fromName(final String name) {
-        MigrationKeys type = MigrationKeys.none;
+    public static MigrationKey fromName(final String name) {
+        MigrationKey type = MigrationKey.none;
 
-        for (MigrationKeys key : MigrationKeys.values()) {
+        for (MigrationKey key : MigrationKey.values()) {
             if (key.getName().equalsIgnoreCase(name)) {
                 type = key;
 

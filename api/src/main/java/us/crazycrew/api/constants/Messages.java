@@ -55,4 +55,10 @@ public class Messages {
     public static final FusionKey book_not_allowed = FusionKey.key(namespace, "book_not_allowed");
 
     public static final FusionKey help_menu = FusionKey.key(namespace, "help_menu");
+
+    public static final FusionKey migration_error = FusionKey.key(namespace, "migration_error");
+
+    public static final FusionKey migration_not_available = FusionKey.key(namespace, "migration_not_available");
+
+    public static final FusionKey migration_success = FusionKey.key(namespace, "migration_success");
 }

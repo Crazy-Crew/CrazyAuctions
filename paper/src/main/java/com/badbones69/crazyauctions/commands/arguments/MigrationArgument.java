@@ -1,6 +1,6 @@
 package com.badbones69.crazyauctions.commands.arguments;
 
-import com.badbones69.crazyauctions.common.enums.MigrationKeys;
+import com.badbones69.crazyauctions.common.enums.MigrationKey;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
@@ -14,18 +14,18 @@ import io.papermc.paper.command.brigadier.argument.CustomArgumentType;
 import org.jspecify.annotations.NonNull;
 import java.util.concurrent.CompletableFuture;
 
-public class MigrationArgument implements CustomArgumentType.Converted<MigrationKeys, String> {
+public class MigrationArgument implements CustomArgumentType.Converted<MigrationKey, String> {
 
     private final FusionPaper fusion = (FusionPaper) FusionProvider.getInstance();
 
     @Override
-    public @NonNull final MigrationKeys convert(@NonNull final String nativeType) throws CommandSyntaxException {
-        return MigrationKeys.fromName(nativeType);
+    public @NonNull final MigrationKey convert(@NonNull final String nativeType) throws CommandSyntaxException {
+        return MigrationKey.fromName(nativeType);
     }
 
     @Override
     public @NonNull final <S> CompletableFuture<Suggestions> listSuggestions(@NonNull final CommandContext<S> context, @NonNull final SuggestionsBuilder builder) {
-        for (final MigrationKeys migration : MigrationKeys.values()) {
+        for (final MigrationKey migration : MigrationKey.values()) {
             final String name = migration.getName();
 
             if (name.equalsIgnoreCase("none")) continue;

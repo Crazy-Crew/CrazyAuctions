@@ -34,6 +34,28 @@ Messages:
   Selling-Disabled: "{prefix}<red>The selling option is disabled."
   Bidding-Disabled: "{prefix}<red>The bidding option is disabled."
   Book-Not-Allowed: "{prefix}<red>That book is not able to be sold in this auction house!"
+  Migration:
+    # A list of available placeholders: {file}, {type}, {reason}
+    Error: "{prefix}<red>We could not migrate <green>{file} <red>using <green>{type} <red>migration for <green>{reason}."
+    # A list of available placeholders: {prefix}
+    Not-Available: "{prefix}<green>This migration type is not available."
+    # A list of available placeholders: {succeeded_amount}, {failed_amount}, {time}, {type}, {files}
+    #
+    # {files} will output multiple crates if migrating from another plugin
+    Success:
+      - "<bold><gold>━━━━━━━━━━━━━━━━━━━ Migration Stats ━━━━━━━━━━━━━━━━━━━</gold></bold>"
+      - "<dark_gray>»</dark_gray> <green>Successful Conversions: "
+      - " ⤷ {succeeded_amount}</green>"
+      - "<dark_gray>»</dark_gray> <red>Failed Conversions: "
+      - " ⤷ {failed_amount}</red>"
+      - ""
+      - "<red>Conversion Time: <yellow>{time}"
+      - "<red>Conversion Type: <yellow>{type}"
+      - ""
+      - "<red>Converted Files:"
+      - "{files}"
+      - ""
+      - "<bold><gold>━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</gold></bold>"
   Help-Menu:
     - "<yellow>-- <gold>Crazy Auctions Help <yellow>--"
     - "<blue>/Ah - <yellow>Opens the crazy auction."

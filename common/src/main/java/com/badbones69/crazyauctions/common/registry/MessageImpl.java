@@ -129,6 +129,26 @@ public class MessageImpl {
             action.addKey(default_locale, Messages.book_not_allowed,
                     new YamlMessageAdapter(configuration, "<red>That book is not able to be sold in this auction house!", "Messages", "Book-Not-Allowed"));
 
+            action.addKey(default_locale, Messages.migration_error, new YamlMessageAdapter(configuration, "{prefix}<red>We could not migrate <green>{file} <red>using <green>{type} <red>migration for <green>{reason}.", "Messages", "Migration", "Error"));
+
+            action.addKey(default_locale, Messages.migration_not_available, new YamlMessageAdapter(configuration, "{prefix}<green>This migration type is not available.", "Messages", "Migration", "Not-Available"));
+
+            action.addKey(default_locale, Messages.migration_success, new YamlMessageAdapter(configuration, StringUtils.toString(List.of(
+                    "<bold><gold>━━━━━━━━━━━━━━━━━━━ Migration Stats ━━━━━━━━━━━━━━━━━━━</gold></bold>",
+                            "<dark_gray>»</dark_gray> <green>Successful Conversions: ",
+                            " ⤷ {succeeded_amount}</green>",
+                            "<dark_gray>»</dark_gray> <red>Failed Conversions: ",
+                            " ⤷ {failed_amount}</red>",
+                            "",
+                            "<red>Conversion Time: <yellow>{time}",
+                            "<red>Conversion Type: <yellow>{type}",
+                            "",
+                            "<red>Converted Files:",
+                            "{files}",
+                            "",
+                            "<bold><gold>━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</gold></bold>"
+            )), "Messages", "Migration", "Success"));
+
             action.addKey(default_locale, Messages.help_menu, new YamlMessageAdapter(configuration, StringUtils.toString(List.of(
                     "<yellow>-- <gold>Crazy Auctions Help</gold> --",
                     "<blue>/Ah</blue> <gray>- Opens the crazy auction.",
