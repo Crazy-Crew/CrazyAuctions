@@ -28,6 +28,8 @@ public abstract class CrazyAuctions<S, K, I> {
 
     public abstract @NonNull K getFusion();
 
+    public abstract void loadExamples();
+
     public abstract void post();
 
     public abstract void init();
