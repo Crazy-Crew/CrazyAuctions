@@ -75,6 +75,10 @@ public enum FileKey {
     }
 
     public void save() {
+        if (!this.fileManager.hasFile(this.location)) {
+            return;
+        }
+
         switch (this.fileType) {
             case PAPER_YAML -> getPaperCustomFile().save();
             case YAML -> getYamlCustomFile().save();
@@ -82,6 +86,10 @@ public enum FileKey {
     }
 
     public void load() {
+        if (!this.fileManager.hasFile(this.location)) {
+            return;
+        }
+
         switch (this.fileType) {
             case PAPER_YAML -> getPaperCustomFile().load();
             case YAML -> getYamlCustomFile().load();
