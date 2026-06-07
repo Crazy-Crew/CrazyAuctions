@@ -8,7 +8,8 @@ import com.badbones69.crazyauctions.api.registry.PaperUserRegistry;
 import com.badbones69.crazyauctions.api.registry.adapters.PaperSenderAdapter;
 import com.badbones69.crazyauctions.commands.AuctionCommand;
 import com.badbones69.crazyauctions.commands.admin.ReloadCommand;
-import com.badbones69.crazyauctions.commands.admin.auction.ForceCancelCommand;
+import com.badbones69.crazyauctions.commands.admin.auction.CancelCommand;
+import com.badbones69.crazyauctions.commands.admin.auction.FreezeCommand;
 import com.badbones69.crazyauctions.commands.admin.migrate.MigrateCommand;
 import com.badbones69.crazyauctions.commands.player.CollectCommand;
 import com.badbones69.crazyauctions.commands.player.ExpiredCommand;
@@ -80,8 +81,9 @@ public class CrazyPlatform extends CrazyPlugin<CommandSender, ItemStack> {
             LiteralArgumentBuilder<CommandSourceStack> literal = root.literal().createBuilder();
 
             List.of(
-                    new ForceCancelCommand(),
+                    new CancelCommand(),
                     new ReloadCommand(),
+                    new FreezeCommand(),
 
                     new MigrateCommand(),
 
@@ -110,6 +112,13 @@ public class CrazyPlatform extends CrazyPlugin<CommandSender, ItemStack> {
 
         this.isBiddingModuleEnabled = configuration.getBoolean("Settings.Feature-Toggle.Bidding", true);
     }
+
+    /*public List<String> getCategory(@NonNull final String category, @NonNull final List<String> items) {
+        return new ArrayList<>(items).stream().filter(value -> !value.isBlank())
+                .filter(value -> {
+                    return "".equals("");
+                }).toList();
+    }*/
 
     @Override
     public void stop() {

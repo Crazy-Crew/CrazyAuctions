@@ -5,8 +5,10 @@ import com.badbones69.crazyauctions.common.enums.FileKey;
 import com.badbones69.crazyauctions.common.enums.MigrationKey;
 import com.ryderbelserion.fusion.kyori.utils.AdvUtils;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.jspecify.annotations.NonNull;
+import org.spongepowered.configurate.CommentedConfigurationNode;
 
 public class LegacyConfigType extends IAuctionMigrator {
 
@@ -18,7 +20,27 @@ public class LegacyConfigType extends IAuctionMigrator {
     public void run() {
         final YamlConfiguration configuration = FileKey.config.getConfiguration();
 
-        configuration.set("Settings.Prefix", AdvUtils.convert(configuration.getString("Settings.Prefix", "<gray>[<dark_red>Crazy <aqua>Auctions<gray>]: ")));
+        final ConfigurationSection section = configuration.getConfigurationSection("Settings");
+
+        if (section == null) {
+            return;
+        }
+
+        section.set("Prefix", AdvUtils.convert(section.getString("Prefix", "<gray>[<dark_red>Crazy <aqua>Auctions<gray>]: "), true));
+
+        final CommentedConfigurationNode auction = FileKey.auction.getYamlConfig();
+
+        boolean isSave = false;
+
+        if (section.contains("GUIName")) {
+            color(auction, "auction.yml", section.getString("GUIName", "<red>Crazy<dark_blue>Auctions"), "settings", "gui", "name");
+
+            isSave = true;
+        }
+
+        if (isSave) {
+            FileKey.auction.save();
+        }
 
         FileKey.config.save();
     }

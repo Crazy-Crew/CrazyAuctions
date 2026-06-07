@@ -5,10 +5,15 @@ import com.badbones69.crazyauctions.api.CrazyPlatform;
 import com.badbones69.crazyauctions.api.registry.adapters.PaperSenderAdapter;
 import com.badbones69.crazyauctions.common.enums.MigrationKey;
 import com.badbones69.crazyauctions.common.registry.MessageImpl;
+import com.ryderbelserion.fusion.core.api.enums.Level;
 import com.ryderbelserion.fusion.core.api.registry.message.MessageRegistry;
+import com.ryderbelserion.fusion.kyori.utils.AdvUtils;
 import com.ryderbelserion.fusion.paper.FusionPaper;
 import org.bukkit.command.CommandSender;
 import org.jspecify.annotations.NonNull;
+import org.spongepowered.configurate.CommentedConfigurationNode;
+import org.spongepowered.configurate.serialize.SerializationException;
+
 import java.util.List;
 import java.util.Locale;
 
@@ -58,6 +63,18 @@ public abstract class IAuctionMigrator {
             put("%type%", type.getName());
             put("%time%", time());
         }});*/
+    }
+
+    public void color(@NonNull final CommentedConfigurationNode configuration, @NonNull final String file, @NonNull final String value, @NonNull final Object... path) {
+        set(configuration, file, AdvUtils.convert(value, true), path);
+    }
+
+    public void set(@NonNull final CommentedConfigurationNode configuration, @NonNull final String file, @NonNull final String value, @NonNull final Object... path) {
+        try {
+            configuration.node(path).set(String.class, value);
+        } catch (final SerializationException exception) {
+            this.fusion.log(Level.WARNING, "Failed to set to path %s in file %s", exception, path, file);
+        }
     }
 
     public @NonNull final String time() {

@@ -22,7 +22,8 @@ public enum Permissions {
     bid("bid", "Access to /crazyauctions bid", PermissionDefault.TRUE, false),
     use("use", "Access to /crazyauctions", PermissionDefault.TRUE, false),
 
-    force_end("force-end-all", "Access to /crazyauctions force-end-all", PermissionDefault.OP, false),
+    force_end("force-end-all", "Access to /crazyauctions cancel", PermissionDefault.OP, false),
+    freeze("freeze", "Access to /crazyauctions freeze", PermissionDefault.OP, false),
 
     bypass("bypass", "Bypasses most plugin restrictions", PermissionDefault.FALSE, true),
 

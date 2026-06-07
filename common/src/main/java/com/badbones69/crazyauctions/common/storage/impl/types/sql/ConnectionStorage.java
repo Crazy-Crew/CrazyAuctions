@@ -1,6 +1,7 @@
 package com.badbones69.crazyauctions.common.storage.impl.types.sql;
 
 import com.ryderbelserion.fusion.kyori.FusionKyori;
+import net.kyori.adventure.key.Key;
 import org.jspecify.annotations.NonNull;
 import us.crazycrew.api.storage.IStorageHolder;
 import java.sql.Connection;
@@ -49,7 +50,7 @@ public class ConnectionStorage extends IStorageHolder {
     }
 
     @Override
-    public void addItem(@NonNull final UUID uuid, @NonNull final String name, @NonNull final String base64, final double price, @NonNull final ShopType shopType) {}
+    public void addItem(@NonNull final UUID uuid, @NonNull final String name, @NonNull final String base64, final double price, final int amount, @NonNull final ShopType shopType) {}
 
     @Override
     public boolean hasUser(@NonNull final UUID uuid) {

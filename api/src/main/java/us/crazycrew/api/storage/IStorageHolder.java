@@ -17,6 +17,8 @@ public abstract class IStorageHolder {
             @NonNull final String name,
             @NonNull final String base64,
             final double price,
+            final int amount,
+
             @NonNull final ShopType shopType
     );
 

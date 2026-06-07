@@ -6,6 +6,7 @@ import com.ryderbelserion.fusion.core.api.FusionProvider;
 import com.ryderbelserion.fusion.core.api.enums.Level;
 import com.ryderbelserion.fusion.paper.FusionPaper;
 import com.ryderbelserion.fusion.paper.utils.ItemUtils;
+import net.kyori.adventure.key.Key;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Server;
 import org.bukkit.configuration.ConfigurationSection;
@@ -141,7 +142,10 @@ public class YamlFactory extends IStorageHolder {
             @NonNull final UUID uuid,
             @NonNull final String name,
             @NonNull final String base64,
+
             final double price,
+            final int amount,
+
             @NonNull final ShopType shopType
     ) {
         int number = 1;
@@ -160,6 +164,13 @@ public class YamlFactory extends IStorageHolder {
 
         item.set("Seller", uuid.toString());
         item.set("SellerName", name);
+        item.set("Amount", amount);
+
+        //final ItemType itemType = ItemUtils.getItemType(itemKey.value());
+
+        //final ItemStack itemStack = itemType != null ? itemType.createItemStack() : ItemStack.empty();
+
+        //item.set("Category", "");
 
         switch (shopType) {
             case BID -> {

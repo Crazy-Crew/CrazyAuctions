@@ -20,7 +20,7 @@ import us.crazycrew.api.constants.Messages;
 import java.util.List;
 import java.util.UUID;
 
-public class ForceCancelCommand extends BaseCommand {
+public class CancelCommand extends BaseCommand {
 
     @Override
     public void run(@NotNull final PaperCommandContext context) {
@@ -63,7 +63,7 @@ public class ForceCancelCommand extends BaseCommand {
 
     @Override
     public @NotNull final LiteralCommandNode<CommandSourceStack> literal() {
-        return Commands.literal("force_end_all").requires(this::requirement)
+        return Commands.literal("cancel").requires(this::requirement)
                 .executes(context -> {
                     run(new PaperCommandContext(context));
 

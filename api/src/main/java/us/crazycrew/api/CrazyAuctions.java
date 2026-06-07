@@ -3,6 +3,7 @@ package us.crazycrew.api;
 import com.ryderbelserion.fusion.core.api.registry.message.MessageRegistry;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NonNull;
+import us.crazycrew.api.adapters.IServerAdapter;
 import us.crazycrew.api.items.IAuctionItem;
 import us.crazycrew.api.registry.IPlayerRegistry;
 import us.crazycrew.api.storage.IStorageHolder;
@@ -23,6 +24,8 @@ public abstract class CrazyAuctions<S, K, I> {
     public abstract @NonNull IStorageHolder getStorageHolder();
 
     public abstract @NonNull IPlayerRegistry getUserRegistry();
+
+    public abstract @NonNull IServerAdapter getServerAdapter();
 
     public abstract @NonNull Path getDataPath();
 
