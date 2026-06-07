@@ -1,6 +1,26 @@
+# The new section of the config.yml
+auctions:
+  # The default category which all items will be in, unless specified in the categories' folder.
+  category:
+    # The category type, Do not change this unless you know what you are doing, I won't help you.
+    type: "Default"
+    # Should this category show up in the /ah category menu?
+    enabled: true
+    # The item settings.
+    item:
+      # The name of the item.
+      name: "<bold><gold>Everything"
+      # The lore of the item.
+      lore:
+        - "<gray>This category contains all the"
+        - "<gray>items currently being sold."
+      # The material of the item.
+      type: "barrier"
+      # The slot of the item.
+      slot: 23
+
 Settings:
   Prefix: '<gray>[<dark_red>Crazy <aqua>Auctions<gray>]: ' #Prefix of when you get Crazy Auctions Messages.
-  GUIName: '&4Crazy &bAuctions&8' #Name of the Main GUI.
   Players-Current-Items: '&8Your Current Listings' #The Name of the Player Current Items GUI.
   Cancelled/Expired-Items: '&8Canceled/Expired Listings' #Name of the Cancelled/Expired GUI.
   Buying-Item: '&8Purchase Item: Are You Sure?' #Name of the Buying GUI.

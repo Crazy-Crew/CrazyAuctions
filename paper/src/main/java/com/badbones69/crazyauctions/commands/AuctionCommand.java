@@ -1,9 +1,7 @@
 package com.badbones69.crazyauctions.commands;
 
-import com.badbones69.crazyauctions.Methods;
-import com.badbones69.crazyauctions.api.enums.Category;
+import com.badbones69.crazyauctions.api.builders.gui.types.AuctionMenu;
 import com.badbones69.crazyauctions.api.enums.other.Permissions;
-import com.badbones69.crazyauctions.controllers.GuiListener;
 import com.badbones69.crazyauctions.common.enums.FileKey;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.tree.LiteralCommandNode;
@@ -12,7 +10,6 @@ import com.ryderbelserion.fusion.paper.builders.commands.context.PaperCommandCon
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NonNull;
@@ -32,23 +29,21 @@ public class AuctionCommand extends BaseCommand {
             return;
         }
 
-        final FileConfiguration config = FileKey.config.getConfiguration();
+        //final FileConfiguration config = FileKey.config.getConfiguration();
 
         final Player player = context.getPlayer();
 
-        if (config.getBoolean("Settings.Category-Page-Opens-First", false)) {
+        /*if (config.getBoolean("Settings.Category-Page-Opens-First", false)) {
             GuiListener.openCategories(player, ShopType.SELL);
 
             return;
-        }
+        }*/
 
-        if (this.platform.isSellModuleEnabled()) {
-            GuiListener.openShop(player, ShopType.SELL, Category.NONE, 1);
-        } else if (this.platform.isBidModuleEnabled()) {
-            GuiListener.openShop(player, ShopType.BID, Category.NONE, 1);
-        } else {
-            player.sendMessage(Methods.getPrefix() + Methods.color("&cThe bidding and selling options are both disabled. Please contact the admin about this."));
-        }
+        final AuctionMenu menu = new AuctionMenu(player, FileKey.auction.getYamlConfig());
+
+        final ShopType shopType = this.platform.isSellModuleEnabled() ? ShopType.SELL : ShopType.BID;
+
+        menu.build(shopType);
     }
 
     @Override

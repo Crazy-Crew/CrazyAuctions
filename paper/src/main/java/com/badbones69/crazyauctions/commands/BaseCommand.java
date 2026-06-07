@@ -2,7 +2,9 @@ package com.badbones69.crazyauctions.commands;
 
 import com.badbones69.crazyauctions.CrazyAuctions;
 import com.badbones69.crazyauctions.api.CrazyPlatform;
+import com.badbones69.crazyauctions.api.registry.PaperUserRegistry;
 import com.badbones69.crazyauctions.api.registry.adapters.PaperSenderAdapter;
+import com.badbones69.crazyauctions.common.adapters.ServerAdapter;
 import com.badbones69.crazyauctions.common.registry.MessageImpl;
 import com.badbones69.crazyauctions.currency.VaultSupport;
 import com.mojang.brigadier.context.CommandContext;
@@ -31,6 +33,10 @@ public abstract class BaseCommand extends PaperCommand {
     protected final FusionPaper fusion = this.platform.getFusion();
 
     protected final MessageRegistry messageRegistry = this.fusion.getMessageRegistry();
+
+    protected final PaperUserRegistry userRegistry = this.platform.getUserRegistry();
+
+    protected final ServerAdapter serverAdapter = this.platform.getServerAdapter();
 
     protected final MessageImpl messageImpl = this.platform.getMessageImpl();
 

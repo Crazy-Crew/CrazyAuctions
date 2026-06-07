@@ -1,0 +1,7 @@
+settings:
+  # Gui related settings.
+  gui:
+    # The name of the auction gui.
+    name: "<red>Crazy<dark_blue>Auctions"
+    # The size of the auction gui
+    rows: 6

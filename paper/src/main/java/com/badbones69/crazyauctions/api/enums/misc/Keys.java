@@ -9,14 +9,24 @@ import org.jetbrains.annotations.NotNull;
 public enum Keys {
 
     // contains the store id
-    auction_store_id("auction_store_id", PersistentDataType.INTEGER),
+    auction_store_id("auction_store_id", PersistentDataType.STRING),
+
+    // contains the auction id reference for the yml file
+    auction_id("auction_id", PersistentDataType.STRING),
+
+    // the player selling or putting the item up to bid.
+    auction_seller_name("auction_seller_name", PersistentDataType.STRING),
 
     // this contains, the number for the item which can be found in the data.yml
     auction_number("auction_number", PersistentDataType.STRING),
 
+    // if an item is biddable
+    auction_biddable("auction_biddable", PersistentDataType.BOOLEAN),
+
     // any button in the gui
     auction_button("auction_button", PersistentDataType.STRING),
 
+    // the uuid of the auction.
     auction_uuid("auction_uuid", PersistentDataType.STRING),
 
     // contains the auction item price

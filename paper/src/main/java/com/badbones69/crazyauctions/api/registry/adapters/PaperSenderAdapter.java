@@ -2,7 +2,7 @@ package com.badbones69.crazyauctions.api.registry.adapters;
 
 import com.badbones69.crazyauctions.Methods;
 import com.badbones69.crazyauctions.api.registry.PaperUserRegistry;
-import com.badbones69.crazyauctions.common.registry.adapters.sender.ISenderAdapter;
+import us.crazycrew.api.adapters.ISenderAdapter;
 import com.badbones69.crazyauctions.api.CrazyPlatform;
 import com.ryderbelserion.fusion.core.api.FusionKey;
 import com.ryderbelserion.fusion.core.api.registry.message.MessageRegistry;

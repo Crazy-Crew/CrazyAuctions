@@ -21,7 +21,9 @@ public enum FileKey {
     data("data.yml", FileType.PAPER_YAML),
 
     messages("messages.yml", FileType.YAML),
-    database("database.yml", FileType.YAML);
+    database("database.yml", FileType.YAML),
+
+    auction("auction.yml", "guis", FileType.YAML);
 
     private final FusionPaper fusion = (FusionPaper) FusionProvider.getInstance();
 
@@ -29,8 +31,15 @@ public enum FileKey {
 
     private final Path path = this.fusion.getDataPath();
 
-    private final Path location;
     private final FileType fileType;
+    private final Path location; // the file location
+    private final Path folder; // the folder which defaults to the data path
+
+    FileKey(@NotNull final String fileName, @NotNull final String folder, @NotNull final FileType fileType) {
+        this.folder = this.path.resolve(folder);
+        this.location = this.folder.resolve(fileName);
+        this.fileType = fileType;
+    }
 
     /**
      * A constructor to build a file
@@ -38,7 +47,8 @@ public enum FileKey {
      * @param fileName the name of the file
      */
     FileKey(@NotNull final String fileName, @NotNull final FileType fileType) {
-        this.location = this.path.resolve(fileName);
+        this.folder = this.path;
+        this.location = this.folder.resolve(fileName);
         this.fileType = fileType;
     }
 
@@ -47,7 +57,7 @@ public enum FileKey {
     }
 
     public @NotNull final PaperCustomFile getPaperCustomFile() {
-        @NotNull final Optional<PaperCustomFile> customFile = this.fileManager.getPaperFile(this.location);
+        final Optional<PaperCustomFile> customFile = this.fileManager.getPaperFile(this.location);
 
         if (customFile.isEmpty()) {
             throw new FileException("Could not find custom file for " + this.location);
@@ -61,13 +71,17 @@ public enum FileKey {
     }
 
     public @NotNull final YamlCustomFile getYamlCustomFile() {
-        @NotNull final Optional<YamlCustomFile> customFile = this.fileManager.getYamlFile(this.location);
+        final Optional<YamlCustomFile> customFile = this.fileManager.getYamlFile(this.location);
 
         if (customFile.isEmpty()) {
             throw new FusionException("Could not find custom file for " + this.location);
         }
 
         return customFile.get();
+    }
+
+    public @NotNull final FileType getFileType() {
+        return this.fileType;
     }
 
     public @NotNull final Path getPath() {

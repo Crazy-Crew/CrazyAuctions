@@ -1,7 +1,8 @@
 package com.badbones69.crazyauctions.common;
 
+import com.badbones69.crazyauctions.common.adapters.ServerAdapter;
 import com.badbones69.crazyauctions.common.registry.MessageImpl;
-import com.badbones69.crazyauctions.common.registry.adapters.sender.ISenderAdapter;
+import us.crazycrew.api.adapters.ISenderAdapter;
 import com.badbones69.crazyauctions.common.storage.StorageManager;
 import com.ryderbelserion.fusion.core.api.enums.Level;
 import com.ryderbelserion.fusion.core.api.registry.message.MessageRegistry;
@@ -34,6 +35,7 @@ public abstract class CrazyPlugin<S extends Audience, I> extends CrazyAuctions<S
     public abstract ISenderAdapter getSenderAdapter();
 
     protected PaperFileManager fileManager;
+    protected ServerAdapter serverAdapter;
     protected MessageImpl messageImpl;
 
     @Override
@@ -55,7 +57,8 @@ public abstract class CrazyPlugin<S extends Audience, I> extends CrazyAuctions<S
         } catch (final IOException ignored) {}
 
         this.fileManager.addFile(path.resolve("database.yml"), FileType.YAML)
-                .addFile(path.resolve("messages.yml"), FileType.YAML);
+                .addFile(path.resolve("messages.yml"), FileType.YAML)
+                .addFolder(path.resolve("guis"), FileType.YAML);
 
         this.messageImpl = new MessageImpl(this.messageRegistry = this.fusion.getMessageRegistry());
         this.messageImpl.init();
@@ -69,6 +72,8 @@ public abstract class CrazyPlugin<S extends Audience, I> extends CrazyAuctions<S
         } catch (final Exception exception) {
             this.fusion.log(Level.ERROR, "Failed to initialize storage impl", exception);
         }
+
+        this.serverAdapter = new ServerAdapter();
     }
 
     @Override
@@ -133,6 +138,11 @@ public abstract class CrazyPlugin<S extends Audience, I> extends CrazyAuctions<S
     @Override
     public @NonNull final Path getDataPath() {
         return this.fusion.getDataPath();
+    }
+
+    @Override
+    public @NonNull final ServerAdapter getServerAdapter() {
+        return this.serverAdapter;
     }
 
     public @NonNull final MessageImpl getMessageImpl() {

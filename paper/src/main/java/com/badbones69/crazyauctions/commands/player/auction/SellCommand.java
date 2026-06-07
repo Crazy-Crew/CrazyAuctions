@@ -58,9 +58,9 @@ public class SellCommand extends BaseCommand {
 
         final double minimumPrice = configuration.getDouble("Settings.Minimum-Sell-Price", 10.0);
 
-        final double arg1 = context.getDoubleArgument("price").orElse(minimumPrice);
+        final double price = context.getDoubleArgument("price").orElse(minimumPrice);
 
-        if (arg1 < minimumPrice) {
+        if (price < minimumPrice) {
             this.adapter.sendMessage(player, Messages.sell_price_too_low);
 
             return;
@@ -68,7 +68,7 @@ public class SellCommand extends BaseCommand {
 
         final double beginningPrice = configuration.getDouble("Settings.Max-Beginning-Sell-Price", 1000000.0);
 
-        if (arg1 > beginningPrice) {
+        if (price > beginningPrice) {
             this.adapter.sendMessage(player, Messages.sell_price_too_high);
 
             return;
@@ -130,9 +130,8 @@ public class SellCommand extends BaseCommand {
             }
         }
 
-        final int itemAmount = item.getAmount();
-
-        final int amount = context.getIntegerArgument("amount").orElse(itemAmount);
+        final int size = item.getMaxStackSize();
+        final int amount = context.hasArgument("amount") ? Math.min(context.getIntegerArgument("amount").orElse(size), size) : size;
 
         final int fee = configuration.getInt("Settings.Auction-List-Fee", 0);
 
@@ -153,32 +152,35 @@ public class SellCommand extends BaseCommand {
 
         final ItemStack result = item.clone();
 
-        result.setAmount(Math.min(amount, itemAmount));
+        result.setAmount(amount);
 
         this.holder.addItem(
                 player.getUniqueId(),
                 player.getName(),
                 Methods.toBase64(result),
-                arg1,
+
+                price,
+                amount,
+
                 ShopType.SELL
         );
 
-        new AuctionListEvent(player, ShopType.SELL, result, arg1).callEvent();
+        new AuctionListEvent(player, ShopType.SELL, result, price).callEvent();
 
         final Map<String, String> placeholders = new HashMap<>();
 
-        placeholders.put("%Price%", String.valueOf(arg1));
-        placeholders.put("%price%", String.valueOf(arg1));
+        placeholders.put("%Price%", String.valueOf(price));
+        placeholders.put("%price%", String.valueOf(price));
 
         this.adapter.sendMessage(player, Messages.added_item_to_auction, placeholders);
 
-        final int resultAmount = item.getAmount();
+        if (amount >= 1) {
+            item.setAmount(item.getAmount() - amount);
 
-        if (resultAmount <= 1 || (resultAmount - amount) <= 0) {
-            Methods.setItemInHand(player, ItemStack.empty());
-        } else {
-            item.setAmount(resultAmount - amount);
+            return;
         }
+
+        Methods.setItemInHand(player, ItemStack.empty());
     }
 
     @Override

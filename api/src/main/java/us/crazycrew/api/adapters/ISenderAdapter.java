@@ -1,4 +1,4 @@
-package com.badbones69.crazyauctions.common.registry.adapters.sender;
+package us.crazycrew.api.adapters;
 
 import com.ryderbelserion.fusion.core.api.FusionKey;
 import org.jetbrains.annotations.NotNull;
