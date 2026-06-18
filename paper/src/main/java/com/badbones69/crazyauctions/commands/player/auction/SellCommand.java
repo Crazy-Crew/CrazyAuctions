@@ -6,8 +6,8 @@ import com.badbones69.crazyauctions.api.events.AuctionListEvent;
 import com.badbones69.crazyauctions.commands.BaseCommand;
 import com.badbones69.crazyauctions.common.enums.FileKey;
 import com.mojang.brigadier.Command;
-import com.mojang.brigadier.arguments.DoubleArgumentType;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
+import com.mojang.brigadier.arguments.LongArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import com.mojang.brigadier.tree.LiteralCommandNode;
@@ -56,9 +56,9 @@ public class SellCommand extends BaseCommand {
 
         final YamlConfiguration configuration = FileKey.config.getConfiguration();
 
-        final double minimumPrice = configuration.getDouble("Settings.Minimum-Sell-Price", 10.0);
+        final long minimumPrice = configuration.getLong("Settings.Minimum-Sell-Price", 10);
 
-        final double arg1 = context.getDoubleArgument("price").orElse(minimumPrice);
+        final long arg1 = context.getLongArgument("price").orElse(minimumPrice);
 
         if (arg1 < minimumPrice) {
             this.adapter.sendMessage(player, Messages.sell_price_too_low);
@@ -66,7 +66,7 @@ public class SellCommand extends BaseCommand {
             return;
         }
 
-        final double beginningPrice = configuration.getDouble("Settings.Max-Beginning-Sell-Price", 1000000.0);
+        final long beginningPrice = configuration.getLong("Settings.Max-Beginning-Sell-Price", 1000000);
 
         if (arg1 > beginningPrice) {
             this.adapter.sendMessage(player, Messages.sell_price_too_high);
@@ -134,7 +134,7 @@ public class SellCommand extends BaseCommand {
 
         final int amount = context.getIntegerArgument("amount").orElse(itemAmount);
 
-        final int fee = configuration.getInt("Settings.Auction-List-Fee", 0);
+        final long fee = configuration.getLong("Settings.Auction-List-Fee", 0);
 
         if (fee > 0) {
             if (this.support.getMoney(player) < fee) {
@@ -185,7 +185,7 @@ public class SellCommand extends BaseCommand {
     public @NotNull final LiteralCommandNode<CommandSourceStack> literal() {
         final LiteralArgumentBuilder<CommandSourceStack> root = Commands.literal("sell").requires(this::requirement);
 
-        final RequiredArgumentBuilder<CommandSourceStack, Double> arg1 = argument("price", DoubleArgumentType.doubleArg()).suggests((_, builder) -> suggestDoubleArgument(builder, "", 1, 100)).executes(context -> {
+        final RequiredArgumentBuilder<CommandSourceStack, Long> arg1 = argument("price", LongArgumentType.longArg()).suggests((_, builder) -> suggestIntegerArgument(builder, "", 1, 100)).executes(context -> {
             run(new PaperCommandContext(context));
 
             return Command.SINGLE_SUCCESS;

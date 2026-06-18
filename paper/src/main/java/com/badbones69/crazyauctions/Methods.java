@@ -200,12 +200,12 @@ public class Methods {
 
                     for (; data.contains("OutOfTime/Cancelled." + num); num++) ;
 
-                    if (data.getBoolean("Items." + i + ".Biddable") && !data.getString("Items." + i + ".TopBidder").equalsIgnoreCase("None") && plugin.getSupport().getMoney(getOfflinePlayer(data.getString("Items." + i + ".TopBidder"))) >= data.getDouble("Items." + i + ".Price")) {
+                    if (data.getBoolean("Items." + i + ".Biddable") && !data.getString("Items." + i + ".TopBidder").equalsIgnoreCase("None") && plugin.getSupport().getMoney(getOfflinePlayer(data.getString("Items." + i + ".TopBidder"))) >= data.getLong("Items." + i + ".Price")) {
                         String winner = data.getString("Items." + i + ".TopBidder");
                         String seller = data.getString("Items." + i + ".Seller");
-                        double price = data.getDouble("Items." + i + ".Price");
-                        double taxAmount = (long) (price * config.getDouble("Settings.Percent-Tax", 0) / 100);
-                        double taxedPriceAmount = Math.max(price - taxAmount, 0);
+                        long price = data.getLong("Items." + i + ".Price");
+                        long taxAmount = price * config.getLong("Settings.Percent-Tax", 0) / 100;
+                        long taxedPriceAmount = Math.max(price - taxAmount, 0);
 
                         OfflinePlayer sellerPlayer = Methods.getOfflinePlayer(seller);
                         OfflinePlayer winnerPlayer = Methods.getOfflinePlayer(winner);
@@ -280,18 +280,18 @@ public class Methods {
         if (shouldSave) FileKey.data.save();
     }
     
-    public static double getPrice(String ID, Boolean Expired) {
-        double price = 0.0;
+    public static long getPrice(String ID, Boolean Expired) {
+        long price = 0;
 
         FileConfiguration configuration = FileKey.data.getConfiguration();
 
         if (Expired) {
             if (configuration.contains("OutOfTime/Cancelled." + ID + ".Price")) {
-                price = configuration.getDouble("OutOfTime/Cancelled." + ID + ".Price");
+                price = configuration.getLong("OutOfTime/Cancelled." + ID + ".Price");
             }
         } else {
             if (configuration.contains("Items." + ID + ".Price")) {
-                price = configuration.getDouble("Items." + ID + ".Price");
+                price = configuration.getLong("Items." + ID + ".Price");
             }
         }
 

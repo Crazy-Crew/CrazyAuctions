@@ -715,7 +715,7 @@ public class GuiListener implements Listener {
                 if (displayName.equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.Bid.Name")))) {
                     String ID = biddingID.get(player.getUniqueId());
                     double bid = bidding.get(player.getUniqueId());
-                    String topBidder = data.getString("Items." + ID + ".TopBidder");
+                    String topBidder = data.getString("Items." + ID + ".TopBidder", "None");
 
                     if (plugin.getSupport().getMoney(player) < bid) {
                         Map<String, String> placeholders = new HashMap<>();
@@ -728,13 +728,13 @@ public class GuiListener implements Listener {
                         return;
                     }
 
-                    if (data.getDouble("Items." + ID + ".Price") > bid) {
+                    if (data.getLong("Items." + ID + ".Price") > bid) {
                         adapter.sendMessage(player, Messages.bid_more_money);
 
                         return;
                     }
 
-                    if (data.getDouble("Items." + ID + ".Price") >= bid && !topBidder.equalsIgnoreCase("None")) {
+                    if (data.getLong("Items." + ID + ".Price") >= bid && !topBidder.equalsIgnoreCase("None")) {
                         adapter.sendMessage(player, Messages.bid_more_money);
 
                         return;
@@ -747,7 +747,7 @@ public class GuiListener implements Listener {
                     data.set("Items." + ID + ".TopBidderName", player.getName());
 
                     Map<String, String> placeholders = new HashMap<>();
-                    placeholders.put("%Bid%", bid + "");
+                    placeholders.put("%Bid%", String.valueOf(bid));
 
                     adapter.sendMessage(player, Messages.bid_msg, placeholders);
 
@@ -951,7 +951,7 @@ public class GuiListener implements Listener {
                                     return;
                                 }
 
-                                double cost = data.getDouble("Items." + i + ".Price");
+                                long cost = data.getLong("Items." + i + ".Price");
 
                                 if (plugin.getSupport().getMoney(player) < cost) {
                                     String itemName = config.getString("Settings.GUISettings.OtherSettings.Cant-Afford.Item");
@@ -1036,7 +1036,7 @@ public class GuiListener implements Listener {
 
                 if (displayName.equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.Confirm.Name")))) {
                     String ID = IDs.get(player.getUniqueId());
-                    double cost = data.getDouble("Items." + ID + ".Price");
+                    long cost = data.getLong("Items." + ID + ".Price");
                     String seller = data.getString("Items." + ID + ".Seller");
 
                     if (!data.contains("Items." + ID)) {
@@ -1095,7 +1095,7 @@ public class GuiListener implements Listener {
 
                     String price = String.valueOf(cost);
 
-                    long taxAmount = (long) (cost * config.getDouble("Settings.Percent-Tax", 0) / 100);
+                    long taxAmount = cost * config.getLong("Settings.Percent-Tax", 0) / 100;
                     cost -= taxAmount;
 
                     cost = Math.max(0, cost);
