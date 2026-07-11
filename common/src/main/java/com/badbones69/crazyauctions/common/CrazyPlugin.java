@@ -5,11 +5,14 @@ import com.badbones69.crazyauctions.common.registry.adapters.sender.ISenderAdapt
 import com.badbones69.crazyauctions.common.storage.StorageManager;
 import com.ryderbelserion.fusion.core.api.enums.Level;
 import com.ryderbelserion.fusion.core.api.registry.message.MessageRegistry;
+import com.ryderbelserion.fusion.files.enums.FileAction;
 import com.ryderbelserion.fusion.files.enums.FileType;
 import com.ryderbelserion.fusion.paper.FusionPaper;
 import com.ryderbelserion.fusion.paper.files.PaperFileManager;
 import net.kyori.adventure.audience.Audience;
 import org.jspecify.annotations.NonNull;
+import org.spongepowered.configurate.loader.HeaderMode;
+import org.spongepowered.configurate.yaml.NodeStyle;
 import us.crazycrew.api.CrazyAuctions;
 import us.crazycrew.api.storage.IStorageHolder;
 import java.io.IOException;
@@ -54,8 +57,22 @@ public abstract class CrazyPlugin<S extends Audience, I> extends CrazyAuctions<S
             Files.createDirectories(path);
         } catch (final IOException ignored) {}
 
-        this.fileManager.addFile(path.resolve("database.yml"), FileType.YAML)
-                .addFile(path.resolve("messages.yml"), FileType.YAML);
+        this.fileManager.addFile(path.resolve("database.yml"), FileType.YAML, action -> {
+                    action.addAction(FileAction.EXTRACT_FILE);
+
+                    action.withHeaderMode(HeaderMode.PRESERVE);
+                    action.withNodeStyle(NodeStyle.BLOCK);
+                    action.withComments(true);
+                    action.withIndent(1);
+                })
+                .addFile(path.resolve("messages.yml"), FileType.YAML, action -> {
+                    action.addAction(FileAction.EXTRACT_FILE);
+
+                    action.withHeaderMode(HeaderMode.PRESERVE);
+                    action.withNodeStyle(NodeStyle.BLOCK);
+                    action.withComments(true);
+                    action.withIndent(1);
+                });
 
         this.messageImpl = new MessageImpl(this.messageRegistry = this.fusion.getMessageRegistry());
         this.messageImpl.init();

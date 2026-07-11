@@ -29,12 +29,16 @@ tasks {
 
     shadowJar {
         listOf(
-            "com.ryderbelserion.fusion"
+            "com.ryderbelserion.fusion",
+            "io.leangen.geantyref",
+            "org.spongepowered",
+            "com.google.gson",
+            "org.jspecify",
+            "org.bstats",
+            "org.yaml"
         ).forEach {
             relocate(it, "libs.$it")
         }
-
-        relocate("org.bstats", project.group.toString())
     }
 
     runPaper.folia.registerTask()
