@@ -5,11 +5,17 @@ plugins {
 project.group = "${rootProject.group}"
 
 repositories {
+    maven("https://repo.fancyinnovations.com/releases/")
+
+    maven("https://repo.essentialsx.net/releases/")
+
+    maven("https://repo.momirealms.net/releases/")
+
+    maven("https://repo.hibiscusmc.com/releases/")
+
     maven("https://repo.nexomc.com/releases/")
 
     maven("https://repo.oraxen.com/releases/")
-
-    maven("https://maven.devs.beer/")
 }
 
 dependencies {
@@ -17,7 +23,7 @@ dependencies {
 
     implementation(libs.fusion.paper)
 
-    implementation(libs.bstats.paper)
+    implementation(libs.metrics)
 
     compileOnly(libs.bundles.shared)
 }
@@ -31,10 +37,13 @@ tasks {
         listOf(
             "com.ryderbelserion.fusion",
             "io.leangen.geantyref",
+            "dev.triumphteam.cmd",
+            "com.zaxxer.hikari",
             "org.spongepowered",
             "com.google.gson",
             "org.jspecify",
             "org.bstats",
+            "org.slf4j",
             "org.yaml"
         ).forEach {
             relocate(it, "libs.$it")

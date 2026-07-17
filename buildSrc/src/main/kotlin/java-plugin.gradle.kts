@@ -1,3 +1,16 @@
+import gradle.kotlin.dsl.accessors._1c0260a9f7f62d13dcd99181bde3a49f.compileJava
+import gradle.kotlin.dsl.accessors._1c0260a9f7f62d13dcd99181bde3a49f.ext
+import gradle.kotlin.dsl.accessors._1c0260a9f7f62d13dcd99181bde3a49f.java
+import gradle.kotlin.dsl.accessors._1c0260a9f7f62d13dcd99181bde3a49f.processResources
+import org.gradle.api.artifacts.VersionCatalogsExtension
+import org.gradle.api.file.DuplicatesStrategy
+import org.gradle.jvm.toolchain.JavaLanguageVersion
+import org.gradle.kotlin.dsl.invoke
+import org.gradle.kotlin.dsl.`java-library`
+import org.gradle.kotlin.dsl.maven
+import org.gradle.kotlin.dsl.properties
+import org.gradle.kotlin.dsl.repositories
+
 plugins {
     id("com.ryderbelserion.feather.core")
 
@@ -19,7 +32,6 @@ repositories {
     maven("https://jitpack.io/")
 
     mavenCentral()
-    mavenLocal()
 }
 
 java {
@@ -43,11 +55,14 @@ tasks {
             "description" to rootProject.description.toString(),
             "minecraft" to libs.findVersion("minecraft").get(),
             "website" to "https://github.com/${rootProject.property("repository_owner")}/${rootProject.name}",
-            "group" to project.group
+            "group" to project.group,
+
+            "current_commit" to rootProject.ext.get("current_commit").toString(),
+            "previous_commit" to rootProject.ext.get("previous_commit").toString()
         )
 
         with(copySpec {
-            include("*paper-plugin.yml", "*plugin.yml")
+            include("*paper-plugin.yml", "*plugin.yml", "*version.json")
 
             from("src/main/resources") {
                 expand(inputs.properties)
