@@ -62,7 +62,7 @@ tasks {
         )
 
         with(copySpec {
-            include("*paper-plugin.yml", "*plugin.yml", "*version.json")
+            include("*paper-plugin.yml", "*version.json")
 
             from("src/main/resources") {
                 expand(inputs.properties)
