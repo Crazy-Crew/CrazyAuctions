@@ -9,7 +9,7 @@ import com.ryderbelserion.fusion.paper.builders.commands.context.PaperCommandCon
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
 import org.jetbrains.annotations.NotNull;
-import us.crazycrew.api.constants.Messages;
+import com.badbones69.crazyauctions.common.enums.messages.Messages;
 import java.util.List;
 
 public class ReloadCommand extends BaseCommand {
@@ -18,7 +18,7 @@ public class ReloadCommand extends BaseCommand {
     public void run(@NotNull final PaperCommandContext context) {
         this.platform.reload();
 
-        this.adapter.sendMessage(context.getSender(), Messages.reload);
+        Messages.reload.sendMessage(context.getSender());
     }
 
     @Override

@@ -1,20 +1,18 @@
 package com.badbones69.crazyauctions.common;
 
-import com.badbones69.crazyauctions.common.registry.MessageImpl;
-import com.badbones69.crazyauctions.common.registry.adapters.sender.ISenderAdapter;
+import com.badbones69.crazyauctions.common.enums.keys.FileKeys;
+import com.badbones69.crazyauctions.common.enums.messages.Messages;
 import com.badbones69.crazyauctions.common.storage.StorageManager;
+import com.badbones69.crazyauctions.common.storage.holder.StorageHolder;
+import com.ryderbelserion.fusion.core.api.FusionKey;
 import com.ryderbelserion.fusion.core.api.enums.Level;
 import com.ryderbelserion.fusion.core.api.registry.message.MessageRegistry;
-import com.ryderbelserion.fusion.files.enums.FileAction;
-import com.ryderbelserion.fusion.files.enums.FileType;
 import com.ryderbelserion.fusion.paper.FusionPaper;
 import com.ryderbelserion.fusion.paper.files.PaperFileManager;
-import net.kyori.adventure.audience.Audience;
 import org.jspecify.annotations.NonNull;
-import org.spongepowered.configurate.loader.HeaderMode;
-import org.spongepowered.configurate.yaml.NodeStyle;
+import org.spongepowered.configurate.CommentedConfigurationNode;
+import us.crazycrew.AuctionsProvider;
 import us.crazycrew.api.CrazyAuctions;
-import us.crazycrew.api.storage.IStorageHolder;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -22,22 +20,22 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Stream;
 
-public abstract class CrazyPlugin<S extends Audience, I> extends CrazyAuctions<S, FusionPaper, I> {
+public abstract class CrazyAuctionsPlugin<I> extends CrazyAuctions<FusionPaper, I> {
 
     protected MessageRegistry messageRegistry;
-    protected IStorageHolder storageHolder;
     protected final FusionPaper fusion;
     protected final long startTime;
 
-    public CrazyPlugin(@NonNull final FusionPaper fusion) {
+    public CrazyAuctionsPlugin(final FusionPaper fusion, final Path path) {
+        super(path);
+
         this.startTime = System.nanoTime();
         this.fusion = fusion;
     }
 
-    public abstract ISenderAdapter getSenderAdapter();
-
+    protected StorageManager storageManager;
     protected PaperFileManager fileManager;
-    protected MessageImpl messageImpl;
+    protected StorageHolder storageHolder;
 
     @Override
     public void init() {
@@ -49,48 +47,63 @@ public abstract class CrazyPlugin<S extends Audience, I> extends CrazyAuctions<S
             return;
         }
 
+        this.fusion.post();
+
+        this.messageRegistry = this.fusion.getMessageRegistry();
         this.fileManager = this.fusion.getFileManager();
 
-        final Path path = getDataPath();
-
-        try {
-            Files.createDirectories(path);
-        } catch (final IOException ignored) {}
-
-        this.fileManager.addFile(path.resolve("database.yml"), FileType.YAML, action -> {
-                    action.addAction(FileAction.EXTRACT_FILE);
-
-                    action.withHeaderMode(HeaderMode.PRESERVE);
-                    action.withNodeStyle(NodeStyle.BLOCK);
-                    action.withComments(true);
-                    action.withIndent(1);
-                })
-                .addFile(path.resolve("messages.yml"), FileType.YAML, action -> {
-                    action.addAction(FileAction.EXTRACT_FILE);
-
-                    action.withHeaderMode(HeaderMode.PRESERVE);
-                    action.withNodeStyle(NodeStyle.BLOCK);
-                    action.withComments(true);
-                    action.withIndent(1);
-                });
-
-        this.messageImpl = new MessageImpl(this.messageRegistry = this.fusion.getMessageRegistry());
-        this.messageImpl.init();
-
-        this.fileManager.addPaperFile(path.resolve("config.yml"));
+        for (final FileKeys key : FileKeys.values()) {
+            key.load();
+        }
 
         loadExamples();
 
-        try {
-            this.storageHolder = new StorageManager(this).init();
-        } catch (final Exception exception) {
-            this.fusion.log(Level.ERROR, "Failed to initialize storage impl", exception);
-        }
+        this.storageManager = new StorageManager(this);
+
+        this.storageHolder = this.storageManager.init();
+        this.storageHolder.save();
+
+        AuctionsProvider.register(this);
     }
 
     @Override
     public void post() {
 
+    }
+
+    @Override
+    public void reload() {
+        for (final FileKeys key : FileKeys.values()) {
+            key.reload();
+        }
+
+        this.storageHolder.save().reload();
+
+        loadMessages();
+        loadExamples();
+    }
+
+    @Override
+    public void loadMessages() {
+        final List<Path> paths = this.fileManager.getFilesByPath(this.path.resolve("locale"), ".yml", this.fileManager.getDepth());
+
+        paths.add(this.path.resolve("messages.yml")); // add to list
+
+        this.fusion.getMessageRegistry().init(action -> {
+            for (final Path path : paths) {
+                this.fileManager.getYamlFile(path).ifPresentOrElse(customFile -> {
+                    final String fileName = customFile.getFileName();
+
+                    final FusionKey key = FusionKey.key(CrazyAuctions.namespace, fileName.equalsIgnoreCase("messages.yml") ? "default" : fileName.toLowerCase());
+
+                    final CommentedConfigurationNode configuration = customFile.getConfiguration();
+
+                    for (final Messages message : Messages.values()) {
+                        message.addKey(action, configuration, key);
+                    }
+                }, () -> this.fusion.log(Level.INFO, "Path %s not found in cache.".formatted(path)));
+            }
+        });
     }
 
     @Override
@@ -116,30 +129,13 @@ public abstract class CrazyPlugin<S extends Audience, I> extends CrazyAuctions<S
         List.of(
                 "config.yml",
                 "data.yml",
-                "messages.yml",
-                "database.yml"
+                "messages.yml"
         ).forEach(file -> this.fileManager.extractFile(file, examples.resolve(file)));
-    }
-
-    @Override
-    public void reload() {
-        this.fileManager.refresh(false);
-
-        loadExamples();
-
-        this.messageImpl.reload();
-
-        this.storageHolder.reload();
     }
 
     @Override
     public @NonNull final MessageRegistry getMessageRegistry() {
         return this.messageRegistry;
-    }
-
-    @Override
-    public @NonNull final IStorageHolder getStorageHolder() {
-        return this.storageHolder;
     }
 
     @Override
@@ -149,10 +145,10 @@ public abstract class CrazyPlugin<S extends Audience, I> extends CrazyAuctions<S
 
     @Override
     public @NonNull final Path getDataPath() {
-        return this.fusion.getDataPath();
+        return this.path;
     }
 
-    public @NonNull final MessageImpl getMessageImpl() {
-        return this.messageImpl;
+    public @NonNull final StorageHolder getStorageHolder() {
+        return this.storageHolder;
     }
 }

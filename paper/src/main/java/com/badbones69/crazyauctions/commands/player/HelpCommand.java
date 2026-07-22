@@ -10,7 +10,7 @@ import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
-import us.crazycrew.api.constants.Messages;
+import com.badbones69.crazyauctions.common.enums.messages.Messages;
 import java.util.List;
 
 public class HelpCommand extends BaseCommand {
@@ -19,7 +19,7 @@ public class HelpCommand extends BaseCommand {
     public void run(@NotNull final PaperCommandContext context) {
         final CommandSender sender = context.getSender();
 
-        this.adapter.sendMessage(sender, Messages.help_menu);
+        Messages.help_menu.sendMessage(sender);
     }
 
     @Override

@@ -3,8 +3,9 @@ package com.badbones69.crazyauctions.commands;
 import com.badbones69.crazyauctions.Methods;
 import com.badbones69.crazyauctions.api.enums.Category;
 import com.badbones69.crazyauctions.api.enums.other.Permissions;
+import com.badbones69.crazyauctions.common.enums.messages.Messages;
 import com.badbones69.crazyauctions.controllers.GuiListener;
-import com.badbones69.crazyauctions.common.enums.FileKey;
+import com.badbones69.crazyauctions.common.enums.keys.FileKeys;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import com.ryderbelserion.fusion.kyori.permissions.PermissionContext;
@@ -16,7 +17,6 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NonNull;
-import us.crazycrew.api.constants.Messages;
 import us.crazycrew.api.enums.ShopType;
 import java.util.List;
 
@@ -27,12 +27,12 @@ public class AuctionCommand extends BaseCommand {
         final CommandSender sender = context.getSender();
 
         if (!context.isPlayer()) {
-            this.adapter.sendMessage(sender, Messages.players_only);
+            Messages.players_only.sendMessage(sender);
 
             return;
         }
 
-        final FileConfiguration config = FileKey.config.getConfiguration();
+        final FileConfiguration config = FileKeys.config.getConfiguration();
 
         final Player player = context.getPlayer();
 

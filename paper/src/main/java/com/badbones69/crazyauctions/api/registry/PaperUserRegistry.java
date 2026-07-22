@@ -5,14 +5,14 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NonNull;
 import us.crazycrew.api.CrazyAuctions;
-import us.crazycrew.api.registry.IPlayerRegistry;
-import us.crazycrew.api.user.IPlayer;
+import us.crazycrew.api.registry.IUserRegistry;
+import us.crazycrew.api.adapters.user.IUser;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
-public class PaperUserRegistry implements IPlayerRegistry<Player> {
+public class PaperUserRegistry implements IUserRegistry<Player> {
 
     private final Map<UUID, PaperPlayerAdapter> users = new HashMap<>();
 
@@ -47,7 +47,7 @@ public class PaperUserRegistry implements IPlayerRegistry<Player> {
     }
 
     @Override
-    public @NotNull final IPlayer getConsole() {
+    public @NotNull final IUser getConsole() {
         return this.users.get(CrazyAuctions.CONSOLE_UUID);
     }
 }

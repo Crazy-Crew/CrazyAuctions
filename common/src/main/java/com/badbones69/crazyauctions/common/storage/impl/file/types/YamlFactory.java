@@ -1,6 +1,8 @@
-package com.badbones69.crazyauctions.common.storage.impl.types.file;
+package com.badbones69.crazyauctions.common.storage.impl.file.types;
 
-import com.badbones69.crazyauctions.common.enums.FileKey;
+import com.badbones69.crazyauctions.common.CrazyAuctionsPlugin;
+import com.badbones69.crazyauctions.common.enums.keys.FileKeys;
+import com.badbones69.crazyauctions.common.storage.impl.file.FlatFactory;
 import com.badbones69.crazyauctions.common.utils.TimeUtils;
 import com.ryderbelserion.fusion.core.api.FusionProvider;
 import com.ryderbelserion.fusion.core.api.enums.Level;
@@ -14,26 +16,27 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ItemType;
 import org.jspecify.annotations.NonNull;
-import us.crazycrew.api.storage.IStorageHolder;
 import us.crazycrew.api.enums.ShopType;
 import java.util.UUID;
 
-public class YamlFactory extends IStorageHolder {
+public class YamlFactory extends FlatFactory {
 
     private final FusionPaper fusion = (FusionPaper) FusionProvider.getInstance();
 
-    private YamlConfiguration configuration;
-
-    public YamlFactory(@NonNull final YamlConfiguration configuration) {
-        this.configuration = configuration;
+    public YamlFactory(final CrazyAuctionsPlugin plugin) {
+        super(plugin, "yaml");
     }
+
+    private YamlConfiguration configuration;
 
     public @NonNull final YamlConfiguration getConfiguration() {
         return this.configuration;
     }
 
     @Override
-    public @NonNull final YamlFactory init() {
+    public final void init() {
+        this.configuration = FileKeys.data.getConfiguration();
+
         final ConfigurationSection cancelled = this.configuration.getConfigurationSection("OutOfTime/Cancelled");
 
         final Server server = this.fusion.getServer();
@@ -67,7 +70,7 @@ public class YamlFactory extends IStorageHolder {
                 }
 
                 if (isSaving) {
-                    FileKey.data.save();
+                    FileKeys.data.save();
                 }
             }
         }
@@ -123,17 +126,15 @@ public class YamlFactory extends IStorageHolder {
                 }
 
                 if (isSaving) {
-                    FileKey.data.save();
+                    FileKeys.data.save();
                 }
             }
         }
-
-        return this;
     }
 
     @Override
     public void reload() {
-        this.configuration = FileKey.data.getConfiguration();
+        this.configuration = FileKeys.data.getConfiguration();
     }
 
     @Override
@@ -141,7 +142,7 @@ public class YamlFactory extends IStorageHolder {
             @NonNull final UUID uuid,
             @NonNull final String name,
             @NonNull final String base64,
-            final double price,
+            final long price,
             @NonNull final ShopType shopType
     ) {
         int number = 1;
@@ -156,7 +157,7 @@ public class YamlFactory extends IStorageHolder {
 
         final ConfigurationSection item = section.createSection("%s".formatted(number));
 
-        final FileConfiguration config = FileKey.config.getConfiguration();
+        final FileConfiguration config = FileKeys.config.getConfiguration();
 
         item.set("Seller", uuid.toString());
         item.set("SellerName", name);
@@ -186,11 +187,8 @@ public class YamlFactory extends IStorageHolder {
 
         item.set("Item", base64);
 
-        FileKey.data.save();
+        FileKeys.data.save();
     }
-
-    @Override
-    public void insertUser(@NonNull final UUID uuid, @NonNull final String name) {}
 
     @Override
     public boolean hasExpiredItem(@NonNull final UUID uuid) {
@@ -234,12 +232,12 @@ public class YamlFactory extends IStorageHolder {
     }
 
     @Override
-    public boolean hasItem(@NonNull final UUID uuid) {
-        return false;
+    public void stop() {
+
     }
 
     @Override
-    public void stop() {
+    public void save() {
 
     }
 }

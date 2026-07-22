@@ -1,7 +1,8 @@
 package us.crazycrew.api.enums;
 
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 
+@NullMarked
 public enum ShopType {
     
     SELL("Sell"),
@@ -12,7 +13,7 @@ public enum ShopType {
     /**
      * @param name name of the Shop Type.
      */
-    ShopType(@NonNull final String name) {
+    ShopType(final String name) {
         this.name = name;
     }
     
@@ -20,8 +21,8 @@ public enum ShopType {
      * @param name name of the Type you want.
      * @return Returns the Type as an Enum.
      */
-    public static @NonNull ShopType getFromName(@NonNull final String name) {
-        for (ShopType type : ShopType.values()) {
+    public static ShopType getFromName(final String name) {
+        for (final ShopType type : ShopType.values()) {
             if (type.getName().equalsIgnoreCase(name)) {
                 return type;
             }
@@ -33,7 +34,7 @@ public enum ShopType {
     /**
      * @return Returns the type name as a string.
      */
-    public @NonNull final String getName() {
+    public final String getName() {
         return this.name;
     }
 }

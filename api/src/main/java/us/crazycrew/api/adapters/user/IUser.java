@@ -1,13 +1,13 @@
-package us.crazycrew.api.user;
+package us.crazycrew.api.adapters.user;
 
 import com.ryderbelserion.fusion.core.api.FusionKey;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NonNull;
-import us.crazycrew.api.items.IAuctionItem;
+import us.crazycrew.api.adapters.items.IAuctionItem;
 import java.util.UUID;
 
-public abstract class IPlayer<I, A extends IAuctionItem<I>> {
+public abstract class IUser<I, A extends IAuctionItem<I>> {
 
     public abstract @NonNull UUID getUniqueId();
 

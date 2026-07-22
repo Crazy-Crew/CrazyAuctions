@@ -11,7 +11,7 @@ import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
-import us.crazycrew.api.constants.Messages;
+import com.badbones69.crazyauctions.common.enums.messages.Messages;
 import java.util.List;
 
 public class ExpiredCommand extends BaseCommand {
@@ -21,7 +21,7 @@ public class ExpiredCommand extends BaseCommand {
         final CommandSender sender = context.getSender();
 
         if (!context.isPlayer()) {
-            this.adapter.sendMessage(sender, Messages.players_only);
+            Messages.players_only.sendMessage(sender);
 
             return;
         }

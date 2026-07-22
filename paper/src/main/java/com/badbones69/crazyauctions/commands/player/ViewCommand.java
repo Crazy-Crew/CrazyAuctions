@@ -2,6 +2,7 @@ package com.badbones69.crazyauctions.commands.player;
 
 import com.badbones69.crazyauctions.api.enums.other.Permissions;
 import com.badbones69.crazyauctions.commands.BaseCommand;
+import com.badbones69.crazyauctions.common.enums.messages.Messages;
 import com.badbones69.crazyauctions.controllers.GuiListener;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
@@ -16,7 +17,6 @@ import io.papermc.paper.command.brigadier.argument.ArgumentTypes;
 import io.papermc.paper.command.brigadier.argument.resolvers.selector.PlayerSelectorArgumentResolver;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
-import us.crazycrew.api.constants.Messages;
 import java.util.List;
 import static io.papermc.paper.command.brigadier.Commands.argument;
 
@@ -27,14 +27,14 @@ public class ViewCommand extends BaseCommand {
         final CommandSender sender = context.getSender();
 
         if (!context.isPlayer()) {
-            this.adapter.sendMessage(sender, Messages.players_only);
+            Messages.players_only.sendMessage(sender);
 
             return;
         }
 
         final CommandContext<CommandSourceStack> source = context.getContext();
 
-        getPlayer(source).ifPresentOrElse(player -> GuiListener.openViewer(player, 1), () -> this.adapter.sendMessage(sender, Messages.failed_to_open_inventory));
+        getPlayer(source).ifPresentOrElse(player -> GuiListener.openViewer(player, 1), () -> Messages.failed_to_open_inventory.sendMessage(sender));
     }
 
     @Override

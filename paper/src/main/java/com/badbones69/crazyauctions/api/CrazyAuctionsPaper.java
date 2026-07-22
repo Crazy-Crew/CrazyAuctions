@@ -17,14 +17,13 @@ import com.badbones69.crazyauctions.commands.player.ListCommand;
 import com.badbones69.crazyauctions.commands.player.ViewCommand;
 import com.badbones69.crazyauctions.commands.player.auction.BidCommand;
 import com.badbones69.crazyauctions.commands.player.auction.SellCommand;
-import com.badbones69.crazyauctions.common.CrazyPlugin;
-import com.badbones69.crazyauctions.common.enums.FileKey;
+import com.badbones69.crazyauctions.common.CrazyAuctionsPlugin;
+import com.badbones69.crazyauctions.common.enums.keys.FileKeys;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.ryderbelserion.fusion.paper.FusionPaper;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.plugin.lifecycle.event.LifecycleEventManager;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
-import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -36,15 +35,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class CrazyPlatform extends CrazyPlugin<CommandSender, ItemStack> {
+public class CrazyAuctionsPaper extends CrazyAuctionsPlugin<ItemStack> {
 
     private boolean isSellingModuleEnabled;
     private boolean isBiddingModuleEnabled;
 
     private final CrazyAuctions plugin;
 
-    public CrazyPlatform(@NonNull final CrazyAuctions plugin, @NonNull final FusionPaper fusion) {
-        super(fusion);
+    public CrazyAuctionsPaper(@NonNull final CrazyAuctions plugin, @NonNull final FusionPaper fusion) {
+        super(fusion, plugin.getDataPath());
 
         this.plugin = plugin;
     }
@@ -59,9 +58,11 @@ public class CrazyPlatform extends CrazyPlugin<CommandSender, ItemStack> {
         this.userRegistry = new PaperUserRegistry();
         this.userRegistry.init();
 
-        this.userAdapter = new PaperSenderAdapter(this);
+        this.userAdapter = new PaperSenderAdapter();
 
-        final YamlConfiguration configuration = FileKey.config.getConfiguration();
+        loadMessages();
+
+        final YamlConfiguration configuration = FileKeys.config.getConfiguration();
 
         this.isSellingModuleEnabled = configuration.getBoolean("Settings.Feature-Toggle.Selling", true);
 
@@ -104,7 +105,7 @@ public class CrazyPlatform extends CrazyPlugin<CommandSender, ItemStack> {
     public void reload() {
         super.reload();
 
-        final YamlConfiguration configuration = FileKey.config.getConfiguration();
+        final YamlConfiguration configuration = FileKeys.config.getConfiguration();
 
         this.isSellingModuleEnabled = configuration.getBoolean("Settings.Feature-Toggle.Selling", true);
 
@@ -113,11 +114,11 @@ public class CrazyPlatform extends CrazyPlugin<CommandSender, ItemStack> {
 
     @Override
     public void stop() {
-        FileKey.data.save();
+        FileKeys.data.save();
     }
 
     public @NonNull final List<ItemStack> getItems(@NonNull final Player player) {
-        final YamlConfiguration data = FileKey.data.getConfiguration();
+        final YamlConfiguration data = FileKeys.data.getConfiguration();
 
         final List<ItemStack> items = new ArrayList<>();
 

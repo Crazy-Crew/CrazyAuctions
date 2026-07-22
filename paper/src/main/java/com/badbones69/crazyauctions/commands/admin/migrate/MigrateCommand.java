@@ -17,7 +17,7 @@ import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
-import us.crazycrew.api.constants.Messages;
+import com.badbones69.crazyauctions.common.enums.messages.Messages;
 import java.util.List;
 import java.util.Optional;
 import static io.papermc.paper.command.brigadier.Commands.argument;
@@ -29,7 +29,7 @@ public class MigrateCommand extends BaseCommand {
         final CommandSender sender = context.getSender();
 
         if (!context.isPlayer()) {
-            this.adapter.sendMessage(sender, Messages.players_only);
+            Messages.players_only.sendMessage(sender);
 
             return;
         }

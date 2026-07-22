@@ -4,7 +4,7 @@ import com.badbones69.crazyauctions.Methods;
 import com.badbones69.crazyauctions.api.enums.other.Permissions;
 import com.badbones69.crazyauctions.api.events.AuctionListEvent;
 import com.badbones69.crazyauctions.commands.BaseCommand;
-import com.badbones69.crazyauctions.common.enums.FileKey;
+import com.badbones69.crazyauctions.common.enums.keys.FileKeys;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.LongArgumentType;
@@ -24,7 +24,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.jetbrains.annotations.NotNull;
-import us.crazycrew.api.constants.Messages;
+import com.badbones69.crazyauctions.common.enums.messages.Messages;
 import us.crazycrew.api.enums.ShopType;
 import java.util.HashMap;
 import java.util.List;
@@ -39,28 +39,29 @@ public class BidCommand extends BaseCommand {
         final CommandSender sender = context.getSender();
 
         if (!context.isPlayer()) {
-            this.adapter.sendMessage(sender, Messages.players_only);
+            Messages.players_only.sendMessage(sender);
 
             return;
         }
+
         final Player player = context.getPlayer();
 
         final ItemStack item = Methods.getItemInHand(player);
 
         if (item.isEmpty()) {
-            this.adapter.sendMessage(player, Messages.doesnt_have_item_in_hand);
+            Messages.doesnt_have_item_in_hand.sendMessage(player);
 
             return;
         }
 
-        final YamlConfiguration configuration = FileKey.config.getConfiguration();
+        final YamlConfiguration configuration = FileKeys.config.getConfiguration();
 
         final long minimumPrice = configuration.getLong("Settings.Minimum-Bid-Price", 100);
 
         final long arg1 = context.getLongArgument("price").orElse(minimumPrice);
 
         if (arg1 < minimumPrice) {
-            this.adapter.sendMessage(player, Messages.bid_price_too_low);
+            Messages.bid_price_too_low.sendMessage(player);
 
             return;
         }
@@ -68,7 +69,7 @@ public class BidCommand extends BaseCommand {
         final long beginningPrice = configuration.getLong("Settings.Max-Beginning-Bid-Price", 1000000);
 
         if (arg1 > beginningPrice) {
-            this.adapter.sendMessage(player, Messages.bid_price_too_high);
+            Messages.bid_price_too_high.sendMessage(player);
 
             return;
         }
@@ -98,13 +99,13 @@ public class BidCommand extends BaseCommand {
         final int limit = integer.get();
 
         if (limit > 0 && items.size() >= limit) {
-            this.adapter.sendMessage(player, Messages.max_items);
+            Messages.max_items.sendMessage(player);
 
             return;
         }
 
         if (configuration.getStringList("Settings.BlackList").contains(item.getType().getKey().getKey())) {
-            this.adapter.sendMessage(player, Messages.item_blacklisted);
+            Messages.item_blacklisted.sendMessage(player);
 
             return;
         }
@@ -114,7 +115,7 @@ public class BidCommand extends BaseCommand {
         final PersistentDataContainerView container = item.getPersistentDataContainer();
 
         if (container.getKeys().stream().anyMatch(key -> keys.contains(key.asString()))) {
-            this.adapter.sendMessage(player, Messages.item_blacklisted);
+            Messages.item_blacklisted.sendMessage(player);
 
             return;
         }
@@ -123,7 +124,7 @@ public class BidCommand extends BaseCommand {
             final int durability = damageable.getDamage();
 
             if (durability > 0) {
-                this.adapter.sendMessage(player, Messages.item_damaged);
+                Messages.item_damaged.sendMessage(player);
 
                 return;
             }
@@ -142,7 +143,7 @@ public class BidCommand extends BaseCommand {
                 placeholders.put("%Money_Needed%", String.valueOf(fee));
                 placeholders.put("%money_needed%", String.valueOf(fee));
 
-                this.adapter.sendMessage(player, Messages.need_more_money, placeholders);
+                Messages.need_more_money.sendMessage(player, placeholders);
 
                 return;
             }
@@ -169,7 +170,7 @@ public class BidCommand extends BaseCommand {
         placeholders.put("%Price%", String.valueOf(arg1));
         placeholders.put("%price%", String.valueOf(arg1));
 
-        this.adapter.sendMessage(player, Messages.added_item_to_auction, placeholders);
+        Messages.added_item_to_auction.sendMessage(player, placeholders);
 
         final int resultAmount = item.getAmount();
 

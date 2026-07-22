@@ -1,4 +1,4 @@
-package us.crazycrew.api.items;
+package us.crazycrew.api.adapters.items;
 
 import org.jspecify.annotations.NonNull;
 

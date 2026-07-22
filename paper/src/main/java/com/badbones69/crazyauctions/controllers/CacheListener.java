@@ -1,7 +1,7 @@
 package com.badbones69.crazyauctions.controllers;
 
 import com.badbones69.crazyauctions.CrazyAuctions;
-import com.badbones69.crazyauctions.api.CrazyPlatform;
+import com.badbones69.crazyauctions.api.CrazyAuctionsPaper;
 import com.badbones69.crazyauctions.api.registry.PaperUserRegistry;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -12,7 +12,7 @@ public class CacheListener implements Listener {
 
     private final CrazyAuctions plugin = CrazyAuctions.get();
 
-    private final CrazyPlatform platform = this.plugin.getPlatform();
+    private final CrazyAuctionsPaper platform = this.plugin.getPlatform();
 
     private final PaperUserRegistry userRegistry = this.platform.getUserRegistry();
 

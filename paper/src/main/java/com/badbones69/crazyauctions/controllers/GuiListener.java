@@ -10,9 +10,9 @@ import com.badbones69.crazyauctions.api.enums.other.Permissions;
 import com.badbones69.crazyauctions.api.registry.adapters.PaperSenderAdapter;
 import com.ryderbelserion.fusion.core.utils.StringUtils;
 import com.ryderbelserion.fusion.paper.FusionPaper;
-import us.crazycrew.api.constants.Messages;
+import com.badbones69.crazyauctions.common.enums.messages.Messages;
 import us.crazycrew.api.enums.ShopType;
-import com.badbones69.crazyauctions.common.enums.FileKey;
+import com.badbones69.crazyauctions.common.enums.keys.FileKeys;
 import com.badbones69.crazyauctions.api.events.AuctionBuyEvent;
 import com.badbones69.crazyauctions.api.events.AuctionNewBidEvent;
 import com.badbones69.crazyauctions.currency.VaultSupport;
@@ -44,7 +44,7 @@ public class GuiListener implements Listener {
 
     private static final CrazyAuctions plugin = CrazyAuctions.get();
 
-    private static final CrazyPlatform platform = plugin.getPlatform();
+    private static final CrazyAuctionsPaper platform = plugin.getPlatform();
 
     private static final FusionPaper fusion = platform.getFusion();
 
@@ -60,15 +60,15 @@ public class GuiListener implements Listener {
     public static void openShop(@NotNull Player player, @NotNull ShopType sell, @NotNull Category cat, int page) {
         Methods.updateAuction();
 
-        YamlConfiguration config = FileKey.config.getConfiguration();
-        YamlConfiguration data = FileKey.data.getConfiguration();
+        YamlConfiguration config = FileKeys.config.getConfiguration();
+        YamlConfiguration data = FileKeys.data.getConfiguration();
         List<ItemStack> items = new ArrayList<>();
         List<Integer> ID = new ArrayList<>();
 
         if (!data.contains("Items")) {
             data.set("Items.Clear", null);
 
-            FileKey.data.save();
+            FileKeys.data.save();
         }
 
         shopCategory.put(player.getUniqueId(), cat);
@@ -208,7 +208,7 @@ public class GuiListener implements Listener {
 
     public static void openCategories(@NotNull Player player, @NotNull ShopType shop) {
         Methods.updateAuction();
-        YamlConfiguration config = FileKey.config.getConfiguration();
+        YamlConfiguration config = FileKeys.config.getConfiguration();
 
         Inventory inv = new AuctionMenu(54, Methods.color(config.getString("Settings.Categories"))).getInventory();
 
@@ -252,8 +252,8 @@ public class GuiListener implements Listener {
     public static void openPlayersCurrentList(@NotNull Player player, int page) {
         Methods.updateAuction();
 
-        YamlConfiguration config = FileKey.config.getConfiguration();
-        YamlConfiguration data = FileKey.data.getConfiguration();
+        YamlConfiguration config = FileKeys.config.getConfiguration();
+        YamlConfiguration data = FileKeys.data.getConfiguration();
 
         List<ItemStack> items = new ArrayList<>();
         List<Integer> ID = new ArrayList<>();
@@ -300,8 +300,8 @@ public class GuiListener implements Listener {
     public static void openPlayersExpiredList(@NotNull Player player, int page) {
         Methods.updateAuction();
 
-        YamlConfiguration config = FileKey.config.getConfiguration();
-        YamlConfiguration data = FileKey.data.getConfiguration();
+        YamlConfiguration config = FileKeys.config.getConfiguration();
+        YamlConfiguration data = FileKeys.data.getConfiguration();
 
         List<ItemStack> items = new ArrayList<>();
         List<Integer> ID = new ArrayList<>();
@@ -354,13 +354,13 @@ public class GuiListener implements Listener {
     public static void openBuying(@NotNull Player player, @NotNull String ID) {
         Methods.updateAuction();
 
-        YamlConfiguration config = FileKey.config.getConfiguration();
-        YamlConfiguration data = FileKey.data.getConfiguration();
+        YamlConfiguration config = FileKeys.config.getConfiguration();
+        YamlConfiguration data = FileKeys.data.getConfiguration();
 
         if (!data.contains("Items." + ID)) {
             openShop(player, ShopType.SELL, shopCategory.get(player.getUniqueId()), 1);
 
-            adapter.sendMessage(player, Messages.item_doesnt_exist);
+            Messages.item_doesnt_exist.sendMessage(player);
 
             return;
         }
@@ -430,13 +430,13 @@ public class GuiListener implements Listener {
     public static void openBidding(@NotNull Player player, @NotNull String ID) {
         Methods.updateAuction();
 
-        YamlConfiguration config = FileKey.config.getConfiguration();
-        YamlConfiguration data = FileKey.data.getConfiguration();
+        YamlConfiguration config = FileKeys.config.getConfiguration();
+        YamlConfiguration data = FileKeys.data.getConfiguration();
 
         if (!data.contains("Items." + ID)) {
             openShop(player, ShopType.BID, shopCategory.get(player.getUniqueId()), 1);
 
-            adapter.sendMessage(player, Messages.item_doesnt_exist);
+            Messages.item_doesnt_exist.sendMessage(player);
 
             return;
         }
@@ -466,8 +466,8 @@ public class GuiListener implements Listener {
     public static void openViewer(@NotNull Player player, int page) {
         Methods.updateAuction();
 
-        YamlConfiguration config = FileKey.config.getConfiguration();
-        YamlConfiguration data = FileKey.data.getConfiguration();
+        YamlConfiguration config = FileKeys.config.getConfiguration();
+        YamlConfiguration data = FileKeys.data.getConfiguration();
 
         List<ItemStack> items = new ArrayList<>();
         List<Integer> ID = new ArrayList<>();
@@ -478,7 +478,7 @@ public class GuiListener implements Listener {
         if (!data.contains("Items")) {
             data.set("Items.Clear", null);
 
-            FileKey.data.save();
+            FileKeys.data.save();
         }
 
         if (data.contains("Items")) {
@@ -564,7 +564,7 @@ public class GuiListener implements Listener {
     }
 
     private static ItemStack getBiddingGlass(@NotNull Player player, @NotNull String ID) {
-        YamlConfiguration config = FileKey.config.getConfiguration();
+        YamlConfiguration config = FileKeys.config.getConfiguration();
 
         String id = config.getString("Settings.GUISettings.OtherSettings.Bidding.Item");
         String name = config.getString("Settings.GUISettings.OtherSettings.Bidding.Name");
@@ -592,8 +592,8 @@ public class GuiListener implements Listener {
     }
 
     private static ItemStack getBiddingItem(@NotNull String ID) {
-        YamlConfiguration config = FileKey.config.getConfiguration();
-        YamlConfiguration data = FileKey.data.getConfiguration();
+        YamlConfiguration config = FileKeys.config.getConfiguration();
+        YamlConfiguration data = FileKeys.data.getConfiguration();
 
         ItemStack item = Methods.fromBase64(data.getString("Items." + ID + ".Item"));
 
@@ -622,7 +622,7 @@ public class GuiListener implements Listener {
     }
 
     private static void playClick(@NotNull Player player) {
-        YamlConfiguration config = FileKey.config.getConfiguration();
+        YamlConfiguration config = FileKeys.config.getConfiguration();
 
         if (config.getBoolean("Settings.Sounds.Toggle", false)) {
             String sound = config.getString("Settings.Sounds.Sound", "");
@@ -636,7 +636,7 @@ public class GuiListener implements Listener {
     }
 
     private void playSoldSound(@NotNull Player player) {
-        YamlConfiguration config = FileKey.config.getConfiguration();
+        YamlConfiguration config = FileKeys.config.getConfiguration();
 
         String sound = config.getString("Settings.Sold-Item-Sound", "");
 
@@ -650,7 +650,7 @@ public class GuiListener implements Listener {
     @EventHandler
     public void onInvClose(InventoryCloseEvent event) {
         if (!(event.getInventory().getHolder() instanceof  AuctionMenu auctionMenu)) return;
-        YamlConfiguration config = FileKey.config.getConfiguration();
+        YamlConfiguration config = FileKeys.config.getConfiguration();
 
         Player player = (Player) event.getPlayer();
 
@@ -662,8 +662,8 @@ public class GuiListener implements Listener {
         if (!(clickEvent.getInventory().getHolder() instanceof  AuctionMenu auctionMenu)) return;
         clickEvent.setCancelled(true);
 
-        YamlConfiguration config = FileKey.config.getConfiguration();
-        YamlConfiguration data = FileKey.data.getConfiguration();
+        YamlConfiguration config = FileKeys.config.getConfiguration();
+        YamlConfiguration data = FileKeys.data.getConfiguration();
 
         Player player = (Player) clickEvent.getWhoClicked();
         final Inventory inv = clickEvent.getClickedInventory();
@@ -723,19 +723,19 @@ public class GuiListener implements Listener {
                         placeholders.put("%Money_Needed%", (bid - plugin.getSupport().getMoney(player)) + "");
                         placeholders.put("%money_needed%", (bid - plugin.getSupport().getMoney(player)) + "");
 
-                        adapter.sendMessage(player, Messages.need_more_money, placeholders);
+                        Messages.need_more_money.sendMessage(player, placeholders);
 
                         return;
                     }
 
                     if (data.getLong("Items." + ID + ".Price") > bid) {
-                        adapter.sendMessage(player, Messages.bid_more_money);
+                        Messages.bid_more_money.sendMessage(player);
 
                         return;
                     }
 
                     if (data.getLong("Items." + ID + ".Price") >= bid && !topBidder.equalsIgnoreCase("None")) {
-                        adapter.sendMessage(player, Messages.bid_more_money);
+                        Messages.bid_more_money.sendMessage(player);
 
                         return;
                     }
@@ -749,9 +749,9 @@ public class GuiListener implements Listener {
                     Map<String, String> placeholders = new HashMap<>();
                     placeholders.put("%Bid%", String.valueOf(bid));
 
-                    adapter.sendMessage(player, Messages.bid_msg, placeholders);
+                    Messages.bid_msg.sendMessage(player, placeholders);
 
-                    FileKey.data.save();
+                    FileKeys.data.save();
 
                     bidding.put(player.getUniqueId(), 0.0);
                     player.closeInventory();
@@ -785,7 +785,7 @@ public class GuiListener implements Listener {
                         } catch (Exception ex) {
                             player.closeInventory();
 
-                            adapter.sendMessage(player, Messages.item_doesnt_exist);
+                            Messages.item_doesnt_exist.sendMessage(player);
 
                             return;
                         }
@@ -910,14 +910,14 @@ public class GuiListener implements Listener {
                                         OfflinePlayer seller = Methods.getOfflinePlayer(data.getString("Items." + i + ".Seller"));
 
                                         if (seller.getPlayer() != null) {
-                                            adapter.sendMessage(seller.getPlayer(), Messages.admin_force_cancelled_to_player);
+                                            Messages.admin_force_cancelled_to_player.sendMessage(seller.getPlayer());
                                         }
 
                                         Methods.expireItem(1, seller, i, data, Reasons.ADMIN_FORCE_CANCEL);
 
-                                        FileKey.data.save();
+                                        FileKeys.data.save();
 
-                                        adapter.sendMessage(player, Messages.admin_force_cancelled);
+                                        Messages.admin_force_cancelled.sendMessage(player);
 
                                         playClick(player);
 
@@ -1021,7 +1021,7 @@ public class GuiListener implements Listener {
 
                     openShop(player, shopType.get(player.getUniqueId()), shopCategory.get(player.getUniqueId()), 1);
 
-                    adapter.sendMessage(player, Messages.item_doesnt_exist);
+                    Messages.item_doesnt_exist.sendMessage(player);
 
                     return;
                 }
@@ -1044,7 +1044,7 @@ public class GuiListener implements Listener {
 
                         openShop(player, shopType.get(player.getUniqueId()), shopCategory.get(player.getUniqueId()), 1);
 
-                        adapter.sendMessage(player, Messages.item_doesnt_exist);
+                        Messages.item_doesnt_exist.sendMessage(player);
 
                         return;
                     }
@@ -1054,7 +1054,7 @@ public class GuiListener implements Listener {
 
                         player.closeInventory();
 
-                        adapter.sendMessage(player, Messages.inventory_full);
+                        Messages.inventory_full.sendMessage(player);
 
                         return;
                     }
@@ -1071,7 +1071,7 @@ public class GuiListener implements Listener {
                         placeholders.put("%Money_Needed%", (cost - plugin.getSupport().getMoney(player)) + "");
                         placeholders.put("%money_needed%", (cost - plugin.getSupport().getMoney(player)) + "");
 
-                        adapter.sendMessage(player, Messages.need_more_money, placeholders);
+                        Messages.need_more_money.sendMessage(player, placeholders);
 
                         return;
                     }
@@ -1088,7 +1088,7 @@ public class GuiListener implements Listener {
                         placeholders.put("%Money_Needed%", (cost - support.getMoney(player)) + "");
                         placeholders.put("%money_needed%", (cost - support.getMoney(player)) + "");
 
-                        adapter.sendMessage(player, Messages.need_more_money, placeholders);
+                        Messages.need_more_money.sendMessage(player, placeholders);
 
                         return;
                     }
@@ -1117,12 +1117,12 @@ public class GuiListener implements Listener {
                     placeholders.put("%Seller%", sellerPlayer.getName());
                     placeholders.put("%seller%", sellerPlayer.getName());
 
-                    adapter.sendMessage(player, Messages.bought_item, placeholders);
+                    Messages.bought_item.sendMessage(player, placeholders);
 
                     final Player auctioneer = Methods.getPlayer(seller);
 
                     if (auctioneer != null) {
-                        adapter.sendMessage(auctioneer, Messages.player_bought_item, placeholders);
+                        Messages.player_bought_item.sendMessage(auctioneer, placeholders);
 
                         playSoldSound(auctioneer);
                     }
@@ -1130,7 +1130,7 @@ public class GuiListener implements Listener {
                     player.getInventory().addItem(i);
 
                     data.set("Items." + ID, null);
-                    FileKey.data.save();
+                    FileKeys.data.save();
 
                     playClick(player);
 
@@ -1169,11 +1169,11 @@ public class GuiListener implements Listener {
                         for (String i : data.getConfigurationSection("Items").getKeys(false)) {
                             int ID = data.getInt("Items." + i + ".StoreID");
                             if (id == ID) {
-                                adapter.sendMessage(player, Messages.cancelled_item);
+                                Messages.cancelled_item.sendMessage(player);
 
                                 Methods.expireItem(1, player, i, data, Reasons.PLAYER_FORCE_CANCEL);
 
-                                FileKey.data.save();
+                                FileKeys.data.save();
 
                                 playClick(player);
 
@@ -1188,7 +1188,7 @@ public class GuiListener implements Listener {
 
                     openShop(player, shopType.get(player.getUniqueId()), shopCategory.get(player.getUniqueId()), 1);
 
-                    adapter.sendMessage(player, Messages.item_doesnt_exist);
+                    Messages.item_doesnt_exist.sendMessage(player);
 
                     return;
                 }
@@ -1234,7 +1234,7 @@ public class GuiListener implements Listener {
                         for (String i : data.getConfigurationSection("OutOfTime/Cancelled").getKeys(false)) {
                             if (Objects.equals(data.getString("OutOfTime/Cancelled." + i + ".Seller"), player.getUniqueId().toString())) {
                                 if (Methods.isInvFull(player)) {
-                                    adapter.sendMessage(player, Messages.inventory_full);
+                                    Messages.inventory_full.sendMessage(player);
 
                                     break;
                                 } else {
@@ -1246,9 +1246,9 @@ public class GuiListener implements Listener {
                         }
                     }
 
-                    adapter.sendMessage(player, Messages.got_item_back);
+                    Messages.got_item_back.sendMessage(player);
 
-                    FileKey.data.save();
+                    FileKeys.data.save();
 
                     playClick(player);
 
@@ -1280,19 +1280,19 @@ public class GuiListener implements Listener {
 
                             if (id == ID) {
                                 if (!Methods.isInvFull(player)) {
-                                    adapter.sendMessage(player, Messages.got_item_back);
+                                    Messages.got_item_back.sendMessage(player);
 
                                     player.getInventory().addItem(Methods.fromBase64(data.getString("OutOfTime/Cancelled." + i + ".Item")));
 
                                     data.set("OutOfTime/Cancelled." + i, null);
 
-                                    FileKey.data.save();
+                                    FileKeys.data.save();
 
                                     playClick(player);
 
                                     openPlayersExpiredList(player, 1);
                                 } else {
-                                    adapter.sendMessage(player, Messages.inventory_full);
+                                    Messages.inventory_full.sendMessage(player);
                                 }
 
                                 return;
@@ -1304,7 +1304,7 @@ public class GuiListener implements Listener {
 
                     openShop(player, shopType.get(player.getUniqueId()), shopCategory.get(player.getUniqueId()), 1);
 
-                    adapter.sendMessage(player, Messages.item_doesnt_exist);
+                    Messages.item_doesnt_exist.sendMessage(player);
                 }
             }
         }

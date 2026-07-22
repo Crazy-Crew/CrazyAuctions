@@ -1,7 +1,7 @@
 package com.badbones69.crazyauctions.commands.admin.migrate.types;
 
 import com.badbones69.crazyauctions.commands.admin.migrate.interfaces.IAuctionMigrator;
-import com.badbones69.crazyauctions.common.enums.FileKey;
+import com.badbones69.crazyauctions.common.enums.keys.FileKeys;
 import com.badbones69.crazyauctions.common.enums.MigrationKey;
 import com.ryderbelserion.fusion.core.api.FusionKey;
 import com.ryderbelserion.fusion.core.api.registry.message.adapter.interfaces.IMessageAdapter;
@@ -20,7 +20,7 @@ public class LegacyMessagesType extends IAuctionMigrator {
 
     @Override
     public void run() {
-        final CommentedConfigurationNode configuration = FileKey.messages.getYamlConfig();
+        final CommentedConfigurationNode configuration = FileKeys.messages.getYamlConfiguration();
 
         final CommentedConfigurationNode messages = configuration.node("Messages");
 
@@ -30,14 +30,15 @@ public class LegacyMessagesType extends IAuctionMigrator {
             final CommentedConfigurationNode section = messages.node(id);
 
             try {
-                section.set(String.class, AdvUtils.convert(section.getString(adapter.map(IMessageAdapter::getValue).orElse(""))));
+                section.set(String.class, AdvUtils.convert(section.getString(adapter.map(IMessageAdapter::getValue).orElse("")), true));
             } catch (final SerializationException exception) {
                 exception.printStackTrace();
             }
         });
 
-        FileKey.messages.save();
+        FileKeys.messages.save();
+        FileKeys.messages.load();
 
-        this.messageImpl.reload();
+        this.platform.loadMessages();
     }
 }

@@ -10,11 +10,11 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jspecify.annotations.NonNull;
 import us.crazycrew.api.CrazyAuctions;
-import us.crazycrew.api.constants.Messages;
-import us.crazycrew.api.user.IPlayer;
+import us.crazycrew.api.adapters.user.IUser;
 import java.util.UUID;
+import static us.crazycrew.api.CrazyAuctions.default_locale;
 
-public class PaperPlayerAdapter extends IPlayer<ItemStack, PaperAuctionItem> {
+public class PaperPlayerAdapter extends IUser<ItemStack, PaperAuctionItem> {
 
     protected FusionKey locale;
     protected Player player;
@@ -42,7 +42,7 @@ public class PaperPlayerAdapter extends IPlayer<ItemStack, PaperAuctionItem> {
     @Override
     public @NotNull final FusionKey getLocaleKey() {
         //return this.player == null ? Messages.default_locale : this.locale;
-        return Messages.default_locale;
+        return default_locale;
     }
 
     @Override

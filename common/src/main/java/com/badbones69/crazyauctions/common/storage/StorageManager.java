@@ -1,50 +1,29 @@
 package com.badbones69.crazyauctions.common.storage;
 
-import com.badbones69.crazyauctions.common.CrazyPlugin;
-import com.badbones69.crazyauctions.common.enums.FileKey;
-import com.badbones69.crazyauctions.common.storage.impl.types.file.YamlFactory;
-import com.ryderbelserion.fusion.core.api.exceptions.FusionException;
-import com.ryderbelserion.fusion.paper.FusionPaper;
-import com.ryderbelserion.fusion.paper.files.PaperFileManager;
-import org.jspecify.annotations.NonNull;
-import org.spongepowered.configurate.CommentedConfigurationNode;
-import us.crazycrew.api.storage.IStorageHolder;
-import java.nio.file.Path;
+import com.badbones69.crazyauctions.common.CrazyAuctionsPlugin;
+import com.badbones69.crazyauctions.common.enums.keys.FileKeys;
+import com.badbones69.crazyauctions.common.storage.holder.StorageHolder;
+import com.badbones69.crazyauctions.common.storage.impl.file.types.YamlFactory;
+import org.bukkit.configuration.file.YamlConfiguration;
 
 public class StorageManager {
 
-    private final PaperFileManager fileManager;
-    private final FusionPaper fusion;
-    private final Path dataPath;
+    private final CrazyAuctionsPlugin plugin;
 
-    public StorageManager(@NonNull final CrazyPlugin plugin) {
-        this.dataPath = plugin.getDataPath();
-        this.fusion = plugin.getFusion();
-
-        this.fileManager = this.fusion.getFileManager();
+    public StorageManager(final CrazyAuctionsPlugin plugin) {
+        this.plugin = plugin;
     }
 
-    public IStorageHolder init() {
-        final CommentedConfigurationNode configuration = FileKey.database.getYamlConfig();
+    @SuppressWarnings("DuplicateBranchesInSwitch")
+    public StorageHolder init() {
+        final YamlConfiguration configuration = FileKeys.config.getConfiguration();
 
-        final String type = configuration.node("database", "type").getString("YAML").toLowerCase();
+        final String storageType = configuration.getString("database.type", "YAML").toLowerCase();
 
-        return switch (type) {
-            //case "sqlite" -> new ConnectionStorage(new SqliteFactory(this.dataPath.resolve("crazyenvoys.db")), this.fusion).init();
-
-            case "sqlite" -> { // temporarily only enabled yaml for now
-                this.fileManager.addPaperFile(this.dataPath.resolve("data.yml"));
-
-                yield new YamlFactory(FileKey.data.getConfiguration()).init();
-            }
-
-            case "yaml" -> {
-                this.fileManager.addPaperFile(this.dataPath.resolve("data.yml"));
-
-                yield new YamlFactory(FileKey.data.getConfiguration()).init();
-            }
-
-            default -> throw new FusionException("Unknown Database Type: %s".formatted(type));
+        return switch (storageType.toLowerCase()) {
+            case "yaml" -> new StorageHolder(new YamlFactory(this.plugin)).init();
+            case "sqlite" -> new StorageHolder(new YamlFactory(this.plugin)).init();
+            default -> throw new IllegalStateException("Unexpected storage type value: " + storageType);
         };
     }
 }

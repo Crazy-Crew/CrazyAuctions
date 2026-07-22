@@ -1,9 +1,9 @@
 package com.badbones69.crazyauctions;
 
-import com.badbones69.crazyauctions.api.CrazyPlatform;
+import com.badbones69.crazyauctions.api.CrazyAuctionsPaper;
 import com.badbones69.crazyauctions.api.enums.Reasons;
 import com.badbones69.crazyauctions.api.registry.adapters.PaperSenderAdapter;
-import com.badbones69.crazyauctions.common.enums.FileKey;
+import com.badbones69.crazyauctions.common.enums.keys.FileKeys;
 import com.badbones69.crazyauctions.api.events.AuctionCancelledEvent;
 import com.badbones69.crazyauctions.api.events.AuctionExpireEvent;
 import com.badbones69.crazyauctions.api.events.AuctionWinBidEvent;
@@ -14,7 +14,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import us.crazycrew.api.constants.Messages;
+import com.badbones69.crazyauctions.common.enums.messages.Messages;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -23,7 +23,7 @@ public class Methods {
 
     private final static CrazyAuctions plugin = CrazyAuctions.get();
 
-    private final static CrazyPlatform platform = plugin.getPlatform();
+    private final static CrazyAuctionsPaper platform = plugin.getPlatform();
 
     private final static PaperSenderAdapter adapter = platform.getSenderAdapter();
 
@@ -41,11 +41,11 @@ public class Methods {
     }
     
     public static String getPrefix() {
-        return color(FileKey.config.getConfiguration().getString("Settings.Prefix", ""));
+        return color(FileKeys.config.getConfiguration().getString("Settings.Prefix", ""));
     }
     
     public static String getPrefix(String msg) {
-        return color(FileKey.config.getConfiguration().getString("Settings.Prefix", "") + msg);
+        return color(FileKeys.config.getConfiguration().getString("Settings.Prefix", "") + msg);
     }
 
     public static ItemStack getItemInHand(Player player) {
@@ -169,8 +169,8 @@ public class Methods {
     }
     
     public static void updateAuction() {
-        FileConfiguration config = FileKey.config.getConfiguration();
-        FileConfiguration data = FileKey.data.getConfiguration();
+        FileConfiguration config = FileKeys.config.getConfiguration();
+        FileConfiguration data = FileKeys.data.getConfiguration();
 
         Calendar cal = Calendar.getInstance();
         Calendar expireTime = Calendar.getInstance();
@@ -238,7 +238,7 @@ public class Methods {
                             new AuctionWinBidEvent(player, Methods.fromBase64(data.getString("Items." + i + ".Item")), price).callEvent();
 
                             if (player != null) {
-                                adapter.sendMessage(player, Messages.win_bidding, placeholders);
+                                Messages.win_bidding.sendMessage(player, placeholders);
                             }
                         }
 
@@ -246,7 +246,7 @@ public class Methods {
                             Player player = getPlayer(seller);
 
                             if (player != null) {
-                                adapter.sendMessage(player, Messages.someone_won_players_bid, placeholders);
+                                Messages.someone_won_players_bid.sendMessage(player, placeholders);
                             }
                         }
 
@@ -259,7 +259,7 @@ public class Methods {
                         Player player = getPlayer(seller);
 
                         if (isOnline(seller) && player != null) {
-                            adapter.sendMessage(player, Messages.item_has_expired);
+                            Messages.item_has_expired.sendMessage(player);
                         }
 
                         AuctionExpireEvent event = new AuctionExpireEvent(player, Methods.fromBase64(data.getString("Items." + i + ".Item")));
@@ -277,13 +277,13 @@ public class Methods {
             }
         }
 
-        if (shouldSave) FileKey.data.save();
+        if (shouldSave) FileKeys.data.save();
     }
     
     public static long getPrice(String ID, Boolean Expired) {
         long price = 0;
 
-        FileConfiguration configuration = FileKey.data.getConfiguration();
+        FileConfiguration configuration = FileKeys.data.getConfiguration();
 
         if (Expired) {
             if (configuration.contains("OutOfTime/Cancelled." + ID + ".Price")) {

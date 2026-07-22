@@ -1,7 +1,6 @@
 package com.badbones69.crazyauctions;
 
-import com.badbones69.crazyauctions.api.CrazyManager;
-import com.badbones69.crazyauctions.api.CrazyPlatform;
+import com.badbones69.crazyauctions.api.CrazyAuctionsPaper;
 import com.badbones69.crazyauctions.controllers.CacheListener;
 import com.badbones69.crazyauctions.controllers.GuiListener;
 import com.badbones69.crazyauctions.controllers.MarcoListener;
@@ -25,20 +24,17 @@ public class CrazyAuctions extends JavaPlugin {
         return JavaPlugin.getPlugin(CrazyAuctions.class);
     }
 
-    private CrazyManager crazyManager;
     private VaultSupport support;
 
-    private CrazyPlatform platform;
+    private CrazyAuctionsPaper platform;
     private FusionPaper fusion;
 
     @Override
     public void onEnable() {
-        this.platform = new CrazyPlatform(this, new FusionPaper(this));
+        this.platform = new CrazyAuctionsPaper(this, new FusionPaper(this));
         this.platform.init();
 
         this.fusion = this.platform.getFusion();
-
-        this.crazyManager = new CrazyManager();
 
         final Server server = getServer();
         final PluginManager pluginManager = server.getPluginManager();
@@ -77,16 +73,12 @@ public class CrazyAuctions extends JavaPlugin {
         server.getAsyncScheduler().cancelTasks(this);
     }
 
+    public final CrazyAuctionsPaper getPlatform() {
+        return this.platform;
+    }
+
     public final VaultSupport getSupport() {
         return this.support;
-    }
-
-    public final CrazyManager getCrazyManager() {
-        return this.crazyManager;
-    }
-
-    public final CrazyPlatform getPlatform() {
-        return this.platform;
     }
 
     public final FusionPaper getFusion() {

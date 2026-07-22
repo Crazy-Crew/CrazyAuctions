@@ -2,7 +2,7 @@ package com.badbones69.crazyauctions.api.objects.items;
 
 import org.bukkit.inventory.ItemStack;
 import org.jspecify.annotations.NonNull;
-import us.crazycrew.api.items.IAuctionItem;
+import us.crazycrew.api.adapters.items.IAuctionItem;
 
 public class PaperAuctionItem implements IAuctionItem<ItemStack> {
 

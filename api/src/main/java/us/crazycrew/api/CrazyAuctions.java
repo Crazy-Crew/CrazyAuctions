@@ -1,67 +1,62 @@
 package us.crazycrew.api;
 
+import com.ryderbelserion.fusion.core.api.FusionKey;
 import com.ryderbelserion.fusion.core.api.registry.message.MessageRegistry;
 import org.jetbrains.annotations.ApiStatus;
-import org.jspecify.annotations.NonNull;
-import us.crazycrew.api.items.IAuctionItem;
-import us.crazycrew.api.registry.IPlayerRegistry;
-import us.crazycrew.api.storage.IStorageHolder;
+import org.jspecify.annotations.NullMarked;
+import us.crazycrew.api.adapters.items.IAuctionItem;
+import us.crazycrew.api.adapters.sender.ISenderAdapter;
+import us.crazycrew.api.registry.IUserRegistry;
 import java.nio.file.Path;
 import java.util.UUID;
 
-public abstract class CrazyAuctions<S, K, I> {
+@NullMarked
+public abstract class CrazyAuctions<K, I> {
 
     public static final UUID CONSOLE_UUID = new UUID(0, 0);
     public static final String CONSOLE_NAME = "Console";
-
     public static final String namespace = "crazyauctions";
+    public static final FusionKey default_locale = FusionKey.key(namespace, "default");
 
-    public abstract @NonNull IAuctionItem<I> getItem(@NonNull final I itemStack);
+    protected final Path path;
 
-    public abstract @NonNull MessageRegistry getMessageRegistry();
+    public CrazyAuctions(final Path path) {
+        this.path = path;
+    }
 
-    public abstract @NonNull IStorageHolder getStorageHolder();
+    public abstract IAuctionItem<I> getItem(final I itemStack);
 
-    public abstract @NonNull IPlayerRegistry getUserRegistry();
+    @ApiStatus.Internal
+    public abstract MessageRegistry getMessageRegistry();
 
-    public abstract @NonNull Path getDataPath();
+    public abstract IUserRegistry getUserRegistry();
 
-    public abstract @NonNull K getFusion();
-
-    public abstract void loadExamples();
-
-    public abstract void post();
-
-    public abstract void init();
-
-    public abstract void stop();
-
-    public abstract void reload();
+    public abstract ISenderAdapter getSenderAdapter();
 
     public abstract boolean isSellModuleEnabled();
 
     public abstract boolean isBidModuleEnabled();
 
-    public static class Provider {
-        private static CrazyAuctions instance;
+    public abstract Path getDataPath();
 
-        @ApiStatus.Internal
-        private Provider() {
-            throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
-        }
+    @ApiStatus.Internal
+    public abstract K getFusion();
 
-        public static CrazyAuctions getInstance() {
-            return instance;
-        }
+    @ApiStatus.Internal
+    public abstract void loadMessages();
 
-        @ApiStatus.Internal
-        public static void register(@NonNull final CrazyAuctions instance) {
-            Provider.instance = instance;
-        }
+    @ApiStatus.Internal
+    public abstract void loadExamples();
 
-        @ApiStatus.Internal
-        public static void unregister() {
-            Provider.instance = null;
-        }
-    }
+    @ApiStatus.Internal
+    public abstract void reload();
+
+    @ApiStatus.Internal
+    public abstract void init();
+
+    @ApiStatus.Internal
+    public abstract void post();
+
+    @ApiStatus.Internal
+    public abstract void stop();
 }
