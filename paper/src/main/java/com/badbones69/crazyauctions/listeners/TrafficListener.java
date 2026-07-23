@@ -1,4 +1,4 @@
-package com.badbones69.crazyauctions.controllers;
+package com.badbones69.crazyauctions.listeners;
 
 import com.badbones69.crazyauctions.CrazyAuctions;
 import com.badbones69.crazyauctions.Methods;

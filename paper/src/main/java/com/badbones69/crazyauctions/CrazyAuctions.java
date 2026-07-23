@@ -1,10 +1,10 @@
 package com.badbones69.crazyauctions;
 
 import com.badbones69.crazyauctions.api.CrazyAuctionsPaper;
-import com.badbones69.crazyauctions.controllers.CacheListener;
+import com.badbones69.crazyauctions.listeners.cache.CacheListener;
 import com.badbones69.crazyauctions.controllers.GuiListener;
 import com.badbones69.crazyauctions.controllers.MarcoListener;
-import com.badbones69.crazyauctions.controllers.TrafficListener;
+import com.badbones69.crazyauctions.listeners.TrafficListener;
 import com.badbones69.crazyauctions.currency.VaultSupport;
 import com.badbones69.crazyauctions.datafixer.ConfigFixer;
 import com.ryderbelserion.fusion.paper.FusionPaper;
