@@ -17,6 +17,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ItemType;
 import org.jspecify.annotations.NonNull;
 import us.crazycrew.api.enums.ShopType;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 public class YamlFactory extends FlatFactory {
@@ -130,6 +133,50 @@ public class YamlFactory extends FlatFactory {
                 }
             }
         }
+
+        repairStoreIDs();
+    }
+
+    /**
+     * Gives every listing an id that no other listing shares.
+     *
+     * <p>The id of an expired item used to be copied over as a number, which came out as 0 for
+     * every entry and left the menus unable to tell those listings apart.
+     */
+    private void repairStoreIDs() {
+        final Set<String> ids = new HashSet<>();
+
+        boolean isSaving = false;
+
+        for (final String path : List.of("Items", "OutOfTime/Cancelled")) {
+            final ConfigurationSection section = this.configuration.getConfigurationSection(path);
+
+            if (section == null) continue;
+
+            for (final String key : section.getKeys(false)) {
+                final ConfigurationSection listing = section.getConfigurationSection(key);
+
+                if (listing == null) continue;
+
+                final String id = listing.getString("StoreID", "");
+
+                if (!id.isBlank() && ids.add(id)) continue;
+
+                String replacement;
+
+                do {
+                    replacement = UUID.randomUUID().toString().substring(0, 8);
+                } while (!ids.add(replacement));
+
+                listing.set("StoreID", replacement);
+
+                isSaving = true;
+            }
+        }
+
+        if (isSaving) {
+            FileKeys.data.save();
+        }
     }
 
     @Override
@@ -176,7 +223,7 @@ public class YamlFactory extends FlatFactory {
             }
         }
 
-        item.set("StoreID", UUID.randomUUID().toString().substring(0, 8));
+        item.set("StoreID", getStoreID(section));
 
         item.set("Full-Time", TimeUtils.convertToMill(config.getString("Settings.Full-Expire-Time", "10d")));
 
@@ -188,6 +235,41 @@ public class YamlFactory extends FlatFactory {
         item.set("Item", base64);
 
         FileKeys.data.save();
+    }
+
+    /**
+     * Builds an id that is not in use by another listing.
+     *
+     * <p>The menus resolve a clicked item back to its listing by this id, so a duplicate would
+     * hand the buyer someone else's item.
+     *
+     * @param items The section holding the currently listed items.
+     * @return An id no other listing is using.
+     */
+    private String getStoreID(@NonNull final ConfigurationSection items) {
+        final ConfigurationSection expired = this.configuration.getConfigurationSection("OutOfTime/Cancelled");
+
+        String id;
+
+        do {
+            id = UUID.randomUUID().toString().substring(0, 8);
+        } while (isTaken(items, id) || (expired != null && isTaken(expired, id)));
+
+        return id;
+    }
+
+    private boolean isTaken(@NonNull final ConfigurationSection section, @NonNull final String id) {
+        for (final String key : section.getKeys(false)) {
+            final ConfigurationSection listing = section.getConfigurationSection(key);
+
+            if (listing == null) continue;
+
+            if (id.equals(listing.getString("StoreID", key))) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     @Override

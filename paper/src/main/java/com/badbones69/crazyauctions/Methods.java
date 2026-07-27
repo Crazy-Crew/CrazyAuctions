@@ -82,8 +82,8 @@ public class Methods {
         return false;
     }
     
-    public static List<ItemStack> getPage(List<ItemStack> list, Integer page) {
-        List<ItemStack> items = new ArrayList<>();
+    public static <T> List<T> getPage(List<T> list, Integer page) {
+        List<T> items = new ArrayList<>();
 
         if (page <= 0) page = 1;
 
@@ -106,34 +106,7 @@ public class Methods {
 
         return items;
     }
-    
-    public static List<Integer> getPageInts(List<Integer> list, Integer page) {
-        List<Integer> items = new ArrayList<>();
 
-        if (page <= 0) page = 1;
-
-        int max = 45;
-        int index = page * max - max;
-        int endIndex = index >= list.size() ? list.size() - 1 : index + max;
-
-        for (; index < endIndex; index++) {
-            if (index < list.size()) items.add(list.get(index));
-        }
-
-        for (; items.isEmpty(); page--) {
-            if (page <= 0) break;
-
-            index = page * max - max;
-            endIndex = index >= list.size() ? list.size() - 1 : index + max;
-
-            for (; index < endIndex; index++) {
-                if (index < list.size()) items.add(list.get(index));
-            }
-        }
-
-        return items;
-    }
-    
     public static int getMaxPage(List<ItemStack> list) {
         int maxPage = 1;
         int amount = list.size();
@@ -252,7 +225,7 @@ public class Methods {
 
                         data.set("OutOfTime/Cancelled." + num + ".Seller", winner);
                         data.set("OutOfTime/Cancelled." + num + ".Full-Time", fullExpireTime.getTimeInMillis());
-                        data.set("OutOfTime/Cancelled." + num + ".StoreID", data.getInt("Items." + i + ".StoreID"));
+                        data.set("OutOfTime/Cancelled." + num + ".StoreID", getStoreID(data, "Items." + i));
                         data.set("OutOfTime/Cancelled." + num + ".Item", data.getString("Items." + i + ".Item"));
                     } else {
                         String seller = data.getString("Items." + i + ".Seller");
@@ -267,7 +240,7 @@ public class Methods {
 
                         data.set("OutOfTime/Cancelled." + num + ".Seller", data.getString("Items." + i + ".Seller"));
                         data.set("OutOfTime/Cancelled." + num + ".Full-Time", fullExpireTime.getTimeInMillis());
-                        data.set("OutOfTime/Cancelled." + num + ".StoreID", data.getInt("Items." + i + ".StoreID"));
+                        data.set("OutOfTime/Cancelled." + num + ".StoreID", getStoreID(data, "Items." + i));
                         data.set("OutOfTime/Cancelled." + num + ".Item", data.getString("Items." + i + ".Item"));
                     }
 
@@ -280,6 +253,20 @@ public class Methods {
         if (shouldSave) FileKeys.data.save();
     }
     
+    /**
+     * Reads the id a listing is identified by in the menus.
+     *
+     * <p>It is saved as a string, but older data files may have it saved as a number and some
+     * entries may not have it at all, so the section the listing lives in is used as a fallback.
+     *
+     * @param data The file in which the data is saved.
+     * @param path The section the listing is saved in. i.e. Items.1
+     * @return The id of the listing.
+     */
+    public static String getStoreID(FileConfiguration data, String path) {
+        return data.getString(path + ".StoreID", path.substring(path.lastIndexOf('.') + 1));
+    }
+
     public static long getPrice(String ID, Boolean Expired) {
         long price = 0;
 
@@ -315,7 +302,7 @@ public class Methods {
 
         data.set("OutOfTime/Cancelled." + num + ".Seller", data.getString("Items." + i + ".Seller"));
         data.set("OutOfTime/Cancelled." + num + ".Full-Time", data.getLong("Items." + i + ".Full-Time"));
-        data.set("OutOfTime/Cancelled." + num + ".StoreID", data.getInt("Items." + i + ".StoreID"));
+        data.set("OutOfTime/Cancelled." + num + ".StoreID", getStoreID(data, "Items." + i));
         data.set("OutOfTime/Cancelled." + num + ".Item", data.getString("Items." + i + ".Item"));
 
         data.set("Items." + i, null);
