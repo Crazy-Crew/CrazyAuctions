@@ -399,7 +399,7 @@ public class GuiListener implements Listener {
         String price = StringUtils.formatNumber(Methods.getPrice(ID, false));
         String time = Methods.convertToTime(data.getLong("Items." + ID + ".Time-Till-Expire"));
 
-        String sellerName = data.getString("Items." + ID + ".Seller", "N/A");
+        String sellerName = data.getString("Items." + ID + ".SellerName", "N/A");
 
         ItemBuilder itemBuilder = ItemBuilder.convertItemStack(data.getString("Items." + ID + ".Item"));
 
