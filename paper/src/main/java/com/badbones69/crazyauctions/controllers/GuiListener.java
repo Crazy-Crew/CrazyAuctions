@@ -649,7 +649,7 @@ public class GuiListener implements Listener {
 
         Player player = (Player) event.getPlayer();
 
-        if (auctionMenu.getTitle().contains(Methods.color(config.getString("Settings.Bidding-On-Item")))) bidding.remove(player);
+        if (auctionMenu.getTitle().contains(Methods.color(config.getString("Settings.Bidding-On-Item")))) bidding.remove(player.getUniqueId());
     }
 
     @EventHandler
