@@ -7,9 +7,7 @@ import com.badbones69.crazyauctions.api.builders.ItemBuilder;
 import com.badbones69.crazyauctions.api.enums.Category;
 import com.badbones69.crazyauctions.api.enums.Reasons;
 import com.badbones69.crazyauctions.api.enums.other.Permissions;
-import com.badbones69.crazyauctions.api.registry.adapters.PaperSenderAdapter;
 import com.ryderbelserion.fusion.core.utils.StringUtils;
-import com.ryderbelserion.fusion.paper.FusionPaper;
 import com.badbones69.crazyauctions.common.enums.messages.Messages;
 import us.crazycrew.api.enums.ShopType;
 import com.badbones69.crazyauctions.common.enums.keys.FileKeys;
@@ -46,15 +44,11 @@ public class GuiListener implements Listener {
 
     private static final CrazyAuctionsPaper platform = plugin.getPlatform();
 
-    private static final FusionPaper fusion = platform.getFusion();
-
-    private static final PaperSenderAdapter adapter = platform.getSenderAdapter();
-
     private static final Map<UUID, Double> bidding = new HashMap<>();
     private static final Map<UUID, String> biddingID = new HashMap<>();
     private static final Map<UUID, ShopType> shopType = new HashMap<>(); // Shop Type
     private static final Map<UUID, Category> shopCategory = new HashMap<>(); // Category Type
-    private static final Map<UUID, List<Integer>> List = new HashMap<>();
+    private static final Map<UUID, List<String>> List = new HashMap<>();
     private static final Map<UUID, String> IDs = new HashMap<>();
 
     public static void openShop(@NotNull Player player, @NotNull ShopType sell, @NotNull Category cat, int page) {
@@ -63,7 +57,7 @@ public class GuiListener implements Listener {
         YamlConfiguration config = FileKeys.config.getConfiguration();
         YamlConfiguration data = FileKeys.data.getConfiguration();
         List<ItemStack> items = new ArrayList<>();
-        List<Integer> ID = new ArrayList<>();
+        List<String> ID = new ArrayList<>();
 
         if (!data.contains("Items")) {
             data.set("Items.Clear", null);
@@ -103,7 +97,7 @@ public class GuiListener implements Listener {
 
                             items.add(itemBuilder.build());
 
-                            ID.add(data.getInt("Items." + i + ".StoreID"));
+                            ID.add(data.getString("Items." + i + ".StoreID"));
                         }
                     } else {
                         if (sell == ShopType.SELL) {
@@ -123,7 +117,7 @@ public class GuiListener implements Listener {
 
                             items.add(itemBuilder.build());
 
-                            ID.add(data.getInt("Items." + i + ".StoreID"));
+                            ID.add(data.getString("Items." + i + ".StoreID"));
                         }
                     }
                 }
@@ -194,13 +188,14 @@ public class GuiListener implements Listener {
         setPage(inv, page, items, ID, player);
     }
 
-    private static void setPage(Inventory inv, int page, List<ItemStack> items, List<Integer> ID, Player player) {
+    private static void setPage(Inventory inv, int page, List<ItemStack> items, List<String> ID, Player player) {
         for (ItemStack item : Methods.getPage(items, page)) {
             int slot = inv.firstEmpty();
 
             inv.setItem(slot, item);
         }
-        List<Integer> Id = new ArrayList<>(Methods.getPageInts(ID, page));
+
+        List<String> Id = new ArrayList<>(Methods.getPageInts(ID, page));
         List.put(player.getUniqueId(), Id);
 
         player.openInventory(inv);
@@ -256,7 +251,7 @@ public class GuiListener implements Listener {
         YamlConfiguration data = FileKeys.data.getConfiguration();
 
         List<ItemStack> items = new ArrayList<>();
-        List<Integer> ID = new ArrayList<>();
+        List<String> ID = new ArrayList<>();
 
         Inventory inv = new AuctionMenu(54, Methods.color(config.getString("Settings.Players-Current-Items"))).getInventory();
 
@@ -289,7 +284,7 @@ public class GuiListener implements Listener {
 
                     items.add(itemBuilder.build());
 
-                    ID.add(data.getInt("Items." + i + ".StoreID"));
+                    ID.add(data.getString("Items." + i + ".StoreID"));
                 }
             }
         }
@@ -304,7 +299,7 @@ public class GuiListener implements Listener {
         YamlConfiguration data = FileKeys.data.getConfiguration();
 
         List<ItemStack> items = new ArrayList<>();
-        List<Integer> ID = new ArrayList<>();
+        List<String> ID = new ArrayList<>();
 
         if (data.contains("OutOfTime/Cancelled")) {
             for (String i : data.getConfigurationSection("OutOfTime/Cancelled").getKeys(false)) {
@@ -328,7 +323,7 @@ public class GuiListener implements Listener {
 
                         items.add(itemBuilder.build());
 
-                        ID.add(data.getInt("OutOfTime/Cancelled." + i + ".StoreID"));
+                        ID.add(data.getString("OutOfTime/Cancelled." + i + ".StoreID"));
                     }
                 }
             }
@@ -470,7 +465,7 @@ public class GuiListener implements Listener {
         YamlConfiguration data = FileKeys.data.getConfiguration();
 
         List<ItemStack> items = new ArrayList<>();
-        List<Integer> ID = new ArrayList<>();
+        List<String> ID = new ArrayList<>();
 
         final UUID uuid = player.getUniqueId();
         final String asString = uuid.toString();
@@ -521,7 +516,7 @@ public class GuiListener implements Listener {
 
                     items.add(itemBuilder.build());
 
-                    ID.add(data.getInt("Items." + i + ".StoreID"));
+                    ID.add(data.getString("Items." + i + ".StoreID"));
                 }
             }
         }
@@ -897,13 +892,13 @@ public class GuiListener implements Listener {
 
             if (List.containsKey(player.getUniqueId())) {
                 if (List.get(player.getUniqueId()).size() >= slot) {
-                    int id = List.get(player.getUniqueId()).get(slot);
+                    String id = List.get(player.getUniqueId()).get(slot);
 
                     if (data.contains("Items")) {
                         for (String i : data.getConfigurationSection("Items").getKeys(false)) {
-                            int ID = data.getInt("Items." + i + ".StoreID");
+                            String ID = data.getString("Items." + i + ".StoreID");
 
-                            if (id == ID) {
+                            if (id.equals(ID)) {
                                 if (Permissions.admin_wildcard.hasPermission(player) || Permissions.force_end.hasPermission(player)) {
                                     if (clickEvent.getAction() == InventoryAction.MOVE_TO_OTHER_INVENTORY) {
 
@@ -1163,12 +1158,12 @@ public class GuiListener implements Listener {
 
             if (List.containsKey(player.getUniqueId())) {
                 if (List.get(player.getUniqueId()).size() >= slot) {
-                    int id = List.get(player.getUniqueId()).get(slot);
+                    String id = List.get(player.getUniqueId()).get(slot);
 
                     if (data.contains("Items")) {
                         for (String i : data.getConfigurationSection("Items").getKeys(false)) {
-                            int ID = data.getInt("Items." + i + ".StoreID");
-                            if (id == ID) {
+                            String ID = data.getString("Items." + i + ".StoreID");
+                            if (id.equals(ID)) {
                                 Messages.cancelled_item.sendMessage(player);
 
                                 Methods.expireItem(1, player, i, data, Reasons.PLAYER_FORCE_CANCEL);
@@ -1272,13 +1267,13 @@ public class GuiListener implements Listener {
 
             if (List.containsKey(player.getUniqueId())) {
                 if (List.get(player.getUniqueId()).size() >= slot) {
-                    int id = List.get(player.getUniqueId()).get(slot);
+                    String id = List.get(player.getUniqueId()).get(slot);
 
                     if (data.contains("OutOfTime/Cancelled")) {
                         for (String i : data.getConfigurationSection("OutOfTime/Cancelled").getKeys(false)) {
-                            int ID = data.getInt("OutOfTime/Cancelled." + i + ".StoreID");
+                            String ID = data.getString("OutOfTime/Cancelled." + i + ".StoreID");
 
-                            if (id == ID) {
+                            if (id.equals(ID)) {
                                 if (!Methods.isInvFull(player)) {
                                     Messages.got_item_back.sendMessage(player);
 

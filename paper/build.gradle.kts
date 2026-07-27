@@ -5,9 +5,17 @@ plugins {
 project.group = "${rootProject.group}"
 
 repositories {
-    maven("https://repo.fancyinnovations.com/releases/")
+    exclusiveContent {
+        forRepository {
+            maven("https://repo.essentialsx.net/releases/")
+        }
 
-    maven("https://repo.essentialsx.net/releases/")
+        filter {
+            includeGroup("net.essentialsx")
+        }
+    }
+
+    maven("https://repo.fancyinnovations.com/releases/")
 
     maven("https://repo.momirealms.net/releases/")
 

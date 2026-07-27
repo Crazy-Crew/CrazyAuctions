@@ -107,8 +107,8 @@ public class Methods {
         return items;
     }
     
-    public static List<Integer> getPageInts(List<Integer> list, Integer page) {
-        List<Integer> items = new ArrayList<>();
+    public static List<String> getPageInts(List<String> list, Integer page) {
+        List<String> items = new ArrayList<>();
 
         if (page <= 0) page = 1;
 
@@ -252,7 +252,7 @@ public class Methods {
 
                         data.set("OutOfTime/Cancelled." + num + ".Seller", winner);
                         data.set("OutOfTime/Cancelled." + num + ".Full-Time", fullExpireTime.getTimeInMillis());
-                        data.set("OutOfTime/Cancelled." + num + ".StoreID", data.getInt("Items." + i + ".StoreID"));
+                        data.set("OutOfTime/Cancelled." + num + ".StoreID", data.getString("Items." + i + ".StoreID"));
                         data.set("OutOfTime/Cancelled." + num + ".Item", data.getString("Items." + i + ".Item"));
                     } else {
                         String seller = data.getString("Items." + i + ".Seller");
@@ -267,7 +267,7 @@ public class Methods {
 
                         data.set("OutOfTime/Cancelled." + num + ".Seller", data.getString("Items." + i + ".Seller"));
                         data.set("OutOfTime/Cancelled." + num + ".Full-Time", fullExpireTime.getTimeInMillis());
-                        data.set("OutOfTime/Cancelled." + num + ".StoreID", data.getInt("Items." + i + ".StoreID"));
+                        data.set("OutOfTime/Cancelled." + num + ".StoreID", data.getString("Items." + i + ".StoreID"));
                         data.set("OutOfTime/Cancelled." + num + ".Item", data.getString("Items." + i + ".Item"));
                     }
 
@@ -315,7 +315,7 @@ public class Methods {
 
         data.set("OutOfTime/Cancelled." + num + ".Seller", data.getString("Items." + i + ".Seller"));
         data.set("OutOfTime/Cancelled." + num + ".Full-Time", data.getLong("Items." + i + ".Full-Time"));
-        data.set("OutOfTime/Cancelled." + num + ".StoreID", data.getInt("Items." + i + ".StoreID"));
+        data.set("OutOfTime/Cancelled." + num + ".StoreID", data.getString("Items." + i + ".StoreID"));
         data.set("OutOfTime/Cancelled." + num + ".Item", data.getString("Items." + i + ".Item"));
 
         data.set("Items." + i, null);

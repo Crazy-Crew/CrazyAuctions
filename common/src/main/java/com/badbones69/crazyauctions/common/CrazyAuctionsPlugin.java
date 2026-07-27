@@ -39,7 +39,7 @@ public abstract class CrazyAuctionsPlugin<I> extends CrazyAuctions<FusionPaper, 
 
     @Override
     public void init() {
-        this.fusion.init();
+        this.fusion.init().post();
 
         if (!this.fusion.isPluginEnabled("Vault")) {
             this.fusion.log(Level.ERROR, "Vault was not found on the server, so the plugin will not function!");

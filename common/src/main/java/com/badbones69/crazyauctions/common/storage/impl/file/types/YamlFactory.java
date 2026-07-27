@@ -176,7 +176,7 @@ public class YamlFactory extends FlatFactory {
             }
         }
 
-        item.set("StoreID", UUID.randomUUID().toString().substring(0, 8));
+        item.set("StoreID", UUID.randomUUID().toString());
 
         item.set("Full-Time", TimeUtils.convertToMill(config.getString("Settings.Full-Expire-Time", "10d")));
 
