@@ -110,6 +110,8 @@ public class CrazyAuctionsPaper extends CrazyAuctionsPlugin<ItemStack> {
         this.isSellingModuleEnabled = configuration.getBoolean("Settings.Feature-Toggle.Selling", true);
 
         this.isBiddingModuleEnabled = configuration.getBoolean("Settings.Feature-Toggle.Bidding", true);
+
+        this.plugin.getTaxService().reload();
     }
 
     @Override

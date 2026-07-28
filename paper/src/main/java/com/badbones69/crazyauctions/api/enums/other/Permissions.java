@@ -24,6 +24,7 @@ public enum Permissions {
 
     force_end("force-end-all", "Access to /crazyauctions force-end-all", PermissionDefault.OP, false),
 
+    tax("tax", "Bypasses taxes on auction transactions", PermissionDefault.FALSE, true),
     bypass("bypass", "Bypasses most plugin restrictions", PermissionDefault.FALSE, true),
 
     access("access", "Access other portions of the plugin", PermissionDefault.TRUE, true),

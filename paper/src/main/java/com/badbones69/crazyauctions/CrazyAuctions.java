@@ -6,6 +6,7 @@ import com.badbones69.crazyauctions.controllers.GuiListener;
 import com.badbones69.crazyauctions.controllers.MarcoListener;
 import com.badbones69.crazyauctions.listeners.TrafficListener;
 import com.badbones69.crazyauctions.currency.VaultSupport;
+import com.badbones69.crazyauctions.currency.tax.TaxService;
 import com.badbones69.crazyauctions.datafixer.ConfigFixer;
 import com.ryderbelserion.fusion.paper.FusionPaper;
 import com.ryderbelserion.fusion.paper.builders.folia.FoliaScheduler;
@@ -25,6 +26,7 @@ public class CrazyAuctions extends JavaPlugin {
     }
 
     private VaultSupport support;
+    private TaxService taxService;
 
     private CrazyAuctionsPaper platform;
     private FusionPaper fusion;
@@ -50,6 +52,9 @@ public class CrazyAuctions extends JavaPlugin {
 
         this.support = new VaultSupport();
         this.support.setupEconomy();
+        this.support.setupPermissions();
+
+        this.taxService = new TaxService(this, this.support);
 
         new FoliaScheduler(this, Scheduler.global_scheduler) {
             @Override
@@ -79,6 +84,10 @@ public class CrazyAuctions extends JavaPlugin {
 
     public final VaultSupport getSupport() {
         return this.support;
+    }
+
+    public final TaxService getTaxService() {
+        return this.taxService;
     }
 
     public final FusionPaper getFusion() {

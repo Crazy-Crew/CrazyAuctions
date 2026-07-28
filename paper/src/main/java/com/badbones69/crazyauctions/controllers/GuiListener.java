@@ -14,6 +14,8 @@ import com.badbones69.crazyauctions.common.enums.keys.FileKeys;
 import com.badbones69.crazyauctions.api.events.AuctionBuyEvent;
 import com.badbones69.crazyauctions.api.events.AuctionNewBidEvent;
 import com.badbones69.crazyauctions.currency.VaultSupport;
+import com.badbones69.crazyauctions.currency.tax.TaxQuote;
+import com.badbones69.crazyauctions.currency.tax.TaxService;
 import com.ryderbelserion.fusion.paper.builders.folia.FoliaScheduler;
 import com.ryderbelserion.fusion.paper.builders.folia.Scheduler;
 import org.bukkit.Material;
@@ -711,12 +713,14 @@ public class GuiListener implements Listener {
                     String ID = biddingID.get(player.getUniqueId());
                     double bid = bidding.get(player.getUniqueId());
                     String topBidder = data.getString("Items." + ID + ".TopBidder", "None");
+                    final OfflinePlayer sellerPlayer = Methods.getOfflinePlayer(data.getString("Items." + ID + ".Seller"));
+                    final TaxQuote quote = plugin.getTaxService().quote((long) bid, player, sellerPlayer);
 
-                    if (plugin.getSupport().getMoney(player) < bid) {
+                    if (plugin.getSupport().getMoney(player) < quote.buyerTotal()) {
                         Map<String, String> placeholders = new HashMap<>();
 
-                        placeholders.put("%Money_Needed%", (bid - plugin.getSupport().getMoney(player)) + "");
-                        placeholders.put("%money_needed%", (bid - plugin.getSupport().getMoney(player)) + "");
+                        placeholders.put("%Money_Needed%", (quote.buyerTotal() - plugin.getSupport().getMoney(player)) + "");
+                        placeholders.put("%money_needed%", (quote.buyerTotal() - plugin.getSupport().getMoney(player)) + "");
 
                         Messages.need_more_money.sendMessage(player, placeholders);
 
@@ -947,8 +951,10 @@ public class GuiListener implements Listener {
                                 }
 
                                 long cost = data.getLong("Items." + i + ".Price");
+                                final OfflinePlayer sellerPlayer = Methods.getOfflinePlayer(data.getString("Items." + i + ".Seller"));
+                                final TaxQuote quote = plugin.getTaxService().quote(cost, player, sellerPlayer);
 
-                                if (plugin.getSupport().getMoney(player) < cost) {
+                                if (plugin.getSupport().getMoney(player) < quote.buyerTotal()) {
                                     String itemName = config.getString("Settings.GUISettings.OtherSettings.Cant-Afford.Item");
                                     String name = config.getString("Settings.GUISettings.OtherSettings.Cant-Afford.Name");
 
@@ -1055,16 +1061,19 @@ public class GuiListener implements Listener {
                     }
 
                     final VaultSupport support = plugin.getSupport();
+                    final TaxService taxService = plugin.getTaxService();
+                    final OfflinePlayer sellerPlayer = Methods.getOfflinePlayer(seller);
+                    final TaxQuote quote = taxService.quote(cost, player, sellerPlayer);
 
                     Map<String, String> placeholders = new HashMap<>();
 
-                    if (support.getMoney(player) < cost) {
+                    if (support.getMoney(player) < quote.buyerTotal()) {
                         playClick(player);
 
                         player.closeInventory();
 
-                        placeholders.put("%Money_Needed%", (cost - plugin.getSupport().getMoney(player)) + "");
-                        placeholders.put("%money_needed%", (cost - plugin.getSupport().getMoney(player)) + "");
+                        placeholders.put("%Money_Needed%", (quote.buyerTotal() - plugin.getSupport().getMoney(player)) + "");
+                        placeholders.put("%money_needed%", (quote.buyerTotal() - plugin.getSupport().getMoney(player)) + "");
 
                         Messages.need_more_money.sendMessage(player, placeholders);
 
@@ -1075,13 +1084,13 @@ public class GuiListener implements Listener {
 
                     new AuctionBuyEvent(player, i, cost).callEvent();
 
-                    if (!support.removeMoney(player, cost)) {
+                    if (!support.removeMoney(player, quote.buyerTotal())) {
                         playClick(player);
 
                         player.closeInventory();
 
-                        placeholders.put("%Money_Needed%", (cost - support.getMoney(player)) + "");
-                        placeholders.put("%money_needed%", (cost - support.getMoney(player)) + "");
+                        placeholders.put("%Money_Needed%", (quote.buyerTotal() - support.getMoney(player)) + "");
+                        placeholders.put("%money_needed%", (quote.buyerTotal() - support.getMoney(player)) + "");
 
                         Messages.need_more_money.sendMessage(player, placeholders);
 
@@ -1090,34 +1099,41 @@ public class GuiListener implements Listener {
 
                     String price = String.valueOf(cost);
 
-                    long taxAmount = cost * config.getLong("Settings.Percent-Tax", 0) / 100;
-                    cost -= taxAmount;
+                    final boolean sellerPaid = quote.sellerProceeds() == 0
+                            || support.addMoney(sellerPlayer, quote.sellerProceeds());
 
-                    cost = Math.max(0, cost);
+                    if (!sellerPaid) {
+                        support.addMoney(player, quote.buyerTotal());
+                        player.closeInventory();
+                        Messages.transaction_failed.sendMessage(player);
 
-                    OfflinePlayer sellerPlayer = Methods.getOfflinePlayer(seller);
-                    support.addMoney(sellerPlayer, cost);
+                        return;
+                    }
 
-                    String tax = String.valueOf(taxAmount);
-                    String taxedPrice = String.valueOf(cost);
+                    taxService.depositTaxes(quote);
 
                     placeholders.put("%Price%", price);
                     placeholders.put("%price%", price);
-                    placeholders.put("%Tax%", tax);
-                    placeholders.put("%tax%", tax);
-                    placeholders.put("%Taxed_Price%", taxedPrice);
-                    placeholders.put("%taxed_price%", taxedPrice);
                     placeholders.put("%Player%", player.getName());
                     placeholders.put("%player%", player.getName());
                     placeholders.put("%Seller%", sellerPlayer.getName());
                     placeholders.put("%seller%", sellerPlayer.getName());
+                    taxService.addPlaceholders(placeholders, quote);
 
                     Messages.bought_item.sendMessage(player, placeholders);
+
+                    if (taxService.shouldShowTax() && quote.buyerTax() > 0) {
+                        Messages.buyer_tax.sendMessage(player, placeholders);
+                    }
 
                     final Player auctioneer = Methods.getPlayer(seller);
 
                     if (auctioneer != null) {
                         Messages.player_bought_item.sendMessage(auctioneer, placeholders);
+
+                        if (taxService.shouldShowTax() && quote.sellerTax() > 0) {
+                            Messages.seller_tax.sendMessage(auctioneer, placeholders);
+                        }
 
                         playSoldSound(auctioneer);
                     }

@@ -13,6 +13,7 @@ public class VaultSupport {
     private final CrazyAuctions plugin = CrazyAuctions.get();
 
     private Economy vault = null;
+    private net.milkbowl.vault.permission.Permission permissions = null;
 
     public Economy getVault() {
         return this.vault;
@@ -24,6 +25,22 @@ public class VaultSupport {
         if (serviceProvider != null) this.vault = serviceProvider.getProvider();
 
         return this.vault != null;
+    }
+
+    public void setupPermissions() {
+        final RegisteredServiceProvider<net.milkbowl.vault.permission.Permission> serviceProvider = this.plugin.getServer().getServicesManager().getRegistration(net.milkbowl.vault.permission.Permission.class);
+
+        if (serviceProvider != null) this.permissions = serviceProvider.getProvider();
+    }
+
+    public boolean hasPermission(@NotNull OfflinePlayer player, @NotNull String permission) {
+        final Player onlinePlayer = player.getPlayer();
+
+        if (onlinePlayer != null) return onlinePlayer.hasPermission(permission);
+
+        if (player.getName() == null) return false;
+
+        return this.permissions != null && this.permissions.playerHas((String) null, player, permission);
     }
 
     public double getMoney(@NotNull OfflinePlayer player) {

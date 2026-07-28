@@ -11,7 +11,31 @@ Settings:
   Full-Expire-Time: 10d #The full time the item is in the crazy auctions.
   Bid-Winner-Time: 20d #The time the winner of a bid has to claim their prize.
   Auction-List-Fee: 0 # The amount the player has to pay to list an item.
-  Percent-Tax: 0.0 # The amount of tax the player has to pay when the item is purchased.
+  Percent-Tax: 0.0 # Legacy seller tax percentage. Used only when the Tax section below is missing.
+  Tax:
+    # basic = one rate for every player; progressive = a rate based on each taxed player's balance.
+    # Players with crazyauctions.tax or crazyauctions.bypass are exempt.
+    Type: basic
+    # Player name or UUID that receives all collected taxes. Leave empty to remove tax money from circulation.
+    Account: ''
+    # Send the buyer/seller a second message with their tax breakdown.
+    Show: false
+    # player = charge the buyer; shop = deduct from the seller; both = tax both sides.
+    Apply-To: shop
+    Basic:
+      # Decimal rate: 0.05 = 5%. Values must be between 0 and 1.
+      Rate: 0.0
+    Progressive:
+      # The first upper balance greater than or equal to the player's balance is used.
+      # Use '-1' for the final bracket with no upper limit. Rates use decimal format.
+      Brackets:
+        '50000': 0.05
+        '250000': 0.10
+        '1000000': 0.15
+        '5000000': 0.25
+        '8000000': 0.35
+        '10000000': 0.40
+        '-1': 0.60
   Minimum-Sell-Price: 10 #Minimum amount you can sell an item for.
   Max-Beginning-Sell-Price: 1000000 #Max amount you can sell an item for.
   Minimum-Bid-Price: 100 #Minimum starting bid.

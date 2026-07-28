@@ -7,6 +7,8 @@ import com.badbones69.crazyauctions.common.enums.keys.FileKeys;
 import com.badbones69.crazyauctions.api.events.AuctionCancelledEvent;
 import com.badbones69.crazyauctions.api.events.AuctionExpireEvent;
 import com.badbones69.crazyauctions.api.events.AuctionWinBidEvent;
+import com.badbones69.crazyauctions.currency.tax.TaxQuote;
+import com.badbones69.crazyauctions.currency.tax.TaxService;
 import com.ryderbelserion.fusion.core.utils.StringUtils;
 import org.bukkit.*;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -169,7 +171,6 @@ public class Methods {
     }
     
     public static void updateAuction() {
-        FileConfiguration config = FileKeys.config.getConfiguration();
         FileConfiguration data = FileKeys.data.getConfiguration();
 
         Calendar cal = Calendar.getInstance();
@@ -200,61 +201,70 @@ public class Methods {
 
                     for (; data.contains("OutOfTime/Cancelled." + num); num++) ;
 
-                    if (data.getBoolean("Items." + i + ".Biddable") && !data.getString("Items." + i + ".TopBidder").equalsIgnoreCase("None") && plugin.getSupport().getMoney(getOfflinePlayer(data.getString("Items." + i + ".TopBidder"))) >= data.getLong("Items." + i + ".Price")) {
-                        String winner = data.getString("Items." + i + ".TopBidder");
-                        String seller = data.getString("Items." + i + ".Seller");
-                        long price = data.getLong("Items." + i + ".Price");
-                        long taxAmount = price * config.getLong("Settings.Percent-Tax", 0) / 100;
-                        long taxedPriceAmount = Math.max(price - taxAmount, 0);
+                    boolean completedBid = false;
 
-                        OfflinePlayer sellerPlayer = Methods.getOfflinePlayer(seller);
-                        OfflinePlayer winnerPlayer = Methods.getOfflinePlayer(winner);
+                    final String winner = data.getString("Items." + i + ".TopBidder", "None");
 
-                        plugin.getSupport().addMoney(sellerPlayer, price);
-                        plugin.getSupport().removeMoney(winnerPlayer, price);
+                    if (data.getBoolean("Items." + i + ".Biddable") && !winner.equalsIgnoreCase("None")) {
+                        final String seller = data.getString("Items." + i + ".Seller");
+                        final long price = data.getLong("Items." + i + ".Price");
+                        final OfflinePlayer sellerPlayer = Methods.getOfflinePlayer(seller);
+                        final OfflinePlayer winnerPlayer = Methods.getOfflinePlayer(winner);
+                        final TaxService taxService = plugin.getTaxService();
+                        final TaxQuote quote = taxService.quote(price, winnerPlayer, sellerPlayer);
 
-                        String tax = String.valueOf(taxAmount);
-                        String taxedPrice = String.valueOf(taxedPriceAmount);
+                        if (plugin.getSupport().getMoney(winnerPlayer) >= quote.buyerTotal()
+                                && plugin.getSupport().removeMoney(winnerPlayer, quote.buyerTotal())) {
+                            final boolean sellerPaid = quote.sellerProceeds() == 0
+                                    || plugin.getSupport().addMoney(sellerPlayer, quote.sellerProceeds());
 
-                        HashMap<String, String> placeholders = new HashMap<>();
+                            if (sellerPaid) {
+                                completedBid = true;
+                                taxService.depositTaxes(quote);
 
-                        final String placeholder = StringUtils.formatNumber(getPrice(i, false));
+                                final HashMap<String, String> placeholders = new HashMap<>();
+                                final String placeholder = StringUtils.formatNumber(getPrice(i, false));
 
-                        placeholders.put("%Price%", placeholder);
-                        placeholders.put("%price%", placeholder);
+                                placeholders.put("%Price%", placeholder);
+                                placeholders.put("%price%", placeholder);
+                                placeholders.put("%Player%", winnerPlayer.getName());
+                                placeholders.put("%player%", winnerPlayer.getName());
+                                placeholders.put("%Seller%", sellerPlayer.getName());
+                                placeholders.put("%seller%", sellerPlayer.getName());
+                                taxService.addPlaceholders(placeholders, quote);
 
-                        placeholders.put("%Tax%", tax);
-                        placeholders.put("%tax%", tax);
-                        placeholders.put("%Taxed_Price%", taxedPrice);
-                        placeholders.put("%taxed_price%", taxedPrice);
-                        placeholders.put("%Player%", winnerPlayer.getName());
-                        placeholders.put("%player%", winnerPlayer.getName());
-                        placeholders.put("%Seller%", sellerPlayer.getName());
-                        placeholders.put("%seller%", sellerPlayer.getName());
+                                final Player winnerOnline = getPlayer(winner);
 
-                        if (isOnline(winner) && getPlayer(winner) != null) {
-                            Player player = getPlayer(winner);
+                                if (winnerOnline != null) {
+                                    new AuctionWinBidEvent(winnerOnline, Methods.fromBase64(data.getString("Items." + i + ".Item")), price).callEvent();
+                                    Messages.win_bidding.sendMessage(winnerOnline, placeholders);
 
-                            new AuctionWinBidEvent(player, Methods.fromBase64(data.getString("Items." + i + ".Item")), price).callEvent();
+                                    if (taxService.shouldShowTax() && quote.buyerTax() > 0) {
+                                        Messages.buyer_tax.sendMessage(winnerOnline, placeholders);
+                                    }
+                                }
 
-                            if (player != null) {
-                                Messages.win_bidding.sendMessage(player, placeholders);
+                                final Player sellerOnline = getPlayer(seller);
+
+                                if (sellerOnline != null) {
+                                    Messages.someone_won_players_bid.sendMessage(sellerOnline, placeholders);
+
+                                    if (taxService.shouldShowTax() && quote.sellerTax() > 0) {
+                                        Messages.seller_tax.sendMessage(sellerOnline, placeholders);
+                                    }
+                                }
+
+                                data.set("OutOfTime/Cancelled." + num + ".Seller", winner);
+                                data.set("OutOfTime/Cancelled." + num + ".Full-Time", fullExpireTime.getTimeInMillis());
+                                data.set("OutOfTime/Cancelled." + num + ".StoreID", data.getString("Items." + i + ".StoreID"));
+                                data.set("OutOfTime/Cancelled." + num + ".Item", data.getString("Items." + i + ".Item"));
+                            } else {
+                                plugin.getSupport().addMoney(winnerPlayer, quote.buyerTotal());
                             }
                         }
+                    }
 
-                        if (isOnline(seller) && getPlayer(seller) != null) {
-                            Player player = getPlayer(seller);
-
-                            if (player != null) {
-                                Messages.someone_won_players_bid.sendMessage(player, placeholders);
-                            }
-                        }
-
-                        data.set("OutOfTime/Cancelled." + num + ".Seller", winner);
-                        data.set("OutOfTime/Cancelled." + num + ".Full-Time", fullExpireTime.getTimeInMillis());
-                        data.set("OutOfTime/Cancelled." + num + ".StoreID", data.getString("Items." + i + ".StoreID"));
-                        data.set("OutOfTime/Cancelled." + num + ".Item", data.getString("Items." + i + ".Item"));
-                    } else {
+                    if (!completedBid) {
                         String seller = data.getString("Items." + i + ".Seller");
                         Player player = getPlayer(seller);
 
