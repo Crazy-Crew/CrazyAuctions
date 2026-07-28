@@ -14,6 +14,8 @@ public enum Keys {
     // this contains, the number for the item which can be found in the data.yml
     auction_number("auction_number", PersistentDataType.STRING),
 
+    auction_category("auction_category", PersistentDataType.STRING),// goes to main menu
+
     // any button in the gui
     auction_button("auction_button", PersistentDataType.STRING),
 

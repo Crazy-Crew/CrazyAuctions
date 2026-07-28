@@ -80,8 +80,4 @@ public class CrazyAuctions extends JavaPlugin {
     public final VaultSupport getSupport() {
         return this.support;
     }
-
-    public final FusionPaper getFusion() {
-        return this.fusion;
-    }
 }

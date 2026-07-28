@@ -4,6 +4,7 @@ import com.badbones69.crazyauctions.CrazyAuctions;
 import com.badbones69.crazyauctions.Methods;
 import com.badbones69.crazyauctions.api.enums.other.Permissions;
 import com.badbones69.crazyauctions.api.objects.items.PaperAuctionItem;
+import com.badbones69.crazyauctions.api.registry.PaperButtonRegistry;
 import com.badbones69.crazyauctions.api.registry.PaperUserRegistry;
 import com.badbones69.crazyauctions.api.registry.adapters.PaperSenderAdapter;
 import com.badbones69.crazyauctions.commands.AuctionCommand;
@@ -48,12 +49,16 @@ public class CrazyAuctionsPaper extends CrazyAuctionsPlugin<ItemStack> {
         this.plugin = plugin;
     }
 
+    private PaperButtonRegistry buttonRegistry;
     private PaperUserRegistry userRegistry;
     private PaperSenderAdapter userAdapter;
 
     @Override
     public void init() {
         super.init();
+
+        this.buttonRegistry = new PaperButtonRegistry();
+        this.buttonRegistry.init();
 
         this.userRegistry = new PaperUserRegistry();
         this.userRegistry.init();
@@ -104,6 +109,8 @@ public class CrazyAuctionsPaper extends CrazyAuctionsPlugin<ItemStack> {
     @Override
     public void reload() {
         super.reload();
+
+        this.buttonRegistry.reload();
 
         final YamlConfiguration configuration = FileKeys.config.getConfiguration();
 
@@ -172,5 +179,9 @@ public class CrazyAuctionsPaper extends CrazyAuctionsPlugin<ItemStack> {
     @Override
     public boolean isBidModuleEnabled() {
         return isBiddingModuleEnabled;
+    }
+
+    public @NonNull final PaperButtonRegistry getButtonRegistry() {
+        return this.buttonRegistry;
     }
 }
