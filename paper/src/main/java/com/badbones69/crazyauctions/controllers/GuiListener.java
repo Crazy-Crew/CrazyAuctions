@@ -1241,6 +1241,8 @@ public class GuiListener implements Listener {
                     openShop(player, types.get(uuid), shopCategory.get(uuid), 1);
 
                     playClick(player);
+
+                    return;
                 }
 
                 case "PreviousPage" -> {
@@ -1253,6 +1255,8 @@ public class GuiListener implements Listener {
                     playClick(player);
 
                     openPlayersExpiredList(player, (page - 1));
+
+                    return;
                 }
 
                 case "Return" -> {
@@ -1303,6 +1307,8 @@ public class GuiListener implements Listener {
 
                         openPlayersExpiredList(player, page);
                     }
+
+                    return;
                 }
 
                 case "NextPage" -> {
@@ -1313,6 +1319,8 @@ public class GuiListener implements Listener {
                     playClick(player);
 
                     openPlayersExpiredList(player, (page + 1));
+
+                    return;
                 }
             }
 
