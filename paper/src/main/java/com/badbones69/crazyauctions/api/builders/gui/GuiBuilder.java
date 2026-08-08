@@ -22,22 +22,28 @@ public final class GuiBuilder implements InventoryHolder {
     private final Inventory inventory;
     private final int pageNumber;
     private final String title;
+    private final GuiType type;
 
-    public GuiBuilder(final int size, final String title, final int pageNumber) {
+    public GuiBuilder(final int size, final String title, final GuiType type, final int pageNumber) {
         this.inventory = this.server.createInventory(this, size, Methods.color(this.fusion.replacePlaceholders(this.title = title.replace("§", "&"), Map.of(
                 "{page}", String.valueOf(pageNumber)
         ))));
 
         this.pageNumber = pageNumber;
+        this.type = type;
     }
 
-    public GuiBuilder(final int size, final String title) {
-        this(size, title, 1);
+    public GuiBuilder(final int size, final String title, final GuiType type) {
+        this(size, title, type, 1);
     }
 
     @Override
     public Inventory getInventory() {
         return this.inventory;
+    }
+
+    public GuiType getType() {
+        return this.type;
     }
 
     public int getPageNumber() {
