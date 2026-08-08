@@ -35,7 +35,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.Registry;
@@ -58,13 +57,8 @@ public class GuiListener implements Listener {
 
     private static final FusionPaper fusion = platform.getFusion();
 
-    private static final Map<UUID, Double> bidding = new HashMap<>();
-    private static final Map<UUID, String> biddingID = new HashMap<>();
-    private static final Map<UUID, ShopType> types = new HashMap<>(); // Shop Type
-    private static final Map<UUID, Category> shopCategory = new HashMap<>(); // Category Type
-
-    public static void openShop(@NotNull Player player, @NotNull ShopType shopType, @NotNull Category cat, int page) {
-        final UUID uuid = player.getUniqueId();
+    public static void openShop(@NotNull final Player player, @NotNull final ShopType shopType, @NotNull final Category category, final int page) {
+        int safePage;
 
         Methods.updateAuction();
 
@@ -79,8 +73,6 @@ public class GuiListener implements Listener {
             FileKeys.data.save();
         }
 
-        shopCategory.put(uuid, cat);
-
         final ConfigurationSection section = data.getConfigurationSection("Items");
 
         if (section != null) {
@@ -91,7 +83,7 @@ public class GuiListener implements Listener {
 
                 if (!index.contains("Item")) continue;
 
-                if (!cat.equals(Category.NONE)) continue;
+                if (!category.equals(Category.NONE)) continue;
 
                 final String store_id = index.getString("StoreID", "");
 
@@ -99,7 +91,7 @@ public class GuiListener implements Listener {
 
                 final ItemBuilder itemBuilder = ItemBuilder.from(ItemType.STONE).withBase64(index.getString("Item", "")).setPersistentString(Keys.auction_store_id.getNamespacedKey(), store_id);
 
-                final Set<String> categoryItems = cat.getItems();
+                final Set<String> categoryItems = category.getItems();
 
                 if (!categoryItems.contains(itemBuilder.asString())) continue;
 
@@ -148,9 +140,9 @@ public class GuiListener implements Listener {
             }
         }
 
-        page = Math.min(Methods.getMaxPage(items), page);
+        safePage = Math.min(Methods.getMaxPage(items), page);
 
-        Inventory inv = new GuiBuilder(54, config.getString("Settings.GUIName", "&4Crazy &bAuctions&8 #{page}"), GuiType.main_menu, page).getInventory();
+        final Inventory inventory = new GuiBuilder(54, config.getString("Settings.GUIName", "&4Crazy &bAuctions&8 #{page}"), GuiType.main_menu, shopType, category, safePage).getInventory();
 
         final List<String> options = new ArrayList<>(java.util.List.of(
                 "Cancelled/ExpiredItems",
@@ -161,8 +153,6 @@ public class GuiListener implements Listener {
                 "NextPage",
                 "Refresh"
         ));
-
-        types.putIfAbsent(uuid, shopType);
 
         switch (shopType) {
             case BID -> {
@@ -182,25 +172,21 @@ public class GuiListener implements Listener {
             }
         }
 
-        final boolean hasCategory = shopCategory.containsKey(uuid);
+        final String name = Methods.color(category.getName());
 
         options.forEach(option -> buttonRegistry.getButtonByName(option).ifPresent(button -> {
             final Map<String, String> placeholders = new HashMap<>();
             final Map<NamespacedKey, String> keys = new HashMap<>();
 
-            if (hasCategory) {
-                final String name = Methods.color(shopCategory.get(uuid).getName());
+            placeholders.putIfAbsent("%Category%", name);
+            placeholders.putIfAbsent("%category%", name);
 
-                placeholders.putIfAbsent("%Category%", name);
-                placeholders.putIfAbsent("%category%", name);
+            keys.put(Keys.auction_category.getNamespacedKey(), name);
 
-                keys.put(Keys.auction_category.getNamespacedKey(), name);
-            }
-
-            button.setItem(player, inv, keys, placeholders);
+            button.setItem(player, inventory, keys, placeholders);
         }));
 
-        setPage(inv, page, items, player);
+        setPage(inventory, safePage, items, player);
     }
 
     private static void setPage(final Inventory inventory, final int page, final List<ItemStack> items, final Player player) {
@@ -216,13 +202,11 @@ public class GuiListener implements Listener {
     }
 
     public static void openCategories(@NotNull final Player player, @NotNull final ShopType shop) {
-        final UUID uuid = player.getUniqueId();
-
         Methods.updateAuction();
 
         final YamlConfiguration config = FileKeys.config.getConfiguration();
 
-        Inventory inv = new GuiBuilder(54, config.getString("Settings.Categories", "&8Categories"), GuiType.categories_menu).getInventory();
+        final Inventory inventory = new GuiBuilder(54, config.getString("Settings.Categories", "&8Categories"), GuiType.categories_menu, shop, Category.NONE).getInventory();
 
         java.util.List.of(
                 "OtherSettings.WhatIsThis.Categories",
@@ -235,11 +219,9 @@ public class GuiListener implements Listener {
                 "Armor",
                 "Food",
                 "None"
-        ).forEach(id -> buttonRegistry.getButtonByName(id).ifPresent(button -> button.setItem(player, inv, Map.of())));
+        ).forEach(id -> buttonRegistry.getButtonByName(id).ifPresent(button -> button.setItem(player, inventory, Map.of())));
 
-        types.put(uuid, shop);
-
-        player.openInventory(inv);
+        player.openInventory(inventory);
     }
 
     public static void openPlayersCurrentList(@NotNull final Player player, final int page) {
@@ -254,12 +236,12 @@ public class GuiListener implements Listener {
 
         final List<ItemStack> items = new ArrayList<>();
 
-        final Inventory inv = new GuiBuilder(54, config.getString("Settings.Players-Current-Items", "&8Your Current Listings"), GuiType.current_menu).getInventory();
+        final Inventory inventory = new GuiBuilder(54, config.getString("Settings.Players-Current-Items", "&8Your Current Listings"), GuiType.current_menu, ShopType.NONE, Category.NONE).getInventory();
 
         java.util.List.of(
                 "WhatIsThis.CurrentItems",
                 "Back"
-        ).forEach(id -> buttonRegistry.getButtonByName(id).ifPresent(button -> button.setItem(player, inv, Map.of())));
+        ).forEach(id -> buttonRegistry.getButtonByName(id).ifPresent(button -> button.setItem(player, inventory, Map.of())));
 
         final ConfigurationSection section = data.getConfigurationSection("Items");
 
@@ -318,7 +300,7 @@ public class GuiListener implements Listener {
             }
         }
 
-        setPage(inv, page, items, player);
+        setPage(inventory, page, items, player);
     }
 
     public static void openPlayersExpiredList(@NotNull final Player player, int page) {
@@ -393,7 +375,7 @@ public class GuiListener implements Listener {
 
         page = Math.min(Methods.getMaxPage(items), page);
 
-        final Inventory inv = new GuiBuilder(54, config.getString("Settings.Cancelled/Expired-Items", "&8Canceled/Expired Listings #{page}"), GuiType.expired_menu, page).getInventory();
+        final Inventory inv = new GuiBuilder(54, config.getString("Settings.Cancelled/Expired-Items", "&8Canceled/Expired Listings #{page}"), GuiType.expired_menu, ShopType.NONE, Category.NONE, page).getInventory();
 
         java.util.List.of(
                 "WhatIsThis.Cancelled/ExpiredItems",
@@ -404,9 +386,9 @@ public class GuiListener implements Listener {
         ).forEach(id -> buttonRegistry.getButtonByName(id).ifPresent(button -> {
             final Map<NamespacedKey, String> values = new HashMap<>();
 
-            /*switch (id) { //todo() store page on the pdc.
-                case "PreviousPage", "Back", "NextPage", "Return" -> values.put(Keys.auction_button.getNamespacedKey(), id);
-            }*/
+            switch (id) {
+                case "PreviousPage", "Back", "NextPage", "Return" -> values.put(Keys.auction_page.getNamespacedKey(), id);
+            }
 
             button.setItem(player, inv, values);
         }));
@@ -414,23 +396,21 @@ public class GuiListener implements Listener {
         setPage(inv, page, items, player);
     }
 
-    public static void openBuying(@NotNull Player player, @NotNull String id) {
+    public static void openBuying(@NotNull final Player player, @NotNull final Category category, @NotNull final String id) {
         Methods.updateAuction();
 
         final YamlConfiguration config = FileKeys.config.getConfiguration();
         final YamlConfiguration data = FileKeys.data.getConfiguration();
 
-        final UUID uuid = player.getUniqueId();
-
         if (!data.contains("Items." + id)) {
-            openShop(player, ShopType.SELL, shopCategory.get(uuid), 1);
+            openShop(player, ShopType.SELL, category, 1);
 
             Messages.item_doesnt_exist.sendMessage(player);
 
             return;
         }
 
-        Inventory inv = new GuiBuilder(9, config.getString("Settings.Buying-Item", "&8Purchase Item: Are You Sure?"), GuiType.buy_menu).getInventory();
+        Inventory inv = new GuiBuilder(9, config.getString("Settings.Buying-Item", "&8Purchase Item: Are You Sure?"), GuiType.buy_menu, ShopType.BUY, category).getInventory();
 
         java.util.List.of(
                 "Confirm",
@@ -485,7 +465,7 @@ public class GuiListener implements Listener {
         player.openInventory(inv);
     }
 
-    public static void openBidding(@NotNull final Player player, @NotNull final String id) {
+    public static void openBidding(@NotNull final Player player, @NotNull final Category category, @NotNull final String id) {
         Methods.updateAuction();
 
         YamlConfiguration config = FileKeys.config.getConfiguration();
@@ -494,47 +474,48 @@ public class GuiListener implements Listener {
         final UUID uuid = player.getUniqueId();
 
         if (!data.contains("Items." + id)) {
-            openShop(player, ShopType.BID, shopCategory.get(uuid), 1);
+            openShop(player, ShopType.BID, category, 1);
 
             Messages.item_doesnt_exist.sendMessage(player);
 
             return;
         }
 
-        Inventory inv = new GuiBuilder(27, config.getString("Settings.Bidding-On-Item", "&8You Are Bidding On This Item."), GuiType.bid_menu).getInventory();
+        final Inventory inventory = new GuiBuilder(27, config.getString("Settings.Bidding-On-Item", "&8You Are Bidding On This Item."), GuiType.bid_menu, ShopType.BID, category).getInventory();
 
-        bidding.putIfAbsent(uuid, (double) Methods.getPrice(id, false));
+        inventory.setItem(9, ItemBuilder.from(ItemType.LIME_STAINED_GLASS_PANE).withDisplayName("&a+1").setAmount(1).asItemStack());
+        inventory.setItem(10, ItemBuilder.from(ItemType.LIME_STAINED_GLASS_PANE).withDisplayName("&a+10").setAmount(1).asItemStack());
+        inventory.setItem(11, ItemBuilder.from(ItemType.LIME_STAINED_GLASS_PANE).withDisplayName("&a+100").setAmount(1).asItemStack());
+        inventory.setItem(12, ItemBuilder.from(ItemType.LIME_STAINED_GLASS_PANE).withDisplayName("&a+1000").setAmount(1).asItemStack());
+        inventory.setItem(14, ItemBuilder.from(ItemType.LIME_STAINED_GLASS_PANE).withDisplayName("&c-1000").setAmount(1).asItemStack());
+        inventory.setItem(15, ItemBuilder.from(ItemType.LIME_STAINED_GLASS_PANE).withDisplayName("&c-100").setAmount(1).asItemStack());
+        inventory.setItem(16, ItemBuilder.from(ItemType.LIME_STAINED_GLASS_PANE).withDisplayName("&c-10").setAmount(1).asItemStack());
+        inventory.setItem(17, ItemBuilder.from(ItemType.LIME_STAINED_GLASS_PANE).withDisplayName("&c-1").setAmount(1).asItemStack());
 
-        inv.setItem(9, ItemBuilder.from(ItemType.LIME_STAINED_GLASS_PANE).withDisplayName("&a+1").setAmount(1).asItemStack());
-        inv.setItem(10, ItemBuilder.from(ItemType.LIME_STAINED_GLASS_PANE).withDisplayName("&a+10").setAmount(1).asItemStack());
-        inv.setItem(11, ItemBuilder.from(ItemType.LIME_STAINED_GLASS_PANE).withDisplayName("&a+100").setAmount(1).asItemStack());
-        inv.setItem(12, ItemBuilder.from(ItemType.LIME_STAINED_GLASS_PANE).withDisplayName("&a+1000").setAmount(1).asItemStack());
-        inv.setItem(14, ItemBuilder.from(ItemType.LIME_STAINED_GLASS_PANE).withDisplayName("&c-1000").setAmount(1).asItemStack());
-        inv.setItem(15, ItemBuilder.from(ItemType.LIME_STAINED_GLASS_PANE).withDisplayName("&c-100").setAmount(1).asItemStack());
-        inv.setItem(16, ItemBuilder.from(ItemType.LIME_STAINED_GLASS_PANE).withDisplayName("&c-10").setAmount(1).asItemStack());
-        inv.setItem(17, ItemBuilder.from(ItemType.LIME_STAINED_GLASS_PANE).withDisplayName("&c-1").setAmount(1).asItemStack());
+        final long price = Methods.getPrice(id, false);
+        final String pretty = StringUtils.formatNumber(price);
 
         buttonRegistry.getButtonByName("Bidding").ifPresent(button -> {
-            final String price = StringUtils.formatNumber(Methods.getPrice(id, false));
-            final String bid = String.valueOf(bidding.get(uuid));
+            final String bid = String.valueOf(price);
 
-            button.setItem(player, inv, 13, Map.of(), Map.of(
+            button.setItem(player, inventory, 13, Map.of(), Map.of(
                     "%Bid%", bid,
                     "%bid%", bid,
-                    "%TopBid%", price,
-                    "%topbid%", price
+                    "%TopBid%", pretty,
+                    "%topbid%", pretty
             ));
         });
 
-        buttonRegistry.getButtonByName("Bid").ifPresent(button -> button.setItem(player, inv, 22, Map.of()));
+        buttonRegistry.getButtonByName("Bid").ifPresent(button -> button.setItem(player, inventory, 22, Map.of()));
 
-        inv.setItem(4, getBiddingItem(id));
+        inventory.setItem(4, getBiddingItem(id));
 
-        player.openInventory(inv);
+        player.openInventory(inventory);
     }
 
-    public static void openViewer(@NotNull Player player, int page) {
+    public static void openViewer(@NotNull final Player player, final Category category, final int page) {
         Methods.updateAuction();
+        int safePage;
 
         final YamlConfiguration config = FileKeys.config.getConfiguration();
 
@@ -590,7 +571,7 @@ public class GuiListener implements Listener {
                 final String sellerName = index.getString("SellerName", "N/A");
                 final String bidderName = index.getString("TopBidderName", "N/A");
 
-                final ItemBuilder builder = ItemBuilder.from(ItemType.STONE).withBase64(index.getString("Item", "")).setPersistentString(Keys.auction_button.getNamespacedKey(), store_id);
+                final ItemBuilder builder = ItemBuilder.from(ItemType.STONE).withBase64(index.getString("Item", "")).setPersistentString(Keys.auction_store_id.getNamespacedKey(), store_id);
 
                 final boolean isBiddable = index.getBoolean("Biddable", false);
 
@@ -618,16 +599,16 @@ public class GuiListener implements Listener {
 
         int maxPage = Methods.getMaxPage(items);
 
-        page = Math.min(maxPage, page);
+        safePage = Math.min(maxPage, page);
 
-        final Inventory inv = new GuiBuilder(54, config.getString("Settings.GUIName", "&4Crazy &bAuctions&8 #{page}"), GuiType.main_menu, page).getInventory();
+        final Inventory inv = new GuiBuilder(54, config.getString("Settings.GUIName", "&4Crazy &bAuctions&8 #{page}"), GuiType.main_menu, ShopType.NONE, category, safePage).getInventory();
 
         buttonRegistry.getButtonByName("WhatIsThis.Viewing").ifPresent(button -> button.setItem(player, inv, Map.of()));
 
-        setPage(inv, page, items, player);
+        setPage(inv, safePage, items, player);
     }
 
-    private static ItemStack getBiddingItem(@NotNull String ID) {
+    private static ItemStack getBiddingItem(@NotNull final String ID) {
         final YamlConfiguration config = FileKeys.config.getConfiguration();
         final YamlConfiguration data = FileKeys.data.getConfiguration();
 
@@ -682,20 +663,6 @@ public class GuiListener implements Listener {
     }
 
     @EventHandler
-    public void onInventoryClose(InventoryCloseEvent event) {
-        final Inventory inventory = event.getInventory();
-
-        if (!(inventory.getHolder() instanceof GuiBuilder auctionMenu)) return;
-
-        if (!(event.getPlayer() instanceof Player player)) return;
-
-        final YamlConfiguration config = FileKeys.config.getConfiguration();
-        final String title = auctionMenu.getTitle();
-
-        if (title.contains(Methods.color(config.getString("Settings.Bidding-On-Item", "")))) bidding.remove(player.getUniqueId());
-    }
-
-    @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
         final Inventory inventory = event.getInventory();
 
@@ -731,30 +698,28 @@ public class GuiListener implements Listener {
         }
 
         final String id = container.getOrDefault(Keys.auction_store_id.getNamespacedKey(), PersistentDataType.STRING, "");
-        final GuiType guiType = auctionMenu.getType();
+        final Category category = auctionMenu.getCategory();
+        final ShopType shopType = auctionMenu.getShopType();
+        final GuiType guiType = auctionMenu.getGuiType();
 
         switch (guiType) {
             case categories_menu -> {
-                final Category category = Category.getFromName(variable);
-
-                if (category != null) {
-                    openShop(player, types.get(uuid), category, 1);
+                if (variable.equalsIgnoreCase("Back")) {
+                    openShop(player, shopType, category, 1);
 
                     playClick(player);
 
                     return;
                 }
 
-                if (variable.equalsIgnoreCase("Back")) {
-                    openShop(player, types.get(uuid), shopCategory.get(uuid), 1);
+                openShop(player, shopType, category, 1);
 
-                    playClick(player);
-                }
+                playClick(player);
             }
 
             case current_menu -> {
                 if (variable.equalsIgnoreCase("Back")) {
-                    openShop(player, types.get(uuid), shopCategory.get(uuid), 1);
+                    openShop(player, shopType, category, 1);
 
                     playClick(player);
 
@@ -766,7 +731,7 @@ public class GuiListener implements Listener {
                 if (itemsSection == null) {
                     playClick(player);
 
-                    openShop(player, types.get(uuid), shopCategory.get(uuid), 1);
+                    openShop(player, shopType, category, 1);
 
                     Messages.item_doesnt_exist.sendMessage(player);
 
@@ -778,7 +743,7 @@ public class GuiListener implements Listener {
                 if (index == null) {
                     playClick(player);
 
-                    openShop(player, types.get(uuid), shopCategory.get(uuid), 1);
+                    openShop(player, shopType, category, 1);
 
                     Messages.item_doesnt_exist.sendMessage(player);
 
@@ -801,7 +766,7 @@ public class GuiListener implements Listener {
                     case "Back" -> {
                         Methods.updateAuction();
 
-                        openShop(player, types.get(uuid), shopCategory.get(uuid), 1);
+                        openShop(player, shopType, category, 1);
 
                         playClick(player);
                     }
@@ -884,7 +849,7 @@ public class GuiListener implements Listener {
                         if (section == null) {
                             playClick(player);
 
-                            openShop(player, types.get(uuid), shopCategory.get(uuid), 1);
+                            openShop(player, shopType, category, 1);
 
                             Messages.item_doesnt_exist.sendMessage(player);
 
@@ -933,7 +898,7 @@ public class GuiListener implements Listener {
 
                         if (pageNumber == 1) pageNumber++;
 
-                        openShop(player, types.get(uuid), shopCategory.get(uuid), pageNumber - 1);
+                        openShop(player, shopType, category, pageNumber - 1);
 
                         playClick(player);
                     }
@@ -941,7 +906,7 @@ public class GuiListener implements Listener {
                     case "NextPage" -> {
                         Methods.updateAuction();
 
-                        openShop(player, types.get(uuid), shopCategory.get(uuid), pageNumber + 1);
+                        openShop(player, shopType, category, pageNumber + 1);
 
                         playClick(player);
                     }
@@ -949,19 +914,19 @@ public class GuiListener implements Listener {
                     case "Refresh", "Refesh" -> {
                         Methods.updateAuction();
 
-                        openShop(player, types.get(uuid), shopCategory.get(uuid), pageNumber);
+                        openShop(player, shopType, category, pageNumber);
 
                         playClick(player);
                     }
 
                     case "Bidding/Selling.Bidding" -> {
-                        openShop(player, ShopType.SELL, shopCategory.get(uuid), 1);
+                        openShop(player, ShopType.SELL, category, 1);
 
                         playClick(player);
                     }
 
                     case "Bidding/Selling.Selling" -> {
-                        openShop(player, ShopType.BID, shopCategory.get(uuid), 1);
+                        openShop(player, ShopType.BID, category, 1);
 
                         playClick(player);
                     }
@@ -979,7 +944,7 @@ public class GuiListener implements Listener {
                     }
 
                     case "Category1", "Category2" -> {
-                        openCategories(player, types.get(uuid));
+                        openCategories(player, shopType);
 
                         playClick(player);
                     }
@@ -998,7 +963,7 @@ public class GuiListener implements Listener {
                         if (index == null) {
                             playClick(player);
 
-                            openShop(player, types.get(uuid), shopCategory.get(uuid), 1);
+                            openShop(player, shopType, category, 1);
 
                             Messages.item_doesnt_exist.sendMessage(player);
 
@@ -1031,7 +996,7 @@ public class GuiListener implements Listener {
 
                             playClick(player);
 
-                            openShop(player, types.get(uuid), shopCategory.get(uuid), auctionMenu.getPageNumber());
+                            openShop(player, shopType, category, auctionMenu.getPageNumber());
 
                             return;
                         }
@@ -1096,13 +1061,11 @@ public class GuiListener implements Listener {
 
                             playClick(player);
 
-                            openBidding(player, id);
-
-                            biddingID.put(uuid, id);
+                            openBidding(player, category, id);
                         } else {
                             playClick(player);
 
-                            openBuying(player, id);
+                            openBuying(player, category, id);
                         }
                     }
                 }
@@ -1118,7 +1081,7 @@ public class GuiListener implements Listener {
 
                             playClick(player);
 
-                            openShop(player, types.get(uuid), shopCategory.get(uuid), 1);
+                            openShop(player, shopType, category, 1);
 
                             return;
                         }
@@ -1130,7 +1093,7 @@ public class GuiListener implements Listener {
 
                             playClick(player);
 
-                            openShop(player, types.get(uuid), shopCategory.get(uuid), 1);
+                            openShop(player, shopType, category, 1);
 
                             return;
                         }
@@ -1138,7 +1101,7 @@ public class GuiListener implements Listener {
                         if (!data.contains("Items." + id)) {
                             playClick(player);
 
-                            openShop(player, types.get(uuid), shopCategory.get(uuid), 1);
+                            openShop(player, shopType, category, 1);
 
                             Messages.item_doesnt_exist.sendMessage(player);
 
@@ -1232,11 +1195,11 @@ public class GuiListener implements Listener {
 
                         playClick(player);
 
-                        openShop(player, types.get(uuid), shopCategory.get(uuid), 1);
+                        openShop(player, shopType, category, 1);
                     }
 
                     case "Cancel" -> {
-                        openShop(player, types.get(uuid), shopCategory.get(uuid), 1);
+                        openShop(player, shopType, category, 1);
 
                         playClick(player);
                     }
@@ -1253,7 +1216,7 @@ public class GuiListener implements Listener {
                         return;
                     }
 
-                    double bid = bidding.get(uuid);
+                    final long bid = container.getOrDefault(Keys.auction_price.getNamespacedKey(), PersistentDataType.LONG, 0L);
 
                     final String topBidder = items.getString("TopBidder", "None");
 
@@ -1271,7 +1234,7 @@ public class GuiListener implements Listener {
                         return;
                     }
 
-                    final long price = items.getLong("Price", 0);
+                    final long price = items.getLong("Price", 0L);
 
                     if (price <= 0) {
                         fusion.log(Level.WARNING, "Price cannot be less than or equal to 0 for %s", id);
@@ -1305,8 +1268,6 @@ public class GuiListener implements Listener {
 
                     FileKeys.data.save();
 
-                    bidding.put(uuid, 0.0);
-
                     player.closeInventory();
 
                     playClick(player);
@@ -1325,21 +1286,23 @@ public class GuiListener implements Listener {
                 priceEdits.put("&c-100", -100);
                 priceEdits.put("&c-1000", -1000);
 
-                for (String price : priceEdits.keySet()) {
-                    try {
-                        bidding.put(uuid, (bidding.get(uuid) + priceEdits.get(price)));
+                final long bid = container.getOrDefault(Keys.auction_price.getNamespacedKey(), PersistentDataType.LONG, 0L);
 
-                        inventory.setItem(4, getBiddingItem(biddingID.get(uuid)));
+                for (final String price : priceEdits.keySet()) {
+                    try {
+                        final long raw = bid + priceEdits.get(price);
+
+                        inventory.setItem(4, getBiddingItem(id));
 
                         buttonRegistry.getButtonByName("Bidding").ifPresent(button -> {
-                            final String value = StringUtils.formatNumber(Methods.getPrice(biddingID.get(uuid), false));
-                            final String bid = String.valueOf(bidding.get(uuid));
+                            final String value = StringUtils.formatNumber(Methods.getPrice(id, false));
+                            final String format = String.valueOf(raw);
 
                             button.setItem(player, inventory, 13, Map.of(
-                                    Keys.auction_button.getNamespacedKey(), bid
+                                    Keys.auction_price.getNamespacedKey(), format
                             ), Map.of(
-                                    "%Bid%", bid,
-                                    "%bid%", bid,
+                                    "%Bid%", format,
+                                    "%bid%", format,
                                     "%TopBid%", value,
                                     "%topbid%", value
                             ));

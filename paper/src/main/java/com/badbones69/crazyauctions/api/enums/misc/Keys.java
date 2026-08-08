@@ -9,20 +9,21 @@ import org.jetbrains.annotations.NotNull;
 public enum Keys {
 
     // contains the store id
-    auction_store_id("auction_store_id", PersistentDataType.INTEGER),
+    auction_store_id("auction_store_id", PersistentDataType.STRING),
 
     // this contains, the number for the item which can be found in the data.yml
     auction_number("auction_number", PersistentDataType.STRING),
 
-    auction_category("auction_category", PersistentDataType.STRING),// goes to main menu
+    auction_category("auction_category", PersistentDataType.STRING), // goes to main menu
 
     // any button in the gui
     auction_button("auction_button", PersistentDataType.STRING),
+    auction_page("auction_page", PersistentDataType.INTEGER),
 
     auction_uuid("auction_uuid", PersistentDataType.STRING),
 
     // contains the auction item price
-    auction_price("auction_price", PersistentDataType.INTEGER);
+    auction_price("auction_price", PersistentDataType.LONG);
 
     private final CrazyAuctions plugin = CrazyAuctions.get();
 

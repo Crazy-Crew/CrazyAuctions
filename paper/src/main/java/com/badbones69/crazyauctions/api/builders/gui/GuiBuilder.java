@@ -3,12 +3,14 @@ package com.badbones69.crazyauctions.api.builders.gui;
 import com.badbones69.crazyauctions.CrazyAuctions;
 import com.badbones69.crazyauctions.Methods;
 import com.badbones69.crazyauctions.api.CrazyAuctionsPaper;
+import com.badbones69.crazyauctions.api.enums.Category;
 import com.ryderbelserion.fusion.paper.FusionPaper;
 import org.bukkit.Server;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jspecify.annotations.NullMarked;
+import us.crazycrew.api.enums.ShopType;
 import java.util.Map;
 
 @NullMarked
@@ -22,19 +24,24 @@ public final class GuiBuilder implements InventoryHolder {
     private final Inventory inventory;
     private final int pageNumber;
     private final String title;
-    private final GuiType type;
 
-    public GuiBuilder(final int size, final String title, final GuiType type, final int pageNumber) {
+    private final Category category;
+    private final ShopType shopType;
+    private final GuiType guiType;
+
+    public GuiBuilder(final int size, final String title, final GuiType guiType, final ShopType shopType, final Category category, final int pageNumber) {
         this.inventory = this.server.createInventory(this, size, Methods.color(this.fusion.replacePlaceholders(this.title = title.replace("§", "&"), Map.of(
                 "{page}", String.valueOf(pageNumber)
         ))));
 
         this.pageNumber = pageNumber;
-        this.type = type;
+        this.category = category;
+        this.shopType = shopType;
+        this.guiType = guiType;
     }
 
-    public GuiBuilder(final int size, final String title, final GuiType type) {
-        this(size, title, type, 1);
+    public GuiBuilder(final int size, final String title, final GuiType guiType, final ShopType shopType, final Category category) {
+        this(size, title, guiType, shopType, category, 1);
     }
 
     @Override
@@ -42,8 +49,16 @@ public final class GuiBuilder implements InventoryHolder {
         return this.inventory;
     }
 
-    public GuiType getType() {
-        return this.type;
+    public Category getCategory() {
+        return this.category;
+    }
+
+    public ShopType getShopType() {
+        return this.shopType;
+    }
+
+    public GuiType getGuiType() {
+        return this.guiType;
     }
 
     public int getPageNumber() {
