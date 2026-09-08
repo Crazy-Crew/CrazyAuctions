@@ -1,36 +1,136 @@
 package com.badbones69.crazyauctions.api.enums;
 
-import org.bukkit.Material;
-import java.util.ArrayList;
+import org.bukkit.Registry;
+import org.bukkit.inventory.ItemType;
+import org.jspecify.annotations.NonNull;
+import java.util.HashSet;
+import java.util.Set;
 
 public enum Category {
     
-    NONE("None", new ArrayList<>()),
-    OTHER("Other", getOthers()),
-    ARMOR("Armor", getArmor()),
-    WEAPONS("Weapons", getWeapons()),
-    TOOLS("Tools", getTools()),
+    NONE("None", Set.of()),
+    ARMOR("Armor", Set.of(
+            ItemType.CHAINMAIL_HELMET.key().asString(),
+            ItemType.CHAINMAIL_CHESTPLATE.key().asString(),
+            ItemType.CHAINMAIL_LEGGINGS.key().asString(),
+            ItemType.CHAINMAIL_BOOTS.key().asString(),
+
+            ItemType.IRON_HELMET.key().asString(),
+            ItemType.IRON_CHESTPLATE.key().asString(),
+            ItemType.IRON_LEGGINGS.key().asString(),
+            ItemType.IRON_BOOTS.key().asString(),
+
+            ItemType.DIAMOND_HELMET.key().asString(),
+            ItemType.DIAMOND_CHESTPLATE.key().asString(),
+            ItemType.DIAMOND_LEGGINGS.key().asString(),
+            ItemType.DIAMOND_BOOTS.key().asString(),
+
+            ItemType.GOLDEN_HELMET.key().asString(),
+            ItemType.GOLDEN_CHESTPLATE.key().asString(),
+            ItemType.GOLDEN_LEGGINGS.key().asString(),
+            ItemType.GOLDEN_BOOTS.key().asString(),
+
+            ItemType.NETHERITE_HELMET.key().asString(),
+            ItemType.NETHERITE_CHESTPLATE.key().asString(),
+            ItemType.NETHERITE_LEGGINGS.key().asString(),
+            ItemType.NETHERITE_BOOTS.key().asString(),
+
+            ItemType.TURTLE_HELMET.key().asString(),
+
+            ItemType.COPPER_HELMET.key().asString(),
+            ItemType.COPPER_CHESTPLATE.key().asString(),
+            ItemType.COPPER_LEGGINGS.key().asString(),
+            ItemType.COPPER_BOOTS.key().asString(),
+
+            ItemType.LEATHER_HELMET.key().asString(),
+            ItemType.LEATHER_CHESTPLATE.key().asString(),
+            ItemType.LEATHER_LEGGINGS.key().asString(),
+            ItemType.LEATHER_BOOTS.key().asString(),
+            ItemType.LEATHER_HORSE_ARMOR.key().asString()
+    )),
+    WEAPONS("Weapons", Set.of(
+            ItemType.WOODEN_SWORD.key().asString(),
+            ItemType.STONE_SWORD.key().asString(),
+            ItemType.IRON_SWORD.key().asString(),
+            ItemType.DIAMOND_SWORD.key().asString(),
+            ItemType.GOLDEN_SWORD.key().asString(),
+            ItemType.NETHERITE_SWORD.key().asString(),
+            ItemType.COPPER_SWORD.key().asString(),
+
+            ItemType.WOODEN_AXE.key().asString(),
+            ItemType.STONE_AXE.key().asString(),
+            ItemType.IRON_AXE.key().asString(),
+            ItemType.DIAMOND_AXE.key().asString(),
+            ItemType.GOLDEN_AXE.key().asString(),
+            ItemType.NETHERITE_AXE.key().asString(),
+            ItemType.COPPER_AXE.key().asString(),
+
+            ItemType.TRIDENT.key().asString(),
+            ItemType.CROSSBOW.key().asString(),
+            ItemType.BOW.key().asString()
+    )),
+    TOOLS("Tools", Set.of(
+            ItemType.WOODEN_PICKAXE.key().asString(),
+            ItemType.WOODEN_AXE.key().asString(),
+            ItemType.WOODEN_HOE.key().asString(),
+            ItemType.WOODEN_SHOVEL.key().asString(),
+
+            ItemType.STONE_PICKAXE.key().asString(),
+            ItemType.STONE_AXE.key().asString(),
+            ItemType.STONE_HOE.key().asString(),
+            ItemType.STONE_SHOVEL.key().asString(),
+
+            ItemType.IRON_PICKAXE.key().asString(),
+            ItemType.IRON_AXE.key().asString(),
+            ItemType.IRON_HOE.key().asString(),
+            ItemType.IRON_SHOVEL.key().asString(),
+
+            ItemType.DIAMOND_PICKAXE.key().asString(),
+            ItemType.DIAMOND_AXE.key().asString(),
+            ItemType.DIAMOND_HOE.key().asString(),
+            ItemType.DIAMOND_SHOVEL.key().asString(),
+
+            ItemType.GOLDEN_PICKAXE.key().asString(),
+            ItemType.GOLDEN_AXE.key().asString(),
+            ItemType.GOLDEN_HOE.key().asString(),
+            ItemType.GOLDEN_SHOVEL.key().asString(),
+
+            ItemType.NETHERITE_PICKAXE.key().asString(),
+            ItemType.NETHERITE_AXE.key().asString(),
+            ItemType.NETHERITE_HOE.key().asString(),
+            ItemType.NETHERITE_SHOVEL.key().asString(),
+
+            ItemType.COPPER_SHOVEL.key().asString(),
+            ItemType.COPPER_SWORD.key().asString(),
+            ItemType.COPPER_AXE.key().asString(),
+            ItemType.COPPER_HOE.key().asString()
+    )),
+    POTIONS("Potions", Set.of(
+            ItemType.POTION.key().asString(),
+            ItemType.SPLASH_POTION.key().asString(),
+            ItemType.LINGERING_POTION.key().asString()
+    )),
     FOOD("Food", getFood()),
-    POTIONS("Potions", getPotions()),
-    BLOCKS("Blocks", getBlocks());
-    
+    BLOCKS("Blocks", getBlocks()),
+    OTHER("Other", getOthers());
+
+    private final Set<String> items;
     private final String name;
-    private final ArrayList<Material> items;
     
     /**
      * @param name Name of the Shop Type.
      */
-    Category(String name, ArrayList<Material> items) {
-        this.name = name;
+    Category(final String name, final Set<String> items) {
         this.items = items;
+        this.name = name;
     }
     
     /**
      * @param name Name of the Type you want.
      * @return Returns the Type as an Enum.
      */
-    public static Category getFromName(String name) {
-        for (Category type : Category.values()) {
+    public static Category getFromName(@NonNull final String name) {
+        for (final Category type : Category.values()) {
             if (type.getName().equalsIgnoreCase(name)) {
                 return type;
             }
@@ -39,142 +139,61 @@ public enum Category {
         return null;
     }
     
-    private static ArrayList<Material> getArmor() {
-        ArrayList<Material> ma = new ArrayList<>();
+    private static Set<String> getFood() {
+        final Set<String> types = new HashSet<>();
 
-        ma.add(Material.GOLDEN_HELMET);
-        ma.add(Material.GOLDEN_CHESTPLATE);
-        ma.add(Material.GOLDEN_LEGGINGS);
-        ma.add(Material.GOLDEN_BOOTS);
-        ma.add(Material.DIAMOND_HELMET);
-        ma.add(Material.DIAMOND_CHESTPLATE);
-        ma.add(Material.DIAMOND_LEGGINGS);
-        ma.add(Material.DIAMOND_BOOTS);
-        ma.add(Material.CHAINMAIL_HELMET);
-        ma.add(Material.CHAINMAIL_CHESTPLATE);
-        ma.add(Material.CHAINMAIL_LEGGINGS);
-        ma.add(Material.CHAINMAIL_BOOTS);
-        ma.add(Material.IRON_HELMET);
-        ma.add(Material.IRON_CHESTPLATE);
-        ma.add(Material.IRON_LEGGINGS);
-        ma.add(Material.IRON_BOOTS);
-        ma.add(Material.DIAMOND_HELMET);
-        ma.add(Material.DIAMOND_CHESTPLATE);
-        ma.add(Material.DIAMOND_LEGGINGS);
-        ma.add(Material.DIAMOND_BOOTS);
-        ma.add(Material.NETHERITE_HELMET);
-        ma.add(Material.NETHERITE_CHESTPLATE);
-        ma.add(Material.NETHERITE_LEGGINGS);
-        ma.add(Material.NETHERITE_BOOTS);
+        for (final ItemType itemType : Registry.ITEM.stream().toList()) {
+            final String asString = itemType.key().asString();
 
-        return ma;
-    }
-    
-    private static ArrayList<Material> getTools() {
-        ArrayList<Material> ma = new ArrayList<>();
+            if (Category.POTIONS.hasItem(asString)) continue;
 
-        ma.add(Material.WOODEN_PICKAXE);
-        ma.add(Material.WOODEN_AXE);
-        ma.add(Material.WOODEN_SHOVEL);
-        ma.add(Material.WOODEN_HOE);
-        ma.add(Material.GOLDEN_PICKAXE);
-        ma.add(Material.GOLDEN_AXE);
-        ma.add(Material.GOLDEN_SHOVEL);
-        ma.add(Material.GOLDEN_HOE);
-        ma.add(Material.STONE_SHOVEL);
-        ma.add(Material.IRON_SHOVEL);
-        ma.add(Material.DIAMOND_SHOVEL);
-        ma.add(Material.STONE_PICKAXE);
-        ma.add(Material.IRON_PICKAXE);
-        ma.add(Material.DIAMOND_PICKAXE);
-        ma.add(Material.STONE_AXE);
-        ma.add(Material.IRON_AXE);
-        ma.add(Material.DIAMOND_AXE);
-        ma.add(Material.STONE_HOE);
-        ma.add(Material.IRON_HOE);
-        ma.add(Material.DIAMOND_HOE);
-        ma.add(Material.NETHERITE_PICKAXE);
-        ma.add(Material.NETHERITE_AXE);
-        ma.add(Material.NETHERITE_HOE);
-        ma.add(Material.NETHERITE_SHOVEL);
+            if (!itemType.isEdible()) continue;
 
-        return ma;
-    }
-    
-    private static ArrayList<Material> getWeapons() {
-        ArrayList<Material> ma = new ArrayList<>();
-
-        ma.add(Material.GOLDEN_PICKAXE);
-        ma.add(Material.GOLDEN_AXE);
-        ma.add(Material.GOLDEN_SHOVEL);
-        ma.add(Material.GOLDEN_HOE);
-        ma.add(Material.STONE_SWORD);
-        ma.add(Material.IRON_SWORD);
-        ma.add(Material.DIAMOND_SWORD);
-        ma.add(Material.STONE_AXE);
-        ma.add(Material.IRON_AXE);
-        ma.add(Material.DIAMOND_AXE);
-        ma.add(Material.BOW);
-        ma.add(Material.NETHERITE_SWORD);
-        ma.add(Material.NETHERITE_AXE);
-
-        return ma;
-    }
-    
-    private static ArrayList<Material> getFood() {
-        ArrayList<Material> ma = new ArrayList<>();
-
-        for (Material m : Material.values()) {
-            if (m.isEdible()) {
-                if (m != Material.POTION) ma.add(m);
-            }
+            types.add(asString);
         }
 
-        return ma;
+        return types;
     }
     
-    private static ArrayList<Material> getPotions() {
-        ArrayList<Material> ma = new ArrayList<>();
+    private static Set<String> getBlocks() {
+        final Set<String> types = new HashSet<>();
 
-        ma.add(Material.POTION);
-        ma.add(Material.SPLASH_POTION);
-        ma.add(Material.LINGERING_POTION);
+        for (final ItemType itemType : Registry.ITEM.stream().toList()) {
+            final String asString = itemType.key().asString();
 
-        return ma;
-    }
-    
-    private static ArrayList<Material> getBlocks() {
-        ArrayList<Material> ma = new ArrayList<>();
+            if (!itemType.hasBlockType()) continue;
 
-        for (Material m : Material.values()) {
-            if (m.isBlock()) {
-                ma.add(m);
-            }
+            types.add(asString);
         }
 
-        return ma;
+        return types;
     }
     
-    private static ArrayList<Material> getOthers() {
-        ArrayList<Material> ma = new ArrayList<>();
+    private static Set<String> getOthers() {
+        final Set<String> types = new HashSet<>();
 
-        for (Material m : Material.values()) {
-            if (!(getArmor().contains(m) || getTools().contains(m) || getWeapons().contains(m) || getFood().contains(m) || getPotions().contains(m) || getBlocks().contains(m))) {
-                ma.add(m);
-            }
+        for (final ItemType itemType : Registry.ITEM.stream().toList()) {
+            final String asString = itemType.key().asString();
+
+            types.add(asString);
         }
 
-        return ma;
+        return types;
     }
-    
-    /**
-     * @return Returns the type name as a string.
-     */
+
+    public boolean hasItem(final String item) {
+        if (this.items == null) {
+            return false;
+        }
+
+        return this.items.contains(item);
+    }
+
+    public Set<String> getItems() {
+        return this.items;
+    }
+
     public String getName() {
         return this.name;
-    }
-    
-    public ArrayList<Material> getItems() {
-        return this.items;
     }
 }

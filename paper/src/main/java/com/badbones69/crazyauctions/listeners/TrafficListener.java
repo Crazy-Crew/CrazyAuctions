@@ -20,9 +20,9 @@ public class TrafficListener implements Listener {
 
     private final CrazyAuctions plugin = CrazyAuctions.get();
 
-    private final FusionPaper fusion = this.plugin.getFusion();
-
     private final CrazyAuctionsPaper platform = this.plugin.getPlatform();
+
+    private final FusionPaper fusion = this.platform.getFusion();
 
     private final StorageHolder holder = this.platform.getStorageHolder();
 

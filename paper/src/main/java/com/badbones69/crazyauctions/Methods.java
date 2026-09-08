@@ -10,6 +10,7 @@ import com.badbones69.crazyauctions.api.events.AuctionWinBidEvent;
 import com.ryderbelserion.fusion.core.utils.StringUtils;
 import org.bukkit.*;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -99,33 +100,6 @@ public class Methods {
             if (page <= 0) break;
             index = page * max - max;
             endIndex = index >= list.size() ? list.size() - 1 : index + max;
-            for (; index < endIndex; index++) {
-                if (index < list.size()) items.add(list.get(index));
-            }
-        }
-
-        return items;
-    }
-    
-    public static List<String> getPageInts(List<String> list, Integer page) {
-        List<String> items = new ArrayList<>();
-
-        if (page <= 0) page = 1;
-
-        int max = 45;
-        int index = page * max - max;
-        int endIndex = index >= list.size() ? list.size() - 1 : index + max;
-
-        for (; index < endIndex; index++) {
-            if (index < list.size()) items.add(list.get(index));
-        }
-
-        for (; items.isEmpty(); page--) {
-            if (page <= 0) break;
-
-            index = page * max - max;
-            endIndex = index >= list.size() ? list.size() - 1 : index + max;
-
             for (; index < endIndex; index++) {
                 if (index < list.size()) items.add(list.get(index));
             }
@@ -280,12 +254,12 @@ public class Methods {
         if (shouldSave) FileKeys.data.save();
     }
     
-    public static long getPrice(String ID, Boolean Expired) {
+    public static long getPrice(String ID, boolean isExpired) {
         long price = 0;
 
-        FileConfiguration configuration = FileKeys.data.getConfiguration();
+        final YamlConfiguration configuration = FileKeys.data.getConfiguration();
 
-        if (Expired) {
+        if (isExpired) {
             if (configuration.contains("OutOfTime/Cancelled." + ID + ".Price")) {
                 price = configuration.getLong("OutOfTime/Cancelled." + ID + ".Price");
             }
