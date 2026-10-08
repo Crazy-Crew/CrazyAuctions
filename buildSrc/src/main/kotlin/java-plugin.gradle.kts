@@ -1,7 +1,3 @@
-import gradle.kotlin.dsl.accessors._1c0260a9f7f62d13dcd99181bde3a49f.compileJava
-import gradle.kotlin.dsl.accessors._1c0260a9f7f62d13dcd99181bde3a49f.ext
-import gradle.kotlin.dsl.accessors._1c0260a9f7f62d13dcd99181bde3a49f.java
-import gradle.kotlin.dsl.accessors._1c0260a9f7f62d13dcd99181bde3a49f.processResources
 import org.gradle.api.artifacts.VersionCatalogsExtension
 import org.gradle.api.file.DuplicatesStrategy
 import org.gradle.jvm.toolchain.JavaLanguageVersion
