@@ -8,7 +8,7 @@ plugins {
     `java-plugin`
 }
 
-val git = feather.getBuilder()
+val git = feather.builder
 
 // https://github.com/granny/Pl3xMap/blob/0547bbba3f0b7468db17983412e95bf59a1a0b7d/build.gradle.kts#L10
 tasks {
@@ -49,8 +49,17 @@ val releaseType = rootProject.ext.get("release_type").toString()
 val color = rootProject.property("${releaseType.lowercase()}_color").toString()
 val isRelease = releaseType.equals("release", true)
 
+val lines = rootProject.ext.get("mc_changelog").toString()
+val result: String = if (lines.length > 1024) {
+    listOf(
+        "Click the download links above!"
+    ).convertList()
+} else {
+    lines
+}
+
 feather {
-    workingDirectory = rootProject.rootDir.toPath()
+    targetDirectory = rootProject.rootDir.toPath()
 
     val origin = git.getNewestCommit(rootProject.property("repository_owner").toString(),rootProject.name, git.utils.getRemoteCommitHash())
 
@@ -103,7 +112,7 @@ feather {
 
                         field(
                             ":hammer: Changelog",
-                            rootProject.ext.get("mc_changelog").toString().updateMarkdown()
+                            result.updateMarkdown()
                         )
                     }
                 }
