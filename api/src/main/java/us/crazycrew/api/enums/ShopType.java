@@ -6,7 +6,9 @@ import org.jspecify.annotations.NullMarked;
 public enum ShopType {
     
     SELL("Sell"),
-    BID("Bid");
+    BID("Bid"),
+    BUY("Buy"),
+    NONE("None");
     
     private final String name;
     

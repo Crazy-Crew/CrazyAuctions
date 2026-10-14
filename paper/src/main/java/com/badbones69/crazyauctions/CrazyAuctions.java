@@ -6,7 +6,6 @@ import com.badbones69.crazyauctions.controllers.GuiListener;
 import com.badbones69.crazyauctions.controllers.MarcoListener;
 import com.badbones69.crazyauctions.listeners.TrafficListener;
 import com.badbones69.crazyauctions.currency.VaultSupport;
-import com.badbones69.crazyauctions.datafixer.ConfigFixer;
 import com.ryderbelserion.fusion.paper.FusionPaper;
 import com.ryderbelserion.fusion.paper.builders.folia.FoliaScheduler;
 import com.ryderbelserion.fusion.paper.builders.folia.Scheduler;
@@ -58,8 +57,6 @@ public class CrazyAuctions extends JavaPlugin {
             }
         }.runAtFixedRate(0L, 5000L);
 
-        new ConfigFixer().onEnable();
-
         new Metrics(this, 4624);
     }
 
@@ -79,9 +76,5 @@ public class CrazyAuctions extends JavaPlugin {
 
     public final VaultSupport getSupport() {
         return this.support;
-    }
-
-    public final FusionPaper getFusion() {
-        return this.fusion;
     }
 }

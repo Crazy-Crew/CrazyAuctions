@@ -1,8 +1,8 @@
 Settings:
   Prefix: '<gray>[<dark_red>Crazy <aqua>Auctions<gray>]: ' #Prefix of when you get Crazy Auctions Messages.
-  GUIName: '&4Crazy &bAuctions&8' #Name of the Main GUI.
+  GUIName: '&4Crazy &bAuctions&8 #{page}' #Name of the Main GUI.
   Players-Current-Items: '&8Your Current Listings' #The Name of the Player Current Items GUI.
-  Cancelled/Expired-Items: '&8Canceled/Expired Listings' #Name of the Cancelled/Expired GUI.
+  Cancelled/Expired-Items: '&8Canceled/Expired Listings #{page}' #Name of the Cancelled/Expired GUI.
   Buying-Item: '&8Purchase Item: Are You Sure?' #Name of the Buying GUI.
   Bidding-On-Item: '&8You Are Bidding On This Item.' #Name of the Bidding GUI.
   Categories: '&8Categories' #Name of the Category GUI.
@@ -69,7 +69,7 @@ Settings:
       Armor:
         Item: 'GOLDEN_CHESTPLATE'
         Toggle: true
-        Slot: 11
+        Slot: 10
         Name: '&6&lArmor'
         Lore:
           - '&7This category contains all'
@@ -77,7 +77,7 @@ Settings:
       Weapons:
         Item: 'GOLDEN_SWORD'
         Toggle: true
-        Slot: 12
+        Slot: 11
         Name: '&6&lWeapons'
         Lore:
           - '&7This category contains all'
@@ -85,7 +85,7 @@ Settings:
       Tools:
         Item: 'GOLDEN_PICKAXE'
         Toggle: true
-        Slot: 13
+        Slot: 12
         Name: '&6&lTools'
         Lore:
           - '&7This category contains all'
@@ -93,7 +93,7 @@ Settings:
       Food:
         Item: 'GOLDEN_APPLE'
         Toggle: true
-        Slot: 14
+        Slot: 13
         Name: '&6&lFood'
         Lore:
           - '&7This category contains all'
@@ -101,7 +101,7 @@ Settings:
       Potions:
         Item: 'POTION'
         Toggle: true
-        Slot: 15
+        Slot: 14
         Name: '&6&lPotions'
         Lore:
           - '&7This category contains all'
@@ -109,7 +109,7 @@ Settings:
       Blocks:
         Item: 'GRASS_BLOCK'
         Toggle: true
-        Slot: 16
+        Slot: 15
         Name: '&6&lBlocks'
         Lore:
           - '&7This category contains all'
@@ -117,7 +117,7 @@ Settings:
       Other:
         Item: 'GOLD_NUGGET'
         Toggle: true
-        Slot: 17
+        Slot: 16
         Name: '&6&lOthers'
         Lore:
           - '&7This category contains all the'
@@ -125,7 +125,7 @@ Settings:
       None:
         Item: 'BARRIER'
         Toggle: true
-        Slot: 23
+        Slot: 22
         Name: '&6&lNone'
         Lore:
           - '&7This category contains all'
@@ -134,7 +134,7 @@ Settings:
       SellingItems: #The button for your current items.
         Item: 'DIAMOND' #The item that this button is.
         Toggle: true #If the item is in the gui or not.
-        Slot: 46 #The slot it is in. I recommend not changing these. If you do make sure they are still in the bottom row.
+        Slot: 45 #The slot it is in. I recommend not changing these. If you do make sure they are still in the bottom row.
         Name: '&6Items You are Selling' #Name of the item.
         Lore: #Lore of the item.
           - '&aClick here to view all the items you'
@@ -142,7 +142,7 @@ Settings:
       Cancelled/ExpiredItems: #The button for Cancelled/Expired Items.
         Item: 'POISONOUS_POTATO'
         Toggle: true
-        Slot: 47
+        Slot: 46
         Name: '&6Collect Expired / Canceled Items'
         Lore:
           - '&aClick here to view and collect all of the'
@@ -150,25 +150,25 @@ Settings:
       PreviousPage: #The button for Previous Page.
         Item: 'PAPER'
         Toggle: true
-        Slot: 49
+        Slot: 48
         Name: '&6Previous Page'
         Lore: { }
       Refresh: #The button for Refresh Page.
         Item: 'SUNFLOWER'
         Toggle: true
-        Slot: 50
+        Slot: 49
         Name: '&6Refresh Page'
         Lore: { }
       NextPage: #The button for Next Page.
         Item: 'PAPER'
         Toggle: true
-        Slot: 51
+        Slot: 50
         Name: '&6Next Page'
         Lore: { }
       Category1: #The button for Next Page.
         Item: 'CHEST'
         Toggle: true
-        Slot: 52
+        Slot: 51
         Name: '&6Categories'
         Lore:
           - '&bCurrent Category: &6%category%'
@@ -177,7 +177,7 @@ Settings:
       Category2: #The button for Next Page.
         Item: 'CHEST'
         Toggle: true
-        Slot: 48
+        Slot: 47
         Name: '&6Categories'
         Lore:
           - '&bCurrent Category: &6%category%'
@@ -187,7 +187,7 @@ Settings:
         Selling:
           Item: 'SLIME_BALL'
           Toggle: true
-          Slot: 53
+          Slot: 52
           Name: '&6Currently looking at items being sold.'
           Lore:
             - '&7&l(&6&l!&7&l) &7Click here to see items'
@@ -195,7 +195,7 @@ Settings:
         Bidding:
           Item: 'MAGMA_CREAM'
           Toggle: true
-          Slot: 53
+          Slot: 52
           Name: '&6Currently looking at items that can be bid on.'
           Lore:
             - '&7&l(&6&l!&7&l) &7Click here to see items'
@@ -204,7 +204,7 @@ Settings:
         SellingShop: #The Book in the main shop.
           Item: 'BOOK'
           Toggle: true
-          Slot: 54
+          Slot: 53
           Name: '&6What Is This Page?'
           Lore:
             - '&aThis is the crazy auctions, here you can'
@@ -217,7 +217,7 @@ Settings:
         BiddingShop: #The Book in the main shop.
           Item: 'BOOK'
           Toggle: true
-          Slot: 54
+          Slot: 53
           Name: '&6What Is This Page?'
           Lore:
             - '&aThis is the crazy auctions, here you can'
@@ -230,7 +230,7 @@ Settings:
         CurrentItems: #The Book in the Current items GUI.
           Item: 'BOOK'
           Toggle: true
-          Slot: 54
+          Slot: 53
           Name: '&6What Is This Page?'
           Lore:
             - '&aThese are your current listings, all of'
@@ -242,7 +242,7 @@ Settings:
         Cancelled/ExpiredItems: #The Book in the Canceled/Expired Items GUI.
           Item: 'BOOK'
           Toggle: true
-          Slot: 54
+          Slot: 53
           Name: '&6What Is This Page?'
           Lore:
             - '&aThis page houses all of your cancelled and'
@@ -255,7 +255,7 @@ Settings:
         Viewing: #The Book in the Viewing Items GUI.
           Item: 'BOOK'
           Toggle: true
-          Slot: 50
+          Slot: 49
           Name: '&6What Is This Page?'
           Lore:
             - '&aThis page shows all the items that'
@@ -265,7 +265,7 @@ Settings:
         Categories: #The Book in the Viewing Items GUI.
           Item: 'BOOK'
           Toggle: true
-          Slot: 54
+          Slot: 53
           Name: '&6What Is This Page?'
           Lore:
             - '&aThis page shows all the categories'
@@ -274,11 +274,11 @@ Settings:
             - '&aitems that belong to that category.'
       Back: #The Back Buttons.
         Item: 'PAPER'
-        Slot: 46
+        Slot: 45
         Name: '&6Back'
       Return: #The Return Buttons.
         Item: 'FLOWER_POT'
-        Slot: 50
+        Slot: 49
         Name: '&6Return All'
         Lore:
           - '&aClick here to return all cancelled'

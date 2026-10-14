@@ -1,5 +1,6 @@
 package com.badbones69.crazyauctions.commands.player;
 
+import com.badbones69.crazyauctions.api.enums.Category;
 import com.badbones69.crazyauctions.api.enums.other.Permissions;
 import com.badbones69.crazyauctions.commands.BaseCommand;
 import com.badbones69.crazyauctions.common.enums.messages.Messages;
@@ -34,7 +35,7 @@ public class ViewCommand extends BaseCommand {
 
         final CommandContext<CommandSourceStack> source = context.getContext();
 
-        getPlayer(source).ifPresentOrElse(player -> GuiListener.openViewer(player, 1), () -> Messages.failed_to_open_inventory.sendMessage(sender));
+        getPlayer(source).ifPresentOrElse(player -> GuiListener.openViewer(player, Category.NONE, 1), () -> Messages.failed_to_open_inventory.sendMessage(sender));
     }
 
     @Override
