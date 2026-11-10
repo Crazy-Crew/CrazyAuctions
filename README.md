@@ -1,8 +1,7 @@
 <center><div align="center">
 
-![CrazyAuctions](https://raw.githubusercontent.com/Crazy-Crew/Branding/main/crazyauctions/banner/webp/banner.webp)
+![CrazyAuctions](https://raw.githubusercontent.com/Crazy-Crew/Branding/main/repositories/crazyauctions/banner/webp/banner.webp)
 
-[![][jenkins-shield]][jenkins-url]
 [![][discord-shield]][discord-url]
 [![][contributors-shield]][contributors-url]
 [![][forks-shield]][forks-url]
@@ -38,9 +37,6 @@ If you do not want this anonymous data sent, You currently have to go to the `bS
 
 ## Apex Hosting (ad)
 We're sponsored by Apex Hosting, Click [here](https://billing.apexminecrafthosting.com/aff.php?aff=5511) to get 25% off your first purchase with the code `APEX25` at checkout for Minecraft servers, Satisfactory servers, and more!
-
-[jenkins-shield]: https://img.shields.io/jenkins/build?jobUrl=https%3A%2F%2Fci.crazycrew.us%2Fjob%2FCrazyAuctions%2F&style=flat&logo=jenkins
-[jenkins-url]: https://ci.crazycrew.us/job/CrazyAuctions/
 
 [contributors-shield]: https://img.shields.io/github/contributors-anon/Crazy-Crew/CrazyAuctions.svg?style=flat&logo=appveyor
 [contributors-url]: https://github.com/Crazy-Crew/CrazyAuctions/graphs/contributors
