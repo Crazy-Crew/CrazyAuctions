@@ -85,7 +85,7 @@ public abstract class CrazyAuctionsPlugin<I> extends CrazyAuctions<FusionPaper, 
 
     @Override
     public void loadMessages() {
-        final List<Path> paths = this.fileManager.getFilesByPath(this.path.resolve("locale"), ".yml", this.fileManager.getDepth());
+        final List<Path> paths = this.fileManager.getFilesByPath(this.path.resolve("locale"), ".yml");
 
         paths.add(this.path.resolve("messages.yml")); // add to list
 
